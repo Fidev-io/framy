@@ -1,0 +1,14 @@
+builders:
+  framy_dependency_builder:
+    import: "package:framy_generator/builder.dart"
+    builder_factories: ["dependencyBuilder"]
+    build_extensions: { ".dart": [".framy.json"] }
+    auto_apply: dependents
+    runs_before: [":framy_builder"]
+    build_to: cache
+  framy_builder:
+    import: "package:framy_generator/builder.dart"
+    builder_factories: ["framyAppBuilder"]
+    build_extensions: { ".dart": ["app.framy.dart"] }
+    auto_apply: dependents
+    build_to: source

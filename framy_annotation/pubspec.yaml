@@ -1,0 +1,10 @@
+name: framy_annotation
+description: >
+  Annotations for Framy code-generator.
+  This package does nothing without framy_generator.
+version: 0.1.0
+homepage: https://github.com/Fidev-io/framy
+
+environment:
+  sdk: ">=2.5.0 <3.0.0"
+
