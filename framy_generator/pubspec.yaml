@@ -13,8 +13,8 @@ dependencies:
   #  analyzer: ">=0.39.2 <0.40.0"
 
   framy_annotation:
-#    ^0.1.0
-    path: ../framy_annotation
+    ^0.1.0
+#    path: ../framy_annotation
 
 dev_dependencies:
   build_runner: ^1.10.0
