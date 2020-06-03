@@ -3,6 +3,8 @@ name: Acceptance tests
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   counter-app:

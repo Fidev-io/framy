@@ -28,6 +28,6 @@ jobs:
         with:
           channel: 'dev'
       - run: flutter pub get
-        working-directory: tests_apps/counter_app
+        working-directory: test_apps/counter_app
       - run: flutter test
-        working-directory: tests_apps/counter_app
+        working-directory: test_apps/counter_app
