@@ -23,3 +23,9 @@ jobs:
       - name: appbar acceptance tests
         run: flutter driver --target=test_driver/app_bar.dart -d macos
         working-directory: test_apps/counter_app
+      - name: upload screenshots
+        uses: actions/upload-artifact@master
+        working-directory: test_apps/counter_app
+        with:
+          name: screenshots
+          path: ./ozzie
