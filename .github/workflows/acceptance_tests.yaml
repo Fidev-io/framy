@@ -1,0 +1,25 @@
+name: Acceptance tests
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  counter-app:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1.3.0
+        with:
+          channel: 'dev'
+      - run: flutter config --enable-macos-desktop
+      - run: flutter pub get
+        working-directory: test_apps/counter_app
+      - name: AppBar
+        run: flutter driver --target=test_driver/app_bar.dart -d macos
+        working-directory: test_apps/counter_app
+      - name: upload screenshots
+        uses: actions/upload-artifact@master
+        with:
+          name: screenshots
+          path: ./test_apps/counter_app/ozzie
