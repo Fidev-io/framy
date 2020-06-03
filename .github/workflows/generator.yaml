@@ -1,0 +1,20 @@
+name: Generator tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  setup-and-run:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1.3.0
+        with:
+          channel: 'dev'
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+        working-directory: framy_generator
