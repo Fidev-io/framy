@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/element/element.dart';
 
+/// Returns the import which points to a given [element]
 String getImport(Element element) {
   // prefer library source, because otherwise "part of"-files will lead to
   // compile errors due to bad imports in the generated code

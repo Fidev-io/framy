@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:framy_annotation/framy_annotation.dart';
 
 void main() {
   runApp(MyApp());
 }
 
+@FramyApp()
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ abstract class FramyAnnotation {
 
 /// Specifies a location where generated Framy app will be placed
 /// Required to be used exactly once inside the app
-/// Typically annonates main app widget (e.g. MyApp, MainApp, etc)
+/// Typically annotates main app widget (e.g. MyApp, MainApp, etc)
 class FramyApp extends FramyAnnotation {
   const FramyApp();
 }

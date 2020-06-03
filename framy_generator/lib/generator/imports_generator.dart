@@ -1,4 +1,5 @@
-String generateImports(Set<String> imports) {
+String generateImports() {
+  Set<String> imports = {};
   imports.add('package:flutter/foundation.dart');
   imports.add('package:flutter/material.dart');
   String importsStr = '';
