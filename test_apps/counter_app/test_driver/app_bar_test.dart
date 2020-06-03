@@ -1,15 +1,16 @@
 import 'package:flutter_driver/flutter_driver.dart';
-import 'package:ozzie/ozzie.dart';
 import 'package:test/test.dart';
+
+import 'github_firendly_ozzie.dart';
 
 void main() {
   group('App Bar', () {
     FlutterDriver driver;
-    Ozzie ozzie;
+    GithubFriendlyOzzie ozzie;
 
     setUpAll(() async {
       driver = await FlutterDriver.connect();
-      ozzie = Ozzie.initWith(driver, groupName: 'counter-app');
+      ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
     });
 
     tearDownAll(() async {
