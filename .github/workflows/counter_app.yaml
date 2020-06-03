@@ -1,0 +1,25 @@
+name: Counter app tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  counter-app-tests:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1.3.0
+        with:
+          channel: 'dev'
+      - run: flutter config --enable-macos-desktop
+      - run: flutter pub get
+        working-directory: test_apps/counter_app
+      - name: widget tests
+        run: flutter test
+        working-directory: test_apps/counter_app
+      - name: appbar acceptance tests
+        run: flutter driver --target=test_driver/app_bar.dart -d macos
+        working-directory: test_apps/counter_app
