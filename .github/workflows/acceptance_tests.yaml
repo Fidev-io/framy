@@ -1,13 +1,11 @@
-name: Counter app tests
+name: Acceptance tests
 
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
-  counter-app-tests:
+  counter-app:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
@@ -17,10 +15,7 @@ jobs:
       - run: flutter config --enable-macos-desktop
       - run: flutter pub get
         working-directory: test_apps/counter_app
-      - name: widget tests
-        run: flutter test
-        working-directory: test_apps/counter_app
-      - name: appbar acceptance tests
+      - name: AppBar
         run: flutter driver --target=test_driver/app_bar.dart -d macos
         working-directory: test_apps/counter_app
       - name: upload screenshots

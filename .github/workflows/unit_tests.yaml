@@ -1,0 +1,33 @@
+name: Unit tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  analyze-and-test-generator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1.3.0
+        with:
+          channel: 'dev'
+      - run: flutter pub get
+        working-directory: framy_generator
+      - run: flutter analyze
+        working-directory: framy_generator
+      - run: flutter test
+        working-directory: framy_generator
+  counter-app-widget-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1.3.0
+        with:
+          channel: 'dev'
+      - run: flutter pub get
+        working-directory: tests_apps/counter_app
+      - run: flutter test
+        working-directory: tests_apps/counter_app
