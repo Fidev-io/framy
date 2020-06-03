@@ -25,7 +25,6 @@ jobs:
         working-directory: test_apps/counter_app
       - name: upload screenshots
         uses: actions/upload-artifact@master
-        working-directory: test_apps/counter_app
         with:
           name: screenshots
-          path: ./ozzie
+          path: ./test_apps/counter_app/ozzie
