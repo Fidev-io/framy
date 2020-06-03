@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  setup-and-run:
+  analyze-and-test-generator:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
