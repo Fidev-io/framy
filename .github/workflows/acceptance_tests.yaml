@@ -18,6 +18,9 @@ jobs:
       - name: AppBar
         run: flutter driver --target=test_driver/app_bar.dart -d macos
         working-directory: test_apps/counter_app
+      - name: FontsPage
+        run: flutter driver --target=test_driver/fonts_page.dart -d macos
+        working-directory: test_apps/counter_app
       - name: upload screenshots
         uses: actions/upload-artifact@master
         with:

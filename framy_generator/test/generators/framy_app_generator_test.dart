@@ -23,5 +23,12 @@ void main() {
       //then
       expect(result.contains('FramyAppBar'), isTrue);
     });
+
+    test('should contain FramyFontsPage', () {
+      //when
+      final String result = generateFramyApp();
+      //then
+      expect(result.contains('FramyFontsPage'), isTrue);
+    });
   });
 }
