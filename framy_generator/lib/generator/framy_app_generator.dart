@@ -3,7 +3,10 @@ class FramyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FramyAppBar(),
+      home: Scaffold(
+        appBar: FramyAppBar(),
+        body: FramyFontsPage(),
+      ),
     );
   }
 }

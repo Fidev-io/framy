@@ -1,3 +1,13 @@
+String generateFontsPage() => '''
+class FramyFontsPage extends StatelessWidget {
+  const FramyFontsPage() : super(key: const Key('FramyFontsPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+''';
 //String generateFontsPage() => '''
 //class FontsPage extends StatelessWidget {
 //  @override

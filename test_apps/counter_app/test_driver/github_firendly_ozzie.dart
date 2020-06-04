@@ -13,7 +13,6 @@ class GithubFriendlyOzzie {
   final FlutterDriver driver;
   final String groupName;
   final bool shouldTakeScreenshots;
-  var _doesGroupFolderNeedToBeDeleted = true;
 
   GithubFriendlyOzzie._internal(
     this.driver, {
@@ -51,10 +50,6 @@ class GithubFriendlyOzzie {
   /// when calling `Ozzie.initWith`.
   Future takeScreenshot(String screenshotName) async {
     if (shouldTakeScreenshots) {
-      if (_doesGroupFolderNeedToBeDeleted) {
-        await _deleteExistingGroupFolder();
-        _doesGroupFolderNeedToBeDeleted = false;
-      }
       final filePath = _filePath(screenshotName);
       final file = await File(filePath).create(recursive: true);
       final pixels = await driver.screenshot();
@@ -109,14 +104,6 @@ class GithubFriendlyOzzie {
       groupFolderName: _groupFolderName,
       groupName: groupName,
     );
-  }
-
-  Future _deleteExistingGroupFolder() async {
-    final groupFolder = Directory(_groupFolderName);
-    if (await groupFolder.exists()) {
-      await groupFolder.delete(recursive: true);
-      print('Ozzie has deleted the "$groupName" folder');
-    }
   }
 
   String get _groupFolderName => '$rootFolderName/$groupName';

@@ -2,7 +2,9 @@
 
 cd framy_generator
 ./fvm analyze
-./fvm test
+./fvm pub test
 cd ../test_apps/counter_app
 ./fvm test
+rm -rf ozzie
 ./fvm driver --target=test_driver/app_bar.dart -d macos
+./fvm driver --target=test_driver/fonts_page.dart -d macos

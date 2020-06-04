@@ -13,5 +13,10 @@ void main() {
       await tester.pumpWidget(FramyApp());
       expect(find.byKey(Key('FramyAppBar')), findsOneWidget);
     });
+
+    testWidgets('should have fonts page', (tester) async {
+      await tester.pumpWidget(FramyApp());
+      expect(find.byKey(Key('FramyFontsPage')), findsOneWidget);
+    });
   });
 }
