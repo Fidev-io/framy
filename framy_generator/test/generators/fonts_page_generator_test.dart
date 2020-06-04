@@ -83,5 +83,54 @@ void main() {
       //then
       allTextStyles.forEach((style) => expect(result.contains(style), isTrue));
     });
+
+    test('should use textStyle.fontFamily', () {
+      //when
+      final String result = generateFontsPage();
+      //then
+      expect(result.contains('style.fontFamily'), isTrue);
+    });
+
+    test('should use textStyle.fontSize', () {
+      //when
+      final String result = generateFontsPage();
+      //then
+      expect(result.contains('style.fontSize'), isTrue);
+    });
+
+    test('should use textStyle.fontWeight', () {
+      //when
+      final String result = generateFontsPage();
+      //then
+      expect(result.contains('style.fontWeight'), isTrue);
+    });
+
+    test('should use textStyle.color', () {
+      //when
+      final String result = generateFontsPage();
+      //then
+      expect(result.contains('style.color'), isTrue);
+    });
+
+    test('should use textStyle.height', () {
+      //when
+      final String result = generateFontsPage();
+      //then
+      expect(result.contains('style.height'), isTrue);
+    });
+
+    test('should use textStyle.letterSpacing', () {
+      //when
+      final String result = generateFontsPage();
+      //then
+      expect(result.contains('style.letterSpacing'), isTrue);
+    });
+
+    test('should use textStyle.wordSpacing', () {
+      //when
+      final String result = generateFontsPage();
+      //then
+      expect(result.contains('style.wordSpacing'), isTrue);
+    });
   });
 }

@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
   runApp(FramyApp());
 }
 
@@ -74,6 +73,32 @@ class FramySingleFontRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(label, style: style);
+    final family = style.fontFamily;
+    final size = ' / size: ${style.fontSize.toStringAsFixed(1)}';
+    final weight =
+        ' / weight: ${style.fontWeight.toString().replaceAll('FontWeight.', '')}';
+    final height = style.height == null ? '' : ' / height: ${style.height}';
+    final letterSpacing = style.letterSpacing == null
+        ? ''
+        : ' / letter spacing: ${style.letterSpacing}';
+    final wordSpacing = style.wordSpacing == null
+        ? ''
+        : ' / word spacing: ${style.wordSpacing}';
+    final color =
+        ' / color: #${_hex(style.color.alpha)}${_hex(style.color.red)}${_hex(style.color.green)}${_hex(style.color.blue)}';
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: style),
+          Text(
+            '$family$size$weight$color$height$letterSpacing$wordSpacing',
+          ),
+        ],
+      ),
+    );
   }
+
+  String _hex(int val) => val.toRadixString(16).padLeft(2, '0').toUpperCase();
 }

@@ -9,7 +9,6 @@ void main() {
       //then
       final expectedResult = '''
 void main() {
-  debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
   runApp(FramyApp());
 }
 ''';
