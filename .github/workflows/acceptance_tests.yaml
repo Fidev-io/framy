@@ -1,8 +1,8 @@
 name: Acceptance tests
 
 on:
-  push:
-    branches: [ master ]
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   counter-app:
@@ -15,13 +15,23 @@ jobs:
       - run: flutter config --enable-macos-desktop
       - run: flutter pub get
         working-directory: test_apps/counter_app
-      - name: AppBar
-        run: flutter driver --target=test_driver/app_bar.dart -d macos
+      - name: "Start simulator"
+        run: |
+          UDID=$(
+            xcrun instruments -s |
+            awk \
+              -F ' *[][]' \
+              -v 'device=iPhone 11 Pro (13.4.1)' \
+              '$1 == device { print $2 }'
+          )
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+      - name: Acceptance tests on macOS
+        run: flutter driver --target=test_driver/app.dart -d macos
         working-directory: test_apps/counter_app
-      - name: FontsPage
-        run: flutter driver --target=test_driver/fonts_page.dart -d macos
+      - name: Acceptance tests on iPhone 11 Pro
+        run: flutter driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
         working-directory: test_apps/counter_app
-      - name: upload screenshots
+      - name: Upload screenshots
         uses: actions/upload-artifact@master
         with:
           name: screenshots
