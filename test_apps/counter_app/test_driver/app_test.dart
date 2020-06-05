@@ -4,22 +4,29 @@ import 'package:test/test.dart';
 import 'github_firendly_ozzie.dart';
 
 void main() {
+  FlutterDriver driver;
+  GithubFriendlyOzzie ozzie;
+
+  setUpAll(() async {
+    driver = await FlutterDriver.connect();
+    ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
+  });
+
+  tearDownAll(() async {
+    if (driver != null) {
+      driver.close();
+    }
+    ozzie.generateHtmlReport();
+  });
+
+  group('App Bar', () {
+    test('should be visible', () async {
+      await driver.waitFor(find.byValueKey('FramyAppBar'));
+      await ozzie.takeScreenshot('appbar_is_visible');
+    });
+  });
+
   group('Fonts page', () {
-    FlutterDriver driver;
-    GithubFriendlyOzzie ozzie;
-
-    setUpAll(() async {
-      driver = await FlutterDriver.connect();
-      ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
-    });
-
-    tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
-      ozzie.generateHtmlReport();
-    });
-
     test('should be displayed', () async {
       await driver.waitFor(find.byValueKey('FramyFontsPage'));
       await ozzie.takeScreenshot('fonts_page_is_displayed');

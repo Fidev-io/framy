@@ -25,19 +25,13 @@ jobs:
               '$1 == device { print $2 }'
           )
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
-      - name: AppBar on macOS
-        run: flutter driver --target=test_driver/app_bar.dart -d macos
+      - name: AppBar and Fonts page on macOS
+        run: flutter driver --target=test_driver/app.dart -d macos
         working-directory: test_apps/counter_app
-      - name: FontsPage on macOS
-        run: flutter driver --target=test_driver/fonts_page.dart -d macos
+      - name: AppBar and Fonts page iPhone 11 Pro
+        run: flutter driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
         working-directory: test_apps/counter_app
-      - name: AppBar on iPhone 11 Pro
-        run: flutter driver --target=test_driver/app_bar.dart -d 'iPhone 11 Pro'
-        working-directory: test_apps/counter_app
-      - name: FontsPage on iPhone 11 Pro
-        run: flutter driver --target=test_driver/fonts_page.dart -d 'iPhone 11 Pro'
-        working-directory: test_apps/counter_app
-      - name: upload screenshots
+      - name: Upload screenshots
         uses: actions/upload-artifact@master
         with:
           name: screenshots
