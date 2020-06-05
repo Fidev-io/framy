@@ -25,10 +25,10 @@ jobs:
               '$1 == device { print $2 }'
           )
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
-      - name: AppBar and Fonts page on macOS
+      - name: Acceptance tests on macOS
         run: flutter driver --target=test_driver/app.dart -d macos
         working-directory: test_apps/counter_app
-      - name: AppBar and Fonts page iPhone 11 Pro
+      - name: Acceptance tests on iPhone 11 Pro
         run: flutter driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
         working-directory: test_apps/counter_app
       - name: Upload screenshots
