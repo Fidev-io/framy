@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
@@ -6,10 +8,11 @@ import 'github_firendly_ozzie.dart';
 void main() {
   FlutterDriver driver;
   GithubFriendlyOzzie ozzie;
-
+  String platform;
   setUpAll(() async {
     driver = await FlutterDriver.connect();
     ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
+    platform = Platform.environment['PLATFORM'];
   });
 
   tearDownAll(() async {
@@ -22,14 +25,14 @@ void main() {
   group('App Bar', () {
     test('should be visible', () async {
       await driver.waitFor(find.byValueKey('FramyAppBar'));
-      await ozzie.takeScreenshot('appbar_is_visible');
+      await ozzie.takeScreenshot('$platform/appbar_is_visible');
     });
   });
 
   group('Fonts page', () {
     test('should be displayed', () async {
       await driver.waitFor(find.byValueKey('FramyFontsPage'));
-      await ozzie.takeScreenshot('fonts_page_is_displayed');
+      await ozzie.takeScreenshot('$platform/fonts_page_is_displayed');
     });
 
     test('should have all text names', () async {
