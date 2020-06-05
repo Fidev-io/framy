@@ -15,11 +15,27 @@ jobs:
       - run: flutter config --enable-macos-desktop
       - run: flutter pub get
         working-directory: test_apps/counter_app
-      - name: AppBar
+      - name: "Start simulator"
+        run: |
+          UDID=$(
+            xcrun instruments -s |
+            awk \
+              -F ' *[][]' \
+              -v 'device=iPhone 11 Pro (13.4.1)' \
+              '$1 == device { print $2 }'
+          )
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+      - name: AppBar on macOS
         run: flutter driver --target=test_driver/app_bar.dart -d macos
         working-directory: test_apps/counter_app
-      - name: FontsPage
+      - name: FontsPage on macOS
         run: flutter driver --target=test_driver/fonts_page.dart -d macos
+        working-directory: test_apps/counter_app
+      - name: AppBar on iPhone 11 Pro
+        run: flutter driver --target=test_driver/app_bar.dart -d 'iPhone 11 Pro'
+        working-directory: test_apps/counter_app
+      - name: FontsPage on iPhone 11 Pro
+        run: flutter driver --target=test_driver/fonts_page.dart -d 'iPhone 11 Pro'
         working-directory: test_apps/counter_app
       - name: upload screenshots
         uses: actions/upload-artifact@master
