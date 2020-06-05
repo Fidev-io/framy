@@ -12,7 +12,7 @@ void main() {
   setUpAll(() async {
     driver = await FlutterDriver.connect();
     ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
-    platform = Platform.environment['PLATFORM'];
+    platform = Platform.environment['PLATFORM'] ?? 'macos';
   });
 
   tearDownAll(() async {
