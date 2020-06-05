@@ -1,8 +1,8 @@
 name: Acceptance tests
 
 on:
-  push:
-    branches: [ master ]
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   counter-app:
