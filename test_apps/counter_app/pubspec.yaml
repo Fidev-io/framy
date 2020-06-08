@@ -11,9 +11,9 @@ dependencies:
     path: ../../framy_annotation
 
 dev_dependencies:
+  build_runner: any
   flutter_test:
     sdk: flutter
-  build_runner:
   framy_generator:
     path: ../../framy_generator
   flutter_driver:

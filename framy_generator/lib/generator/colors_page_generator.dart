@@ -1,3 +1,13 @@
+String generateColorsPage() => '''
+class FramyColorsPage extends StatelessWidget {
+  const FramyColorsPage() : super(key: const Key('FramyColorsPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(\'colors\');
+  }
+}
+''';
 //import 'package:framy_generator/framy_object.dart';
 //import 'package:framy_generator/generator/accessible_element_generator.dart';
 //

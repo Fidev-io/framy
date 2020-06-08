@@ -13,5 +13,18 @@ void main() {
       await tester.pumpWidget(FramyApp());
       expect(find.byKey(Key('FramyFontsPage')), findsOneWidget);
     });
+
+    testWidgets('should show ColorsPage on tap in drawer', (tester) async {
+      //given
+      expect(find.byKey(Key('FramyColorScheme')), findsNothing);
+      await tester.pumpWidget(FramyApp());
+      await tester.tap(find.byTooltip('Open navigation menu'));
+      await tester.pumpAndSettle();
+      //when
+      await tester.tap(find.text('Color scheme'));
+      await tester.pumpAndSettle();
+      //then
+      expect(find.byKey(Key('FramyColorsPage')), findsOneWidget);
+    });
   });
 }

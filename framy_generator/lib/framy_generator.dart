@@ -3,6 +3,7 @@ import 'package:build/build.dart';
 import 'package:framy_annotation/framy_annotation.dart';
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/app_bar_generator.dart';
+import 'package:framy_generator/generator/colors_page_generator.dart';
 import 'package:framy_generator/generator/drawer_generator.dart';
 import 'package:framy_generator/generator/fonts_page_generator.dart';
 import 'package:framy_generator/generator/framy_app_generator.dart';
@@ -28,6 +29,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateAppBar());
     buffer.writeln(generateDrawer());
     buffer.writeln(generateFontsPage());
+    buffer.writeln(generateColorsPage());
     return buffer.toString();
 
 //    List<FramyObject> framyObjects = [];

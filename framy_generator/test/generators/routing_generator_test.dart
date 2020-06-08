@@ -17,5 +17,10 @@ void main() {
       final result = generateRouting();
       expect(result.contains('FramyLayoutTemplate'), isTrue);
     });
+
+    test('should contain FramyColorsPage', () {
+      final result = generateRouting();
+      expect(result.contains('FramyColorsPage'), isTrue);
+    });
   });
 }
