@@ -80,4 +80,16 @@ void main() {
           '.SF UI Text / size: 10.0 / weight: w400 / color: #FF000000 / letter spacing: 1.5'));
     });
   });
+
+  group('Drawer', () {
+    test('should be openable by drawer icon', () async {
+      //given
+      await driver.waitForAbsent(find.byValueKey('FramyDrawer'));
+      //when
+      await driver.tap(find.byValueKey('FramyDrawerButton'));
+      //then
+      await driver.waitFor(find.byValueKey('FramyDrawer'));
+      await ozzie.takeScreenshot('${platform}_drawer');
+    });
+  }, skip: 'Work in progress');
 }

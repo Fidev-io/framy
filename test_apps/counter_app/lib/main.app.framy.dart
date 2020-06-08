@@ -36,6 +36,15 @@ class FramyAppBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
+class FramyDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      key: Key('FramyDrawer'),
+    );
+  }
+}
+
 class FramyFontsPage extends StatelessWidget {
   const FramyFontsPage() : super(key: const Key('FramyFontsPage'));
 
