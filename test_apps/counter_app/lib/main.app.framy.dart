@@ -16,11 +16,16 @@ class FramyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       key: Key('FramyApp'),
-      home: FramyLayoutTemplate(
-        child: FramyFontsPage(),
-      ),
+      onGenerateRoute: onGenerateRoute,
     );
   }
+}
+
+Route onGenerateRoute(RouteSettings settings) {
+  return PageRouteBuilder<dynamic>(
+    pageBuilder: (_, __, ___) => FramyLayoutTemplate(child: FramyFontsPage()),
+    settings: settings,
+  );
 }
 
 class FramyLayoutTemplate extends StatelessWidget {

@@ -8,5 +8,10 @@ void main() {
       await tester.pumpWidget(FramyApp());
       expect(find.byKey(Key('FramyApp')), findsOneWidget);
     });
+
+    testWidgets('should build fonts page', (tester) async {
+      await tester.pumpWidget(FramyApp());
+      expect(find.byKey(Key('FramyFontsPage')), findsOneWidget);
+    });
   });
 }

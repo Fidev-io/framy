@@ -18,14 +18,9 @@ void main() {
       expect(result.contains('Key(\'FramyApp\')'), isTrue);
     });
 
-    test('should contain FramyFontsPage', () {
+    test('should contain onGenerateRoute', () {
       final result = generateFramyApp();
-      expect(result.contains('FramyFontsPage'), isTrue);
-    });
-
-    test('should contain FramyLayoutTemplate', () {
-      final result = generateFramyApp();
-      expect(result.contains('FramyLayoutTemplate'), isTrue);
+      expect(result.contains('onGenerateRoute'), isTrue);
     });
   });
 }

@@ -4,9 +4,7 @@ class FramyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       key: Key('FramyApp'),
-      home: FramyLayoutTemplate(
-        child: FramyFontsPage(),
-      ),
+      onGenerateRoute: onGenerateRoute,
     );
   }
 }
