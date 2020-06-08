@@ -1,11 +1,37 @@
 #!/bin/sh
 
-cd framy_generator
+shouldRebuild=${1-false}
+#echo "$shouldRebuild"
+#if [ "$shouldRebuild" = "true" ]; then
+#  echo "hi";
+#fi
+
+echo "==== Testing generator ===="
+cd framy_generator || exit
+./fvm pub get
 ./fvm analyze
 ./fvm pub test
-cd ../test_apps/counter_app
-#./fvm pub run build_runner build --delete-conflicting-outputs
+
+echo "==== Testing counter app ===="
+cd ../test_apps/counter_app || exit
+./fvm pub get
+if [ "$shouldRebuild" = "true" ]; then
+  echo "Rebuilding...."
+  ./fvm pub run build_runner build --delete-conflicting-outputs
+fi
 ./fvm test
+
+
 rm -rf ozzie
-./fvm driver --target=test_driver/app_bar.dart -d macos
-./fvm driver --target=test_driver/fonts_page.dart -d macos
+UDID=$(
+  xcrun instruments -s |
+  awk \
+    -F ' *[][]' \
+    -v 'device=iPhone 11 Pro (13.5)' \
+    '$1 == device { print $2 }'
+)
+xcrun simctl boot "${UDID:?No Simulator with this name found}"
+
+PLATFORM="macos" ./fvm driver --target=test_driver/app.dart -d macos
+
+PLATFORM="ios" ./fvm driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
