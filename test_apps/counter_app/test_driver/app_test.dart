@@ -9,6 +9,11 @@ void main() {
   FlutterDriver driver;
   GithubFriendlyOzzie ozzie;
   String platform;
+
+  Future<bool> isDeviceBig() => driver
+      .getBottomRight(find.byValueKey('FramyApp'))
+      .then((offset) => offset.dx >= 1000);
+
   setUpAll(() async {
     driver = await FlutterDriver.connect();
     ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
@@ -78,6 +83,36 @@ void main() {
           .text('.SF UI Text / size: 14.0 / weight: w500 / color: #DD000000'));
       await driver.waitFor(find.text(
           '.SF UI Text / size: 10.0 / weight: w400 / color: #FF000000 / letter spacing: 1.5'));
+    });
+  });
+
+  group('Drawer', () {
+    test('should be openable by drawer icon on small devices', () async {
+      if (!await isDeviceBig()) {
+        //given
+        await driver.waitForAbsent(find.byValueKey('FramyDrawer'));
+        //when
+        await driver.tap(find.byTooltip('Open navigation menu'));
+        //then
+        await driver.waitFor(find.byValueKey('FramyDrawer'));
+        await ozzie.takeScreenshot('${platform}_drawer');
+      }
+    });
+
+    test('should be always opened on big screens', () async {
+      if (await isDeviceBig()) {
+        await driver.waitFor(find.byValueKey('FramyDrawer'));
+        await driver.waitForAbsent(find.byTooltip('Open navigation menu'));
+        await ozzie.takeScreenshot('${platform}_drawer');
+      }
+    });
+
+    test('should have Typography list item', () async {
+      await driver.waitFor(find.text('Typography'));
+    });
+
+    test('should have Color scheme list item', () async {
+      await driver.waitFor(find.text('Color scheme'));
     });
   });
 }

@@ -15,9 +15,23 @@ class FramyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: FramyAppBar(),
-        body: FramyFontsPage(),
+      key: Key('FramyApp'),
+      home: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice = constraints.maxWidth < 1000;
+          return Scaffold(
+            appBar: FramyAppBar(),
+            body: Row(
+              children: [
+                if (!isSmallDevice) FramyDrawer(),
+                Expanded(
+                  child: FramyFontsPage(),
+                ),
+              ],
+            ),
+            drawer: isSmallDevice ? FramyDrawer() : null,
+          );
+        },
       ),
     );
   }
@@ -34,6 +48,35 @@ class FramyAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class FramyDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      key: Key('FramyDrawer'),
+      child: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: kToolbarHeight,
+                child: Text('Framy App'),
+              ),
+              ListTile(
+                leading: Icon(Icons.text_fields),
+                title: Text('Typography'),
+              ),
+              ListTile(
+                leading: Icon(Icons.color_lens),
+                title: Text('Color scheme'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class FramyFontsPage extends StatelessWidget {

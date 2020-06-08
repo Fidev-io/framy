@@ -20,3 +20,6 @@ dev_dependencies:
     sdk: flutter
   test: any
   ozzie: ^2.2.3
+
+flutter:
+  uses-material-design: true
