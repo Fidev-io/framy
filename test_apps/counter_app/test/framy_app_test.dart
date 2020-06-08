@@ -29,5 +29,17 @@ void main() {
       //then
       expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
     });
+
+    testWidgets('should have an always opened drawer on big devices',
+        (tester) async {
+      //given
+      tester.binding.window.physicalSizeTestValue = Size(1000, 800);
+      tester.binding.window.devicePixelRatioTestValue = 1.0;
+      //when
+      await tester.pumpWidget(FramyApp());
+      //then
+      expect(find.byTooltip('Open navigation menu'), findsNothing);
+//      expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
+    });
   });
 }

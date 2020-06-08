@@ -16,10 +16,15 @@ class FramyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       key: Key('FramyApp'),
-      home: Scaffold(
-        appBar: FramyAppBar(),
-        body: FramyFontsPage(),
-        drawer: FramyDrawer(),
+      home: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice = constraints.maxWidth < 1000;
+          return Scaffold(
+            appBar: FramyAppBar(),
+            body: FramyFontsPage(),
+            drawer: isSmallDevice ? FramyDrawer() : null,
+          );
+        },
       ),
     );
   }

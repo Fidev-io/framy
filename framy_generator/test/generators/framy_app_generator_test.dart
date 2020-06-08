@@ -38,11 +38,18 @@ void main() {
       expect(result.contains('FramyFontsPage'), isTrue);
     });
 
-    test('should contain FramyDrawer', () {
+    test('should contain FramyDrawer or null', () {
       //when
       final String result = generateFramyApp();
       //then
-      expect(result.contains('drawer: FramyDrawer()'), isTrue);
+      expect(result.contains('FramyDrawer() : null'), isTrue);
+    });
+
+    test('should contain LayoutBuilder', () {
+      //when
+      final String result = generateFramyApp();
+      //then
+      expect(result.contains('LayoutBuilder'), isTrue);
     });
   });
 }

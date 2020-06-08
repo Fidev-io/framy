@@ -9,6 +9,11 @@ void main() {
   FlutterDriver driver;
   GithubFriendlyOzzie ozzie;
   String platform;
+
+  Future<bool> isDeviceBig() => driver
+      .getBottomRight(find.byValueKey('FramyApp'))
+      .then((offset) => offset.dx >= 1000);
+
   setUpAll(() async {
     driver = await FlutterDriver.connect();
     ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
@@ -82,14 +87,24 @@ void main() {
   });
 
   group('Drawer', () {
-    test('should be openable by drawer icon', () async {
-      //given
-      await driver.waitForAbsent(find.byValueKey('FramyDrawer'));
-      //when
-      await driver.tap(find.byTooltip('Open navigation menu'));
-      //then
-      await driver.waitFor(find.byValueKey('FramyDrawer'));
-      await ozzie.takeScreenshot('${platform}_drawer');
+    test('should be openable by drawer icon on small devices', () async {
+      if (!await isDeviceBig()) {
+        //given
+        await driver.waitForAbsent(find.byValueKey('FramyDrawer'));
+        //when
+        await driver.tap(find.byTooltip('Open navigation menu'));
+        //then
+        await driver.waitFor(find.byValueKey('FramyDrawer'));
+        await ozzie.takeScreenshot('${platform}_drawer');
+      }
+    });
+
+    test('should be always opened on big screens', () async {
+      if (await isDeviceBig()) {
+//        await driver.waitFor(find.byValueKey('FramyDrawer'));
+        await driver.waitForAbsent(find.byTooltip('Open navigation menu'));
+        await ozzie.takeScreenshot('${platform}_drawer');
+      }
     });
 
     test('should have Typography list item', () async {
