@@ -30,5 +30,12 @@ void main() {
       //then
       expect(result.contains('FramyFontsPage'), isTrue);
     });
+
+    test('should contain FramyDrawer', () {
+      //when
+      final String result = generateFramyApp();
+      //then
+      expect(result.contains('drawer: FramyDrawer()'), isTrue);
+    });
   });
 }

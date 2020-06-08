@@ -18,5 +18,16 @@ void main() {
       await tester.pumpWidget(FramyApp());
       expect(find.byKey(Key('FramyFontsPage')), findsOneWidget);
     });
+
+    testWidgets('should have an openable drawer', (tester) async {
+      //given
+      await tester.pumpWidget(FramyApp());
+      expect(find.byKey(Key('FramyDrawer')), findsNothing);
+      //when
+      await tester.tap(find.byTooltip('Open navigation menu'));
+      await tester.pump();
+      //then
+      expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
+    });
   });
 }

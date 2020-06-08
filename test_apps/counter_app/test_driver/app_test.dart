@@ -86,10 +86,10 @@ void main() {
       //given
       await driver.waitForAbsent(find.byValueKey('FramyDrawer'));
       //when
-      await driver.tap(find.byValueKey('FramyDrawerButton'));
+      await driver.tap(find.byTooltip('Open navigation menu'));
       //then
       await driver.waitFor(find.byValueKey('FramyDrawer'));
       await ozzie.takeScreenshot('${platform}_drawer');
     });
-  }, skip: 'Work in progress');
+  });
 }

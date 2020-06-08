@@ -6,6 +6,7 @@ class FramyApp extends StatelessWidget {
       home: Scaffold(
         appBar: FramyAppBar(),
         body: FramyFontsPage(),
+        drawer: FramyDrawer(),
       ),
     );
   }
