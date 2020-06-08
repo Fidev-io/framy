@@ -115,4 +115,12 @@ void main() {
       await driver.waitFor(find.text('Color scheme'));
     });
   });
+
+  group('ColorsPage', () {
+    test('should show ColorScheme page when Color scheme is tapped', () async {
+      await driver.tap(find.text('Color scheme'));
+      await driver.waitFor(find.byValueKey('FramyColorsPage'));
+      await ozzie.takeScreenshot('${platform}_colors_page');
+    });
+  });
 }

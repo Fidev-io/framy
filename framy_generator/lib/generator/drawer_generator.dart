@@ -15,10 +15,14 @@ class FramyDrawer extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.text_fields),
                 title: Text('Typography'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/typography'),
               ),
               ListTile(
                 leading: Icon(Icons.color_lens),
                 title: Text('Color scheme'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/colors'),
               ),
             ],
           ),

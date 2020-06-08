@@ -4,31 +4,33 @@ import 'package:test/test.dart';
 void main() {
   group('Drawer generator result', () {
     test('should start with class FramyDrawer', () {
-      //when
       final String result = generateDrawer();
-      //then
       expect(result.startsWith('class FramyDrawer'), isTrue);
     });
 
     test('should contain FramyDrawer key', () {
-      //when
       final String result = generateDrawer();
-      //then
       expect(result.contains('Key(\'FramyDrawer\')'), isTrue);
     });
 
     test('should contain Typography Text', () {
-      //when
       final String result = generateDrawer();
-      //then
       expect(result.contains('Text(\'Typography\''), isTrue);
     });
 
     test('should contain Color scheme Text', () {
-      //when
       final String result = generateDrawer();
-      //then
       expect(result.contains('Text(\'Color scheme\''), isTrue);
+    });
+
+    test('should contain /colors route name', () {
+      final String result = generateDrawer();
+      expect(result.contains('\'/colors\''), isTrue);
+    });
+
+    test('should contain /typography route name', () {
+      final String result = generateDrawer();
+      expect(result.contains('\'/typography\''), isTrue);
     });
   });
 }

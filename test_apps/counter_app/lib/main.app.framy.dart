@@ -16,23 +16,46 @@ class FramyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       key: Key('FramyApp'),
-      home: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmallDevice = constraints.maxWidth < 1000;
-          return Scaffold(
-            appBar: FramyAppBar(),
-            body: Row(
-              children: [
-                if (!isSmallDevice) FramyDrawer(),
-                Expanded(
-                  child: FramyFontsPage(),
-                ),
-              ],
-            ),
-            drawer: isSmallDevice ? FramyDrawer() : null,
-          );
-        },
-      ),
+      onGenerateRoute: onGenerateRoute,
+    );
+  }
+}
+
+Route onGenerateRoute(RouteSettings settings) {
+  final routes = {
+    '/typography': FramyFontsPage(),
+    '/colors': FramyColorsPage(),
+  };
+  final page = routes[settings.name] ?? FramyFontsPage();
+  return PageRouteBuilder<dynamic>(
+    pageBuilder: (_, __, ___) => FramyLayoutTemplate(child: page),
+    settings: settings,
+  );
+}
+
+class FramyLayoutTemplate extends StatelessWidget {
+  final Widget child;
+
+  const FramyLayoutTemplate({Key key, this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isSmallDevice = constraints.maxWidth < 1000;
+        return Scaffold(
+          appBar: FramyAppBar(),
+          body: Row(
+            children: [
+              if (!isSmallDevice) FramyDrawer(),
+              Expanded(
+                child: child,
+              ),
+            ],
+          ),
+          drawer: isSmallDevice ? FramyDrawer() : null,
+        );
+      },
     );
   }
 }
@@ -66,10 +89,14 @@ class FramyDrawer extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.text_fields),
                 title: Text('Typography'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/typography'),
               ),
               ListTile(
                 leading: Icon(Icons.color_lens),
                 title: Text('Color scheme'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/colors'),
               ),
             ],
           ),
@@ -144,4 +171,13 @@ class FramySingleFontRow extends StatelessWidget {
   }
 
   String _hex(int val) => val.toRadixString(16).padLeft(2, '0').toUpperCase();
+}
+
+class FramyColorsPage extends StatelessWidget {
+  const FramyColorsPage() : super(key: const Key('FramyColorsPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('colors');
+  }
 }
