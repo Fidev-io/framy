@@ -9,7 +9,14 @@ class FramyApp extends StatelessWidget {
           final isSmallDevice = constraints.maxWidth < 1000;
           return Scaffold(
             appBar: FramyAppBar(),
-            body: FramyFontsPage(),
+            body: Row(
+              children: [
+                if (!isSmallDevice) FramyDrawer(),
+                Expanded(
+                  child: FramyFontsPage(),
+                ),
+              ],
+            ),
             drawer: isSmallDevice ? FramyDrawer() : null,
           );
         },

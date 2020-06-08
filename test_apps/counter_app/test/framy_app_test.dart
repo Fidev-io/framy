@@ -39,7 +39,7 @@ void main() {
       await tester.pumpWidget(FramyApp());
       //then
       expect(find.byTooltip('Open navigation menu'), findsNothing);
-//      expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
+      expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
     });
   });
 }

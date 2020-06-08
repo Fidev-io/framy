@@ -101,7 +101,7 @@ void main() {
 
     test('should be always opened on big screens', () async {
       if (await isDeviceBig()) {
-//        await driver.waitFor(find.byValueKey('FramyDrawer'));
+        await driver.waitFor(find.byValueKey('FramyDrawer'));
         await driver.waitForAbsent(find.byTooltip('Open navigation menu'));
         await ozzie.takeScreenshot('${platform}_drawer');
       }
