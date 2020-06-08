@@ -13,6 +13,11 @@ void main() {
       await tester.pumpWidget(_TestDrawer());
       expect(find.text('Typography'), findsOneWidget);
     });
+
+    testWidgets('should have Color scheme list item', (tester) async {
+      await tester.pumpWidget(_TestDrawer());
+      expect(find.text('Color scheme'), findsOneWidget);
+    });
   });
 }
 

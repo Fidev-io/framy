@@ -23,5 +23,12 @@ void main() {
       //then
       expect(result.contains('Text(\'Typography\''), isTrue);
     });
+
+    test('should contain Color scheme Text', () {
+      //when
+      final String result = generateDrawer();
+      //then
+      expect(result.contains('Text(\'Color scheme\''), isTrue);
+    });
   });
 }

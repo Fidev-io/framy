@@ -16,6 +16,10 @@ class FramyDrawer extends StatelessWidget {
                 leading: Icon(Icons.text_fields),
                 title: Text('Typography'),
               ),
+              ListTile(
+                leading: Icon(Icons.color_lens),
+                title: Text('Color scheme'),
+              ),
             ],
           ),
         ),

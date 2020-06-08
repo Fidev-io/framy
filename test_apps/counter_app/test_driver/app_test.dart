@@ -92,8 +92,12 @@ void main() {
       await ozzie.takeScreenshot('${platform}_drawer');
     });
 
-    test('should have typography list item', () async {
+    test('should have Typography list item', () async {
       await driver.waitFor(find.text('Typography'));
+    });
+
+    test('should have Color scheme list item', () async {
+      await driver.waitFor(find.text('Color scheme'));
     });
   });
 }
