@@ -91,5 +91,9 @@ void main() {
       await driver.waitFor(find.byValueKey('FramyDrawer'));
       await ozzie.takeScreenshot('${platform}_drawer');
     });
+
+    test('should have typography list item', () async {
+      await driver.waitFor(find.text('Typography'));
+    });
   });
 }

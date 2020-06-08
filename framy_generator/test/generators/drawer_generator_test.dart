@@ -16,5 +16,12 @@ void main() {
       //then
       expect(result.contains('Key(\'FramyDrawer\')'), isTrue);
     });
+
+    test('should contain Typography Text', () {
+      //when
+      final String result = generateDrawer();
+      //then
+      expect(result.contains('Text(\'Typography\''), isTrue);
+    });
   });
 }

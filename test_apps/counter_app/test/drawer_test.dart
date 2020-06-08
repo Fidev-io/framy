@@ -8,6 +8,11 @@ void main() {
       await tester.pumpWidget(_TestDrawer());
       expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
     });
+
+    testWidgets('should have Typography list item', (tester) async {
+      await tester.pumpWidget(_TestDrawer());
+      expect(find.text('Typography'), findsOneWidget);
+    });
   });
 }
 
