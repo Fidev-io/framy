@@ -12,7 +12,7 @@ void main() {
   setUpAll(() async {
     driver = await FlutterDriver.connect();
     ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
-    platform = Platform.environment['PLATFORM'] ?? 'macos';
+    platform = Platform.environment['PLATFORM'] ?? 'default_macos';
   });
 
   tearDownAll(() async {
@@ -25,14 +25,14 @@ void main() {
   group('App Bar', () {
     test('should be visible', () async {
       await driver.waitFor(find.byValueKey('FramyAppBar'));
-      await ozzie.takeScreenshot('$platform/appbar_is_visible');
+      await ozzie.takeScreenshot('${platform}_appbar_is_visible');
     });
   });
 
   group('Fonts page', () {
     test('should be displayed', () async {
       await driver.waitFor(find.byValueKey('FramyFontsPage'));
-      await ozzie.takeScreenshot('$platform/fonts_page_is_displayed');
+      await ozzie.takeScreenshot('${platform}_fonts_page_is_displayed');
     });
 
     test('should have all text names', () async {
