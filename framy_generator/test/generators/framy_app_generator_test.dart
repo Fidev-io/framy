@@ -17,6 +17,13 @@ void main() {
       expect(result.contains('MaterialApp'), isTrue);
     });
 
+    test('should contain FramyApp Key', () {
+      //when
+      final String result = generateFramyApp();
+      //then
+      expect(result.contains('Key(\'FramyApp\')'), isTrue);
+    });
+
     test('should contain FramyAppBar', () {
       //when
       final String result = generateFramyApp();

@@ -6,7 +6,7 @@ void main() {
   group('Framy App', () {
     testWidgets('should build', (tester) async {
       await tester.pumpWidget(FramyApp());
-      expect(find.byType(FramyApp), findsOneWidget);
+      expect(find.byKey(Key('FramyApp')), findsOneWidget);
     });
 
     testWidgets('should have an app bar', (tester) async {
