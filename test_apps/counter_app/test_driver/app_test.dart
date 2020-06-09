@@ -122,5 +122,61 @@ void main() {
       await driver.waitFor(find.byValueKey('FramyColorsPage'));
       await ozzie.takeScreenshot('${platform}_colors_page');
     });
+
+    test('should show color names and values', () async {
+      await driver.waitFor(find.text('Primary'));
+      await driver.waitFor(find.text('#FF2196F3'));
+      await driver.waitFor(find.text('Primary light'));
+      await driver.waitFor(find.text('#FFBBDEFB'));
+      await driver.waitFor(find.text('Primary dark'));
+      await driver.waitFor(find.text('#FF1976D2'));
+      await driver.waitFor(find.text('Canvas'));
+      await driver.waitFor(find.text('#FFFAFAFA'));
+      await driver.waitFor(find.text('Accent'));
+      await driver.waitFor(find.text('#FF2196F3'));
+      await driver.waitFor(find.byValueKey('Scaffold background'));
+      await driver.waitFor(find.text('#FFFAFAFA'));
+      await driver.waitFor(find.text('Bottom appbar'));
+      await driver.waitFor(find.text('#FFFFFFFF'));
+      await driver.waitFor(find.text('Card'));
+      await driver.waitFor(find.text('#FFFFFFFF'));
+      await driver.waitFor(find.text('Divider'));
+      await driver.waitFor(find.text('#1F000000'));
+      await driver.waitFor(find.text('Focus'));
+      await driver.waitFor(find.text('#1F000000'));
+      await driver.waitFor(find.text('Hover'));
+      await driver.waitFor(find.text('#0A000000'));
+      await driver.waitFor(find.text('Highlight'));
+      await driver.waitFor(find.text('#66BCBCBC'));
+      await driver.waitFor(find.text('Splash'));
+      await driver.waitFor(find.text('#66C8C8C8'));
+      await driver.waitFor(find.text('Disabled'));
+      await driver.waitFor(find.text('#61000000'));
+      await driver.waitFor(find.text('Button'));
+      await driver.waitFor(find.text('#FFE0E0E0'));
+      await driver.waitFor(find.text('Text selection'));
+      await driver.waitFor(find.text('#FF64B5F6'));
+      await driver.waitFor(find.text('Cursor'));
+      await driver.waitFor(find.text('#FF4285F4'));
+      await driver.waitFor(find.byValueKey('Text selection handle'));
+      await driver.waitFor(find.text('#FF64B5F6'));
+      await driver.scrollUntilVisible(
+        find.byType('GridView'),
+        find.byValueKey('Toggleable Active'),
+        dyScroll: -100,
+      );
+      await driver.waitFor(find.text('Background'));
+      await driver.waitFor(find.text('#FF90CAF9'));
+      await driver.waitFor(find.byValueKey('Dialog background'));
+      await driver.waitFor(find.text('#FFFFFFFF'));
+      await driver.waitFor(find.text('Indicator'));
+      await driver.waitFor(find.text('#FF2196F3'));
+      await driver.waitFor(find.text('Hint'));
+      await driver.waitFor(find.text('#8A000000'));
+      await driver.waitFor(find.text('Error'));
+      await driver.waitFor(find.text('#FFD32F2F'));
+      await driver.waitFor(find.byValueKey('Toggleable Active'));
+      await driver.waitFor(find.text('#FF1E88E5'));
+    });
   });
 }
