@@ -238,8 +238,6 @@ final _formatter = DartFormatter();
 
 const defaultFileHeader = '// GENERATED CODE - DO NOT MODIFY BY HAND';
 
-final _headerLine = '// '.padRight(77, '*');
-
 const partIdRegExpLiteral = r'[A-Za-z_\d-]+';
 
 final _partIdRegExp = RegExp('^$partIdRegExpLiteral\$');
