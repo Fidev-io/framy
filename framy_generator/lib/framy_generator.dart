@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:framy_annotation/framy_annotation.dart';
@@ -15,29 +17,31 @@ import 'package:glob/glob.dart';
 import 'package:source_gen/source_gen.dart';
 
 class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
-  final framyObjectFiles = Glob("**.framy.json");
+  final themeFramyObjectFiles = Glob("**.theme.framy.json");
 
   @override
-  dynamic generateForAnnotatedElement(
+  Future<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
+    List<FramyObject> themeFramyObjects = [];
+    await for (final id in buildStep.findAssets(themeFramyObjectFiles)) {
+      List jsons = jsonDecode(await buildStep.readAsString(id));
+      themeFramyObjects
+          .addAll(jsons.map((json) => FramyObject.fromJson(json)).toList());
+    }
+
     final buffer = StringBuffer();
-    buffer.writeln(generateImports());
+    buffer.writeln(generateImports(themeFramyObjects));
     buffer.writeln(generateMain());
-    buffer.writeln(generateFramyApp());
+    buffer.writeln(generateFramyApp(themeData: themeFramyObjects.first));
     buffer.writeln(generateRouting());
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());
     buffer.writeln(generateDrawer());
     buffer.writeln(generateFontsPage());
     buffer.writeln(generateColorsPage());
+
     return buffer.toString();
 
-//    List<FramyObject> framyObjects = [];
-//    await for (final id in buildStep.findAssets(injectableConfigFiles)) {
-//      List jsons = jsonDecode(await buildStep.readAsString(id));
-//      framyObjects
-//          .addAll(jsons.map((json) => FramyObject.fromJson(json)).toList());
-//    }
 //    final buffer = StringBuffer();
 //    //imports
 //    final imports = framyObjects

@@ -11,14 +11,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: getThemeData(),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
+
+@FramyTheme()
+ThemeData getThemeData() => ThemeData(errorColor: Colors.redAccent);
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

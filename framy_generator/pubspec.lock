@@ -78,6 +78,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.2.0"
+  build_test:
+    dependency: transitive
+    description:
+      name: build_test
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0"
   built_collection:
     dependency: transitive
     description:
@@ -379,6 +386,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.5"
+  source_gen_test:
+    dependency: "direct dev"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: cb0cc03c3415ed80c21833f1d7852a65f305267b
+      url: "https://github.com/Fidev-io/source_gen_test.git"
+    source: git
+    version: "0.1.1"
   source_map_stack_trace:
     dependency: transitive
     description:

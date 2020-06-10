@@ -6,6 +6,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:counter_app/main.dart';
 
 void main() {
   runApp(FramyApp());
@@ -16,6 +17,7 @@ class FramyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       key: Key('FramyApp'),
+      theme: getThemeData(),
       onGenerateRoute: onGenerateRoute,
     );
   }

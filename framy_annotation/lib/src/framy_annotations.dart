@@ -28,24 +28,18 @@ const framyApp = FramyApp();
 ///   Color colorWhite = Colors.white;
 /// }
 ///
+/// It can be also used to annotate ThemeData getter method. This has to be first-class citizen
+///
+/// Example:
+///
+/// @FramyTheme()
+/// ThemeData getThemeData() => ThemeData(primarySwatch: Colors.orange);
+///
 class FramyTheme extends FramyAnnotation {
   const FramyTheme();
 }
 
 const framyTheme = FramyTheme();
-
-/// Used to annotate ThemeData getter method. This has to be first-class citizen
-///
-/// Example:
-///
-/// @FramyThemeData
-/// ThemeData getThemeData() => ThemeData(primarySwatch: Colors.orange);
-///
-class FramyThemeData extends FramyAnnotation {
-  const FramyThemeData();
-}
-
-const framyThemeData = FramyThemeData();
 
 /// Used to annotate a Widget to be included as a component
 class FramyWidget<T> extends FramyAnnotation {

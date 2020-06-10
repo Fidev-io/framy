@@ -2,7 +2,14 @@ builders:
   framy_dependency_builder:
     import: "package:framy_generator/builder.dart"
     builder_factories: ["dependencyBuilder"]
-    build_extensions: { ".dart": [".framy.json"] }
+    build_extensions: { ".dart": [".other.framy.json"] }
+    auto_apply: dependents
+    runs_before: [":framy_builder"]
+    build_to: cache
+  theme_builder:
+    import: "package:framy_generator/builder.dart"
+    builder_factories: ["themeBuilder"]
+    build_extensions: { ".dart": [".theme.framy.json"] }
     auto_apply: dependents
     runs_before: [":framy_builder"]
     build_to: cache
