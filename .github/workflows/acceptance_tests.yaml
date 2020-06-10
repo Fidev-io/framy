@@ -3,6 +3,8 @@ name: Acceptance tests
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
   schedule:
     - cron: "0 2 * * *" #Every day on 2AM
 
@@ -19,11 +21,12 @@ jobs:
         working-directory: test_apps/counter_app
       - name: "Start simulator"
         run: |
+          xcrun instruments -s
           UDID=$(
             xcrun instruments -s |
             awk \
               -F ' *[][]' \
-              -v 'device=iPhone 11 Pro (13.4.1)' \
+              -v 'device=iPhone 11 Pro (13.5)' \
               '$1 == device { print $2 }'
           )
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
