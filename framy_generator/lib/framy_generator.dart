@@ -32,7 +32,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     final buffer = StringBuffer();
     buffer.writeln(generateImports(themeFramyObjects));
     buffer.writeln(generateMain());
-    buffer.writeln(generateFramyApp(themeData: themeFramyObjects.first));
+    buffer.writeln(generateFramyApp(themeFramyObjects));
     buffer.writeln(generateRouting());
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());

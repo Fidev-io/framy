@@ -24,11 +24,16 @@ void main() {
       expect(result.contains('onGenerateRoute'), isTrue);
     });
 
-    test('should contain themeData when passed', () {
+    test('should not contain theme when empty list passed', () {
+      final result = generateFramyApp([]);
+      expect(result.contains('theme'), isFalse);
+    });
+
+    test('should contain theme when passed', () {
       //given
       final themeDataObject = FramyObject()..name = 'getThemeData';
       //when
-      final result = generateFramyApp(themeData: themeDataObject);
+      final result = generateFramyApp([themeDataObject]);
       //then
       expect(result.contains('theme: getThemeData(),'), isTrue);
     });
