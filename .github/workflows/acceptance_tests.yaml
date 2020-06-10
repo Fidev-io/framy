@@ -23,7 +23,7 @@ jobs:
             xcrun instruments -s |
             awk \
               -F ' *[][]' \
-              -v 'device=iPhone 11 Pro (13.4.1)' \
+              -v 'device=iPhone 11 Pro (13.5)' \
               '$1 == device { print $2 }'
           )
           xcrun simctl boot "${UDID:?No Simulator with this name found}"
