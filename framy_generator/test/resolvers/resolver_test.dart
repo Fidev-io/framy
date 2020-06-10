@@ -34,4 +34,5 @@ ThemeData getThemeData() => ThemeData(errorColor: Color(0xFFFF0000));
 
 @ShouldThrow('Framy annotations cannot be applied to private methods')
 @FramyTheme()
+// ignore: unused_element
 ThemeData _privateThemeData() => ThemeData();
