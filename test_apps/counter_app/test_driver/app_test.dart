@@ -173,10 +173,13 @@ void main() {
       await driver.waitFor(find.text('#FF2196F3'));
       await driver.waitFor(find.text('Hint'));
       await driver.waitFor(find.text('#8A000000'));
-      await driver.waitFor(find.text('Error'));
-      await driver.waitFor(find.text('#FFD32F2F'));
       await driver.waitFor(find.byValueKey('Toggleable Active'));
       await driver.waitFor(find.text('#FF1E88E5'));
+    });
+
+    test('Uses defined custom error color', () async {
+      await driver.waitFor(find.text('Error'));
+      await driver.waitFor(find.text('#FFFF5252'));
     });
   });
 }

@@ -1,4 +1,5 @@
 import 'package:counter_app/main.app.framy.dart';
+import 'package:counter_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -25,6 +26,14 @@ void main() {
       await tester.pumpAndSettle();
       //then
       expect(find.byKey(Key('FramyColorsPage')), findsOneWidget);
+    });
+
+    testWidgets('should use getThemeData', (tester) async {
+      //when
+      await tester.pumpWidget(FramyApp());
+      final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
+      //then
+      expect(materialApp.theme, getThemeData());
     });
   });
 }
