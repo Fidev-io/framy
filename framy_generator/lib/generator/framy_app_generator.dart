@@ -1,4 +1,5 @@
 import 'package:framy_generator/framy_object.dart';
+import 'package:framy_generator/generator/accessible_element_generator.dart';
 
 String generateFramyApp([List<FramyObject> themeObjects]) => '''
 class FramyApp extends StatelessWidget {
@@ -17,6 +18,7 @@ String _generateThemeDataLine(List<FramyObject> themeObjects) {
   if (themeObjects == null || themeObjects.isEmpty) {
     return '';
   } else {
-    return 'theme: ${themeObjects.first.name}(),';
+    final themeObject = themeObjects.first;
+    return 'theme: ${generateAccessibleElement(themeObject)},';
   }
 }

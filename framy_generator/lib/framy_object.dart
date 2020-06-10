@@ -16,7 +16,7 @@ class FramyObject {
   bool isStatic;
   ElementKind kind;
 
-//  FramyObject parentObject;
+  FramyObject parentObject;
 
   FramyObject();
 
@@ -33,7 +33,7 @@ class FramyObject {
 //
   Map<String, dynamic> toMap() {
     return {
-      'type': type.toString(),
+      'type': type?.toString(),
       'import': import,
       'name': name,
 //      'page': page,
@@ -42,14 +42,16 @@ class FramyObject {
       'isStatic': isStatic,
 //      'constructor': constructor,
       'kind': kind.toString(),
-//      'parentObject': parentObject?.toJson(),
+      'parentObject': parentObject?.toMap(),
     };
   }
 
 //
   FramyObject.fromJson(Map<String, dynamic> json) {
-    type = FramyObjectType.values
-        .singleWhere((type) => type.toString() == json['type']);
+    type = FramyObjectType.values.singleWhere(
+      (type) => type?.toString() == json['type'],
+      orElse: () => null,
+    );
     import = json['import'];
     name = json['name'];
 //    page = json['page'];
@@ -59,9 +61,9 @@ class FramyObject {
 //    constructor = json['constructor'];
     kind = ElementKind.values
         .singleWhere((kind) => kind.toString() == json['kind']);
-//    parentObject = json['parentObject'] == null
-//        ? null
-//        : FramyObject.fromJson(json['parentObject']);
+    parentObject = json['parentObject'] == null
+        ? null
+        : FramyObject.fromJson(json['parentObject']);
   }
 }
 

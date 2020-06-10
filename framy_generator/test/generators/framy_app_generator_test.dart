@@ -31,11 +31,55 @@ void main() {
 
     test('should contain theme when passed', () {
       //given
-      final themeDataObject = FramyObject()..name = 'getThemeData';
+      final themeDataObject = FramyObject()
+        ..name = 'getThemeData'
+        ..kind = ElementKind.FUNCTION
+        ..isStatic = true;
       //when
       final result = generateFramyApp([themeDataObject]);
       //then
       expect(result.contains('theme: getThemeData(),'), isTrue);
+    });
+
+    test('should contain theme with parent when parent object is passed', () {
+      //given
+      final themeDataObject = FramyObject()
+        ..name = 'getThemeData'
+        ..isStatic = false
+        ..kind = ElementKind.METHOD
+        ..parentObject = (FramyObject()..name = 'CustomAppTheme');
+      //when
+      final result = generateFramyApp([themeDataObject]);
+      //then
+      expect(
+          result.contains('theme: CustomAppTheme().getThemeData(),'), isTrue);
+    });
+
+    test('should contain static theme with parent when parent object is passed',
+        () {
+      //given
+      final themeDataObject = FramyObject()
+        ..name = 'getThemeData'
+        ..isStatic = true
+        ..kind = ElementKind.METHOD
+        ..parentObject = (FramyObject()..name = 'CustomAppTheme');
+      //when
+      final result = generateFramyApp([themeDataObject]);
+      //then
+      expect(result.contains('theme: CustomAppTheme.getThemeData(),'), isTrue);
+    });
+
+    test('should contain field theme from parent', () {
+      //given
+      final themeDataObject = FramyObject()
+        ..name = 'theme'
+        ..isStatic = false
+        ..kind = ElementKind.GETTER
+        ..parentObject = (FramyObject()..name = 'CustomAppTheme');
+      //when
+      final result = generateFramyApp([themeDataObject]);
+      //then
+      expect(result.contains('theme: CustomAppTheme().theme,'), isTrue);
     });
   });
 }

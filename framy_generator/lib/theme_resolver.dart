@@ -17,10 +17,37 @@ class ThemeResolver extends GeneratorForAnnotation<FramyTheme> {
       );
     }
 
-    final framyObject = FramyObject.fromElement(element)
-      ..type = FramyObjectType.themeData;
+    List<FramyObject> framyObjectsToReturn = [];
+
+    if (element is ClassElement) {
+      final parentObject = FramyObject.fromElement(element);
+
+      final childrenElements = [
+        ...element.accessors,
+        ...element.methods,
+      ];
+
+      for (var execElement in childrenElements) {
+        switch (execElement.returnType.getDisplayString()) {
+          case 'ThemeData':
+            framyObjectsToReturn
+                .add(_themeDataObjectFromElement(execElement, parentObject));
+            break;
+        }
+      }
+    } else {
+      final framyObject = _themeDataObjectFromElement(element);
+      framyObjectsToReturn.add(framyObject);
+    }
 
     var encoder = JsonEncoder.withIndent('  ');
-    return encoder.convert([framyObject.toMap()]);
+    return encoder.convert(
+        framyObjectsToReturn.map((framyObj) => framyObj.toMap()).toList());
   }
+
+  FramyObject _themeDataObjectFromElement(Element element,
+          [FramyObject parent]) =>
+      FramyObject.fromElement(element)
+        ..type = FramyObjectType.themeData
+        ..parentObject = parent;
 }
