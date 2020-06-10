@@ -31,3 +31,7 @@ Future<void> main() async {
 ]''')
 @FramyTheme()
 ThemeData getThemeData() => ThemeData(errorColor: Color(0xFFFF0000));
+
+@ShouldThrow('Framy annotations cannot be applied to private methods')
+@FramyTheme()
+ThemeData _privateThemeData() => ThemeData();

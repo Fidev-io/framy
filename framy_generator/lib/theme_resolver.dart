@@ -10,8 +10,16 @@ class ThemeResolver extends GeneratorForAnnotation<FramyTheme> {
   @override
   String generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
+    if (element.isPrivate) {
+      throw InvalidGenerationSourceError(
+        'Framy annotations cannot be applied to private methods',
+        element: element,
+      );
+    }
+
     final framyObject = FramyObject.fromElement(element)
       ..type = FramyObjectType.themeData;
+
     var encoder = JsonEncoder.withIndent('  ');
     return encoder.convert([framyObject.toMap()]);
   }
