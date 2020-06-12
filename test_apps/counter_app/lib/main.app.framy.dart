@@ -28,6 +28,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/typography': FramyFontsPage(),
     '/colors': FramyColorsPage(),
     '/appbar': FramyAppBarPage(),
+    '/button': FramyButtonPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -115,6 +116,13 @@ class FramyDrawer extends StatelessWidget {
                       title: Text('AppBar'),
                       onTap: () =>
                           Navigator.of(context).pushReplacementNamed('/appbar'),
+                    ),
+                    ListTile(
+                      key: Key('MaterialComponentsButtonButton'),
+                      leading: SizedBox.shrink(),
+                      title: Text('Button'),
+                      onTap: () =>
+                          Navigator.of(context).pushReplacementNamed('/button'),
                     ),
                   ],
                 ),
@@ -372,6 +380,23 @@ class _FramyColorItem extends StatelessWidget {
   String _hex(int val) => val.toRadixString(16).padLeft(2, '0').toUpperCase();
 }
 
+class FramyHeaderText extends StatelessWidget {
+  final String text;
+
+  const FramyHeaderText(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.headline4,
+      ),
+    );
+  }
+}
+
 class FramyAppBarPage extends StatelessWidget {
   const FramyAppBarPage() : super(key: const Key('FramyAppBarPage'));
 
@@ -441,19 +466,11 @@ class FramyAppBarPage extends StatelessWidget {
   }
 }
 
-class FramyHeaderText extends StatelessWidget {
-  final String text;
-
-  const FramyHeaderText(this.text);
+class FramyButtonPage extends StatelessWidget {
+  const FramyButtonPage() : super(key: const Key('FramyButtonPage'));
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.headline4,
-      ),
-    );
+    return Container();
   }
 }

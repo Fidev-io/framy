@@ -17,8 +17,8 @@ void main() {
 
     testWidgets('should show ColorsPage on tap in drawer', (tester) async {
       //given
-      expect(find.byKey(Key('FramyColorScheme')), findsNothing);
       await tester.pumpWidget(FramyApp());
+      expect(find.byKey(Key('FramyColorScheme')), findsNothing);
       await tester.tap(find.byTooltip('Open navigation menu'));
       await tester.pumpAndSettle();
       //when
@@ -38,17 +38,34 @@ void main() {
 
     testWidgets('should show AppBar page on tap in drawer', (tester) async {
       //given
-      expect(find.byKey(Key('FramyAppBarPage')), findsNothing);
       await tester.pumpWidget(FramyApp());
-      await tester.tap(find.byTooltip('Open navigation menu'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Material components'));
-      await tester.pumpAndSettle();
+      expect(find.byKey(Key('FramyAppBarPage')), findsNothing);
       //when
-      await tester.tap(find.text('AppBar'));
-      await tester.pumpAndSettle();
+      await _goToMaterialComponentPage(tester, find.text('AppBar'));
       //then
       expect(find.byKey(Key('FramyAppBarPage')), findsOneWidget);
     });
+
+    testWidgets('should show Button page on tap in drawer', (tester) async {
+      //given
+      await tester.pumpWidget(FramyApp());
+      expect(find.byKey(Key('FramyButtonPage')), findsNothing);
+      //when
+      await _goToMaterialComponentPage(
+          tester, find.byKey(Key('MaterialComponentsButtonButton')));
+      //then
+      expect(find.byKey(Key('FramyButtonPage')), findsOneWidget);
+    });
   });
+}
+
+Future<void> _goToMaterialComponentPage(
+    WidgetTester tester, Finder finder) async {
+  await tester.tap(find.byTooltip('Open navigation menu'));
+  await tester.pumpAndSettle();
+  await tester.tap(find.text('Material components'));
+  await tester.pumpAndSettle();
+  //when
+  await tester.tap(finder);
+  await tester.pumpAndSettle();
 }

@@ -27,5 +27,10 @@ void main() {
       final result = generateRouting();
       expect(result.contains('FramyAppBarPage'), isTrue);
     });
+
+    test('should contain FramyButtonPage', () {
+      final result = generateRouting();
+      expect(result.contains('FramyButtonPage'), isTrue);
+    });
   });
 }

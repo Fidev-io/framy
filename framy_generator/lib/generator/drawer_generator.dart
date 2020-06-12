@@ -39,6 +39,13 @@ class FramyDrawer extends StatelessWidget {
                       onTap: () =>
                           Navigator.of(context).pushReplacementNamed('/appbar'),
                     ),
+                    ListTile(
+                      key: Key('MaterialComponentsButtonButton'),
+                      leading: SizedBox.shrink(),
+                      title: Text('Button'),
+                      onTap: () =>
+                          Navigator.of(context).pushReplacementNamed('/button'),
+                    ),
                   ],
                 ),
               ),

@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('AppBarPage generator result', () {
-    test('should contain FramyAppBarPage class', () {
+    test('should start with FramyAppBarPage class', () {
       final result = generateAppBarPage();
       expect(result.startsWith('class FramyAppBarPage'), isTrue);
     });
