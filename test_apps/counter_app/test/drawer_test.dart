@@ -18,6 +18,26 @@ void main() {
       await tester.pumpWidget(_TestDrawer());
       expect(find.text('Color scheme'), findsOneWidget);
     });
+
+    group('Material components', () {
+      Future<void> openDrawer(WidgetTester tester) async {
+        //given
+        await tester.pumpWidget(_TestDrawer());
+        //when
+        await tester.tap(find.text('Material components'));
+        await tester.pump();
+      }
+
+      testWidgets('should have AppBar list item', (tester) async {
+        await openDrawer(tester);
+        expect(find.text('AppBar'), findsOneWidget);
+      });
+
+      testWidgets('should have Button list item', (tester) async {
+        await openDrawer(tester);
+        expect(find.text('Button'), findsOneWidget);
+      });
+    });
   });
 }
 

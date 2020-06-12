@@ -214,4 +214,28 @@ void main() {
       await driver.waitFor(find.text('#FFFFFFFF'));
     });
   });
+
+  group('Material components', () {
+    setUp(() async {
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byTooltip('Open navigation menu'));
+      }
+    });
+
+    test('should have AppBar page', () async {
+      await driver.tap(find.text('Material components'));
+      await driver.waitFor(find.text('AppBar'));
+      await driver.tap(find.text('AppBar'));
+      await driver.waitFor(find.byValueKey('FramyAppBarPage'));
+      await ozzie.takeScreenshot('${platform}_appbar_page');
+    });
+
+    test('should have Button page', () async {
+      await driver.tap(find.text('Material components'));
+      await driver.waitFor(find.text('Button'));
+      await driver.tap(find.text('Button'));
+      await driver.waitFor(find.byValueKey('FramyButtonPage'));
+      await ozzie.takeScreenshot('${platform}_button_page');
+    });
+  });
 }

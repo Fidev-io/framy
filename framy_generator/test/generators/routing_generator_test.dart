@@ -22,5 +22,15 @@ void main() {
       final result = generateRouting();
       expect(result.contains('FramyColorsPage'), isTrue);
     });
+
+    test('should contain FramyAppBarPage', () {
+      final result = generateRouting();
+      expect(result.contains('FramyAppBarPage'), isTrue);
+    });
+
+    test('should contain FramyButtonPage', () {
+      final result = generateRouting();
+      expect(result.contains('FramyButtonPage'), isTrue);
+    });
   });
 }

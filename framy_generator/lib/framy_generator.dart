@@ -5,6 +5,8 @@ import 'package:build/build.dart';
 import 'package:framy_annotation/framy_annotation.dart';
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/app_bar_generator.dart';
+import 'package:framy_generator/generator/app_bar_page_generator.dart';
+import 'package:framy_generator/generator/button_page_generator.dart';
 import 'package:framy_generator/generator/colors_page_generator.dart';
 import 'package:framy_generator/generator/drawer_generator.dart';
 import 'package:framy_generator/generator/fonts_page_generator.dart';
@@ -13,6 +15,7 @@ import 'package:framy_generator/generator/imports_generator.dart';
 import 'package:framy_generator/generator/layout_template_generator.dart';
 import 'package:framy_generator/generator/main_generator.dart';
 import 'package:framy_generator/generator/routing_generator.dart';
+import 'package:framy_generator/generator/utils_generator.dart';
 import 'package:glob/glob.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -39,7 +42,9 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateDrawer());
     buffer.writeln(generateFontsPage());
     buffer.writeln(generateColorsPage(themeFramyObjects));
-
+    buffer.writeln(generateUtils());
+    buffer.writeln(generateAppBarPage());
+    buffer.writeln(generateButtonPage());
     return buffer.toString();
 
 //    final buffer = StringBuffer();
