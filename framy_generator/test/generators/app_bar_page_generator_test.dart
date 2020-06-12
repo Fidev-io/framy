@@ -13,9 +13,14 @@ void main() {
       expect(result.contains('Key(\'FramyAppBarPage\')'), isTrue);
     });
 
-    test('should contain AppBar', () {
+    test('should contain 4 AppBars', () {
       final result = generateAppBarPage();
-      expect(result.contains('AppBar('), isTrue);
+      expect('AppBar('.allMatches(result), hasLength(4));
+    });
+
+    test('should contain header', () {
+      final result = generateAppBarPage();
+      expect(result.contains('const FramyHeaderText(\'AppBar\'),'), isTrue);
     });
   });
 }

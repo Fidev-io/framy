@@ -10,9 +10,9 @@ void main() {
       expect(find.byKey(Key('FramyAppBarPage')), findsOneWidget);
     });
 
-    testWidgets('should have one AppBar', (tester) async {
+    testWidgets('should have 4 AppBars', (tester) async {
       await tester.pumpWidget(_TestAppBarPage());
-      expect(find.byType(AppBar), findsOneWidget);
+      expect(find.byType(AppBar), findsNWidgets(4));
     });
   });
 }
