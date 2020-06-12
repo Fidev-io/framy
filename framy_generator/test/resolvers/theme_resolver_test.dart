@@ -72,3 +72,38 @@ class AppTheme2 {
 class AppTheme3 {
   ThemeData theme = ThemeData();
 }
+
+@ShouldGenerate('''
+[
+  {
+    "type": "FramyObjectType.color",
+    "import": "package:__test__/theme_resolver_test.dart",
+    "name": "myCustomColor",
+    "isStatic": false,
+    "kind": "GETTER",
+    "parentObject": {
+      "type": null,
+      "import": "package:__test__/theme_resolver_test.dart",
+      "name": "AppThemeWithColor1",
+      "isStatic": false,
+      "kind": "CLASS",
+      "parentObject": null
+    }
+  }
+]''')
+@FramyTheme()
+class AppThemeWithColor1 {
+  final myCustomColor = Color(0xFFFF9090);
+}
+
+@ShouldGenerate('"name": "myCustomColor",', contains: true)
+@FramyTheme()
+class AppThemeWithMaterialColor {
+  final myCustomColor = MaterialColor(0xFFFF9090);
+}
+
+@ShouldGenerate('"name": "myCustomMaterialAccentColor",', contains: true)
+@FramyTheme()
+class AppThemeWithMaterialAccentColor {
+  final myCustomMaterialAccentColor = MaterialAccentColor(0xFFFF9090);
+}

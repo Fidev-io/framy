@@ -38,7 +38,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateAppBar());
     buffer.writeln(generateDrawer());
     buffer.writeln(generateFontsPage());
-    buffer.writeln(generateColorsPage());
+    buffer.writeln(generateColorsPage(themeFramyObjects));
 
     return buffer.toString();
 

@@ -1,20 +1,21 @@
+import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/colors_page_generator.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('ColorsPage generator result', () {
     test('should start with FramyColorsPage class', () {
-      final result = generateColorsPage();
+      final result = generateColorsPage([]);
       expect(result.startsWith('class FramyColorsPage'), isTrue);
     });
 
     test('should contain key FramyColorsPage', () {
-      final result = generateColorsPage();
+      final result = generateColorsPage([]);
       expect(result.contains('Key(\'FramyColorsPage\')'), isTrue);
     });
 
     test('should contain theme color labels', () {
-      final result = generateColorsPage();
+      final result = generateColorsPage([]);
       expect(result.contains('Primary'), isTrue);
       expect(result.contains('Primary light'), isTrue);
       expect(result.contains('Primary dark'), isTrue);
@@ -39,13 +40,14 @@ void main() {
     });
 
     test('should contain theme color values', () {
-      final result = generateColorsPage();
+      final result = generateColorsPage([]);
       expect(result.contains('Theme.of(context).primaryColor'), isTrue);
       expect(result.contains('Theme.of(context).primaryColorLight'), isTrue);
       expect(result.contains('Theme.of(context).primaryColorDark'), isTrue);
       expect(result.contains('Theme.of(context).canvasColor'), isTrue);
       expect(result.contains('Theme.of(context).accentColor'), isTrue);
-      expect(result.contains('Theme.of(context).scaffoldBackgroundColor'), isTrue);
+      expect(
+          result.contains('Theme.of(context).scaffoldBackgroundColor'), isTrue);
       expect(result.contains('Theme.of(context).bottomAppBarColor'), isTrue);
       expect(result.contains('Theme.of(context).cardColor'), isTrue);
       expect(result.contains('Theme.of(context).dividerColor'), isTrue);
@@ -57,13 +59,51 @@ void main() {
       expect(result.contains('Theme.of(context).buttonColor'), isTrue);
       expect(result.contains('Theme.of(context).textSelectionColor'), isTrue);
       expect(result.contains('Theme.of(context).cursorColor'), isTrue);
-      expect(result.contains('Theme.of(context).textSelectionHandleColor'), isTrue);
+      expect(result.contains('Theme.of(context).textSelectionHandleColor'),
+          isTrue);
       expect(result.contains('Theme.of(context).backgroundColor'), isTrue);
-      expect(result.contains('Theme.of(context).dialogBackgroundColor'), isTrue);
+      expect(
+          result.contains('Theme.of(context).dialogBackgroundColor'), isTrue);
       expect(result.contains('Theme.of(context).indicatorColor'), isTrue);
       expect(result.contains('Theme.of(context).hintColor'), isTrue);
       expect(result.contains('Theme.of(context).errorColor'), isTrue);
-      expect(result.contains('Theme.of(context).toggleableActiveColor'), isTrue);
+      expect(
+          result.contains('Theme.of(context).toggleableActiveColor'), isTrue);
+    });
+
+    test('should contain custom colors from color framy objects', () {
+      //given
+      final colorFramyObjects = [
+        FramyObject()
+          ..type = FramyObjectType.color
+          ..name = 'customColor1'
+          ..kind = ElementKind.GETTER
+          ..isStatic = false
+          ..parentObject = (FramyObject()..name = 'AppTheme')
+      ];
+      //when
+      final result = generateColorsPage(colorFramyObjects);
+      //then
+      expect(
+        result.contains(
+            '_FramyColorItem(name: \'customColor1\', color: AppTheme().customColor1,),'),
+        isTrue,
+      );
+    });
+
+    test('should ignore non-color framy objects', () {
+      //given
+      final framyObjects = [
+        FramyObject()
+          ..type = FramyObjectType.themeData
+          ..name = 'myTheme'
+          ..kind = ElementKind.GETTER
+          ..isStatic = true
+      ];
+      //when
+      final result = generateColorsPage(framyObjects);
+      //then
+      expect(result.contains('myTheme'), isFalse);
     });
   });
 }
