@@ -6,12 +6,9 @@ class FramyHeaderText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.headline4,
-      ),
+    return Text(
+      text,
+      style: Theme.of(context).textTheme.headline5,
     );
   }
 }

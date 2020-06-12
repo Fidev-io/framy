@@ -14,3 +14,18 @@ class TestMaterialApp extends StatelessWidget {
     );
   }
 }
+
+class TestMaterialAppWithScaffold extends StatelessWidget {
+  final Widget child;
+
+  const TestMaterialAppWithScaffold(this.child);
+
+  @override
+  Widget build(BuildContext context) {
+    return TestMaterialApp(
+      Scaffold(
+        body: child,
+      ),
+    );
+  }
+}
