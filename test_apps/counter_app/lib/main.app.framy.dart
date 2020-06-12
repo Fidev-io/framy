@@ -27,6 +27,7 @@ Route onGenerateRoute(RouteSettings settings) {
   final routes = {
     '/typography': FramyFontsPage(),
     '/colors': FramyColorsPage(),
+    '/appbar': FramyAppBarPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -99,6 +100,24 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('Color scheme'),
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/colors'),
+              ),
+              Theme(
+                data: Theme.of(context).copyWith(accentColor: Colors.black54),
+                child: ExpansionTile(
+                  leading: Icon(Icons.category),
+                  title: Text(
+                    'Material components',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  children: [
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('AppBar'),
+                      onTap: () =>
+                          Navigator.of(context).pushReplacementNamed('/appbar'),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -351,4 +370,13 @@ class _FramyColorItem extends StatelessWidget {
   }
 
   String _hex(int val) => val.toRadixString(16).padLeft(2, '0').toUpperCase();
+}
+
+class FramyAppBarPage extends StatelessWidget {
+  const FramyAppBarPage() : super(key: const Key('FramyAppBarPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }

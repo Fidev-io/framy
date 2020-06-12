@@ -24,6 +24,24 @@ class FramyDrawer extends StatelessWidget {
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/colors'),
               ),
+              Theme(
+                data: Theme.of(context).copyWith(accentColor: Colors.black54),
+                child: ExpansionTile(
+                  leading: Icon(Icons.category),
+                  title: Text(
+                    'Material components',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  children: [
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('AppBar'),
+                      onTap: () =>
+                          Navigator.of(context).pushReplacementNamed('/appbar'),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

@@ -214,4 +214,20 @@ void main() {
       await driver.waitFor(find.text('#FFFFFFFF'));
     });
   });
+
+  group('Material components', () {
+    setUp(() async {
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byTooltip('Open navigation menu'));
+      }
+    });
+
+    test('should have AppBar page with AppBar', () async {
+      await driver.tap(find.text('Material components'));
+      await driver.waitFor(find.text('AppBar'));
+      await driver.tap(find.text('AppBar'));
+      await driver.waitFor(find.byValueKey('FramyAppBarPage'));
+      await ozzie.takeScreenshot('${platform}_appbar_page');
+    });
+  });
 }

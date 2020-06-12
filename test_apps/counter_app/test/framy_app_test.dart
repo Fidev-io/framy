@@ -35,5 +35,20 @@ void main() {
       //then
       expect(materialApp.theme, getThemeData());
     });
+
+    testWidgets('should show AppBar page on tap in drawer', (tester) async {
+      //given
+      expect(find.byKey(Key('FramyAppBarPage')), findsNothing);
+      await tester.pumpWidget(FramyApp());
+      await tester.tap(find.byTooltip('Open navigation menu'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Material components'));
+      await tester.pumpAndSettle();
+      //when
+      await tester.tap(find.text('AppBar'));
+      await tester.pumpAndSettle();
+      //then
+      expect(find.byKey(Key('FramyAppBarPage')), findsOneWidget);
+    });
   });
 }

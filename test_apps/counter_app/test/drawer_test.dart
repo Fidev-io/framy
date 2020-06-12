@@ -18,6 +18,18 @@ void main() {
       await tester.pumpWidget(_TestDrawer());
       expect(find.text('Color scheme'), findsOneWidget);
     });
+
+    group('Material components', () {
+      testWidgets('should have AppBar list item', (tester) async {
+        //given
+        await tester.pumpWidget(_TestDrawer());
+        //when
+        await tester.tap(find.text('Material components'));
+        await tester.pump();
+        //then
+        expect(find.text('AppBar'), findsOneWidget);
+      });
+    });
   });
 }
 

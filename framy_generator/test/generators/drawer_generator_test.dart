@@ -32,5 +32,22 @@ void main() {
       final String result = generateDrawer();
       expect(result.contains('\'/typography\''), isTrue);
     });
+
+    group('Material components', () {
+      test('should contain Material components text', () {
+        final String result = generateDrawer();
+        expect(result.contains('\'Material components\''), isTrue);
+      });
+
+      test('should contain AppBar text', () {
+        final String result = generateDrawer();
+        expect(result.contains('Text(\'AppBar\''), isTrue);
+      });
+
+      test('should contain /appbar route name', () {
+        final String result = generateDrawer();
+        expect(result.contains('\'/appbar\''), isTrue);
+      });
+    });
   });
 }
