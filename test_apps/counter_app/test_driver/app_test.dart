@@ -181,5 +181,37 @@ void main() {
       await driver.waitFor(find.text('Error'));
       await driver.waitFor(find.text('#FFFF5252'));
     });
+
+    test('should show MaterialScheme color names and values', () async {
+      await driver.scrollUntilVisible(
+        find.byType('GridView'),
+        find.text('On primary'),
+        dyScroll: -100,
+      );
+      await driver.waitFor(find.text('Primary'));
+      await driver.waitFor(find.text('#FF2196F3'));
+      await driver.waitFor(find.text('Primary variant'));
+      await driver.waitFor(find.text('#FF1976D2'));
+      await driver.waitFor(find.text('Secondary'));
+      await driver.waitFor(find.text('#FF2196F3'));
+      await driver.waitFor(find.text('Secondary variant'));
+      await driver.waitFor(find.text('#FF1976D2'));
+      await driver.waitFor(find.text('Background'));
+      await driver.waitFor(find.text('#FF90CAF9'));
+      await driver.waitFor(find.text('Surface'));
+      await driver.waitFor(find.text('#FFFFFFFF'));
+      await driver.waitFor(find.text('Error'));
+      await driver.waitFor(find.text('#FFFF5252'));
+      await driver.waitFor(find.text('On primary'));
+      await driver.waitFor(find.text('#FFFFFFFF'));
+      await driver.waitFor(find.text('On secondary'));
+      await driver.waitFor(find.text('#FFFFFFFF'));
+      await driver.waitFor(find.text('On background'));
+      await driver.waitFor(find.text('#FFFFFFFF'));
+      await driver.waitFor(find.text('On surface'));
+      await driver.waitFor(find.text('#FF000000'));
+      await driver.waitFor(find.text('On error'));
+      await driver.waitFor(find.text('#FFFFFFFF'));
+    });
   });
 }
