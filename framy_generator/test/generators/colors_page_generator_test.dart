@@ -105,5 +105,45 @@ void main() {
       //then
       expect(result.contains('myTheme'), isFalse);
     });
+
+    test('should contain color scheme values', () {
+      final result = generateColorsPage([]);
+      expect(result.contains('Theme.of(context).colorScheme.primary'), isTrue);
+      expect(result.contains('Theme.of(context).colorScheme.primaryVariant'),
+          isTrue);
+      expect(
+          result.contains('Theme.of(context).colorScheme.secondary'), isTrue);
+      expect(result.contains('Theme.of(context).colorScheme.secondaryVariant'),
+          isTrue);
+      expect(
+          result.contains('Theme.of(context).colorScheme.background'), isTrue);
+      expect(result.contains('Theme.of(context).colorScheme.surface'), isTrue);
+      expect(result.contains('Theme.of(context).colorScheme.error'), isTrue);
+      expect(
+          result.contains('Theme.of(context).colorScheme.onPrimary'), isTrue);
+      expect(
+          result.contains('Theme.of(context).colorScheme.onSecondary'), isTrue);
+      expect(result.contains('Theme.of(context).colorScheme.onBackground'),
+          isTrue);
+      expect(
+          result.contains('Theme.of(context).colorScheme.onSurface'), isTrue);
+      expect(result.contains('Theme.of(context).colorScheme.onError'), isTrue);
+    });
+
+    test('should contain Color Scheme labels', () {
+      final result = generateColorsPage([]);
+      expect(result.contains('Primary'), isTrue);
+      expect(result.contains('Primary variant'), isTrue);
+      expect(result.contains('Secondary'), isTrue);
+      expect(result.contains('Secondary variant'), isTrue);
+      expect(result.contains('Background'), isTrue);
+      expect(result.contains('Surface'), isTrue);
+      expect(result.contains('Error'), isTrue);
+      expect(result.contains('On primary'), isTrue);
+      expect(result.contains('On secondary'), isTrue);
+      expect(result.contains('On background'), isTrue);
+      expect(result.contains('On surface'), isTrue);
+      expect(result.contains('On error'), isTrue);
+    });
   });
 }

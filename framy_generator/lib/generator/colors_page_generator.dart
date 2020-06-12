@@ -77,6 +77,54 @@ class FramyColorsPage extends StatelessWidget {
           name: 'Toggleable Active',
           color: Theme.of(context).toggleableActiveColor,
         ),
+        _FramyColorItem(
+          name: 'Primary',
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        _FramyColorItem(
+          name: 'Primary variant',
+          color: Theme.of(context).colorScheme.primaryVariant,
+        ),
+        _FramyColorItem(
+          name: 'Secondary',
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+        _FramyColorItem(
+          name: 'Secondary variant',
+          color: Theme.of(context).colorScheme.secondaryVariant,
+        ),
+        _FramyColorItem(
+          name: 'Background',
+          color: Theme.of(context).colorScheme.background,
+        ),
+        _FramyColorItem(
+          name: 'Surface',
+          color: Theme.of(context).colorScheme.surface,
+        ),
+        _FramyColorItem(
+          name: 'Error',
+          color: Theme.of(context).colorScheme.error,
+        ),
+        _FramyColorItem(
+          name: 'On primary',
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+        _FramyColorItem(
+          name: 'On secondary',
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
+        _FramyColorItem(
+          name: 'On background',
+          color: Theme.of(context).colorScheme.onBackground,
+        ),
+        _FramyColorItem(
+          name: 'On surface',
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+        _FramyColorItem(
+          name: 'On error',
+          color: Theme.of(context).colorScheme.onError,
+        ),
       ],
     );
   }
