@@ -12,5 +12,10 @@ void main() {
       final result = generateAppBarPage();
       expect(result.contains('Key(\'FramyAppBarPage\')'), isTrue);
     });
+
+    test('should contain AppBar', () {
+      final result = generateAppBarPage();
+      expect(result.contains('AppBar('), isTrue);
+    });
   });
 }
