@@ -33,6 +33,12 @@ class ThemeResolver extends GeneratorForAnnotation<FramyTheme> {
             framyObjectsToReturn
                 .add(_themeDataObjectFromElement(execElement, parentObject));
             break;
+          case 'Color':
+          case 'MaterialColor':
+          case 'MaterialAccentColor':
+            framyObjectsToReturn
+                .add(_colorObjectFromElement(execElement, parentObject));
+            break;
         }
       }
     } else {
@@ -49,5 +55,10 @@ class ThemeResolver extends GeneratorForAnnotation<FramyTheme> {
           [FramyObject parent]) =>
       FramyObject.fromElement(element)
         ..type = FramyObjectType.themeData
+        ..parentObject = parent;
+
+  FramyObject _colorObjectFromElement(Element element, [FramyObject parent]) =>
+      FramyObject.fromElement(element)
+        ..type = FramyObjectType.color
         ..parentObject = parent;
 }

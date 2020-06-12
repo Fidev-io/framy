@@ -1,4 +1,7 @@
-String generateColorsPage() => '''
+import 'package:framy_generator/framy_object.dart';
+import 'package:framy_generator/generator/accessible_element_generator.dart';
+
+String generateColorsPage(List<FramyObject> themeObjects) => '''
 class FramyColorsPage extends StatelessWidget {
   const FramyColorsPage() : super(key: const Key('FramyColorsPage'));
 
@@ -7,6 +10,7 @@ class FramyColorsPage extends StatelessWidget {
     return GridView.extent(
       maxCrossAxisExtent: 150,
       children: [
+        ${_generateCustomColorItems(themeObjects)}
         _FramyColorItem(
           name: 'Primary',
           color: Theme.of(context).primaryColor,
@@ -129,6 +133,19 @@ class _FramyColorItem extends StatelessWidget {
   String _hex(int val) => val.toRadixString(16).padLeft(2, '0').toUpperCase();
 }
 ''';
+
+String _generateCustomColorItems(List<FramyObject> themeObjects) {
+  String result = '';
+  themeObjects
+      .where((framyObject) => framyObject.type == FramyObjectType.color)
+      .forEach(
+    (colorFramyObject) {
+      result +=
+          '_FramyColorItem(name: \'${colorFramyObject.name}\', color: ${generateAccessibleElement(colorFramyObject)},),';
+    },
+  );
+  return result;
+}
 //import 'package:framy_generator/framy_object.dart';
 //import 'package:framy_generator/generator/accessible_element_generator.dart';
 //
@@ -199,45 +216,3 @@ class _FramyColorItem extends StatelessWidget {
 //  }
 //}
 //
-//class ColorItem extends StatelessWidget {
-//  final Color color;
-//  final String name;
-//
-//  const ColorItem({Key key, @required this.color, @required this.name})
-//      : super(key: key);
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return ListTile(
-//      leading: CircleAvatar(backgroundColor: color),
-//      title: Text(name),
-//      trailing: Column(
-//        mainAxisAlignment: MainAxisAlignment.center,
-//        children: [
-//          Text('(\${color.red}, \${color.green}, \${color.blue})'),
-//          Text('#\${_hex(color.red)}\${_hex(color.green)}\${_hex(color.blue)}'),
-//          Text('Opacity: \${(color.opacity * 100).round()}%'),
-//        ],
-//      ),
-//    );
-//  }
-//
-//  String _hex(int val) => val.toRadixString(16).padLeft(2, '0').toUpperCase();
-//}
-//
-//''';
-//
-//String _objectsToColorItems(List<FramyObject> colors) {
-//  if (colors.isEmpty) {
-//    return '';
-//  } else {
-//    String result = 'Text(\'== Defined colors ==\'),\n';
-//    result = colors.fold(result, (prev, obj) {
-//      String colorItem = '          ColorItem(color: ';
-//      colorItem += generateAccessibleElement(obj);
-//      colorItem += ', name: \'${obj.name}\'),\n';
-//      return prev + colorItem;
-//    });
-//    return result;
-//  }
-//}
