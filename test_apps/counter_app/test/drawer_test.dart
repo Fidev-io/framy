@@ -20,7 +20,7 @@ void main() {
     });
 
     group('Material components', () {
-      Future<void> openDrawer(WidgetTester tester) async {
+      Future<void> openMaterialComponentsMenu(WidgetTester tester) async {
         //given
         await tester.pumpWidget(_TestDrawer());
         //when
@@ -29,14 +29,19 @@ void main() {
       }
 
       testWidgets('should have AppBar list item', (tester) async {
-        await openDrawer(tester);
+        await openMaterialComponentsMenu(tester);
         expect(find.text('AppBar'), findsOneWidget);
       });
 
       testWidgets('should have Button list item', (tester) async {
-        await openDrawer(tester);
+        await openMaterialComponentsMenu(tester);
         expect(find.text('Button'), findsOneWidget);
       });
+    });
+
+    testWidgets('should have CounterFAB', (tester) async {
+      await tester.pumpWidget(_TestDrawer());
+      expect(find.text('CounterFAB'), findsOneWidget);
     });
   });
 }

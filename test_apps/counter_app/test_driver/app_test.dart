@@ -238,4 +238,16 @@ void main() {
       await ozzie.takeScreenshot('${platform}_button_page');
     });
   });
+
+  group('CounterFAB', () {
+    setUp(() async {
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byTooltip('Open navigation menu'));
+      }
+    });
+
+    test('should have CounterFAB in drawer', () async {
+      await driver.waitFor(find.text('CounterFAB'));
+    });
+  });
 }

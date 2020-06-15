@@ -1,8 +1,8 @@
 import 'package:build/build.dart';
-import 'package:framy_generator/framy_dependency_generator.dart';
 import 'package:framy_generator/framy_generator.dart';
 import 'package:framy_generator/json_builder.dart';
 import 'package:framy_generator/theme_resolver.dart';
+import 'package:framy_generator/widget_resolver.dart';
 import 'package:source_gen/source_gen.dart';
 
 Builder themeBuilder(BuilderOptions options) {
@@ -14,10 +14,12 @@ Builder themeBuilder(BuilderOptions options) {
   );
 }
 
-Builder dependencyBuilder(BuilderOptions options) {
-  return LibraryBuilder(
-    FramyDependencyGenerator(),
-    generatedExtension: '.other.framy.json',
+Builder widgetBuilder(BuilderOptions options) {
+  return JsonLibraryBuilder(
+    WidgetResolver(),
+    formatOutput: (s) => s,
+    generatedExtension: '.widget.framy.json',
+    header: '',
   );
 }
 

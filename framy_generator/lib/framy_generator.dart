@@ -20,17 +20,13 @@ import 'package:glob/glob.dart';
 import 'package:source_gen/source_gen.dart';
 
 class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
-  final themeFramyObjectFiles = Glob("**.theme.framy.json");
-
   @override
   Future<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
-    List<FramyObject> themeFramyObjects = [];
-    await for (final id in buildStep.findAssets(themeFramyObjectFiles)) {
-      List jsons = jsonDecode(await buildStep.readAsString(id));
-      themeFramyObjects
-          .addAll(jsons.map((json) => FramyObject.fromJson(json)).toList());
-    }
+    final themeFramyObjects =
+        await _loadFramyObjects(buildStep, '**.theme.framy.json');
+    final widgetFramyObjects =
+        await _loadFramyObjects(buildStep, '**.widget.framy.json');
 
     final buffer = StringBuffer();
     buffer.writeln(generateImports(themeFramyObjects));
@@ -39,44 +35,26 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateRouting());
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());
-    buffer.writeln(generateDrawer());
+    buffer.writeln(generateDrawer(widgetFramyObjects));
     buffer.writeln(generateFontsPage());
     buffer.writeln(generateColorsPage(themeFramyObjects));
     buffer.writeln(generateUtils());
     buffer.writeln(generateAppBarPage());
     buffer.writeln(generateButtonPage());
     return buffer.toString();
+  }
 
-//    final buffer = StringBuffer();
-//    //imports
-//    final imports = framyObjects
-//        .expand((obj) => obj.dependencyImports..add(obj.import))
-//        .toSet();
-//    buffer.writeln(generateImports(imports));
-//    //main
-//    buffer.writeln(generateMain());
-//    //gallery app
-//    final themeDataObject = framyObjects.singleWhere(
-//      (fo) => fo.type == FramyObjectType.themeData,
-//      orElse: () => null,
-//    );
-//    buffer.writeln(generateGalleryApp(themeDataObject));
-//    //static stuff
-//    buffer.writeln(generateLayoutBuilder());
-//    buffer.writeln(generateHomePage());
-//    buffer.writeln(generateFontsPage());
-//    buffer.writeln(generateMaterialComponentsPage());
-//    //colors page
-//    final colorObjects =
-//        framyObjects.where((fo) => fo.type == FramyObjectType.color).toList();
-//    buffer.writeln(generateColorsPage(colorObjects));
-//    //dynamic pages
-//    final pages = framyObjects.map((fo) => fo.page).toSet()..remove(null);
-//    buffer.writeln(generatePageConfigs(framyObjects));
-//    for (String page in pages) {
-//      final componentsInPage =
-//          framyObjects.where((fo) => fo.page == page).toList();
-//      buffer.writeln(generateWidgetPage(componentsInPage));
-//    }
+  Future<List<FramyObject>> _loadFramyObjects(
+    BuildStep buildStep,
+    String extension,
+  ) async {
+    final glob = Glob(extension);
+    List<FramyObject> framyObjects = [];
+    await for (final id in buildStep.findAssets(glob)) {
+      List jsons = jsonDecode(await buildStep.readAsString(id));
+      framyObjects
+          .addAll(jsons.map((json) => FramyObject.fromJson(json)).toList());
+    }
+    return framyObjects;
   }
 }

@@ -42,12 +42,8 @@ class FramyTheme extends FramyAnnotation {
 const framyTheme = FramyTheme();
 
 /// Used to annotate a Widget to be included as a component
-class FramyWidget<T> extends FramyAnnotation {
-  final List<String> configs;
-  final List<String> extraImports;
-  final String page;
-
-  const FramyWidget({this.configs, this.extraImports, this.page});
+class FramyWidget extends FramyAnnotation {
+  const FramyWidget();
 }
 
 /// Used to annotate a class containing Widget accessors to be included as a component

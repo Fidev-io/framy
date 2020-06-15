@@ -2,8 +2,7 @@ import 'package:framy_annotation/framy_annotation.dart';
 import 'package:framy_generator/theme_resolver.dart';
 import 'package:source_gen_test/source_gen_test.dart';
 
-import 'color.dart';
-import 'theme_data.dart';
+import 'dummy_classes.dart';
 
 Future<void> main() async {
   final reader = await initializeLibraryReaderForDirectory(

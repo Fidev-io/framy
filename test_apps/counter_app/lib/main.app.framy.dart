@@ -127,6 +127,10 @@ class FramyDrawer extends StatelessWidget {
                   ],
                 ),
               ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('CounterFAB'),
+              ),
             ],
           ),
         ),
