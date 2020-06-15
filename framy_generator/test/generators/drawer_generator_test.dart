@@ -67,20 +67,33 @@ void main() {
       });
     });
 
-    test('should contain custom widget name', () {
+    group('when custom widget is given', () {
       //given
       final widgetsFramyObjects = [
         FramyObject()
           ..type = FramyObjectType.widget
           ..name = 'MyCustomWidget'
       ];
-      //when
-      final result = generateDrawer(widgetsFramyObjects);
-      //then
-      expect(
-        result.contains('Text(\'MyCustomWidget\''),
-        isTrue,
-      );
+
+      test('should contain widget name', () {
+        //when
+        final result = generateDrawer(widgetsFramyObjects);
+        //then
+        expect(
+          result.contains('Text(\'MyCustomWidget\''),
+          isTrue,
+        );
+      });
+
+      test('should contain /widgetName route name', () {
+        //when
+        final result = generateDrawer(widgetsFramyObjects);
+        //then
+        expect(
+          result.contains('\'/MyCustomWidget\''),
+          isTrue,
+        );
+      });
     });
   });
 }

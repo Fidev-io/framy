@@ -66,10 +66,12 @@ String _generateCustomWidgetTiles(List<FramyObject> widgetObjects) {
       .where((framyObject) => framyObject.type == FramyObjectType.widget)
       .forEach(
     (widgetFramyObject) {
+      final className = widgetFramyObject.name;
       result += '''
 ListTile(
   leading: SizedBox.shrink(),
-  title: Text('${widgetFramyObject.name}'),
+  title: Text('$className'),
+  onTap: () => Navigator.of(context).pushReplacementNamed('/$className'),
 ),
 ''';
     },

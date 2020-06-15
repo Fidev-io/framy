@@ -30,10 +30,13 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
         await _loadFramyObjects(buildStep, '**.widget.framy.json');
 
     final buffer = StringBuffer();
-    buffer.writeln(generateImports(themeFramyObjects));
+    buffer.writeln(generateImports([
+      ...themeFramyObjects,
+      ...widgetFramyObjects,
+    ]));
     buffer.writeln(generateMain());
     buffer.writeln(generateFramyApp(themeFramyObjects));
-    buffer.writeln(generateRouting());
+    buffer.writeln(generateRouting(widgetFramyObjects));
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());
     buffer.writeln(generateDrawer(widgetFramyObjects));

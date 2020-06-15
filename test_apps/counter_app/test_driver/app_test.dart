@@ -240,7 +240,7 @@ void main() {
   });
 
   group('CounterFAB', () {
-    setUp(() async {
+    setUpAll(() async {
       if (!await isDeviceBig()) {
         await driver.tap(find.byTooltip('Open navigation menu'));
       }
@@ -255,6 +255,10 @@ void main() {
       await driver.tap(find.text('CounterFAB'));
       await driver.waitFor(find.byValueKey('Framy_CounterFAB_Page'));
       await ozzie.takeScreenshot('${platform}_CounterFAB_page');
+    });
+
+    test('should have counterFAB in CounterFAB page', () async {
+      await driver.waitFor(find.byValueKey('MyCounterFAB'));
     });
   });
 }

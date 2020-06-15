@@ -35,6 +35,19 @@ void main() {
         //then
         expect(result.contains('Framy_MyWidget_Page'), isTrue);
       });
+
+      test('should contain custom widget XXX constructor', () {
+        //given
+        final widgetObjects = [
+          FramyObject()
+            ..name = 'MyWidget'
+            ..type = FramyObjectType.widget
+        ];
+        //when
+        final result = generateWidgetPages(widgetObjects);
+        //then
+        expect(result.contains('MyWidget('), isTrue);
+      });
     });
   });
 }

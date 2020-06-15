@@ -68,6 +68,7 @@ class CounterFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      key: Key('MyCounterFAB'),
       onPressed: onPressed,
       tooltip: 'Increment',
       child: Icon(Icons.add),

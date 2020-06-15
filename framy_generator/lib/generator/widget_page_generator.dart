@@ -8,6 +8,7 @@ String generateWidgetPages(List<FramyObject> widgetFramyObjects) {
 }
 
 String _generateWidgetPage(FramyObject framyObject) {
+  final constructor = '${framyObject.name}()';
   final className = 'Framy${framyObject.name}CustomPage';
   final key = 'Framy_${framyObject.name}_Page';
   return '''
@@ -16,7 +17,7 @@ class $className extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return $constructor;
   }
 }
 ''';

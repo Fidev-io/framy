@@ -19,8 +19,7 @@ void main() {
       //given
       await tester.pumpWidget(FramyApp());
       expect(find.byKey(Key('FramyColorScheme')), findsNothing);
-      await tester.tap(find.byTooltip('Open navigation menu'));
-      await tester.pumpAndSettle();
+      await _openDrawer(tester);
       //when
       await tester.tap(find.text('Color scheme'));
       await tester.pumpAndSettle();
@@ -56,13 +55,29 @@ void main() {
       //then
       expect(find.byKey(Key('FramyButtonPage')), findsOneWidget);
     });
+
+    testWidgets('should show CounterFAB page on tap in drawer', (tester) async {
+      //given
+      await tester.pumpWidget(FramyApp());
+      expect(find.byKey(Key('Framy_CounterFAB_Page')), findsNothing);
+      await _openDrawer(tester);
+      //when
+      await tester.tap(find.text('CounterFAB'));
+      await tester.pumpAndSettle();
+      //then
+      expect(find.byKey(Key('Framy_CounterFAB_Page')), findsOneWidget);
+    });
   });
+}
+
+Future<void> _openDrawer(WidgetTester tester) async {
+  await tester.tap(find.byTooltip('Open navigation menu'));
+  await tester.pumpAndSettle();
 }
 
 Future<void> _goToMaterialComponentPage(
     WidgetTester tester, Finder finder) async {
-  await tester.tap(find.byTooltip('Open navigation menu'));
-  await tester.pumpAndSettle();
+  await _openDrawer(tester);
   await tester.tap(find.text('Material components'));
   await tester.pumpAndSettle();
   //when

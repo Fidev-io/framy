@@ -1,4 +1,5 @@
 import 'package:counter_app/main.app.framy.dart';
+import 'package:counter_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,6 +11,12 @@ void main() {
       await tester
           .pumpWidget(TestMaterialAppWithScaffold(FramyCounterFABCustomPage()));
       expect(find.byKey(Key('Framy_CounterFAB_Page')), findsOneWidget);
+    });
+
+    testWidgets('should have CounterFAB', (tester) async {
+      await tester
+          .pumpWidget(TestMaterialAppWithScaffold(FramyCounterFABCustomPage()));
+      expect(find.byType(CounterFAB), findsOneWidget);
     });
   });
 }
