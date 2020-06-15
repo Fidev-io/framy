@@ -556,3 +556,13 @@ class FramyButtonPage extends StatelessWidget {
     );
   }
 }
+
+class FramyCounterFABCustomPage extends StatelessWidget {
+  const FramyCounterFABCustomPage()
+      : super(key: const Key('Framy_CounterFAB_Page'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
