@@ -4,9 +4,9 @@
 // FramyGenerator
 // **************************************************************************
 
+import 'package:counter_app/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:counter_app/main.dart';
 
 void main() {
   runApp(FramyApp());
@@ -29,6 +29,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/colors': FramyColorsPage(),
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
+    '/CounterFAB': FramyCounterFABCustomPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -126,6 +127,12 @@ class FramyDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('CounterFAB'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/CounterFAB'),
               ),
             ],
           ),
@@ -550,5 +557,15 @@ class FramyButtonPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class FramyCounterFABCustomPage extends StatelessWidget {
+  const FramyCounterFABCustomPage()
+      : super(key: const Key('Framy_CounterFAB_Page'));
+
+  @override
+  Widget build(BuildContext context) {
+    return CounterFAB();
   }
 }

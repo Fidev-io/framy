@@ -10,3 +10,9 @@ class MaterialColor extends Color {
 class MaterialAccentColor extends Color {
   const MaterialAccentColor(int value) : super(value);
 }
+
+class ThemeData {
+  final Color errorColor;
+
+  ThemeData({this.errorColor});
+}

@@ -1,10 +1,7 @@
 #!/bin/sh
 
-shouldRebuild=${1-false}
-#echo "$shouldRebuild"
-#if [ "$shouldRebuild" = "true" ]; then
-#  echo "hi";
-#fi
+shouldRunIntegration=${1-false}
+shouldRebuild=${2-false}
 
 echo "==== Testing generator ===="
 cd framy_generator || exit
@@ -21,17 +18,18 @@ if [ "$shouldRebuild" = "true" ]; then
 fi
 ./fvm test
 
+if [ "$shouldRunIntegration" = "true" ]; then
+  rm -rf ozzie
+  UDID=$(
+    xcrun instruments -s |
+    awk \
+      -F ' *[][]' \
+      -v 'device=iPhone 11 Pro (13.5)' \
+      '$1 == device { print $2 }'
+  )
+  xcrun simctl boot "${UDID:?No Simulator with this name found}"
 
-rm -rf ozzie
-UDID=$(
-  xcrun instruments -s |
-  awk \
-    -F ' *[][]' \
-    -v 'device=iPhone 11 Pro (13.5)' \
-    '$1 == device { print $2 }'
-)
-xcrun simctl boot "${UDID:?No Simulator with this name found}"
+  PLATFORM="macos" ./fvm driver --target=test_driver/app.dart -d macos
 
-PLATFORM="macos" ./fvm driver --target=test_driver/app.dart -d macos
-
-PLATFORM="ios" ./fvm driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
+  PLATFORM="ios" ./fvm driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
+fi

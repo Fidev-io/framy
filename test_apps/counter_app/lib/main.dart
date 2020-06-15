@@ -54,11 +54,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: CounterFAB(onPressed: _incrementCounter),
+    );
+  }
+}
+
+@FramyWidget()
+class CounterFAB extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const CounterFAB({Key key, this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      key: Key('MyCounterFAB'),
+      onPressed: onPressed,
+      tooltip: 'Increment',
+      child: Icon(Icons.add),
     );
   }
 }

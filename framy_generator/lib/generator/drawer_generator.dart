@@ -1,4 +1,6 @@
-String generateDrawer() => '''
+import 'package:framy_generator/framy_object.dart';
+
+String generateDrawer(List<FramyObject> widgetFramyObjects) => '''
 class FramyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class FramyDrawer extends StatelessWidget {
                   ],
                 ),
               ),
+              ${_generateCustomWidgetTiles(widgetFramyObjects)}
             ],
           ),
         ),
@@ -57,3 +60,21 @@ class FramyDrawer extends StatelessWidget {
   }
 }
 ''';
+String _generateCustomWidgetTiles(List<FramyObject> widgetObjects) {
+  String result = '';
+  widgetObjects
+      .where((framyObject) => framyObject.type == FramyObjectType.widget)
+      .forEach(
+    (widgetFramyObject) {
+      final className = widgetFramyObject.name;
+      result += '''
+ListTile(
+  leading: SizedBox.shrink(),
+  title: Text('$className'),
+  onTap: () => Navigator.of(context).pushReplacementNamed('/$className'),
+),
+''';
+    },
+  );
+  return result;
+}

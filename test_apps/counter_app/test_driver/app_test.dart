@@ -238,4 +238,27 @@ void main() {
       await ozzie.takeScreenshot('${platform}_button_page');
     });
   });
+
+  group('CounterFAB', () {
+    setUpAll(() async {
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byTooltip('Open navigation menu'));
+      }
+    });
+
+    test('should have CounterFAB in drawer', () async {
+      await driver.waitFor(find.text('CounterFAB'));
+    });
+
+    test('should go to CounterFAB page after tap on CounterFAB in drawer',
+        () async {
+      await driver.tap(find.text('CounterFAB'));
+      await driver.waitFor(find.byValueKey('Framy_CounterFAB_Page'));
+      await ozzie.takeScreenshot('${platform}_CounterFAB_page');
+    });
+
+    test('should have counterFAB in CounterFAB page', () async {
+      await driver.waitFor(find.byValueKey('MyCounterFAB'));
+    });
+  });
 }

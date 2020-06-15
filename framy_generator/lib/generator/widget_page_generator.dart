@@ -1,3 +1,28 @@
+import 'package:framy_generator/framy_object.dart';
+
+String generateWidgetPages(List<FramyObject> widgetFramyObjects) {
+  if (widgetFramyObjects.isEmpty) {
+    return '';
+  }
+  return _generateWidgetPage(widgetFramyObjects.first);
+}
+
+String _generateWidgetPage(FramyObject framyObject) {
+  final constructor = '${framyObject.name}()';
+  final className = 'Framy${framyObject.name}CustomPage';
+  final key = 'Framy_${framyObject.name}_Page';
+  return '''
+class $className extends StatelessWidget {
+  const $className() : super(key: const Key('$key'));
+
+  @override
+  Widget build(BuildContext context) {
+    return $constructor;
+  }
+}
+''';
+}
+
 //import 'package:framy_generator/framy_object.dart';
 //import 'package:framy_generator/generator/accessible_element_generator.dart';
 //

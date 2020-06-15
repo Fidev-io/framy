@@ -71,6 +71,6 @@ class FramyObject {
 enum FramyObjectType {
   themeData,
   color,
-//  widget,
+  widget,
 //  widgets,
 }
