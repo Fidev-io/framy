@@ -44,9 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
+            CounterTitle(),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
@@ -72,6 +70,19 @@ class CounterFAB extends StatelessWidget {
       onPressed: onPressed,
       tooltip: 'Increment',
       child: Icon(Icons.add),
+    );
+  }
+}
+
+@FramyWidget()
+class CounterTitle extends StatelessWidget {
+  final String verb;
+
+  const CounterTitle({Key key, this.verb}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'You have ${verb ?? 'pushed'} the button this many times:',
     );
   }
 }

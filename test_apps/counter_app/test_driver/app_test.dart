@@ -261,4 +261,18 @@ void main() {
       await driver.waitFor(find.byValueKey('MyCounterFAB'));
     });
   });
+
+  group('CounterTitle', () {
+    setUpAll(() async {
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byTooltip('Open navigation menu'));
+      }
+      await driver.tap(find.text('CounterTitle'));
+    });
+
+    test('should have default title text', () async {
+      await driver
+          .waitFor(find.text('You have pushed the button this many times:'));
+    });
+  });
 }

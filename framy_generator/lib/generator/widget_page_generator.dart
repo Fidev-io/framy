@@ -1,10 +1,10 @@
 import 'package:framy_generator/framy_object.dart';
 
 String generateWidgetPages(List<FramyObject> widgetFramyObjects) {
-  if (widgetFramyObjects.isEmpty) {
-    return '';
-  }
-  return _generateWidgetPage(widgetFramyObjects.first);
+  return widgetFramyObjects.fold(
+    '',
+    (previousValue, element) => previousValue + _generateWidgetPage(element),
+  );
 }
 
 String _generateWidgetPage(FramyObject framyObject) {

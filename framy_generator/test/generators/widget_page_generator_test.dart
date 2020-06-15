@@ -49,5 +49,23 @@ void main() {
         expect(result.contains('MyWidget('), isTrue);
       });
     });
+
+    test('should contain 2 classes with proper names when 2 widgets are passed',
+        () {
+      //given
+      final widgetObjects = [
+        FramyObject()
+          ..name = 'Widget1'
+          ..type = FramyObjectType.widget,
+        FramyObject()
+          ..name = 'Widget2'
+          ..type = FramyObjectType.widget,
+      ];
+      //when
+      final result = generateWidgetPages(widgetObjects);
+      //then
+      expect(result.contains('FramyWidget1CustomPage'), isTrue);
+      expect(result.contains('FramyWidget2CustomPage'), isTrue);
+    });
   });
 }

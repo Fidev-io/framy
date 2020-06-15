@@ -4,9 +4,9 @@
 // FramyGenerator
 // **************************************************************************
 
-import 'package:counter_app/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:counter_app/main.dart';
 
 void main() {
   runApp(FramyApp());
@@ -30,6 +30,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
     '/CounterFAB': FramyCounterFABCustomPage(),
+    '/CounterTitle': FramyCounterTitleCustomPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -133,6 +134,12 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('CounterFAB'),
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/CounterFAB'),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('CounterTitle'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/CounterTitle'),
               ),
             ],
           ),
@@ -567,5 +574,15 @@ class FramyCounterFABCustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CounterFAB();
+  }
+}
+
+class FramyCounterTitleCustomPage extends StatelessWidget {
+  const FramyCounterTitleCustomPage()
+      : super(key: const Key('Framy_CounterTitle_Page'));
+
+  @override
+  Widget build(BuildContext context) {
+    return CounterTitle();
   }
 }
