@@ -41,16 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CounterTitle(),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+        child: CounterTitle(counter: _counter),
       ),
       floatingActionButton: CounterFAB(onPressed: _incrementCounter),
     );
@@ -77,12 +68,23 @@ class CounterFAB extends StatelessWidget {
 @FramyWidget()
 class CounterTitle extends StatelessWidget {
   final String verb;
+  final int counter;
 
-  const CounterTitle({Key key, this.verb = 'pushed'}) : super(key: key);
+  const CounterTitle({Key key, this.verb = 'pushed', this.counter = 0})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Text(
-      'You have $verb the button this many times:',
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'You have $verb the button this many times:',
+        ),
+        Text(
+          '$counter',
+          style: Theme.of(context).textTheme.headline4,
+        ),
+      ],
     );
   }
 }

@@ -104,3 +104,27 @@ class WidgetWithConstructorAndKey {
 class WidgetWithConstructorWithDefaultParamValue {
   WidgetWithConstructorWithDefaultParamValue({String arg1 = 'test1'}) {}
 }
+
+@ShouldGenerate('"type": "FramyWidgetDependencyType.int"', contains: true)
+@FramyWidget()
+class WidgetWithIntParam {
+  WidgetWithIntParam(int arg1) {}
+}
+
+@ShouldGenerate('"type": "FramyWidgetDependencyType.double"', contains: true)
+@FramyWidget()
+class WidgetWithDoubleParam {
+  WidgetWithDoubleParam(double arg1) {}
+}
+
+@ShouldGenerate('"type": "FramyWidgetDependencyType.double"', contains: true)
+@FramyWidget()
+class WidgetWithNumParam {
+  WidgetWithNumParam(num arg1) {}
+}
+
+@ShouldGenerate('"type": "FramyWidgetDependencyType.bool"', contains: true)
+@FramyWidget()
+class WidgetWithBoolParam {
+  WidgetWithBoolParam(bool arg1) {}
+}

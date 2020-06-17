@@ -58,14 +58,15 @@ class FramyObject {
 class FramyWidgetDependency {
   final String name;
   final FramyWidgetDependencyType type;
-  final dynamic defaultValue;
+  final String defaultValueCode;
   final bool isNamed;
 
-  FramyWidgetDependency(this.name, this.type, this.defaultValue, this.isNamed);
+  FramyWidgetDependency(
+      this.name, this.type, this.defaultValueCode, this.isNamed);
 
   FramyWidgetDependency.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        defaultValue = json['defaultValue'],
+        defaultValueCode = json['defaultValue'],
         type = FramyWidgetDependencyType.values
             .singleWhere((element) => element.toString() == json['type']),
         isNamed = json['isNamed'];
@@ -74,7 +75,7 @@ class FramyWidgetDependency {
     return {
       'name': name,
       'type': type?.toString(),
-      'defaultValue': defaultValue,
+      'defaultValue': defaultValueCode,
       'isNamed': isNamed,
     };
   }
@@ -83,7 +84,7 @@ class FramyWidgetDependency {
 enum FramyWidgetDependencyType {
   string,
   int,
-  num,
+  double,
   bool,
 }
 

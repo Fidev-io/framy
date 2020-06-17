@@ -7,5 +7,5 @@ class FramyDependencyModel<T> {
   FramyDependencyModel(this.name, this.type, this.value);
 }
 
-enum FramyDependencyType { string, int, bool, num }
+enum FramyDependencyType { string, int, bool, double }
 ''';

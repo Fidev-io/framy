@@ -70,5 +70,11 @@ void main() {
       final result = generateWidgetDependenciesPanel();
       expect(result.contains('Key(\'FramyWidgetDependenciesButton\')'), isTrue);
     });
+
+    test('should contain null-safe String initialValue', () {
+      final result = generateWidgetDependenciesPanel();
+      expect(result.contains('initialValue: dependency.value?.toString()'),
+          isTrue);
+    });
   });
 }

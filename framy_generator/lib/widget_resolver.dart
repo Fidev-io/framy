@@ -42,7 +42,13 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
     switch (type.toString()) {
       case 'String':
         return FramyWidgetDependencyType.string;
-      //TODO: Handle other cases and throw error when unsupported
+      case 'int':
+        return FramyWidgetDependencyType.int;
+      case 'double':
+      case 'num':
+        return FramyWidgetDependencyType.double;
+      case 'bool':
+        return FramyWidgetDependencyType.bool;
       default:
         return FramyWidgetDependencyType.string;
     }

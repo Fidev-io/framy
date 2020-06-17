@@ -282,6 +282,10 @@ void main() {
       await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
     });
 
+    test('should have a default value typed in', () async {
+      await driver.waitFor(find.text('pushed'));
+    });
+
     test(
         'should change displayed text when text typed into the dependencies panel',
         () async {

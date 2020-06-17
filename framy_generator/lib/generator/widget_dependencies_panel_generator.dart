@@ -40,8 +40,9 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     return Column(
       children: [
         Text(dependency.name),
-        TextField(
+        TextFormField(
           key: Key('framy_dependency_\${dependency.name}_input'),
+          initialValue: dependency.value?.toString(),
           onChanged: (s) => onChanged(dependency.name, s),
         ),
       ],

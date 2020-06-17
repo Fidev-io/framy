@@ -73,13 +73,27 @@ class $stateClassName extends State<$className> {
 }
 
 String _dependencyInitializationLine(FramyWidgetDependency dependency) {
-  final String type = 'String';
-  final String dependencyType = 'FramyDependencyType.string';
+  final String type = _types[dependency.type];
+  final String dependencyType = _dependencyTypes[dependency.type];
   final String name = dependency.name;
-  final String defaultValue = dependency.defaultValue;
+  final String defaultValue = dependency.defaultValueCode;
 
   return 'FramyDependencyModel<$type>(\'$name\', $dependencyType, $defaultValue),\n';
 }
+
+Map<FramyWidgetDependencyType, String> _types = {
+  FramyWidgetDependencyType.string: 'String',
+  FramyWidgetDependencyType.int: 'int',
+  FramyWidgetDependencyType.bool: 'bool',
+  FramyWidgetDependencyType.double: 'double',
+};
+
+Map<FramyWidgetDependencyType, String> _dependencyTypes = {
+  FramyWidgetDependencyType.string: 'FramyDependencyType.string',
+  FramyWidgetDependencyType.int: 'FramyDependencyType.int',
+  FramyWidgetDependencyType.bool: 'FramyDependencyType.bool',
+  FramyWidgetDependencyType.double: 'FramyDependencyType.double',
+};
 
 String _generateParamUsageInConstructor(FramyWidgetDependency dependency) {
   final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';

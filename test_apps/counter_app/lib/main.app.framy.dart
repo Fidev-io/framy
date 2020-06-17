@@ -638,6 +638,7 @@ class _FramyCounterTitleCustomPageState
     extends State<FramyCounterTitleCustomPage> {
   List<FramyDependencyModel> dependencies = [
     FramyDependencyModel<String>('verb', FramyDependencyType.string, 'pushed'),
+    FramyDependencyModel<int>('counter', FramyDependencyType.int, 0),
   ];
 
   FramyDependencyModel dependency(String name) =>
@@ -662,6 +663,7 @@ class _FramyCounterTitleCustomPageState
               Expanded(
                 child: CounterTitle(
                   verb: dependency('verb').value,
+                  counter: dependency('counter').value,
                 ),
               ),
               if (!isSmallDevice)
@@ -692,7 +694,7 @@ class FramyDependencyModel<T> {
   FramyDependencyModel(this.name, this.type, this.value);
 }
 
-enum FramyDependencyType { string, int, bool, num }
+enum FramyDependencyType { string, int, bool, double }
 
 class FramyWidgetDependenciesPanel extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
@@ -736,8 +738,9 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     return Column(
       children: [
         Text(dependency.name),
-        TextField(
+        TextFormField(
           key: Key('framy_dependency_${dependency.name}_input'),
+          initialValue: dependency.value?.toString(),
           onChanged: (s) => onChanged(dependency.name, s),
         ),
       ],

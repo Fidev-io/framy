@@ -108,6 +108,22 @@ void main() {
       expect(result.contains(expectedList), isTrue);
     });
 
+    test('should properly handle int dependency', () {
+      //given
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.int,
+        '13',
+        false,
+      ));
+      //when
+      final result = generateWidgetPages(widgetObjects);
+      //then
+      final expectedDependency =
+          'FramyDependencyModel<int>(\'arg1\', FramyDependencyType.int, 13),';
+      expect(result.contains(expectedDependency), isTrue);
+    });
+
     test(
         'should use dependency in widget constructor when the non-named dependency is passed',
         () {
