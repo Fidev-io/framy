@@ -1,0 +1,33 @@
+name: Github Pages
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Github Pages Showcase
+    env:
+      my_secret: ${{secrets.commit_secret}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1.3.0
+        with:
+          channel: 'dev'
+      - run: flutter config --enable-web
+      - run: flutter pub get
+        working-directory: showcase
+      - run: flutter build web --release
+        working-directory: showcase
+      - run: |
+          cd showcase/build/web
+          git init
+          git config --global user.email marcin.szalek1@gmail.com
+          git config --global user.name MarcinusX
+          git status
+          git remote add origin https://${{secrets.commit_secret}}@github.com/Fidev-io/framy.git
+          git checkout -b gh-pages
+          git add --all
+          git commit -m "github pages CI deploy"
+          git push origin gh-pages -f
