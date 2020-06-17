@@ -16,3 +16,5 @@ class ThemeData {
 
   ThemeData({this.errorColor});
 }
+
+class Key {}

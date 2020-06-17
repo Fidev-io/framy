@@ -6,16 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'test_utils.dart';
 
 void main() {
-  group('Framy_CounterFAB_Page', () {
+  group('FramyCounterFABCustomPage', () {
     testWidgets('should build', (tester) async {
-      await tester
-          .pumpWidget(TestMaterialAppWithScaffold(FramyCounterFABCustomPage()));
+      await tester.pumpWidget(TestMaterialApp(FramyCounterFABCustomPage()));
       expect(find.byKey(Key('Framy_CounterFAB_Page')), findsOneWidget);
     });
 
     testWidgets('should have CounterFAB', (tester) async {
-      await tester
-          .pumpWidget(TestMaterialAppWithScaffold(FramyCounterFABCustomPage()));
+      await tester.pumpWidget(TestMaterialApp(FramyCounterFABCustomPage()));
       expect(find.byType(CounterFAB), findsOneWidget);
     });
   });

@@ -1,17 +1,18 @@
 import 'package:counter_app/main.app.framy.dart';
-import 'package:counter_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'test_utils.dart';
 
 void main() {
   group('ColorsPage', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(_TestColorsPage());
+      await tester.pumpWidget(TestMaterialApp(FramyColorsPage()));
       expect(find.byKey(Key('FramyColorsPage')), findsOneWidget);
     });
 
     testWidgets('should show color names', (tester) async {
-      await tester.pumpWidget(_TestColorsPage());
+      await tester.pumpWidget(TestMaterialApp(FramyColorsPage()));
       await tester.dragFrom(Offset(0, 500), Offset(0, -100));
       await tester.pump();
       expect(find.text('Primary'), findsNWidgets(2));
@@ -50,7 +51,7 @@ void main() {
     });
 
     testWidgets('should show color values', (tester) async {
-      await tester.pumpWidget(_TestColorsPage());
+      await tester.pumpWidget(TestMaterialApp(FramyColorsPage()));
       await tester.dragFrom(Offset(0, 500), Offset(0, -100));
       await tester.pump();
       expect(find.text('#FF2196F3'), findsNWidgets(5));
@@ -73,14 +74,4 @@ void main() {
       expect(find.text('#FF000000'), findsOneWidget);
     });
   });
-}
-
-class _TestColorsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: getThemeData(),
-      home: FramyColorsPage(),
-    );
-  }
 }

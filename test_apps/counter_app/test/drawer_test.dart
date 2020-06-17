@@ -2,27 +2,29 @@ import 'package:counter_app/main.app.framy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'test_utils.dart';
+
 void main() {
   group('Drawer', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(_TestDrawer());
+      await tester.pumpWidget(TestMaterialApp(FramyDrawer()));
       expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
     });
 
     testWidgets('should have Typography list item', (tester) async {
-      await tester.pumpWidget(_TestDrawer());
+      await tester.pumpWidget(TestMaterialApp(FramyDrawer()));
       expect(find.text('Typography'), findsOneWidget);
     });
 
     testWidgets('should have Color scheme list item', (tester) async {
-      await tester.pumpWidget(_TestDrawer());
+      await tester.pumpWidget(TestMaterialApp(FramyDrawer()));
       expect(find.text('Color scheme'), findsOneWidget);
     });
 
     group('Material components', () {
       Future<void> openMaterialComponentsMenu(WidgetTester tester) async {
         //given
-        await tester.pumpWidget(_TestDrawer());
+        await tester.pumpWidget(TestMaterialApp(FramyDrawer()));
         //when
         await tester.tap(find.text('Material components'));
         await tester.pump();
@@ -40,17 +42,8 @@ void main() {
     });
 
     testWidgets('should have CounterFAB', (tester) async {
-      await tester.pumpWidget(_TestDrawer());
+      await tester.pumpWidget(TestMaterialApp(FramyDrawer()));
       expect(find.text('CounterFAB'), findsOneWidget);
     });
   });
-}
-
-class _TestDrawer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FramyDrawer(),
-    );
-  }
 }

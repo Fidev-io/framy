@@ -2,6 +2,8 @@ import 'package:counter_app/main.app.framy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'test_utils.dart';
+
 void main() {
   group('FramyLayoutTemplate', () {
     testWidgets('should build', (tester) async {
@@ -47,8 +49,8 @@ void main() {
 class _TestLayoutTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FramyLayoutTemplate(
+    return TestMaterialApp(
+      FramyLayoutTemplate(
         child: Text('foo'),
       ),
     );

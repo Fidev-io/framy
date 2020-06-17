@@ -567,22 +567,201 @@ class FramyButtonPage extends StatelessWidget {
   }
 }
 
-class FramyCounterFABCustomPage extends StatelessWidget {
+class FramyCounterFABCustomPage extends StatefulWidget {
   const FramyCounterFABCustomPage()
       : super(key: const Key('Framy_CounterFAB_Page'));
 
   @override
+  _FramyCounterFABCustomPageState createState() =>
+      _FramyCounterFABCustomPageState();
+}
+
+class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<String>('onPressed', FramyDependencyType.string, null),
+  ];
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  @override
   Widget build(BuildContext context) {
-    return CounterFAB();
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final dependenciesPanel = FramyWidgetDependenciesPanel(
+            dependencies: dependencies,
+            onChanged: (name, val) => setState(
+              () => dependency(name).value = val,
+            ),
+          );
+          final body = Row(
+            children: [
+              Expanded(
+                child: CounterFAB(
+                  onPressed: dependency('onPressed').value,
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(width: 300, child: dependenciesPanel),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependenciesPanel: dependenciesPanel,
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
+    );
   }
 }
 
-class FramyCounterTitleCustomPage extends StatelessWidget {
+class FramyCounterTitleCustomPage extends StatefulWidget {
   const FramyCounterTitleCustomPage()
       : super(key: const Key('Framy_CounterTitle_Page'));
 
   @override
+  _FramyCounterTitleCustomPageState createState() =>
+      _FramyCounterTitleCustomPageState();
+}
+
+class _FramyCounterTitleCustomPageState
+    extends State<FramyCounterTitleCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<String>('verb', FramyDependencyType.string, null),
+  ];
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  @override
   Widget build(BuildContext context) {
-    return CounterTitle();
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final dependenciesPanel = FramyWidgetDependenciesPanel(
+            dependencies: dependencies,
+            onChanged: (name, val) => setState(
+              () => dependency(name).value = val,
+            ),
+          );
+          final body = Row(
+            children: [
+              Expanded(
+                child: CounterTitle(
+                  verb: dependency('verb').value,
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(width: 300, child: dependenciesPanel),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependenciesPanel: dependenciesPanel,
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
+    );
+  }
+}
+
+class FramyDependencyModel<T> {
+  final String name;
+  final FramyDependencyType type;
+  T value;
+
+  FramyDependencyModel(this.name, this.type, this.value);
+}
+
+enum FramyDependencyType { string, int, bool, num }
+
+class FramyWidgetDependenciesPanel extends StatelessWidget {
+  final List<FramyDependencyModel> dependencies;
+  final void Function(String name, dynamic value) onChanged;
+
+  const FramyWidgetDependenciesPanel(
+      {Key key, this.dependencies, this.onChanged})
+      : super(key: const Key('FramyWidgetDependenciesPanel'));
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: Material(
+        color: Colors.white,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: SingleChildScrollView(
+          child: Column(
+            children: dependencies
+                .map((dep) => FramyWidgetDependencyInput(
+                      dependency: dep,
+                      onChanged: onChanged,
+                    ))
+                .toList(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class FramyWidgetDependencyInput extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final void Function(String name, dynamic value) onChanged;
+
+  const FramyWidgetDependencyInput({Key key, this.dependency, this.onChanged})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(dependency.name),
+        TextField(
+          key: Key('framy_dependency_${dependency.name}_input'),
+          onChanged: (s) => onChanged(dependency.name, s),
+        ),
+      ],
+    );
+  }
+}
+
+class FramyWidgetDependenciesFAB extends StatelessWidget {
+  final Widget dependenciesPanel;
+
+  const FramyWidgetDependenciesFAB({Key key, this.dependenciesPanel})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      heroTag: 'FramyWidgetDependenciesButton',
+      child: Icon(Icons.tune),
+      key: const Key('FramyWidgetDependenciesButton'),
+      onPressed: () => showModalBottomSheet(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        context: context,
+        builder: (context) => dependenciesPanel,
+      ),
+      mini: true,
+    );
   }
 }

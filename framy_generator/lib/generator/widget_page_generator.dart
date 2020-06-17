@@ -8,58 +8,80 @@ String generateWidgetPages(List<FramyObject> widgetFramyObjects) {
 }
 
 String _generateWidgetPage(FramyObject framyObject) {
-  final constructor = '${framyObject.name}()';
+  final constructor = '''${framyObject.name}(
+  ${framyObject.widgetDependencies.fold('', (s, dep) => s + _generateParamUsageInConstructor(dep))}
+  )''';
   final className = 'Framy${framyObject.name}CustomPage';
+  final stateClassName = '_Framy${framyObject.name}CustomPageState';
   final key = 'Framy_${framyObject.name}_Page';
+
   return '''
-class $className extends StatelessWidget {
-  const $className() : super(key: const Key('$key'));
+class $className extends StatefulWidget {
+  const $className(): super(key: const Key('$key'));
+
+  @override
+  $stateClassName createState() => $stateClassName();
+}
+
+class $stateClassName extends State<$className> {
+  List<FramyDependencyModel> dependencies = [
+    ${framyObject.widgetDependencies.fold('', (s, dep) => s + _dependencyInitializationLine(dep))}
+  ];
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
 
   @override
   Widget build(BuildContext context) {
-    return $constructor;
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final dependenciesPanel = FramyWidgetDependenciesPanel(
+            dependencies: dependencies,
+            onChanged: (name, val) => setState(
+              () => dependency(name).value = val,
+            ),
+          );
+          final body = Row(
+            children: [
+              Expanded(
+                child: $constructor,
+              ),
+              if (!isSmallDevice)
+                SizedBox(width: 300, child: dependenciesPanel),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependenciesPanel: dependenciesPanel,
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
+    );
   }
 }
 ''';
 }
 
-//import 'package:framy_generator/framy_object.dart';
-//import 'package:framy_generator/generator/accessible_element_generator.dart';
-//
-//String generateWidgetPage(List<FramyObject> widgetObjects) {
-//  final pageName = widgetObjects.first.page;
-//  return '''
-//class ${pageName.replaceAll(' ', '')}Page extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return SingleChildScrollView(
-//      child: Column(
-//        children: [
-//          ${_getComponentConstructors(widgetObjects)}
-//        ],
-//      ),
-//    );
-//  }
-//}
-//
-//''';
-//}
-//
-//String _getComponentConstructors(List<FramyObject> componentObjects) {
-//  return componentObjects.fold(
-//    '',
-//    (prev, co) => '$prev${_getConstructor(co)},\n',
-//  );
-//}
-//
-//String _getConstructor(FramyObject object) {
-//  if (object.constructor != null) {
-//    return object.constructor;
-//  } else if (object.parentObject != null) {
-//    return generateAccessibleElement(object);
-//  } else {
-//    print(
-//        'No constructor, nor parent object for ${object.name}. Adding SizedBox()...');
-//    return 'SizedBox.shrink()';
-//  }
-//}
+String _dependencyInitializationLine(FramyWidgetDependency dependency) {
+  final String type = 'String';
+  final String dependencyType = 'FramyDependencyType.string';
+  final String name = dependency.name;
+  final String defaultValue = dependency.defaultValue;
+
+  return 'FramyDependencyModel<$type>(\'$name\', $dependencyType, $defaultValue),\n';
+}
+
+String _generateParamUsageInConstructor(FramyWidgetDependency dependency) {
+  final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';
+  return '${nameInConstructor}dependency(\'${dependency.name}\').value,\n';
+}

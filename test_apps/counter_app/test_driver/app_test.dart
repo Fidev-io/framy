@@ -274,5 +274,20 @@ void main() {
       await driver
           .waitFor(find.text('You have pushed the button this many times:'));
     });
+
+    test('should have a dependencies panel', () async {
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+      }
+      await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
+    });
+
+    test('should change displayed text when text typed into the dependencies panel',
+        () async {
+      await driver.tap(find.byValueKey('framy_dependency_verb_input'));
+      await driver.enterText('Foo Foo');
+      await driver
+          .waitFor(find.text('You have Foo Foo the button this many times:'));
+    });
   });
 }

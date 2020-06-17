@@ -5,18 +5,12 @@ export 'package:analyzer/dart/element/element.dart';
 
 class FramyObject {
   FramyObjectType type;
-
-//  List<String> dependencyImports;
   String import;
   String name;
-
-//  String page;
-//  String group;
-//  String constructor;
   bool isStatic;
   ElementKind kind;
-
   FramyObject parentObject;
+  List<FramyWidgetDependency> widgetDependencies;
 
   FramyObject();
 
@@ -24,29 +18,22 @@ class FramyObject {
       : import = getImport(element),
         name = element.displayName,
         kind = element.kind,
-//        dependencyImports = element.library.importedLibraries
-//            .map((lib) => lib.location.toString())
-//            .toList(),
         isStatic = (element is ExecutableElement && element.isStatic) ||
             (element is FieldElement && element.isStatic);
 
-//
   Map<String, dynamic> toMap() {
     return {
       'type': type?.toString(),
       'import': import,
       'name': name,
-//      'page': page,
-//      'dependencyImports': dependencyImports,
-//      'group': group,
       'isStatic': isStatic,
-//      'constructor': constructor,
       'kind': kind.toString(),
       'parentObject': parentObject?.toMap(),
+      'widgetDependencies':
+          widgetDependencies?.map((dep) => dep.toMap())?.toList(),
     };
   }
 
-//
   FramyObject.fromJson(Map<String, dynamic> json) {
     type = FramyObjectType.values.singleWhere(
       (type) => type?.toString() == json['type'],
@@ -54,23 +41,54 @@ class FramyObject {
     );
     import = json['import'];
     name = json['name'];
-//    page = json['page'];
-//    group = json['grup'];
-//    dependencyImports = List.from(json['dependencyImports'] ?? []);
     isStatic = json['isStatic'];
-//    constructor = json['constructor'];
     kind = ElementKind.values
         .singleWhere((kind) => kind.toString() == json['kind']);
     parentObject = json['parentObject'] == null
         ? null
         : FramyObject.fromJson(json['parentObject']);
+    widgetDependencies = json['widgetDependencies'] == null
+        ? null
+        : (json['widgetDependencies'] as List)
+            .map((map) => FramyWidgetDependency.fromJson(map))
+            .toList();
   }
 }
 
-//
+class FramyWidgetDependency {
+  final String name;
+  final FramyWidgetDependencyType type;
+  final dynamic defaultValue;
+  final bool isNamed;
+
+  FramyWidgetDependency(this.name, this.type, this.defaultValue, this.isNamed);
+
+  FramyWidgetDependency.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        defaultValue = json['defaultValue'],
+        type = FramyWidgetDependencyType.values
+            .singleWhere((element) => element.toString() == json['type']),
+        isNamed = json['isNamed'];
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'type': type?.toString(),
+      'defaultValue': defaultValue,
+      'isNamed': isNamed,
+    };
+  }
+}
+
+enum FramyWidgetDependencyType {
+  string,
+  int,
+  num,
+  bool,
+}
+
 enum FramyObjectType {
   themeData,
   color,
   widget,
-//  widgets,
 }

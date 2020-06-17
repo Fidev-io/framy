@@ -8,6 +8,7 @@ import 'package:framy_generator/generator/app_bar_generator.dart';
 import 'package:framy_generator/generator/app_bar_page_generator.dart';
 import 'package:framy_generator/generator/button_page_generator.dart';
 import 'package:framy_generator/generator/colors_page_generator.dart';
+import 'package:framy_generator/generator/dependency_model_generator.dart';
 import 'package:framy_generator/generator/drawer_generator.dart';
 import 'package:framy_generator/generator/fonts_page_generator.dart';
 import 'package:framy_generator/generator/framy_app_generator.dart';
@@ -16,6 +17,7 @@ import 'package:framy_generator/generator/layout_template_generator.dart';
 import 'package:framy_generator/generator/main_generator.dart';
 import 'package:framy_generator/generator/routing_generator.dart';
 import 'package:framy_generator/generator/utils_generator.dart';
+import 'package:framy_generator/generator/widget_dependencies_panel_generator.dart';
 import 'package:framy_generator/generator/widget_page_generator.dart';
 import 'package:glob/glob.dart';
 import 'package:source_gen/source_gen.dart';
@@ -46,6 +48,8 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateAppBarPage());
     buffer.writeln(generateButtonPage());
     buffer.writeln(generateWidgetPages(widgetFramyObjects));
+    buffer.writeln(generateDependencyModel());
+    buffer.writeln(generateWidgetDependenciesPanel());
     return buffer.toString();
   }
 
