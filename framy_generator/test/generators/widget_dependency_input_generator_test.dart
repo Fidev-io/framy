@@ -52,5 +52,16 @@ void main() {
       final result = generateWidgetDependencyInput();
       expect(result.contains('\'Invalid integer value\''), isTrue);
     });
+
+    test('should contain 2 checks for type double', () {
+      final result = generateWidgetDependencyInput();
+      expect('dependency.type == FramyDependencyType.double'.allMatches(result),
+          hasLength(2));
+    });
+
+    test('should contain error message Invalid double value', () {
+      final result = generateWidgetDependencyInput();
+      expect(result.contains('\'Invalid double value\''), isTrue);
+    });
   });
 }

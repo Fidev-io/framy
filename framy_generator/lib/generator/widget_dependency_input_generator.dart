@@ -21,6 +21,10 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               if (int.tryParse(value) == null) {
                 error = 'Invalid integer value';
               }
+            } else if (dependency.type == FramyDependencyType.double) {
+              if (double.tryParse(value) == null) {
+                error = 'Invalid double value';
+              }
             }
             return error;
           },
@@ -28,6 +32,8 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             var valueToReturn;
             if (dependency.type == FramyDependencyType.int) {
               valueToReturn = int.tryParse(s);
+            } else if (dependency.type == FramyDependencyType.double) {
+              valueToReturn = double.tryParse(s);
             } else {
               valueToReturn = s;
             }
