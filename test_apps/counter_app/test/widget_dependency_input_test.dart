@@ -1,5 +1,6 @@
 import 'package:counter_app/main.app.framy.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_utils.dart';
@@ -15,6 +16,10 @@ void main() {
   FramyDependencyModel _getDoubleModel([double defaultValue]) =>
       FramyDependencyModel<double>(
           'dub', FramyDependencyType.double, defaultValue);
+
+  FramyDependencyModel _getBoolModel([bool defaultValue]) =>
+      FramyDependencyModel<bool>(
+          'boolVal', FramyDependencyType.bool, defaultValue);
 
   Future<void> _buildDependencyInput(
       WidgetTester tester, FramyDependencyModel dependency,
@@ -132,6 +137,27 @@ void main() {
             find.byKey(Key('framy_dependency_dub_input')), 'abc');
         //then
         expect(emittedValue, -1);
+      });
+    });
+
+    group('for booleans', () {
+      testWidgets(
+          'should emit changed boolean value when value in dropdown is changed',
+          (WidgetTester tester) async {
+        //given
+        var emittedValue;
+        await _buildDependencyInput(
+          tester,
+          _getBoolModel(false),
+          (name, val) => emittedValue = val,
+        );
+        //when
+        await tester.tap(find.byKey(Key('framy_dependency_boolVal_input')));
+        await tester.pump();
+        await tester.tap(find.text('True').first);
+        //then
+        expect(emittedValue, isInstanceOf<bool>());
+        expect(emittedValue, equals(true));
       });
     });
   });

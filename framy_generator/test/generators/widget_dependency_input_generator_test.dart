@@ -63,5 +63,29 @@ void main() {
       final result = generateWidgetDependencyInput();
       expect(result.contains('\'Invalid double value\''), isTrue);
     });
+
+    test('should contain check for type bool', () {
+      final result = generateWidgetDependencyInput();
+      expect(
+        result.contains('dependency.type == FramyDependencyType.bool'),
+        isTrue,
+      );
+    });
+
+    test('should contain DropdownButton<bool>', () {
+      final result = generateWidgetDependencyInput();
+      expect(
+        result.contains('DropdownButton<bool>'),
+        isTrue,
+      );
+    });
+
+    test('should contain TextFormField', () {
+      final result = generateWidgetDependencyInput();
+      expect(
+        result.contains('TextFormField'),
+        isTrue,
+      );
+    });
   });
 }
