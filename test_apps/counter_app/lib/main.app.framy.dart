@@ -4,9 +4,9 @@
 // FramyGenerator
 // **************************************************************************
 
-import 'package:counter_app/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:counter_app/main.dart';
 
 void main() {
   runApp(FramyApp());
@@ -30,6 +30,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
     '/CounterFAB': FramyCounterFABCustomPage(),
+    '/CounterTitle': FramyCounterTitleCustomPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -133,6 +134,12 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('CounterFAB'),
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/CounterFAB'),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('CounterTitle'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/CounterTitle'),
               ),
             ],
           ),
@@ -560,12 +567,249 @@ class FramyButtonPage extends StatelessWidget {
   }
 }
 
-class FramyCounterFABCustomPage extends StatelessWidget {
+class FramyCounterFABCustomPage extends StatefulWidget {
   const FramyCounterFABCustomPage()
       : super(key: const Key('Framy_CounterFAB_Page'));
 
   @override
+  _FramyCounterFABCustomPageState createState() =>
+      _FramyCounterFABCustomPageState();
+}
+
+class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<String>('onPressed', FramyDependencyType.string, null),
+  ];
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  @override
   Widget build(BuildContext context) {
-    return CounterFAB();
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final dependenciesPanel = FramyWidgetDependenciesPanel(
+            dependencies: dependencies,
+            onChanged: (name, val) => setState(
+              () => dependency(name).value = val,
+            ),
+          );
+          final body = Row(
+            children: [
+              Expanded(
+                child: CounterFAB(
+                  onPressed: dependency('onPressed').value,
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(width: 300, child: dependenciesPanel),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependenciesPanel: dependenciesPanel,
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
+    );
+  }
+}
+
+class FramyCounterTitleCustomPage extends StatefulWidget {
+  const FramyCounterTitleCustomPage()
+      : super(key: const Key('Framy_CounterTitle_Page'));
+
+  @override
+  _FramyCounterTitleCustomPageState createState() =>
+      _FramyCounterTitleCustomPageState();
+}
+
+class _FramyCounterTitleCustomPageState
+    extends State<FramyCounterTitleCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<String>('verb', FramyDependencyType.string, 'pushed'),
+    FramyDependencyModel<int>('counter', FramyDependencyType.int, 0),
+  ];
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final dependenciesPanel = FramyWidgetDependenciesPanel(
+            dependencies: dependencies,
+            onChanged: (name, val) => setState(
+              () => dependency(name).value = val,
+            ),
+          );
+          final body = Row(
+            children: [
+              Expanded(
+                child: CounterTitle(
+                  verb: dependency('verb').value,
+                  counter: dependency('counter').value,
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(width: 300, child: dependenciesPanel),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependenciesPanel: dependenciesPanel,
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
+    );
+  }
+}
+
+class FramyDependencyModel<T> {
+  final String name;
+  final FramyDependencyType type;
+  T value;
+
+  FramyDependencyModel(this.name, this.type, this.value);
+}
+
+enum FramyDependencyType { string, int, bool, double }
+
+class FramyWidgetDependenciesPanel extends StatelessWidget {
+  final List<FramyDependencyModel> dependencies;
+  final void Function(String name, dynamic value) onChanged;
+
+  const FramyWidgetDependenciesPanel(
+      {Key key, this.dependencies, this.onChanged})
+      : super(key: const Key('FramyWidgetDependenciesPanel'));
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: Material(
+        color: Colors.white,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: SingleChildScrollView(
+          child: Column(
+            children: dependencies
+                .map((dep) => FramyWidgetDependencyInput(
+                      dependency: dep,
+                      onChanged: onChanged,
+                    ))
+                .toList(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class FramyWidgetDependenciesFAB extends StatelessWidget {
+  final Widget dependenciesPanel;
+
+  const FramyWidgetDependenciesFAB({Key key, this.dependenciesPanel})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      heroTag: 'FramyWidgetDependenciesButton',
+      child: Icon(Icons.tune),
+      key: const Key('FramyWidgetDependenciesButton'),
+      onPressed: () => showModalBottomSheet(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        context: context,
+        builder: (context) => dependenciesPanel,
+      ),
+      mini: true,
+    );
+  }
+}
+
+class FramyWidgetDependencyInput extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final void Function(String name, dynamic value) onChanged;
+
+  const FramyWidgetDependencyInput({Key key, this.dependency, this.onChanged})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final inputKey = Key('framy_dependency_${dependency.name}_input');
+    return Column(
+      children: [
+        Text(dependency.name),
+        if (dependency.type == FramyDependencyType.bool)
+          DropdownButton<bool>(
+            key: inputKey,
+            value: dependency.value,
+            onChanged: (val) => onChanged(dependency.name, val),
+            items: [
+              DropdownMenuItem(
+                value: true,
+                child: Text('True'),
+              ),
+              DropdownMenuItem(
+                value: false,
+                child: Text('False'),
+              )
+            ],
+          )
+        else
+          TextFormField(
+            key: inputKey,
+            initialValue: dependency.value?.toString(),
+            autovalidate: true,
+            validator: (value) {
+              String error;
+              if (dependency.type == FramyDependencyType.int) {
+                if (int.tryParse(value) == null) {
+                  error = 'Invalid integer value';
+                }
+              } else if (dependency.type == FramyDependencyType.double) {
+                if (double.tryParse(value) == null) {
+                  error = 'Invalid double value';
+                }
+              }
+              return error;
+            },
+            onChanged: (s) {
+              var valueToReturn;
+              if (dependency.type == FramyDependencyType.int) {
+                valueToReturn = int.tryParse(s);
+              } else if (dependency.type == FramyDependencyType.double) {
+                valueToReturn = double.tryParse(s);
+              } else {
+                valueToReturn = s;
+              }
+              if (valueToReturn != null) {
+                onChanged(dependency.name, valueToReturn);
+              }
+            },
+          ),
+      ],
+    );
   }
 }

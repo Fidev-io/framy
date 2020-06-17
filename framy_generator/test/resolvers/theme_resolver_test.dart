@@ -26,7 +26,8 @@ Future<void> main() async {
     "name": "getThemeData",
     "isStatic": true,
     "kind": "FUNCTION",
-    "parentObject": null
+    "parentObject": null,
+    "widgetDependencies": null
   }
 ]''')
 @FramyTheme()
@@ -51,8 +52,10 @@ ThemeData _privateThemeData() => ThemeData();
       "name": "AppTheme",
       "isStatic": false,
       "kind": "CLASS",
-      "parentObject": null
-    }
+      "parentObject": null,
+      "widgetDependencies": null
+    },
+    "widgetDependencies": null
   }
 ]''')
 @FramyTheme()
@@ -86,8 +89,10 @@ class AppTheme3 {
       "name": "AppThemeWithColor1",
       "isStatic": false,
       "kind": "CLASS",
-      "parentObject": null
-    }
+      "parentObject": null,
+      "widgetDependencies": null
+    },
+    "widgetDependencies": null
   }
 ]''')
 @FramyTheme()

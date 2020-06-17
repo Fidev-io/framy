@@ -3,15 +3,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'test_utils.dart';
+
 void main() {
   group('FramyFontsPage', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(_TestFontsPage());
+      await tester.pumpWidget(TestMaterialApp(FramyFontsPage()));
       expect(find.byKey(Key('FramyFontsPage')), findsOneWidget);
     });
 
     testWidgets('should show all font names', (tester) async {
-      await tester.pumpWidget(_TestFontsPage());
+      await tester.pumpWidget(TestMaterialApp(FramyFontsPage()));
       expect(find.text('Headline1'), findsOneWidget);
       expect(find.text('Headline2'), findsOneWidget);
       expect(find.text('Headline3'), findsOneWidget);
@@ -59,7 +61,7 @@ void main() {
 
     testWidgets('macOS should display styles descriptions', (tester) async {
       debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
-      await tester.pumpWidget(_TestFontsPage());
+      await tester.pumpWidget(TestMaterialApp(FramyFontsPage()));
       expect(
           find.text(
               '.SF UI Display / size: 112.0 / weight: w100 / color: #8A000000'),
@@ -111,13 +113,4 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     });
   });
-}
-
-class _TestFontsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FramyFontsPage(),
-    );
-  }
 }

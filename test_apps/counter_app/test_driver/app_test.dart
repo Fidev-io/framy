@@ -261,4 +261,62 @@ void main() {
       await driver.waitFor(find.byValueKey('MyCounterFAB'));
     });
   });
+
+  group('CounterTitle', () {
+    setUpAll(() async {
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byTooltip('Open navigation menu'));
+      }
+      await driver.tap(find.text('CounterTitle'));
+    });
+
+    test('should have default title text', () async {
+      await driver
+          .waitFor(find.text('You have pushed the button this many times:'));
+    });
+
+    test('should have a dependencies panel', () async {
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+      }
+      await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
+    });
+
+    test('should have a default value typed in', () async {
+      await driver.waitFor(find.text('pushed'));
+    });
+
+    test(
+        'should change displayed text when text typed into the dependencies panel',
+        () async {
+      await driver.tap(find.byValueKey('framy_dependency_verb_input'));
+      await driver.enterText('Foo Foo');
+      await driver
+          .waitFor(find.text('You have Foo Foo the button this many times:'));
+    });
+
+    test(
+      'should change counter text when number typed into the dependencies panel',
+      () async {
+        await driver.tap(find.byValueKey('framy_dependency_counter_input'));
+        await driver.enterText('17');
+        await driver.waitFor(find.descendant(
+          of: find.byValueKey('Counter title'),
+          matching: find.text('17'),
+        ));
+      },
+    );
+
+    test(
+      'should not change the value and display error message when invalid int text is typed',
+      () async {
+        await driver.enterText('17abc');
+        await driver.waitFor(find.text('Invalid integer value'));
+        await driver.waitFor(find.descendant(
+          of: find.byValueKey('Counter title'),
+          matching: find.text('17'),
+        ));
+      },
+    );
+  });
 }

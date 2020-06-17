@@ -4,37 +4,27 @@ import 'package:test/test.dart';
 void main() {
   group('FontsPage generator result', () {
     test('should start with class definition', () {
-      //when
-      final String result = generateFontsPage();
-      //then
+      final result = generateFontsPage();
       expect(result.startsWith('class FramyFontsPage '), isTrue);
     });
 
     test('should have key', () {
-      //when
-      final String result = generateFontsPage();
-      //then
+      final result = generateFontsPage();
       expect(result.contains('Key(\'FramyFontsPage\')'), isTrue);
     });
 
     test('should have Headline1 text', () {
-      //when
-      final String result = generateFontsPage();
-      //then
+      final result = generateFontsPage();
       expect(result.contains('\'Headline1\''), isTrue);
     });
 
     test('should use Headline1 style', () {
-      //when
-      final String result = generateFontsPage();
-      //then
+      final result = generateFontsPage();
       expect(result.contains('textTheme.headline1'), isTrue);
     });
 
     test('should have a FramySingleFontRow class', () {
-      //when
-      final String result = generateFontsPage();
-      //then
+      final result = generateFontsPage();
       expect(result.contains('class FramySingleFontRow'), isTrue);
     });
 

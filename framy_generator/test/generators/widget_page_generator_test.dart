@@ -10,13 +10,15 @@ void main() {
     });
 
     group('when a widget is passed', () {
+      //given
+      final widgetObjects = [
+        FramyObject()
+          ..name = 'MyWidget'
+          ..type = FramyObjectType.widget
+          ..widgetDependencies = []
+      ];
+
       test('should have a class with name FramyXXXCustomPage', () {
-        //given
-        final widgetObjects = [
-          FramyObject()
-            ..name = 'MyWidget'
-            ..type = FramyObjectType.widget
-        ];
         //when
         final result = generateWidgetPages(widgetObjects);
         //then
@@ -24,12 +26,6 @@ void main() {
       });
 
       test('should contain key Framy_XXX_Page', () {
-        //given
-        final widgetObjects = [
-          FramyObject()
-            ..name = 'MyWidget'
-            ..type = FramyObjectType.widget
-        ];
         //when
         final result = generateWidgetPages(widgetObjects);
         //then
@@ -37,17 +33,163 @@ void main() {
       });
 
       test('should contain custom widget XXX constructor', () {
-        //given
-        final widgetObjects = [
-          FramyObject()
-            ..name = 'MyWidget'
-            ..type = FramyObjectType.widget
-        ];
         //when
         final result = generateWidgetPages(widgetObjects);
         //then
         expect(result.contains('MyWidget('), isTrue);
       });
+
+      test('should contain LayoutBuilder', () {
+        //when
+        final result = generateWidgetPages(widgetObjects);
+        //then
+        expect(result.contains('LayoutBuilder('), isTrue);
+      });
+
+      test('should contain list with dependencies', () {
+        //when
+        final result = generateWidgetPages(widgetObjects);
+        //then
+        expect(
+            result.contains('List<FramyDependencyModel> dependencies'), isTrue);
+      });
+
+      test('should contain FramyWidgetDependenciesPanel', () {
+        //when
+        final result = generateWidgetPages(widgetObjects);
+        //then
+        expect(result.contains('FramyWidgetDependenciesPanel('), isTrue);
+      });
+
+      test('should contain FramyWidgetDependenciesFAB', () {
+        //when
+        final result = generateWidgetPages(widgetObjects);
+        //then
+        expect(result.contains('FramyWidgetDependenciesFAB('), isTrue);
+      });
+    });
+
+    test('should contain 2 classes with proper names when 2 widgets are passed',
+        () {
+      //given
+      final widgetObjects = [
+        FramyObject()
+          ..name = 'Widget1'
+          ..type = FramyObjectType.widget
+          ..widgetDependencies = [],
+        FramyObject()
+          ..name = 'Widget2'
+          ..type = FramyObjectType.widget
+          ..widgetDependencies = [],
+      ];
+      //when
+      final result = generateWidgetPages(widgetObjects);
+      //then
+      expect(result.contains('FramyWidget1CustomPage'), isTrue);
+      expect(result.contains('FramyWidget2CustomPage'), isTrue);
+    });
+
+    test(
+        'should contain initialized dependencies list when widget has dependency',
+        () {
+      //given
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.string,
+        null,
+        false,
+      ));
+      //when
+      final result = generateWidgetPages(widgetObjects);
+      //then
+      final expectedList = '''
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<String>('arg1', FramyDependencyType.string, null),''';
+      expect(result.contains(expectedList), isTrue);
+    });
+
+    test('should properly handle int dependency', () {
+      //given
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.int,
+        '13',
+        false,
+      ));
+      //when
+      final result = generateWidgetPages(widgetObjects);
+      //then
+      final expectedDependency =
+          'FramyDependencyModel<int>(\'arg1\', FramyDependencyType.int, 13),';
+      expect(result.contains(expectedDependency), isTrue);
+    });
+
+    test(
+        'should use dependency in widget constructor when the non-named dependency is passed',
+        () {
+      //given
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.string,
+        null,
+        false,
+      ));
+      //when
+      final result = generateWidgetPages(widgetObjects);
+      //then
+      expect(
+        result.contains(RegExp('Widget1\\(\n *dependency\\(\'arg1\'\\).value')),
+        isTrue,
+      );
+    });
+
+    test(
+        'should use dependency in widget constructor when the named dependency is passed',
+        () {
+      //given
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.string,
+        null,
+        true,
+      ));
+      //when
+      final result = generateWidgetPages(widgetObjects);
+      //then
+      expect(
+        result.contains(
+            RegExp('Widget1\\(\n *arg1: dependency\\(\'arg1\'\\).value')),
+        isTrue,
+      );
+    });
+
+    test(
+        'should use default value in dependency initialization when default value is present',
+        () {
+      //given
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.string,
+        "'fooDefaultValue'",
+        false,
+      ));
+      //when
+      final result = generateWidgetPages(widgetObjects);
+      //then
+      expect(
+        result.contains(RegExp('FramyDependencyModel.*\'fooDefaultValue\'')),
+        isTrue,
+      );
     });
   });
+}
+
+List<FramyObject> getFramyObjectWithDependency(
+    FramyWidgetDependency dependency) {
+  return [
+    FramyObject()
+      ..name = 'Widget1'
+      ..type = FramyObjectType.widget
+      ..widgetDependencies = [dependency]
+  ];
 }
