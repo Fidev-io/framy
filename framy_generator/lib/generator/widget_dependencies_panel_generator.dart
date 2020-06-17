@@ -28,28 +28,6 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
   }
 }
 
-class FramyWidgetDependencyInput extends StatelessWidget {
-  final FramyDependencyModel dependency;
-  final void Function(String name, dynamic value) onChanged;
-
-  const FramyWidgetDependencyInput({Key key, this.dependency, this.onChanged})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(dependency.name),
-        TextFormField(
-          key: Key('framy_dependency_\${dependency.name}_input'),
-          initialValue: dependency.value?.toString(),
-          onChanged: (s) => onChanged(dependency.name, s),
-        ),
-      ],
-    );
-  }
-}
-
 class FramyWidgetDependenciesFAB extends StatelessWidget {
   final Widget dependenciesPanel;
 

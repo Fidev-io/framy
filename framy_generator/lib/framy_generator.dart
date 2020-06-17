@@ -18,6 +18,7 @@ import 'package:framy_generator/generator/main_generator.dart';
 import 'package:framy_generator/generator/routing_generator.dart';
 import 'package:framy_generator/generator/utils_generator.dart';
 import 'package:framy_generator/generator/widget_dependencies_panel_generator.dart';
+import 'package:framy_generator/generator/widget_dependency_input_generator.dart';
 import 'package:framy_generator/generator/widget_page_generator.dart';
 import 'package:glob/glob.dart';
 import 'package:source_gen/source_gen.dart';
@@ -50,6 +51,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateWidgetPages(widgetFramyObjects));
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
+    buffer.writeln(generateWidgetDependencyInput());
     return buffer.toString();
   }
 

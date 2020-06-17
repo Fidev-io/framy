@@ -294,5 +294,17 @@ void main() {
       await driver
           .waitFor(find.text('You have Foo Foo the button this many times:'));
     });
+
+    test(
+      'should change counter text when number typed into the dependencies panel',
+      () async {
+        await driver.tap(find.byValueKey('framy_dependency_counter_input'));
+        await driver.enterText('17');
+        await driver.waitFor(find.descendant(
+          of: find.byValueKey('Counter title'),
+          matching: find.text('17'),
+        ));
+      },
+    );
   });
 }

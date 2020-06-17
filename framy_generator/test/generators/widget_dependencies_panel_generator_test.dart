@@ -38,29 +38,6 @@ void main() {
       );
     });
 
-    test('should contain class FramyWidgetDependencyInput', () {
-      final result = generateWidgetDependenciesPanel();
-      expect(result.contains('class FramyWidgetDependencyInput'), isTrue);
-    });
-
-    test('should contain input key concatenation', () {
-      final result = generateWidgetDependenciesPanel();
-      expect(
-          result
-              .contains('Key(\'framy_dependency_\${dependency.name}_input\')'),
-          isTrue);
-    });
-
-    test('should contain dependency.name', () {
-      final result = generateWidgetDependenciesPanel();
-      expect(result.contains('dependency.name'), isTrue);
-    });
-
-    test('should contain onChanged invocation', () {
-      final result = generateWidgetDependenciesPanel();
-      expect(result.contains('onChanged('), isTrue);
-    });
-
     test('should contain class FramyWidgetDependenciesFAB', () {
       final result = generateWidgetDependenciesPanel();
       expect(result.contains('class FramyWidgetDependenciesFAB'), isTrue);
@@ -69,12 +46,6 @@ void main() {
     test('should contain class key FramyWidgetDependenciesButton', () {
       final result = generateWidgetDependenciesPanel();
       expect(result.contains('Key(\'FramyWidgetDependenciesButton\')'), isTrue);
-    });
-
-    test('should contain null-safe String initialValue', () {
-      final result = generateWidgetDependenciesPanel();
-      expect(result.contains('initialValue: dependency.value?.toString()'),
-          isTrue);
     });
   });
 }

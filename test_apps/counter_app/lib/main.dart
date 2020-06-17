@@ -75,6 +75,7 @@ class CounterTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      key: Key('Counter title'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
