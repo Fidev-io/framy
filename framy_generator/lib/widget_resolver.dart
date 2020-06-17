@@ -24,7 +24,7 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
           FramyWidgetDependency(
             param.name,
             parseDartType(param.type),
-            null,
+            param.defaultValueCode,
             param.isNamed,
           ),
         );

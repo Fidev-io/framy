@@ -78,11 +78,11 @@ class CounterFAB extends StatelessWidget {
 class CounterTitle extends StatelessWidget {
   final String verb;
 
-  const CounterTitle({Key key, this.verb}) : super(key: key);
+  const CounterTitle({Key key, this.verb = 'pushed'}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Text(
-      'You have ${verb ?? 'pushed'} the button this many times:',
+      'You have $verb the button this many times:',
     );
   }
 }

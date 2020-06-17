@@ -93,15 +93,12 @@ void main() {
         'should contain initialized dependencies list when widget has dependency',
         () {
       //given
-      final widgetObjects = [
-        FramyObject()
-          ..name = 'Widget1'
-          ..type = FramyObjectType.widget
-          ..widgetDependencies = [
-            FramyWidgetDependency(
-                'arg1', FramyWidgetDependencyType.string, null, false)
-          ]
-      ];
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.string,
+        null,
+        false,
+      ));
       //when
       final result = generateWidgetPages(widgetObjects);
       //then
@@ -115,15 +112,12 @@ void main() {
         'should use dependency in widget constructor when the non-named dependency is passed',
         () {
       //given
-      final widgetObjects = [
-        FramyObject()
-          ..name = 'Widget1'
-          ..type = FramyObjectType.widget
-          ..widgetDependencies = [
-            FramyWidgetDependency(
-                'arg1', FramyWidgetDependencyType.string, null, false)
-          ]
-      ];
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.string,
+        null,
+        false,
+      ));
       //when
       final result = generateWidgetPages(widgetObjects);
       //then
@@ -137,15 +131,12 @@ void main() {
         'should use dependency in widget constructor when the named dependency is passed',
         () {
       //given
-      final widgetObjects = [
-        FramyObject()
-          ..name = 'Widget1'
-          ..type = FramyObjectType.widget
-          ..widgetDependencies = [
-            FramyWidgetDependency(
-                'arg1', FramyWidgetDependencyType.string, null, true)
-          ]
-      ];
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.string,
+        null,
+        true,
+      ));
       //when
       final result = generateWidgetPages(widgetObjects);
       //then
@@ -155,5 +146,34 @@ void main() {
         isTrue,
       );
     });
+
+    test(
+        'should use default value in dependency initialization when default value is present',
+        () {
+      //given
+      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        'arg1',
+        FramyWidgetDependencyType.string,
+        "'fooDefaultValue'",
+        false,
+      ));
+      //when
+      final result = generateWidgetPages(widgetObjects);
+      //then
+      expect(
+        result.contains(RegExp('FramyDependencyModel.*\'fooDefaultValue\'')),
+        isTrue,
+      );
+    });
   });
+}
+
+List<FramyObject> getFramyObjectWithDependency(
+    FramyWidgetDependency dependency) {
+  return [
+    FramyObject()
+      ..name = 'Widget1'
+      ..type = FramyObjectType.widget
+      ..widgetDependencies = [dependency]
+  ];
 }

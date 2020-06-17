@@ -637,7 +637,7 @@ class FramyCounterTitleCustomPage extends StatefulWidget {
 class _FramyCounterTitleCustomPageState
     extends State<FramyCounterTitleCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<String>('verb', FramyDependencyType.string, null),
+    FramyDependencyModel<String>('verb', FramyDependencyType.string, 'pushed'),
   ];
 
   FramyDependencyModel dependency(String name) =>

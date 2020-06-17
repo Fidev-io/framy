@@ -80,3 +80,27 @@ class WidgetWithConstructor {
 class WidgetWithConstructorAndKey {
   WidgetWithConstructorAndKey({Key key, String arg1}) {}
 }
+
+@ShouldGenerate('''
+[
+  {
+    "type": "FramyObjectType.widget",
+    "import": "package:__test__/widget_resolver_test.dart",
+    "name": "WidgetWithConstructorWithDefaultParamValue",
+    "isStatic": false,
+    "kind": "CLASS",
+    "parentObject": null,
+    "widgetDependencies": [
+      {
+        "name": "arg1",
+        "type": "FramyWidgetDependencyType.string",
+        "defaultValue": "'test1'",
+        "isNamed": true
+      }
+    ]
+  }
+]''')
+@FramyWidget()
+class WidgetWithConstructorWithDefaultParamValue {
+  WidgetWithConstructorWithDefaultParamValue({String arg1 = 'test1'}) {}
+}
