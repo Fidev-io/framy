@@ -753,6 +753,7 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
 
   const FramyWidgetDependenciesFAB({Key key, this.dependenciesPanel})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
