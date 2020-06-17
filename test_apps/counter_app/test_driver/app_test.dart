@@ -282,7 +282,8 @@ void main() {
       await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
     });
 
-    test('should change displayed text when text typed into the dependencies panel',
+    test(
+        'should change displayed text when text typed into the dependencies panel',
         () async {
       await driver.tap(find.byValueKey('framy_dependency_verb_input'));
       await driver.enterText('Foo Foo');
