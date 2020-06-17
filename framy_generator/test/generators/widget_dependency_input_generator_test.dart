@@ -32,10 +32,25 @@ void main() {
       expect(result.contains('onChanged('), isTrue);
     });
 
-    test('should check for type int', () {
+    test('should contain 2 checks for type int', () {
       final result = generateWidgetDependencyInput();
-      expect(result.contains('dependency.type == FramyDependencyType.int'),
-          isTrue);
+      expect('dependency.type == FramyDependencyType.int'.allMatches(result),
+          hasLength(2));
+    });
+
+    test('should contain validator', () {
+      final result = generateWidgetDependencyInput();
+      expect(result.contains('validator'), isTrue);
+    });
+
+    test('should contain autovalidate: true', () {
+      final result = generateWidgetDependencyInput();
+      expect(result.contains('autovalidate: true'), isTrue);
+    });
+
+    test('should contain error message Invalid integer value', () {
+      final result = generateWidgetDependencyInput();
+      expect(result.contains('\'Invalid integer value\''), isTrue);
     });
   });
 }

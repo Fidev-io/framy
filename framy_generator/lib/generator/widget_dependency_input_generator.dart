@@ -14,14 +14,26 @@ class FramyWidgetDependencyInput extends StatelessWidget {
         TextFormField(
           key: Key('framy_dependency_\${dependency.name}_input'),
           initialValue: dependency.value?.toString(),
+          autovalidate: true,
+          validator: (value) {
+            String error;
+            if (dependency.type == FramyDependencyType.int) {
+              if (int.tryParse(value) == null) {
+                error = 'Invalid integer value';
+              }
+            }
+            return error;
+          },
           onChanged: (s) {
             var valueToReturn;
             if (dependency.type == FramyDependencyType.int) {
-              valueToReturn = int.parse(s);
+              valueToReturn = int.tryParse(s);
             } else {
               valueToReturn = s;
             }
-            onChanged(dependency.name, valueToReturn);
+            if (valueToReturn != null) {
+              onChanged(dependency.name, valueToReturn);
+            }
           },
         ),
       ],

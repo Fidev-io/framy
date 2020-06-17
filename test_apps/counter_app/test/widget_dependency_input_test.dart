@@ -50,5 +50,45 @@ void main() {
       expect(emittedValue, isInstanceOf<int>());
       expect(emittedValue, equals(7));
     });
+
+    testWidgets('should show error message when invalid int is typed in',
+        (WidgetTester tester) async {
+      //given
+      await tester.pumpWidget(
+        TestMaterialAppWithScaffold(
+          FramyWidgetDependencyInput(
+            dependency:
+                FramyDependencyModel<int>('name', FramyDependencyType.int, 0),
+            onChanged: (_, __) {},
+          ),
+        ),
+      );
+      //when
+      await tester.enterText(
+          find.byKey(Key('framy_dependency_name_input')), 'abc');
+      await tester.pumpAndSettle();
+      //then
+      expect(find.text('Invalid integer value'), findsOneWidget);
+    });
+
+    testWidgets('should not emit invalid int values when such are typed in',
+        (WidgetTester tester) async {
+      //given
+      int emittedValue = -1; //default val
+      await tester.pumpWidget(
+        TestMaterialAppWithScaffold(
+          FramyWidgetDependencyInput(
+            dependency:
+                FramyDependencyModel<int>('name', FramyDependencyType.int, -1),
+            onChanged: (_, val) => emittedValue = val,
+          ),
+        ),
+      );
+      //when
+      await tester.enterText(
+          find.byKey(Key('framy_dependency_name_input')), 'abc');
+      //then
+      expect(emittedValue, -1);
+    });
   });
 }

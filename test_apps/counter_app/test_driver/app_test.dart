@@ -306,5 +306,17 @@ void main() {
         ));
       },
     );
+
+    test(
+      'should not change the value and display error message when invalid int text is typed',
+      () async {
+        await driver.enterText('17abc');
+        await driver.waitFor(find.text('Invalid integer value'));
+        await driver.waitFor(find.descendant(
+          of: find.byValueKey('Counter title'),
+          matching: find.text('17'),
+        ));
+      },
+    );
   });
 }
