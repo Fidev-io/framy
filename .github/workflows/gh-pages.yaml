@@ -3,9 +3,7 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
+
 jobs:
   build:
     name: Github Pages Showcase
@@ -31,5 +29,5 @@ jobs:
           git remote add origin https://${{secrets.commit_secret}}@github.com/Fidev-io/framy.git
           git checkout -b gh-pages
           git add --all
-          git commit -m "update"
+          git commit -m "github pages CI deploy"
           git push origin gh-pages -f
