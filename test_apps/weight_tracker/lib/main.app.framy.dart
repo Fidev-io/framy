@@ -7,6 +7,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/app_theme.dart';
+import 'package:weight_tracker/widgets/user_data_card.dart';
 
 void main() {
   runApp(FramyApp());
@@ -29,6 +30,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/colors': FramyColorsPage(),
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
+    '/UserDataCard': FramyUserDataCardCustomPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -126,6 +128,12 @@ class FramyDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('UserDataCard'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/UserDataCard'),
               ),
             ],
           ),
@@ -552,6 +560,65 @@ class FramyButtonPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class FramyUserDataCardCustomPage extends StatefulWidget {
+  const FramyUserDataCardCustomPage()
+      : super(key: const Key('Framy_UserDataCard_Page'));
+
+  @override
+  _FramyUserDataCardCustomPageState createState() =>
+      _FramyUserDataCardCustomPageState();
+}
+
+class _FramyUserDataCardCustomPageState
+    extends State<FramyUserDataCardCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<String>('user', FramyDependencyType.string, null),
+  ];
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final dependenciesPanel = FramyWidgetDependenciesPanel(
+            dependencies: dependencies,
+            onChanged: (name, val) => setState(
+              () => dependency(name).value = val,
+            ),
+          );
+          final body = Row(
+            children: [
+              Expanded(
+                child: UserDataCard(
+                  user: dependency('user').value,
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(width: 300, child: dependenciesPanel),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependenciesPanel: dependenciesPanel,
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
       ),
     );
   }
