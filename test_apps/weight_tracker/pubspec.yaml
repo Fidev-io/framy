@@ -1,0 +1,28 @@
+name: weight_tracker
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  framy_annotation:
+    path: ../../framy_annotation
+
+dev_dependencies:
+  build_runner: any
+  flutter_test:
+    sdk: flutter
+  framy_generator:
+    path: ../../framy_generator
+  flutter_driver:
+    sdk: flutter
+  test: any
+  ozzie: ^2.2.3
+
+flutter:
+  uses-material-design: true
