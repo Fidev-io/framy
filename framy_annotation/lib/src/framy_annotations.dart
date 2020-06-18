@@ -46,15 +46,4 @@ class FramyWidget extends FramyAnnotation {
   const FramyWidget();
 }
 
-/// Used to annotate a class containing Widget accessors to be included as a component
-class FramyWidgets extends FramyAnnotation {
-  const FramyWidgets();
-}
-
-/// Used to specify a PageName for a widget to be put in.
-/// Currently used only in [FramyWidgets]
-class FramyPageName extends FramyAnnotation {
-  final String name;
-
-  const FramyPageName(this.name);
-}
+const framyWidget = FramyWidget();
