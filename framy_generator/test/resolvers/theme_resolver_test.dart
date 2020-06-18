@@ -1,5 +1,5 @@
 import 'package:framy_annotation/framy_annotation.dart';
-import 'package:framy_generator/theme_resolver.dart';
+import 'package:framy_generator/resolvers/theme_resolver.dart';
 import 'package:source_gen_test/source_gen_test.dart';
 
 import 'dummy_classes.dart';
