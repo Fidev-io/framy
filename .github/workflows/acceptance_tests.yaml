@@ -38,3 +38,29 @@ jobs:
         with:
           name: screenshots
           path: ./test_apps/counter_app/ozzie
+  weight_tracker:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1.3.0
+        with:
+          channel: 'dev'
+      - run: flutter config --enable-macos-desktop
+      - run: flutter pub get
+        working-directory: test_apps/weight_tracker
+      - name: "Start simulator"
+        run: |
+          UDID=$(
+            xcrun instruments -s |
+            awk \
+              -F ' *[][]' \
+              -v 'device=iPhone 11 Pro (13.5)' \
+              '$1 == device { print $2 }'
+          )
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+      - name: Acceptance tests on macOS
+        run: PLATFORM=macos flutter driver --target=test_driver/app.dart -d macos
+        working-directory: test_apps/weight_tracker
+      - name: Acceptance tests on iPhone 11 Pro
+        run: PLATFORM=ios flutter driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
+        working-directory: test_apps/weight_tracker
