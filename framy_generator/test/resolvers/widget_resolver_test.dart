@@ -45,7 +45,7 @@ class CounterFloatingActionButton {}
     "widgetDependencies": [
       {
         "name": "arg1",
-        "type": "FramyWidgetDependencyType.string",
+        "type": "String",
         "defaultValue": null,
         "isNamed": false
       }
@@ -69,7 +69,7 @@ class WidgetWithConstructor {
     "widgetDependencies": [
       {
         "name": "arg1",
-        "type": "FramyWidgetDependencyType.string",
+        "type": "String",
         "defaultValue": null,
         "isNamed": true
       }
@@ -93,7 +93,7 @@ class WidgetWithConstructorAndKey {
     "widgetDependencies": [
       {
         "name": "arg1",
-        "type": "FramyWidgetDependencyType.string",
+        "type": "String",
         "defaultValue": "'test1'",
         "isNamed": true
       }
@@ -105,25 +105,25 @@ class WidgetWithConstructorWithDefaultParamValue {
   WidgetWithConstructorWithDefaultParamValue({String arg1 = 'test1'}) {}
 }
 
-@ShouldGenerate('"type": "FramyWidgetDependencyType.int"', contains: true)
+@ShouldGenerate('"type": "int"', contains: true)
 @FramyWidget()
 class WidgetWithIntParam {
   WidgetWithIntParam(int arg1) {}
 }
 
-@ShouldGenerate('"type": "FramyWidgetDependencyType.double"', contains: true)
+@ShouldGenerate('"type": "double"', contains: true)
 @FramyWidget()
 class WidgetWithDoubleParam {
   WidgetWithDoubleParam(double arg1) {}
 }
 
-@ShouldGenerate('"type": "FramyWidgetDependencyType.double"', contains: true)
+@ShouldGenerate('"type": "double"', contains: true)
 @FramyWidget()
 class WidgetWithNumParam {
   WidgetWithNumParam(num arg1) {}
 }
 
-@ShouldGenerate('"type": "FramyWidgetDependencyType.bool"', contains: true)
+@ShouldGenerate('"type": "bool"', contains: true)
 @FramyWidget()
 class WidgetWithBoolParam {
   WidgetWithBoolParam(bool arg1) {}

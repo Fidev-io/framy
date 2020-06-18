@@ -7,19 +7,16 @@ import 'package:framy_annotation/framy_annotation.dart';
 import 'package:framy_generator/framy_object.dart';
 import 'package:source_gen/source_gen.dart';
 
-class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
+class ModelResolver extends GeneratorForAnnotation<FramyModel> {
   @override
   String generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
     List<FramyObject> framyObjectsToReturn = [];
-    final framyObject = _widgetObjectFromElement(element);
+    final framyObject = _modelObjectFromElement(element);
     if (element is ClassElement) {
       framyObject.widgetDependencies = [];
       final constructor = element.unnamedConstructor;
       for (ParameterElement param in constructor.parameters) {
-        if (param.type.toString() == 'Key') {
-          continue;
-        }
         framyObject.widgetDependencies.add(
           FramyWidgetDependency(
             param.name,
@@ -46,6 +43,6 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
     return stringType;
   }
 
-  FramyObject _widgetObjectFromElement(Element element) =>
-      FramyObject.fromElement(element)..type = FramyObjectType.widget;
+  FramyObject _modelObjectFromElement(Element element) =>
+      FramyObject.fromElement(element)..type = FramyObjectType.model;
 }

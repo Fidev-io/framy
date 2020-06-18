@@ -578,7 +578,8 @@ class FramyCounterFABCustomPage extends StatefulWidget {
 
 class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<String>('onPressed', FramyDependencyType.string, null),
+    FramyDependencyModel<void Function()>(
+        'onPressed', 'void Function()', null, []),
   ];
 
   FramyDependencyModel dependency(String name) =>
@@ -637,8 +638,8 @@ class FramyCounterTitleCustomPage extends StatefulWidget {
 class _FramyCounterTitleCustomPageState
     extends State<FramyCounterTitleCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<String>('verb', FramyDependencyType.string, 'pushed'),
-    FramyDependencyModel<int>('counter', FramyDependencyType.int, 0),
+    FramyDependencyModel<String>('verb', 'String', 'pushed', []),
+    FramyDependencyModel<int>('counter', 'int', 0, []),
   ];
 
   FramyDependencyModel dependency(String name) =>
@@ -688,13 +689,12 @@ class _FramyCounterTitleCustomPageState
 
 class FramyDependencyModel<T> {
   final String name;
-  final FramyDependencyType type;
+  final String type;
   T value;
+  final List<FramyDependencyModel> subDependencies;
 
-  FramyDependencyModel(this.name, this.type, this.value);
+  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies);
 }
-
-enum FramyDependencyType { string, int, bool, double }
 
 class FramyWidgetDependenciesPanel extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
@@ -731,7 +731,6 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
 
   const FramyWidgetDependenciesFAB({Key key, this.dependenciesPanel})
       : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
@@ -761,7 +760,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     return Column(
       children: [
         Text(dependency.name),
-        if (dependency.type == FramyDependencyType.bool)
+        if (dependency.type == 'bool')
           DropdownButton<bool>(
             key: inputKey,
             value: dependency.value,
@@ -777,18 +776,20 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               )
             ],
           )
-        else
+        else if (dependency.type == 'String' ||
+            dependency.type == 'int' ||
+            dependency.type == 'double')
           TextFormField(
             key: inputKey,
             initialValue: dependency.value?.toString(),
             autovalidate: true,
             validator: (value) {
               String error;
-              if (dependency.type == FramyDependencyType.int) {
+              if (dependency.type == 'int') {
                 if (int.tryParse(value) == null) {
                   error = 'Invalid integer value';
                 }
-              } else if (dependency.type == FramyDependencyType.double) {
+              } else if (dependency.type == 'double') {
                 if (double.tryParse(value) == null) {
                   error = 'Invalid double value';
                 }
@@ -797,9 +798,9 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             },
             onChanged: (s) {
               var valueToReturn;
-              if (dependency.type == FramyDependencyType.int) {
+              if (dependency.type == 'int') {
                 valueToReturn = int.tryParse(s);
-              } else if (dependency.type == FramyDependencyType.double) {
+              } else if (dependency.type == 'double') {
                 valueToReturn = double.tryParse(s);
               } else {
                 valueToReturn = s;
@@ -808,8 +809,44 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 onChanged(dependency.name, valueToReturn);
               }
             },
-          ),
+          )
+        else
+          Text('Not supported type')
       ],
+    );
+  }
+}
+
+class FramyModelInput extends StatelessWidget {
+  final List<FramyDependencyModel> dependencies;
+  final ValueChanged<List<FramyDependencyModel>> onChanged;
+
+  FramyModelInput({Key key, this.onChanged, this.dependencies})
+      : super(key: key);
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).primaryColor),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: dependencies
+            .map((dep) => FramyWidgetDependencyInput(
+                  dependency: dep,
+                  onChanged: (name, value) {
+                    dependency(name).value = value;
+                    onChanged(dependencies);
+                  },
+                ))
+            .toList(),
+      ),
     );
   }
 }

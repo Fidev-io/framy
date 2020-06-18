@@ -2,6 +2,7 @@ import 'package:build/build.dart';
 import 'package:framy_generator/framy_generator.dart';
 import 'package:framy_generator/json_builder.dart';
 import 'package:framy_generator/json_formatter.dart';
+import 'package:framy_generator/resolvers/model_resolver.dart';
 import 'package:framy_generator/resolvers/theme_resolver.dart';
 import 'package:framy_generator/resolvers/widget_resolver.dart';
 import 'package:source_gen/source_gen.dart';
@@ -20,6 +21,15 @@ Builder widgetBuilder(BuilderOptions options) {
     WidgetResolver(),
     formatOutput: fixJson,
     generatedExtension: '.widget.framy.json',
+    header: '',
+  );
+}
+
+Builder modelBuilder(BuilderOptions options) {
+  return JsonLibraryBuilder(
+    ModelResolver(),
+    formatOutput: fixJson,
+    generatedExtension: '.model.framy.json',
     header: '',
   );
 }

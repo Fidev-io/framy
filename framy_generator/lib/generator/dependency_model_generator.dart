@@ -1,11 +1,10 @@
 String generateDependencyModel() => '''
 class FramyDependencyModel<T> {
   final String name;
-  final FramyDependencyType type;
+  final String type;
   T value;
+  final List<FramyDependencyModel> subDependencies;
 
-  FramyDependencyModel(this.name, this.type, this.value);
+  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies);
 }
-
-enum FramyDependencyType { string, int, bool, double }
 ''';
