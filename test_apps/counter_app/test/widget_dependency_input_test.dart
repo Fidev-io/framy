@@ -7,19 +7,16 @@ import 'test_utils.dart';
 
 void main() {
   FramyDependencyModel _getStringModel([String defaultValue]) =>
-      FramyDependencyModel<String>(
-          'name', FramyDependencyType.string, defaultValue);
+      FramyDependencyModel<String>('name', 'String', defaultValue, []);
 
   FramyDependencyModel _getIntModel([int defaultValue]) =>
-      FramyDependencyModel<int>('count', FramyDependencyType.int, defaultValue);
+      FramyDependencyModel<int>('count', 'int', defaultValue, []);
 
   FramyDependencyModel _getDoubleModel([double defaultValue]) =>
-      FramyDependencyModel<double>(
-          'dub', FramyDependencyType.double, defaultValue);
+      FramyDependencyModel<double>('dub', 'double', defaultValue, []);
 
   FramyDependencyModel _getBoolModel([bool defaultValue]) =>
-      FramyDependencyModel<bool>(
-          'boolVal', FramyDependencyType.bool, defaultValue);
+      FramyDependencyModel<bool>('boolVal', 'bool', defaultValue, []);
 
   Future<void> _buildDependencyInput(
       WidgetTester tester, FramyDependencyModel dependency,

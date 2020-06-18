@@ -1,13 +1,15 @@
 import 'package:framy_generator/framy_object.dart';
 
-String generateWidgetPages(List<FramyObject> widgetFramyObjects) {
+String generateWidgetPages(
+    List<FramyObject> widgetFramyObjects, List<FramyObject> modelFramyObjects) {
   return widgetFramyObjects.fold(
     '',
-    (previousValue, element) => previousValue + _generateWidgetPage(element),
+    (previousValue, element) =>
+        previousValue + _generateWidgetPage(element, modelFramyObjects),
   );
 }
 
-String _generateWidgetPage(FramyObject framyObject) {
+String _generateWidgetPage(FramyObject framyObject, List<FramyObject> models) {
   final constructor = '''${framyObject.name}(
   ${framyObject.widgetDependencies.fold('', (s, dep) => s + _generateParamUsageInConstructor(dep))}
   )''';
@@ -25,7 +27,7 @@ class $className extends StatefulWidget {
 
 class $stateClassName extends State<$className> {
   List<FramyDependencyModel> dependencies = [
-    ${framyObject.widgetDependencies.fold('', (s, dep) => s + _dependencyInitializationLine(dep))}
+    ${framyObject.widgetDependencies.fold('', (s, dep) => s + _dependencyInitializationLine(dep, models))}
   ];
 
   FramyDependencyModel dependency(String name) =>
@@ -72,28 +74,25 @@ class $stateClassName extends State<$className> {
 ''';
 }
 
-String _dependencyInitializationLine(FramyWidgetDependency dependency) {
-  final String type = _types[dependency.type];
-  final String dependencyType = _dependencyTypes[dependency.type];
+String _dependencyInitializationLine(
+    FramyWidgetDependency dependency, List<FramyObject> models) {
+  final String type = dependency.type;
   final String name = dependency.name;
   final String defaultValue = dependency.defaultValueCode;
+  final model = models.singleWhere(
+    (element) => element.name == type,
+    orElse: () => null,
+  );
 
-  return 'FramyDependencyModel<$type>(\'$name\', $dependencyType, $defaultValue),\n';
+  String subDependencies = model == null
+      ? ''
+      : model.widgetDependencies.fold(
+          '',
+          (s, dep) => s + _dependencyInitializationLine(dep, models),
+        );
+
+  return 'FramyDependencyModel<$type>(\'$name\', \'$type\', $defaultValue, [$subDependencies]),\n';
 }
-
-Map<FramyWidgetDependencyType, String> _types = {
-  FramyWidgetDependencyType.string: 'String',
-  FramyWidgetDependencyType.int: 'int',
-  FramyWidgetDependencyType.bool: 'bool',
-  FramyWidgetDependencyType.double: 'double',
-};
-
-Map<FramyWidgetDependencyType, String> _dependencyTypes = {
-  FramyWidgetDependencyType.string: 'FramyDependencyType.string',
-  FramyWidgetDependencyType.int: 'FramyDependencyType.int',
-  FramyWidgetDependencyType.bool: 'FramyDependencyType.bool',
-  FramyWidgetDependencyType.double: 'FramyDependencyType.double',
-};
 
 String _generateParamUsageInConstructor(FramyWidgetDependency dependency) {
   final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';

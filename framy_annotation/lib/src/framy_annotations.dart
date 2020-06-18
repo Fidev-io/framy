@@ -47,3 +47,10 @@ class FramyWidget extends FramyAnnotation {
 }
 
 const framyWidget = FramyWidget();
+
+/// Used to annotate a model class that can be passed as an argument to the widget's constructor
+class FramyModel extends FramyAnnotation {
+  const FramyModel();
+}
+
+const framyModel = FramyModel();

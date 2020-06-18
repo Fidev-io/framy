@@ -31,11 +31,14 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
         await _loadFramyObjects(buildStep, '**.theme.framy.json');
     final widgetFramyObjects =
         await _loadFramyObjects(buildStep, '**.widget.framy.json');
+    final modelFramyObjects =
+        await _loadFramyObjects(buildStep, '**.model.framy.json');
 
     final buffer = StringBuffer();
     buffer.writeln(generateImports([
       ...themeFramyObjects,
       ...widgetFramyObjects,
+      ...modelFramyObjects,
     ]));
     buffer.writeln(generateMain());
     buffer.writeln(generateFramyApp(themeFramyObjects));
@@ -48,10 +51,10 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateUtils());
     buffer.writeln(generateAppBarPage());
     buffer.writeln(generateButtonPage());
-    buffer.writeln(generateWidgetPages(widgetFramyObjects));
+    buffer.writeln(generateWidgetPages(widgetFramyObjects, modelFramyObjects));
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
-    buffer.writeln(generateWidgetDependencyInput());
+    buffer.writeln(generateWidgetDependencyInput(modelFramyObjects));
     return buffer.toString();
   }
 

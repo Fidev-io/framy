@@ -13,6 +13,13 @@ builders:
     auto_apply: dependents
     runs_before: [":framy_builder"]
     build_to: cache
+  model_builder:
+    import: "package:framy_generator/builder.dart"
+    builder_factories: ["modelBuilder"]
+    build_extensions: { ".dart": [".model.framy.json"] }
+    auto_apply: dependents
+    runs_before: [":framy_builder"]
+    build_to: cache
   framy_builder:
     import: "package:framy_generator/builder.dart"
     builder_factories: ["framyAppBuilder"]
