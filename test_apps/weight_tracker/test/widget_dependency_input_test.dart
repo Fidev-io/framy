@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:weight_tracker/main.app.framy.dart';
+import 'package:weight_tracker/models/user.dart';
 
-import '../lib/main.app.framy.dart';
-import '../lib/models/user.dart';
 import 'test_utils.dart';
 
 void main() {
@@ -39,7 +39,8 @@ void main() {
       expect(find.byType(FramyWidgetDependencyInput), findsOneWidget);
     });
 
-    testWidgets('should build recursively for User model', (WidgetTester tester) async {
+    testWidgets('should build recursively for User model',
+        (WidgetTester tester) async {
       await _buildDependencyInput(tester, _getUserModel());
       expect(find.byType(FramyWidgetDependencyInput), findsNWidgets(4));
     });
@@ -98,6 +99,31 @@ void main() {
         //then
         expect(
             find.byKey(Key('framy_dependency_firstName_input')), findsNothing);
+      });
+
+      testWidgets('should emit last custom value when its set back to custom',
+          (WidgetTester tester) async {
+        //given
+        User emitted;
+        final presetUser = User('John', 'Doe', 11);
+        final customModel = _getUserModel(presetUser);
+        customModel.subDependencies[0].value = 'Adam';
+        customModel.subDependencies[1].value = 'Smith';
+        customModel.subDependencies[2].value = 25;
+        await _buildDependencyInput(
+          tester,
+          customModel,
+          presets: {
+            'User': {'user1': presetUser}
+          },
+          onChanged: (name, value) => emitted = value,
+        );
+        //when
+        await choosePreset(tester, 'Custom');
+        //then
+        expect(emitted.firstName, 'Adam');
+        expect(emitted.lastName, 'Smith');
+        expect(emitted.age, 25);
       });
     });
   });

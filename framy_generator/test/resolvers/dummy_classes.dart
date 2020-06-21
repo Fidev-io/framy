@@ -18,3 +18,7 @@ class ThemeData {
 }
 
 class Key {}
+
+class User {
+  String firstName;
+}

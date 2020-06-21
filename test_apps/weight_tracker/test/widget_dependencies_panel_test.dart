@@ -23,6 +23,7 @@ void main() {
       await tester.pumpWidget(TestMaterialAppWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: dependencies,
+          presets: {},
         ),
       ));
       expect(find.byKey(Key('FramyWidgetDependenciesPanel')), findsOneWidget);
@@ -36,6 +37,7 @@ void main() {
         FramyWidgetDependenciesPanel(
           dependencies: dependencies,
           onChanged: (name, user) => emitted = user,
+          presets: {},
         ),
       ));
       //when

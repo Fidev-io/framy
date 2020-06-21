@@ -10,6 +10,7 @@ void main() {
       await tester.pumpWidget(TestMaterialAppWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: [],
+          presets: {},
         ),
       ));
       expect(find.byKey(Key('FramyWidgetDependenciesPanel')), findsOneWidget);
@@ -26,6 +27,7 @@ void main() {
       await tester.pumpWidget(TestMaterialAppWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: dependencies,
+          presets: {},
         ),
       ));
       //then
@@ -42,6 +44,7 @@ void main() {
           dependencies: [model],
           onChanged: (name, val) =>
               model = FramyDependencyModel<String>(name, 'String', val, []),
+          presets: {},
         ),
       ));
       //when

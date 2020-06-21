@@ -15,6 +15,9 @@ import 'package:framy_generator/generator/framy_app_generator.dart';
 import 'package:framy_generator/generator/imports_generator.dart';
 import 'package:framy_generator/generator/layout_template_generator.dart';
 import 'package:framy_generator/generator/main_generator.dart';
+import 'package:framy_generator/generator/model_constructor_map_generator.dart';
+import 'package:framy_generator/generator/preset_dropdown_generator.dart';
+import 'package:framy_generator/generator/presets_map_generator.dart';
 import 'package:framy_generator/generator/routing_generator.dart';
 import 'package:framy_generator/generator/utils_generator.dart';
 import 'package:framy_generator/generator/widget_dependencies_panel_generator.dart';
@@ -33,12 +36,15 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
         await _loadFramyObjects(buildStep, '**.widget.framy.json');
     final modelFramyObjects =
         await _loadFramyObjects(buildStep, '**.model.framy.json');
+    final presetFramyObjects =
+        await _loadFramyObjects(buildStep, '**.preset.framy.json');
 
     final buffer = StringBuffer();
     buffer.writeln(generateImports([
       ...themeFramyObjects,
       ...widgetFramyObjects,
       ...modelFramyObjects,
+      ...presetFramyObjects,
     ]));
     buffer.writeln(generateMain());
     buffer.writeln(generateFramyApp(themeFramyObjects));
@@ -55,6 +61,9 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
     buffer.writeln(generateWidgetDependencyInput(modelFramyObjects));
+    buffer.writeln(generatePresetDropdown());
+    buffer.writeln(generateModelConstructorMap(modelFramyObjects));
+    buffer.writeln(generatePresets(presetFramyObjects));
     return buffer.toString();
   }
 

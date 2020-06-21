@@ -26,6 +26,7 @@ void main() {
         FramyWidgetDependencyInput(
           dependency: dependency,
           onChanged: onChanged ?? (_, __) {},
+          presets: {},
         ),
       ),
     );

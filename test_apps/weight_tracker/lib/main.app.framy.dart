@@ -585,7 +585,7 @@ class _FramyUserDataCardCustomPageState
       FramyDependencyModel<int>('age', 'int', null, []),
     ]),
   ];
-  final Map<String, Map<String, dynamic>> presets = generateFramyPresets();
+  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
@@ -598,13 +598,6 @@ class _FramyUserDataCardCustomPageState
         builder: (context, constraints) {
           final isSmallDevice =
               constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
-          final dependenciesPanel = FramyWidgetDependenciesPanel(
-            dependencies: dependencies,
-            presets: presets,
-            onChanged: (name, val) => setState(
-              () => dependency(name).value = val,
-            ),
-          );
           final body = Row(
             children: [
               Expanded(
@@ -613,14 +606,27 @@ class _FramyUserDataCardCustomPageState
                 ),
               ),
               if (!isSmallDevice)
-                SizedBox(width: 300, child: dependenciesPanel),
+                SizedBox(
+                  width: 300,
+                  child: FramyWidgetDependenciesPanel(
+                    dependencies: dependencies,
+                    presets: presets,
+                    onChanged: (name, val) => setState(
+                      () => dependency(name).value = val,
+                    ),
+                  ),
+                ),
             ],
           );
           if (isSmallDevice) {
             return Scaffold(
               body: body,
               floatingActionButton: FramyWidgetDependenciesFAB(
-                dependenciesPanel: dependenciesPanel,
+                dependencies: dependencies,
+                presets: presets,
+                onChanged: (name, val) => setState(
+                  () => dependency(name).value = val,
+                ),
               ),
             );
           } else {
@@ -663,7 +669,7 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
                 .map((dep) => FramyWidgetDependencyInput(
                       dependency: dep,
                       onChanged: onChanged,
-              presets: presets,
+                      presets: presets,
                     ))
                 .toList(),
           ),
@@ -674,9 +680,12 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
 }
 
 class FramyWidgetDependenciesFAB extends StatelessWidget {
-  final Widget dependenciesPanel;
+  final List<FramyDependencyModel> dependencies;
+  final void Function(String name, dynamic value) onChanged;
+  final Map<String, Map<String, dynamic>> presets;
 
-  const FramyWidgetDependenciesFAB({Key key, this.dependenciesPanel})
+  const FramyWidgetDependenciesFAB(
+      {Key key, this.onChanged, this.dependencies, this.presets})
       : super(key: key);
 
   @override
@@ -688,7 +697,16 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
       onPressed: () => showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         context: context,
-        builder: (context) => dependenciesPanel,
+        builder: (context) => StatefulBuilder(
+          builder: (context, setState) => FramyWidgetDependenciesPanel(
+            dependencies: dependencies,
+            presets: presets,
+            onChanged: (s, v) {
+              setState(() {});
+              onChanged(s, v);
+            },
+          ),
+        ),
       ),
       mini: true,
     );
@@ -715,26 +733,11 @@ class FramyWidgetDependencyInput extends StatelessWidget {
       children: [
         Text(dependency.name),
         if (presets.containsKey(dependency.type))
-          DropdownButton(
-            key: Key('framy_${dependency.name}_preset_dropdown'),
-            value: chosenPreset,
-            onChanged: (val) => onChanged(
-              dependency.name,
-              val ??
-                  framyModelConstructorMap[dependency.type]?.call(dependency),
-            ),
-            items: [
-              DropdownMenuItem(
-                value: null,
-                child: Text('Custom'),
-              ),
-              ...presets[dependency.type].entries.map(
-                    (entry) => DropdownMenuItem(
-                      child: Text(entry.key),
-                      value: entry.value,
-                    ),
-                  ),
-            ],
+          FramyPresetDropdown(
+            dependency: dependency,
+            chosenPreset: chosenPreset,
+            onChanged: onChanged,
+            presets: presets,
           ),
         if (chosenPreset == null)
           if (dependency.type == 'bool')
@@ -791,7 +794,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             FramyModelInput(
               dependencies: dependency.subDependencies,
               presets: presets,
-              onChanged: (dependencies) => onChanged(
+              onChanged: (_) => onChanged(
                 dependency.name,
                 framyModelConstructorMap[dependency.type]?.call(dependency),
               ),
@@ -802,24 +805,6 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     );
   }
 }
-
-Map<String, Map<String, dynamic>> generateFramyPresets() => {
-      'User': {'teenageJohn': teenageJohn()}
-    };
-final framyModelConstructorMap =
-    <String, dynamic Function(FramyDependencyModel)>{
-  'User': (dependencyModel) => User(
-        dependencyModel.subDependencies
-            .singleWhere((d) => d.name == 'firstName')
-            .value,
-        dependencyModel.subDependencies
-            .singleWhere((d) => d.name == 'lastName')
-            .value,
-        dependencyModel.subDependencies
-            .singleWhere((d) => d.name == 'age')
-            .value,
-      ),
-};
 
 class FramyModelInput extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
@@ -845,14 +830,68 @@ class FramyModelInput extends StatelessWidget {
         children: dependencies
             .map((dep) => FramyWidgetDependencyInput(
                   dependency: dep,
+                  presets: presets,
                   onChanged: (name, value) {
                     dependency(name).value = value;
                     onChanged(dependencies);
                   },
-                  presets: presets,
                 ))
             .toList(),
       ),
     );
   }
 }
+
+class FramyPresetDropdown extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final void Function(String name, dynamic value) onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+  final dynamic chosenPreset;
+
+  const FramyPresetDropdown(
+      {Key key,
+      this.dependency,
+      this.onChanged,
+      this.presets,
+      this.chosenPreset})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      key: Key('framy_${dependency.name}_preset_dropdown'),
+      value: chosenPreset,
+      onChanged: (val) => onChanged(
+        dependency.name,
+        val ?? framyModelConstructorMap[dependency.type]?.call(dependency),
+      ),
+      items: [
+        DropdownMenuItem(
+          value: null,
+          child: Text('Custom'),
+        ),
+        ...presets[dependency.type].entries.map(
+              (entry) => DropdownMenuItem(
+                child: Text(entry.key),
+                value: entry.value,
+              ),
+            ),
+      ],
+    );
+  }
+}
+
+final framyModelConstructorMap =
+    <String, dynamic Function(FramyDependencyModel)>{
+  'User': (dep) => User(
+        dep.subDependencies.singleWhere((d) => d.name == 'firstName').value,
+        dep.subDependencies.singleWhere((d) => d.name == 'lastName').value,
+        dep.subDependencies.singleWhere((d) => d.name == 'age').value,
+      ),
+};
+
+Map<String, Map<String, dynamic>> createFramyPresets() => {
+      'User': {
+        'teenageJohn': teenageJohn(),
+      },
+    };

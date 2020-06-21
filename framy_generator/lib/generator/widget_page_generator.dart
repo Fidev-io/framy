@@ -29,6 +29,7 @@ class $stateClassName extends State<$className> {
   List<FramyDependencyModel> dependencies = [
     ${framyObject.widgetDependencies.fold('', (s, dep) => s + _dependencyInitializationLine(dep, models))}
   ];
+  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
@@ -41,26 +42,33 @@ class $stateClassName extends State<$className> {
         builder: (context, constraints) {
           final isSmallDevice =
               constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
-          final dependenciesPanel = FramyWidgetDependenciesPanel(
-            dependencies: dependencies,
-            onChanged: (name, val) => setState(
-              () => dependency(name).value = val,
-            ),
-          );
           final body = Row(
             children: [
               Expanded(
                 child: $constructor,
               ),
               if (!isSmallDevice)
-                SizedBox(width: 300, child: dependenciesPanel),
+                SizedBox(
+                  width: 300,
+                  child: FramyWidgetDependenciesPanel(
+                    dependencies: dependencies,
+                    presets: presets,
+                    onChanged: (name, val) => setState(
+                      () => dependency(name).value = val,
+                    ),
+                  ),
+                ),
             ],
           );
           if (isSmallDevice) {
             return Scaffold(
               body: body,
               floatingActionButton: FramyWidgetDependenciesFAB(
-                dependenciesPanel: dependenciesPanel,
+                dependencies: dependencies,
+                presets: presets,
+                onChanged: (name, val) => setState(
+                  () => dependency(name).value = val,
+                ),
               ),
             );
           } else {
