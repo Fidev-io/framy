@@ -19,53 +19,48 @@ void main() {
       ];
 
       test('should have a class with name FramyXXXCustomPage', () {
-        //when
         final result = generateWidgetPages(widgetObjects, []);
-        //then
         expect(result.contains('class FramyMyWidgetCustomPage'), isTrue);
       });
 
       test('should contain key Framy_XXX_Page', () {
-        //when
         final result = generateWidgetPages(widgetObjects, []);
-        //then
         expect(result.contains('Framy_MyWidget_Page'), isTrue);
       });
 
       test('should contain custom widget XXX constructor', () {
-        //when
         final result = generateWidgetPages(widgetObjects, []);
-        //then
         expect(result.contains('MyWidget('), isTrue);
       });
 
       test('should contain LayoutBuilder', () {
-        //when
         final result = generateWidgetPages(widgetObjects, []);
-        //then
         expect(result.contains('LayoutBuilder('), isTrue);
       });
 
       test('should contain list with dependencies', () {
-        //when
         final result = generateWidgetPages(widgetObjects, []);
-        //then
         expect(
             result.contains('List<FramyDependencyModel> dependencies'), isTrue);
       });
 
       test('should contain FramyWidgetDependenciesPanel', () {
-        //when
         final result = generateWidgetPages(widgetObjects, []);
-        //then
         expect(result.contains('FramyWidgetDependenciesPanel('), isTrue);
       });
 
       test('should contain FramyWidgetDependenciesFAB', () {
-        //when
         final result = generateWidgetPages(widgetObjects, []);
-        //then
         expect(result.contains('FramyWidgetDependenciesFAB('), isTrue);
+      });
+
+      test('should have an initialized presets field', () {
+        final result = generateWidgetPages(widgetObjects, []);
+        expect(
+          result.contains(
+              'final Map<String, Map<String, dynamic>> presets = createFramyPresets();'),
+          isTrue,
+        );
       });
     });
 

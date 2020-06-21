@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:framy_annotation/framy_annotation.dart';
 import 'package:framy_generator/framy_object.dart';
+import 'package:framy_generator/json_formatter.dart';
 import 'package:source_gen/source_gen.dart';
 
 class ModelResolver extends GeneratorForAnnotation<FramyModel> {
@@ -30,9 +29,7 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
 
     framyObjectsToReturn.add(framyObject);
 
-    var encoder = JsonEncoder.withIndent('  ');
-    return encoder.convert(
-        framyObjectsToReturn.map((framyObj) => framyObj.toMap()).toList());
+    return framyObjectsToReturn.toJson();
   }
 
   String parseDartType(DartType type) {

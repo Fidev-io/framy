@@ -11,6 +11,7 @@ class FramyObject {
   ElementKind kind;
   FramyObject parentObject;
   List<FramyWidgetDependency> widgetDependencies;
+  String returnType;
 
   FramyObject();
 
@@ -31,6 +32,7 @@ class FramyObject {
       'parentObject': parentObject?.toMap(),
       'widgetDependencies':
           widgetDependencies?.map((dep) => dep.toMap())?.toList(),
+      if (returnType != null) 'returnType': returnType,
     };
   }
 
@@ -52,6 +54,7 @@ class FramyObject {
         : (json['widgetDependencies'] as List)
             .map((map) => FramyWidgetDependency.fromJson(map))
             .toList();
+    returnType = json['returnType'];
   }
 }
 
@@ -85,4 +88,5 @@ enum FramyObjectType {
   color,
   widget,
   model,
+  preset,
 }

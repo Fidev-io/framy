@@ -49,5 +49,24 @@ void main() {
       await driver.waitFor(find.text('John Doe'));
       await driver.waitFor(find.text('Age: 17'));
     });
+
+    test('should allow to use a user preset', () async {
+      await driver.tap(find.byValueKey('framy_user_preset_dropdown'));
+      await driver.tap(find.text('teenageJohn'));
+      await driver.waitFor(find.text('John Smith'));
+      await driver.waitFor(find.text('Age: 13'));
+      await driver
+          .waitForAbsent(find.byValueKey('framy_dependency_firstName_input'));
+      await driver
+          .waitForAbsent(find.byValueKey('framy_dependency_lastName_input'));
+      await driver.waitForAbsent(find.byValueKey('framy_dependency_age_input'));
+    });
+
+    test('should come back to custom user', () async {
+      await driver.tap(find.byValueKey('framy_user_preset_dropdown'));
+      await driver.tap(find.text('Custom'));
+      await driver.waitFor(find.text('John Doe'));
+      await driver.waitFor(find.text('Age: 17'));
+    });
   });
 }

@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:framy_annotation/framy_annotation.dart';
 import 'package:framy_generator/framy_object.dart';
+import 'package:framy_generator/json_formatter.dart';
 import 'package:source_gen/source_gen.dart';
 
 class ThemeResolver extends GeneratorForAnnotation<FramyTheme> {
@@ -46,9 +45,7 @@ class ThemeResolver extends GeneratorForAnnotation<FramyTheme> {
       framyObjectsToReturn.add(framyObject);
     }
 
-    var encoder = JsonEncoder.withIndent('  ');
-    return encoder.convert(
-        framyObjectsToReturn.map((framyObj) => framyObj.toMap()).toList());
+    return framyObjectsToReturn.toJson();
   }
 
   FramyObject _themeDataObjectFromElement(Element element,

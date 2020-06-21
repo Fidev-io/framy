@@ -47,5 +47,21 @@ void main() {
       final result = generateWidgetDependenciesPanel();
       expect(result.contains('Key(\'FramyWidgetDependenciesButton\')'), isTrue);
     });
+
+    test('should have presets field', () {
+      final result = generateWidgetDependenciesPanel();
+      expect(
+        result.contains('final Map<String, Map<String, dynamic>> presets;'),
+        isTrue,
+      );
+    });
+
+    group('FramyWidgetDependenciesFAB', () {
+      test('should contain StatefulBuilder', () {
+        //for updating state in the modal.
+        final result = generateWidgetDependenciesPanel();
+        expect(result.contains('StatefulBuilder'), isTrue);
+      });
+    });
   });
 }

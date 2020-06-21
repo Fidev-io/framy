@@ -54,3 +54,9 @@ class FramyModel extends FramyAnnotation {
 }
 
 const framyModel = FramyModel();
+
+class FramyPreset extends FramyAnnotation {
+  const FramyPreset();
+}
+
+const framyPreset = FramyPreset();

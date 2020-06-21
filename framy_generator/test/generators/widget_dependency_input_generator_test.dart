@@ -94,13 +94,11 @@ void main() {
     });
 
     group('when there is a model object', () {
-      final stringDependency =
-          FramyWidgetDependency('firstName', 'String', null, false);
       final framyModelObjects = [
         FramyObject()
           ..name = 'User'
           ..type = FramyObjectType.model
-          ..widgetDependencies = [stringDependency]
+          ..widgetDependencies = []
       ];
 
       test('should generate else if statement', () {
@@ -109,12 +107,44 @@ void main() {
             result.contains('else if (dependency.type == \'User\')'), isTrue);
       });
 
-      test('should generate a model constructor', () {
-        final result = generateWidgetDependencyInput(framyModelObjects);
+      test('should generate 2 else if conditions when two models are passed',
+          () {
+        //given
+        final models = [
+          FramyObject()
+            ..name = 'User'
+            ..type = FramyObjectType.model
+            ..widgetDependencies = [],
+          FramyObject()
+            ..name = 'Address'
+            ..type = FramyObjectType.model
+            ..widgetDependencies = []
+        ];
+        //when
+        final result = generateWidgetDependencyInput(models);
+        //then
         expect(
-            result.contains(RegExp(
-                'User\\(\n *dependencies\\.singleWhere\\(\\(d\\) => d\\.name == \'firstName\'\\)\\.value,')),
+            result.contains(
+                'else if (dependency.type == \'User\' || dependency.type == \'Address\')'),
             isTrue);
+      });
+
+      test('should use FramyModelInput', () {
+        final result = generateWidgetDependencyInput(framyModelObjects);
+        expect(result.contains('FramyModelInput('), isTrue);
+      });
+    });
+
+    group('with presets feature', () {
+      test('should contain check if preset exists', () {
+        final result = generateWidgetDependencyInput([]);
+        expect(result.contains('if (presets.containsKey(dependency.type))'),
+            isTrue);
+      });
+
+      test('should contain FramyPresetDropdown', () {
+        final result = generateWidgetDependencyInput([]);
+        expect(result.contains('FramyPresetDropdown'), isTrue);
       });
     });
   });
