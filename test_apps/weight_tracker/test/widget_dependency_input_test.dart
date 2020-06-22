@@ -15,7 +15,12 @@ void main() {
         FramyDependencyModel<String>('firstName', 'String', null, []),
         FramyDependencyModel<String>('lastName', 'String', null, []),
         FramyDependencyModel<int>('age', 'int', null, []),
+        FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
       ]);
+
+  FramyDependencyModel _getStringListModel([List<String> defaultValue]) =>
+      FramyDependencyModel<List<String>>(
+          'strings', 'List<String>', defaultValue, []);
 
   Future<void> _buildDependencyInput(
     WidgetTester tester,
@@ -43,7 +48,7 @@ void main() {
     testWidgets('should build recursively for User model',
         (WidgetTester tester) async {
       await _buildDependencyInput(tester, _getUserModel());
-      expect(find.byType(FramyWidgetDependencyInput), findsNWidgets(4));
+      expect(find.byType(FramyWidgetDependencyInput), findsNWidgets(5));
     });
 
     testWidgets(
@@ -129,14 +134,29 @@ void main() {
     });
 
     group('null switch', () {
-      testWidgets('should show switch for String model', (WidgetTester tester) async {
+      testWidgets('should show switch for String model',
+          (WidgetTester tester) async {
         await _buildDependencyInput(tester, _getStringModel());
         expect(find.byType(Switch), findsOneWidget);
       });
 
-      testWidgets('should show 4 switches for User model', (WidgetTester tester) async {
+      testWidgets('should show 4 switches for User model',
+          (WidgetTester tester) async {
         await _buildDependencyInput(tester, _getUserModel());
         expect(find.byType(Switch), findsNWidgets(4));
+      });
+    });
+
+    group('when the type is a list', () {
+      testWidgets('it should build', (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getStringListModel());
+        expect(find.byType(FramyWidgetDependencyInput), findsOneWidget);
+      });
+
+      testWidgets('it should display widgetListDependencyInput',
+          (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getStringListModel());
+        expect(find.byType(FramyWidgetListDependencyInput), findsOneWidget);
       });
     });
   });

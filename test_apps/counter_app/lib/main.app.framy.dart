@@ -861,6 +861,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 }
               },
             )
+          else if (dependency.type.startsWith('List<'))
+            FramyWidgetListDependencyInput(
+              dependency: dependency,
+              onChanged: (model) =>
+                  onChanged(dependency.name, dependency.value),
+              presets: presets,
+            )
           else
             Text('Not supported type')
       ],
@@ -900,6 +907,73 @@ class FramyModelInput extends StatelessWidget {
                 ))
             .toList(),
       ),
+    );
+  }
+}
+
+class FramyWidgetListDependencyInput extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final ValueChanged<FramyDependencyModel> onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+
+  const FramyWidgetListDependencyInput(
+      {Key key, this.dependency, this.onChanged, this.presets})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final String listType = dependency.type.substring(
+      dependency.type.indexOf('<') + 1,
+      dependency.type.lastIndexOf('>'),
+    );
+    return Column(
+      key: Key(dependency.value?.length?.toString()),
+      children: [
+        if (dependency.value != null)
+          for (int i = 0; i < dependency.value.length; i++)
+            Row(
+              children: [
+                Expanded(
+                  child: FramyWidgetDependencyInput(
+                    dependency: FramyDependencyModel(
+                      'List element ${i + 1}',
+                      listType,
+                      dependency.value[i],
+                      [],
+                    ),
+                    onChanged: (name, val) {
+                      dependency.value[i] = val;
+                      onChanged(dependency);
+                    },
+                    presets: presets,
+                  ),
+                ),
+                SizedBox(width: 8),
+                IconButton(
+                  key: Key(
+                      'framy_dependency_List element ${i + 1}_delete_button'),
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    dependency.value.removeAt(i);
+                    onChanged(dependency);
+                  },
+                )
+              ],
+            ),
+        FlatButton(
+          child: Text('Add'),
+          onPressed: () {
+            if (dependency.value == null) {
+              if (listType == 'String') dependency.value = <String>[];
+              if (listType == 'int') dependency.value = <int>[];
+              if (listType == 'double') dependency.value = <double>[];
+              if (listType == 'bool') dependency.value = <bool>[];
+            }
+            dependency.value.add(null);
+            onChanged(dependency);
+          },
+        ),
+      ],
     );
   }
 }

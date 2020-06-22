@@ -148,9 +148,25 @@ void main() {
       });
     });
 
-    test('should contain FramyWidgetDependencyNullSwitch(dependency: dependency)', () {
+    test(
+        'should contain FramyWidgetDependencyNullSwitch(dependency: dependency)',
+        () {
       final result = generateWidgetDependencyInput([]);
-      expect(result.contains('FramyWidgetDependencyNullSwitch(dependency: dependency)'), isTrue);
+      expect(
+          result.contains(
+              'FramyWidgetDependencyNullSwitch(dependency: dependency)'),
+          isTrue);
+    });
+
+    test('should contain check for list', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('else if (dependency.type.startsWith(\'List<\'))'),
+          isTrue);
+    });
+
+    test('should contain FramyWidgetListDependencyInput', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('FramyWidgetListDependencyInput'), isTrue);
     });
   });
 }

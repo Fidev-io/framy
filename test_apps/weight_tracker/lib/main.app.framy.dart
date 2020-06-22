@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/app_theme.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
+import 'package:weight_tracker/widgets/user_emails_view.dart';
 import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/models/user.framy.dart';
 
@@ -33,6 +34,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
     '/UserDataCard': FramyUserDataCardCustomPage(),
+    '/UserEmailsView': FramyUserEmailsViewCustomPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -136,6 +138,12 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('UserDataCard'),
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/UserDataCard'),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('UserEmailsView'),
+                onTap: () => Navigator.of(context)
+                    .pushReplacementNamed('/UserEmailsView'),
               ),
             ],
           ),
@@ -583,6 +591,7 @@ class _FramyUserDataCardCustomPageState
       FramyDependencyModel<String>('firstName', 'String', null, []),
       FramyDependencyModel<String>('lastName', 'String', null, []),
       FramyDependencyModel<int>('age', 'int', null, []),
+      FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
     ]),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
@@ -602,6 +611,78 @@ class _FramyUserDataCardCustomPageState
             children: [
               Expanded(
                 child: UserDataCard(
+                  user: dependency('user').value,
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(
+                  width: 300,
+                  child: FramyWidgetDependenciesPanel(
+                    dependencies: dependencies,
+                    presets: presets,
+                    onChanged: (name, val) => setState(
+                      () => dependency(name).value = val,
+                    ),
+                  ),
+                ),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependencies: dependencies,
+                presets: presets,
+                onChanged: (name, val) => setState(
+                  () => dependency(name).value = val,
+                ),
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
+    );
+  }
+}
+
+class FramyUserEmailsViewCustomPage extends StatefulWidget {
+  const FramyUserEmailsViewCustomPage()
+      : super(key: const Key('Framy_UserEmailsView_Page'));
+
+  @override
+  _FramyUserEmailsViewCustomPageState createState() =>
+      _FramyUserEmailsViewCustomPageState();
+}
+
+class _FramyUserEmailsViewCustomPageState
+    extends State<FramyUserEmailsViewCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<User>('user', 'User', null, [
+      FramyDependencyModel<String>('firstName', 'String', null, []),
+      FramyDependencyModel<String>('lastName', 'String', null, []),
+      FramyDependencyModel<int>('age', 'int', null, []),
+      FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
+    ]),
+  ];
+  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final body = Row(
+            children: [
+              Expanded(
+                child: UserEmailsView(
                   user: dependency('user').value,
                 ),
               ),
@@ -808,6 +889,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 framyModelConstructorMap[dependency.type]?.call(dependency),
               ),
             )
+          else if (dependency.type.startsWith('List<'))
+            FramyWidgetListDependencyInput(
+              dependency: dependency,
+              onChanged: (model) =>
+                  onChanged(dependency.name, dependency.value),
+              presets: presets,
+            )
           else
             Text('Not supported type')
       ],
@@ -847,6 +935,74 @@ class FramyModelInput extends StatelessWidget {
                 ))
             .toList(),
       ),
+    );
+  }
+}
+
+class FramyWidgetListDependencyInput extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final ValueChanged<FramyDependencyModel> onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+
+  const FramyWidgetListDependencyInput(
+      {Key key, this.dependency, this.onChanged, this.presets})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final String listType = dependency.type.substring(
+      dependency.type.indexOf('<') + 1,
+      dependency.type.lastIndexOf('>'),
+    );
+    return Column(
+      key: Key(dependency.value?.length?.toString()),
+      children: [
+        if (dependency.value != null)
+          for (int i = 0; i < dependency.value.length; i++)
+            Row(
+              children: [
+                Expanded(
+                  child: FramyWidgetDependencyInput(
+                    dependency: FramyDependencyModel(
+                      'List element ${i + 1}',
+                      listType,
+                      dependency.value[i],
+                      [],
+                    ),
+                    onChanged: (name, val) {
+                      dependency.value[i] = val;
+                      onChanged(dependency);
+                    },
+                    presets: presets,
+                  ),
+                ),
+                SizedBox(width: 8),
+                IconButton(
+                  key: Key(
+                      'framy_dependency_List element ${i + 1}_delete_button'),
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    dependency.value.removeAt(i);
+                    onChanged(dependency);
+                  },
+                )
+              ],
+            ),
+        FlatButton(
+          child: Text('Add'),
+          onPressed: () {
+            if (dependency.value == null) {
+              if (listType == 'String') dependency.value = <String>[];
+              if (listType == 'int') dependency.value = <int>[];
+              if (listType == 'double') dependency.value = <double>[];
+              if (listType == 'bool') dependency.value = <bool>[];
+              if (listType == 'User') dependency.value = <User>[];
+            }
+            dependency.value.add(null);
+            onChanged(dependency);
+          },
+        ),
+      ],
     );
   }
 }
@@ -896,6 +1052,8 @@ final framyModelConstructorMap =
         dep.subDependencies.singleWhere((d) => d.name == 'firstName').value,
         dep.subDependencies.singleWhere((d) => d.name == 'lastName').value,
         dep.subDependencies.singleWhere((d) => d.name == 'age').value,
+        emails:
+            dep.subDependencies.singleWhere((d) => d.name == 'emails').value,
       ),
 };
 
