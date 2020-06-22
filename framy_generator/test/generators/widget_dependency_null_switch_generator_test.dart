@@ -10,12 +10,17 @@ void main() {
 
     test('should contain check if value is null', () {
       String result = generateWidgetDependencyNullSwitch();
-      expect(result.contains('value == null'), isTrue);
+      expect(result.contains('dependency.value == null'), isTrue);
     });
 
     test('should contain onChanged(null)', () {
       String result = generateWidgetDependencyNullSwitch();
       expect(result.contains('onChanged(null)'), isTrue);
+    });
+
+    test('should contain onChanged(framyModelConstructorMap[dependency.type]?.call(dependency))', () {
+      String result = generateWidgetDependencyNullSwitch();
+      expect(result.contains('onChanged(framyModelConstructorMap[dependency.type]?.call(dependency))'), isTrue);
     });
   });
 }

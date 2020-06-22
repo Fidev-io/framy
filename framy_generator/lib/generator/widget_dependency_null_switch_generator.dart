@@ -1,16 +1,22 @@
 String generateWidgetDependencyNullSwitch() => '''
 class FramyWidgetDependencyNullSwitch extends StatelessWidget {
-  final dynamic value;
   final ValueChanged<dynamic> onChanged;
+  final FramyDependencyModel dependency;
 
-  const FramyWidgetDependencyNullSwitch({Key key, this.value, this.onChanged})
+  const FramyWidgetDependencyNullSwitch({Key key, this.onChanged, this.dependency})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Switch(
-      value: value == null,
-      onChanged: (bool value) => onChanged(null),
+      value: dependency.value == null,
+      onChanged: (bool isActive) {
+        if (isActive) {
+          onChanged(null);
+        } else {
+          onChanged(framyModelConstructorMap[dependency.type]?.call(dependency));
+        }
+      },
     );
   }
 }
