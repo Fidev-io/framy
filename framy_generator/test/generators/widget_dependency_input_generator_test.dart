@@ -148,6 +148,11 @@ void main() {
       });
     });
 
+    test('should contain FramyWidgetDependencyNullSwitch(dependency: dependency)', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('FramyWidgetDependencyNullSwitch(dependency: dependency)'), isTrue);
+    });
+
     test('should contain check for list', () {
       final result = generateWidgetDependencyInput([]);
       expect(result.contains('else if (dependency.type.startsWith(\'List<\'))'),
