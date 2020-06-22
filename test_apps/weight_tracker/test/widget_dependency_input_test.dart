@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weight_tracker/main.app.framy.dart';
 import 'package:weight_tracker/models/user.dart';
@@ -124,6 +125,18 @@ void main() {
         expect(emitted.firstName, 'Adam');
         expect(emitted.lastName, 'Smith');
         expect(emitted.age, 25);
+      });
+    });
+
+    group('null switch', () {
+      testWidgets('should show switch for String model', (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getStringModel());
+        expect(find.byType(Switch), findsOneWidget);
+      });
+
+      testWidgets('should show 4 switches for User model', (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getUserModel());
+        expect(find.byType(Switch), findsNWidgets(4));
       });
     });
   });
