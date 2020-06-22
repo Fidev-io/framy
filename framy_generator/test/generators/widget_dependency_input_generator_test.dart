@@ -147,5 +147,10 @@ void main() {
         expect(result.contains('FramyPresetDropdown'), isTrue);
       });
     });
+
+    test('should contain FramyWidgetDependencyNullSwitch(dependency: dependency)', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('FramyWidgetDependencyNullSwitch(dependency: dependency)'), isTrue);
+    });
   });
 }

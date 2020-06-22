@@ -22,5 +22,10 @@ void main() {
       String result = generateWidgetDependencyNullSwitch();
       expect(result.contains('onChanged(framyModelConstructorMap[dependency.type]?.call(dependency))'), isTrue);
     });
+
+    test('should contain key Key(\'framy_dependency_\${dependency.name}_input\')', () {
+      String result = generateWidgetDependencyNullSwitch();
+      expect(result.contains('Key(\'framy_dependency_\${dependency.name}_null_switch\')'), isTrue);
+    });
   });
 }

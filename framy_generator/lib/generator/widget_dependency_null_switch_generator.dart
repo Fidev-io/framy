@@ -9,6 +9,7 @@ class FramyWidgetDependencyNullSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Switch(
+      key: Key('framy_dependency_\${dependency.name}_null_switch'),
       value: dependency.value == null,
       onChanged: (bool isActive) {
         if (isActive) {

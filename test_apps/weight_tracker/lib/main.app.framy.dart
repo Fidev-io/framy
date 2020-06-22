@@ -731,7 +731,16 @@ class FramyWidgetDependencyInput extends StatelessWidget {
         );
     return Column(
       children: [
-        Text(dependency.name),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(dependency.name),
+            FramyWidgetDependencyNullSwitch(
+              dependency: dependency,
+              onChanged: (val) => onChanged(dependency.name, val),
+            ),
+          ],
+        ),
         if (presets.containsKey(dependency.type))
           FramyPresetDropdown(
             dependency: dependency,
@@ -881,28 +890,6 @@ class FramyPresetDropdown extends StatelessWidget {
   }
 }
 
-class FramyWidgetDependencyNullSwitch extends StatelessWidget {
-  final ValueChanged<dynamic> onChanged;
-  final FramyDependencyModel dependency;
-
-  const FramyWidgetDependencyNullSwitch({Key key, this.onChanged, this.dependency})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Switch(
-      value: dependency.value == null,
-      onChanged: (bool isActive) {
-        if (isActive) {
-          onChanged(null);
-        } else {
-          onChanged(framyModelConstructorMap[dependency.type]?.call(dependency));
-        }
-      },
-    );
-  }
-}
-
 final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
   'User': (dep) => User(
@@ -917,3 +904,28 @@ Map<String, Map<String, dynamic>> createFramyPresets() => {
         'teenageJohn': teenageJohn(),
       },
     };
+
+class FramyWidgetDependencyNullSwitch extends StatelessWidget {
+  final ValueChanged<dynamic> onChanged;
+  final FramyDependencyModel dependency;
+
+  const FramyWidgetDependencyNullSwitch(
+      {Key key, this.onChanged, this.dependency})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Switch(
+      key: Key('framy_dependency_${dependency.name}_null_switch'),
+      value: dependency.value == null,
+      onChanged: (bool isActive) {
+        if (isActive) {
+          onChanged(null);
+        } else {
+          onChanged(
+              framyModelConstructorMap[dependency.type]?.call(dependency));
+        }
+      },
+    );
+  }
+}

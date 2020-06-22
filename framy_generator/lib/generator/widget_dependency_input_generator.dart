@@ -19,7 +19,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
         );
     return Column(
       children: [
-        Text(dependency.name),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(dependency.name),
+            FramyWidgetDependencyNullSwitch(dependency: dependency),
+          ],
+        ),
         if (presets.containsKey(dependency.type))
           FramyPresetDropdown(
             dependency: dependency,

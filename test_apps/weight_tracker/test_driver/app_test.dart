@@ -74,5 +74,11 @@ void main() {
       await driver.waitFor(find.text('null null'));
       await driver.waitFor(find.text('Age: null'));
     });
+
+    test('should set user to default value', () async {
+      await driver.tap(find.byValueKey('framy_dependency_user_null_switch'));
+      await driver.waitFor(find.text('John Doe'));
+      await driver.waitFor(find.text('Age: 17'));
+    });
   });
 }
