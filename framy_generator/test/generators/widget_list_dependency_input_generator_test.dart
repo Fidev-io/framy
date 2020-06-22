@@ -12,5 +12,10 @@ void main() {
       final result = generateWidgetListDependencyInput();
       expect(result.contains('\'Add\''), isTrue);
     });
+
+    test('should have .add( method call', () {
+      final result = generateWidgetListDependencyInput();
+      expect(result.contains('.add('), isTrue);
+    });
   });
 }
