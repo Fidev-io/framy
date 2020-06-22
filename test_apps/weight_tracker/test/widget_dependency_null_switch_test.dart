@@ -99,6 +99,7 @@ void main() {
                 FramyDependencyModel('firstName', 'String', null, []),
                 FramyDependencyModel('lastName', 'String', null, []),
                 FramyDependencyModel('age', 'int', null, []),
+                FramyDependencyModel('emails', 'List<String>', null, []),
               ],
             ),
           ),

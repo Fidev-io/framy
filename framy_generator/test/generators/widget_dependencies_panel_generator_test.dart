@@ -62,6 +62,11 @@ void main() {
         final result = generateWidgetDependenciesPanel();
         expect(result.contains('StatefulBuilder'), isTrue);
       });
+
+      test('should contain framySheetDragHandle Key', () {
+        final result = generateWidgetDependenciesPanel();
+        expect(result.contains('Key(\'framySheetDragHandle\')'), isTrue);
+      });
     });
   });
 }

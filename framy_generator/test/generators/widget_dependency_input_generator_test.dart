@@ -148,14 +148,9 @@ void main() {
       });
     });
 
-    test(
-        'should contain FramyWidgetDependencyNullSwitch(dependency: dependency)',
-        () {
+    test('should contain FramyWidgetDependencyNullSwitch(', () {
       final result = generateWidgetDependencyInput([]);
-      expect(
-          result.contains(
-              'FramyWidgetDependencyNullSwitch(dependency: dependency)'),
-          isTrue);
+      expect(result.contains('FramyWidgetDependencyNullSwitch('), isTrue);
     });
 
     test('should contain check for list', () {
