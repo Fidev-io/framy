@@ -763,13 +763,23 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         context: context,
         builder: (context) => StatefulBuilder(
-          builder: (context, setState) => FramyWidgetDependenciesPanel(
-            dependencies: dependencies,
-            presets: presets,
-            onChanged: (s, v) {
-              setState(() {});
-              onChanged(s, v);
-            },
+          builder: (context, setState) => Column(
+            children: [
+              SizedBox(
+                height: 2,
+                key: Key('framySheetDragHandle'),
+              ),
+              Expanded(
+                child: FramyWidgetDependenciesPanel(
+                  dependencies: dependencies,
+                  presets: presets,
+                  onChanged: (s, v) {
+                    setState(() {});
+                    onChanged(s, v);
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -800,7 +810,10 @@ class FramyWidgetDependencyInput extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(dependency.name),
-            FramyWidgetDependencyNullSwitch(dependency: dependency),
+            FramyWidgetDependencyNullSwitch(
+              dependency: dependency,
+              onChanged: (val) => onChanged(dependency.name, val),
+            ),
           ],
         ),
         if (presets.containsKey(dependency.type))

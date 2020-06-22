@@ -87,7 +87,11 @@ void main() {
       if (!await isDeviceBig()) {
         //hide modal bottom sheet
         await driver.scroll(
-            find.text('user'), 0, 400, Duration(milliseconds: 100));
+          find.byValueKey('framySheetDragHandle'),
+          0,
+          500,
+          Duration(milliseconds: 100),
+        );
         await driver.tap(find.byTooltip('Open navigation menu'));
       }
       await driver.waitFor(find.text('UserEmailsView'));
@@ -102,12 +106,22 @@ void main() {
       await driver.waitFor(find.text('No email'));
     });
 
+    Future<void> _scrollToAddButton() {
+      return driver.scrollUntilVisible(
+        find.byType('SingleChildScrollView'),
+        find.text('Add'),
+        dyScroll: -100,
+      );
+    }
+
     test('should allow to add an email', () async {
       if (!await isDeviceBig()) {
         await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
       }
       await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
+      await _scrollToAddButton();
       await driver.tap(find.text('Add'));
+      await _scrollToAddButton();
       await driver
           .tap(find.byValueKey('framy_dependency_List element 1_input'));
       await driver.enterText('john@gmail.com');
@@ -118,7 +132,9 @@ void main() {
     });
 
     test('should allow to add second email', () async {
+      await _scrollToAddButton();
       await driver.tap(find.text('Add'));
+      await _scrollToAddButton();
       await driver
           .tap(find.byValueKey('framy_dependency_List element 2_input'));
       await driver.enterText('john2@gmail.com');

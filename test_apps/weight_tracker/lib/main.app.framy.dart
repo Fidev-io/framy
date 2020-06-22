@@ -779,13 +779,23 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         context: context,
         builder: (context) => StatefulBuilder(
-          builder: (context, setState) => FramyWidgetDependenciesPanel(
-            dependencies: dependencies,
-            presets: presets,
-            onChanged: (s, v) {
-              setState(() {});
-              onChanged(s, v);
-            },
+          builder: (context, setState) => Column(
+            children: [
+              SizedBox(
+                height: 2,
+                key: Key('framySheetDragHandle'),
+              ),
+              Expanded(
+                child: FramyWidgetDependenciesPanel(
+                  dependencies: dependencies,
+                  presets: presets,
+                  onChanged: (s, v) {
+                    setState(() {});
+                    onChanged(s, v);
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

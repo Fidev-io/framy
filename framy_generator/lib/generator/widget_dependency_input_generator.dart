@@ -23,7 +23,10 @@ class FramyWidgetDependencyInput extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(dependency.name),
-            FramyWidgetDependencyNullSwitch(dependency: dependency),
+            FramyWidgetDependencyNullSwitch(
+              dependency: dependency,
+              onChanged: (val) => onChanged(dependency.name, val),
+            ),
           ],
         ),
         if (presets.containsKey(dependency.type))
