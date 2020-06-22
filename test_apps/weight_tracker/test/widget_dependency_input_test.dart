@@ -134,12 +134,14 @@ void main() {
     });
 
     group('null switch', () {
-      testWidgets('should show switch for String model', (WidgetTester tester) async {
+      testWidgets('should show switch for String model',
+          (WidgetTester tester) async {
         await _buildDependencyInput(tester, _getStringModel());
         expect(find.byType(Switch), findsOneWidget);
       });
 
-      testWidgets('should show 4 switches for User model', (WidgetTester tester) async {
+      testWidgets('should show 4 switches for User model',
+          (WidgetTester tester) async {
         await _buildDependencyInput(tester, _getUserModel());
         expect(find.byType(Switch), findsNWidgets(4));
       });
