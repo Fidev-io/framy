@@ -9,6 +9,7 @@ on:
 jobs:
   counter-app:
     runs-on: macos-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1.3.0
@@ -40,6 +41,7 @@ jobs:
           path: ./test_apps/counter_app/ozzie
   weight_tracker:
     runs-on: macos-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1.3.0
