@@ -8,14 +8,14 @@ void main() {
       expect(result.contains('class FramyWidgetDependencyNullSwitch'), isTrue);
     });
 
-    test('should contain widget argument value', () {
-      String result = generateWidgetDependencyNullSwitch();
-      expect(result.contains('final dynamic value;'), isTrue);
-    });
-
     test('should contain check if value is null', () {
       String result = generateWidgetDependencyNullSwitch();
       expect(result.contains('value == null'), isTrue);
+    });
+
+    test('should contain onChanged(null)', () {
+      String result = generateWidgetDependencyNullSwitch();
+      expect(result.contains('onChanged(null)'), isTrue);
     });
   });
 }

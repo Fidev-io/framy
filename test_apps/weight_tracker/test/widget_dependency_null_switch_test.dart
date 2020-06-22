@@ -20,12 +20,31 @@ void main() {
       expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
     });
 
-    testWidgets('should be inactive when passed value is not null', (tester) async {
+    testWidgets('should be inactive when passed value is not null',
+        (tester) async {
       await tester.pumpWidget(
           TestMaterialAppWithScaffold(FramyWidgetDependencyNullSwitch(
-            value: true,
-          )));
+        value: true,
+      )));
       expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+    });
+
+    testWidgets('should emit null when switch is tapped and value is not null',
+        (tester) async {
+      //given
+      dynamic emittedValue = 'foo';
+      await tester.pumpWidget(
+        TestMaterialAppWithScaffold(
+          FramyWidgetDependencyNullSwitch(
+            value: 'foo',
+            onChanged: (newValue) => emittedValue = newValue,
+          ),
+        ),
+      );
+      //when
+      await tester.tap(find.byType(Switch));
+      //then
+      expect(emittedValue, isNull);
     });
   });
 }
