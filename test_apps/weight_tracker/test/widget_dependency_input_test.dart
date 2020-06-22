@@ -16,6 +16,10 @@ void main() {
         FramyDependencyModel<int>('age', 'int', null, []),
       ]);
 
+  FramyDependencyModel _getStringListModel([List<String> defaultValue]) =>
+      FramyDependencyModel<List<String>>(
+          'strings', 'List<String>', defaultValue, []);
+
   Future<void> _buildDependencyInput(
     WidgetTester tester,
     FramyDependencyModel dependency, {
@@ -124,6 +128,19 @@ void main() {
         expect(emitted.firstName, 'Adam');
         expect(emitted.lastName, 'Smith');
         expect(emitted.age, 25);
+      });
+    });
+
+    group('when the type is a list', () {
+      testWidgets('it should build', (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getStringListModel());
+        expect(find.byType(FramyWidgetDependencyInput), findsOneWidget);
+      });
+
+      testWidgets('it should display widgetListDependencyInput',
+          (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getStringListModel());
+        expect(find.byType(FramyWidgetListDependencyInput), findsOneWidget);
       });
     });
   });

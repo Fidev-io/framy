@@ -9,11 +9,6 @@ void main() {
       FramyDependencyModel<List<String>>(
           'strings', 'List<String>', defaultValue, []);
 
-  FramyDependencyModel _getTestModel([_TestModel defaultValue]) =>
-      FramyDependencyModel<_TestModel>('test', '_TestModel', defaultValue, [
-        _getStringListModel(),
-      ]);
-
   Future<void> _buildDependencyInput(
     WidgetTester tester,
     FramyDependencyModel dependency, {
@@ -86,10 +81,4 @@ void main() {
       expect(emittedValue.first, 'Foo foo');
     });
   });
-}
-
-class _TestModel {
-  final List<String> strings;
-
-  _TestModel(this.strings);
 }

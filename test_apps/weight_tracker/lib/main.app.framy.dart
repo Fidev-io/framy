@@ -880,6 +880,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 framyModelConstructorMap[dependency.type]?.call(dependency),
               ),
             )
+          else if (dependency.type.startsWith('List<'))
+            FramyWidgetListDependencyInput(
+              dependency: dependency,
+              onChanged: (model) =>
+                  onChanged(dependency.name, dependency.value),
+              presets: presets,
+            )
           else
             Text('Not supported type')
       ],

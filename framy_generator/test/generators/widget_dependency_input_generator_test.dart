@@ -147,5 +147,16 @@ void main() {
         expect(result.contains('FramyPresetDropdown'), isTrue);
       });
     });
+
+    test('should contain check for list', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('else if (dependency.type.startsWith(\'List<\'))'),
+          isTrue);
+    });
+
+    test('should contain FramyWidgetListDependencyInput', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('FramyWidgetListDependencyInput'), isTrue);
+    });
   });
 }
