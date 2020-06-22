@@ -946,21 +946,38 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
       dependency.type.lastIndexOf('>'),
     );
     return Column(
+      key: Key(dependency.value?.length?.toString()),
       children: [
         if (dependency.value != null)
           for (int i = 0; i < dependency.value.length; i++)
-            FramyWidgetDependencyInput(
-              dependency: FramyDependencyModel(
-                'List element ${i + 1}',
-                listType,
-                dependency.value[i],
-                [],
-              ),
-              onChanged: (name, val) {
-                dependency.value[i] = val;
-                onChanged(dependency);
-              },
-              presets: presets,
+            Row(
+              children: [
+                Expanded(
+                  child: FramyWidgetDependencyInput(
+                    dependency: FramyDependencyModel(
+                      'List element ${i + 1}',
+                      listType,
+                      dependency.value[i],
+                      [],
+                    ),
+                    onChanged: (name, val) {
+                      dependency.value[i] = val;
+                      onChanged(dependency);
+                    },
+                    presets: presets,
+                  ),
+                ),
+                SizedBox(width: 8),
+                IconButton(
+                  key: Key(
+                      'framy_dependency_List element ${i + 1}_delete_button'),
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    dependency.value.removeAt(i);
+                    onChanged(dependency);
+                  },
+                )
+              ],
             ),
         FlatButton(
           child: Text('Add'),

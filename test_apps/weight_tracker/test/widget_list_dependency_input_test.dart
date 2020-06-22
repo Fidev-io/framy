@@ -107,5 +107,48 @@ void main() {
       expect(dependency.value, hasLength(1));
       expect(dependency.value.first, 'Foo foo');
     });
+
+    testWidgets('should remove element from list when delete icon pressed',
+        (WidgetTester tester) async {
+      //given
+      List<String> emittedValue;
+      await _buildDependencyInput(
+        tester,
+        _getStringListModel(['value1', 'value2']),
+        onChanged: (model) => emittedValue = model.value,
+      );
+      //when
+      await tester.tap(find.byKey(
+        Key('framy_dependency_List element 1_delete_button'),
+      ));
+      //then
+      expect(emittedValue, hasLength(1));
+      expect(emittedValue.first, 'value2');
+    });
+
+    testWidgets('should properly update UI after removing element from list',
+        (WidgetTester tester) async {
+      //given
+      final dependency = _getStringListModel(['value1', 'value2']);
+      await tester.pumpWidget(
+        TestMaterialAppWithScaffold(
+          StatefulBuilder(
+            builder: (context, setState) => FramyWidgetListDependencyInput(
+              dependency: dependency,
+              onChanged: (dep) => setState(() {}),
+              presets: {},
+            ),
+          ),
+        ),
+      );
+      //when
+      await tester.tap(find.byKey(
+        Key('framy_dependency_List element 1_delete_button'),
+      ));
+      await tester.pump();
+      //then
+      expect(find.text('value1'), findsNothing);
+      expect(find.text('value2'), findsOneWidget);
+    });
   });
 }

@@ -45,5 +45,21 @@ void main() {
       ]);
       expect(result.contains('if (listType == \'SomeClass\')'), isTrue);
     });
+
+    test('should contain IconButton', () {
+      final result = generateWidgetListDependencyInput([]);
+      expect(result.contains('IconButton('), isTrue);
+    });
+
+    test('should contain removeAt method', () {
+      final result = generateWidgetListDependencyInput([]);
+      expect(result.contains('removeAt('), isTrue);
+    });
+
+    test('should have key related to list length', () {
+      final result = generateWidgetListDependencyInput([]);
+      expect(result.contains('key: Key(dependency.value?.length?.toString()),'),
+          isTrue);
+    });
   });
 }

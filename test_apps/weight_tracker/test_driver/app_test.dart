@@ -74,7 +74,8 @@ void main() {
     setUpAll(() async {
       if (!await isDeviceBig()) {
         //hide modal bottom sheet
-        await driver.tap(find.byTooltip('Open navigation menu'));
+        await driver.scroll(
+            find.text('user'), 0, 400, Duration(milliseconds: 100));
         await driver.tap(find.byTooltip('Open navigation menu'));
       }
       await driver.waitFor(find.text('UserEmailsView'));
@@ -102,6 +103,29 @@ void main() {
         of: find.byValueKey('UserEmailsView'),
         matching: find.text('john@gmail.com'),
       ));
+    });
+
+    test('should allow to add second email', () async {
+      await driver.tap(find.text('Add'));
+      await driver
+          .tap(find.byValueKey('framy_dependency_List element 2_input'));
+      await driver.enterText('john2@gmail.com');
+      //confirm previous email is still there
+      await driver.waitFor(find.descendant(
+        of: find.byValueKey('UserEmailsView'),
+        matching: find.text('john@gmail.com'),
+      ));
+      //and that new email has been added
+      await driver.waitFor(find.descendant(
+        of: find.byValueKey('UserEmailsView'),
+        matching: find.text('john2@gmail.com'),
+      ));
+    });
+
+    test('should allow remove email from list', () async {
+      await driver.tap(
+          find.byValueKey('framy_dependency_List element 1_delete_button'));
+      await driver.waitForAbsent(find.text('john@gmail.com'));
     });
   });
 }
