@@ -57,6 +57,34 @@ void main() {
       expect(emittedValue, hasLength(1));
       expect(emittedValue.first, isNull);
     });
+
+    testWidgets('should show an input for every list item',
+        (WidgetTester tester) async {
+      await _buildDependencyInput(
+        tester,
+        _getStringListModel(['item1', 'item2', 'item3']),
+      );
+      expect(find.text('item1'), findsOneWidget);
+      expect(find.text('item2'), findsOneWidget);
+      expect(find.text('item3'), findsOneWidget);
+    });
+
+    testWidgets('should emit changed list item value',
+        (WidgetTester tester) async {
+      //given
+      List<String> emittedValue;
+      await _buildDependencyInput(
+        tester,
+        _getStringListModel([null]),
+        onChanged: (model) => emittedValue = model.value,
+      );
+      //when
+      await tester.enterText(
+          find.byKey(Key('framy_dependency_List element 1_input')), 'Foo foo');
+      //then
+      expect(emittedValue, hasLength(1));
+      expect(emittedValue.first, 'Foo foo');
+    });
   });
 }
 

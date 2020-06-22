@@ -7,10 +7,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/app_theme.dart';
-import 'package:weight_tracker/models/user.dart';
-import 'package:weight_tracker/models/user.framy.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
+import 'package:weight_tracker/models/user.dart';
+import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
   runApp(FramyApp());
@@ -591,8 +591,7 @@ class _FramyUserDataCardCustomPageState
       FramyDependencyModel<String>('firstName', 'String', null, []),
       FramyDependencyModel<String>('lastName', 'String', null, []),
       FramyDependencyModel<int>('age', 'int', null, []),
-      FramyDependencyModel<List<String>>(
-          'emails', 'List<String>', const [], []),
+      FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
     ]),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
@@ -664,8 +663,7 @@ class _FramyUserEmailsViewCustomPageState
       FramyDependencyModel<String>('firstName', 'String', null, []),
       FramyDependencyModel<String>('lastName', 'String', null, []),
       FramyDependencyModel<int>('age', 'int', null, []),
-      FramyDependencyModel<List<String>>(
-          'emails', 'List<String>', const [], []),
+      FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
     ]),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
@@ -925,6 +923,54 @@ class FramyModelInput extends StatelessWidget {
   }
 }
 
+class FramyWidgetListDependencyInput extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final ValueChanged<FramyDependencyModel> onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+
+  const FramyWidgetListDependencyInput(
+      {Key key, this.dependency, this.onChanged, this.presets})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final String listType = dependency.type.substring(
+      dependency.type.indexOf('<') + 1,
+      dependency.type.lastIndexOf('>'),
+    );
+    return Column(
+      children: [
+        if (dependency.value != null)
+          for (int i = 0; i < dependency.value.length; i++)
+            FramyWidgetDependencyInput(
+              dependency: FramyDependencyModel(
+                'List element ${i + 1}',
+                listType,
+                dependency.value[i],
+                [],
+              ),
+              onChanged: (name, val) {
+                dependency.value[i] = val;
+                onChanged(dependency);
+              },
+              presets: presets,
+            ),
+        FlatButton(
+          child: Text('Add'),
+          onPressed: () {
+            if (dependency.value == null) {
+              dependency.value = [null];
+            } else {
+              dependency.value.add(null);
+            }
+            onChanged(dependency);
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class FramyPresetDropdown extends StatelessWidget {
   final FramyDependencyModel dependency;
   final void Function(String name, dynamic value) onChanged;
@@ -980,32 +1026,3 @@ Map<String, Map<String, dynamic>> createFramyPresets() => {
         'teenageJohn': teenageJohn(),
       },
     };
-
-class FramyWidgetListDependencyInput extends StatelessWidget {
-  final FramyDependencyModel dependency;
-  final ValueChanged<FramyDependencyModel> onChanged;
-  final Map<String, Map<String, dynamic>> presets;
-
-  const FramyWidgetListDependencyInput(
-      {Key key, this.dependency, this.onChanged, this.presets})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FlatButton(
-          child: Text('Add'),
-          onPressed: () {
-            if (dependency.value == null) {
-              dependency.value = [null];
-            } else {
-              dependency.value.add(null);
-            }
-            onChanged(dependency);
-          },
-        ),
-      ],
-    );
-  }
-}

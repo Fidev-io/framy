@@ -17,5 +17,15 @@ void main() {
       final result = generateWidgetListDependencyInput();
       expect(result.contains('.add('), isTrue);
     });
+
+    test('should have FramyWidgetDependencyInput constructor', () {
+      final result = generateWidgetListDependencyInput();
+      expect(result.contains('FramyWidgetDependencyInput('), isTrue);
+    });
+
+    test('should have List element name', () {
+      final result = generateWidgetListDependencyInput();
+      expect(result.contains('\'List element '), isTrue);
+    });
   });
 }
