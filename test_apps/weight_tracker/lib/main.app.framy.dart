@@ -984,6 +984,13 @@ Map<String, Map<String, dynamic>> createFramyPresets() => {
 class FramyWidgetListDependencyInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column(
+      children: [
+        FlatButton(
+          child: Text('Add'),
+          onPressed: () {},
+        ),
+      ],
+    );
   }
 }

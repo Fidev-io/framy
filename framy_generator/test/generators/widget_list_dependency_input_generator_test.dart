@@ -7,5 +7,10 @@ void main() {
       final result = generateWidgetListDependencyInput();
       expect(result.startsWith('class FramyWidgetListDependencyInput'), isTrue);
     });
+
+    test('should contain Add label for a button', () {
+      final result = generateWidgetListDependencyInput();
+      expect(result.contains('\'Add\''), isTrue);
+    });
   });
 }

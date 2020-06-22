@@ -31,6 +31,11 @@ void main() {
       await _buildDependencyInput(tester, _getTestModel());
       expect(find.byType(FramyWidgetListDependencyInput), findsOneWidget);
     });
+
+    testWidgets('should have Add button', (WidgetTester tester) async {
+      await _buildDependencyInput(tester, _getTestModel());
+      expect(find.text('Add'), findsOneWidget);
+    });
   });
 }
 
