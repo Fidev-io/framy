@@ -881,6 +881,13 @@ class FramyPresetDropdown extends StatelessWidget {
   }
 }
 
+class FramyWidgetDependencyNullSwitch extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
   'User': (dep) => User(
