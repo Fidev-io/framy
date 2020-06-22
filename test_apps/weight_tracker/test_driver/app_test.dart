@@ -69,4 +69,24 @@ void main() {
       await driver.waitFor(find.text('Age: 17'));
     });
   });
+
+  group('UserEmailsView', () {
+    setUpAll(() async {
+      if (!await isDeviceBig()) {
+        //hide modal bottom sheet
+        await driver.tap(find.byTooltip('Open navigation menu'));
+        await driver.tap(find.byTooltip('Open navigation menu'));
+      }
+      await driver.waitFor(find.text('UserEmailsView'));
+      await driver.tap(find.text('UserEmailsView'));
+    });
+
+    test('should have UserEmailsView in UserEmailsView page', () async {
+      await driver.waitFor(find.byValueKey('UserEmailsView'));
+    });
+
+    test('should show no email text by default', () async {
+      await driver.waitFor(find.text('No email'));
+    });
+  });
 }
