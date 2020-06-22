@@ -1,4 +1,6 @@
-String generateWidgetListDependencyInput() => '''
+import 'package:framy_generator/framy_object.dart';
+
+String generateWidgetListDependencyInput(List<FramyObject> modelObjects) => '''
 class FramyWidgetListDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
   final ValueChanged<FramyDependencyModel> onChanged;
@@ -35,10 +37,13 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
           child: Text('Add'),
           onPressed: () {
             if (dependency.value == null) {
-              dependency.value = [null];
-            } else {
-              dependency.value.add(null);
+              ${_generateEmptyList('String')}
+              ${_generateEmptyList('int')}
+              ${_generateEmptyList('double')}
+              ${_generateEmptyList('bool')}
+              ${modelObjects.fold('', (prev, modelObject) => prev + _generateEmptyList(modelObject.name) + '\n')}
             }
+            dependency.value.add(null);
             onChanged(dependency);
           },
         ),
@@ -47,3 +52,6 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
   }
 }
 ''';
+
+String _generateEmptyList(String type) =>
+    "if (listType == '$type') dependency.value = <$type>[];";

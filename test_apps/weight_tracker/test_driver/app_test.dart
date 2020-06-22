@@ -94,10 +94,9 @@ void main() {
         await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
       }
       await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
+      await driver.tap(find.text('Add'));
       await driver
-          .tap(find.byValueKey('framy_dependency_emails_list_add_button'));
-      await driver
-          .tap(find.byValueKey('framy_dependency_emails_list_item_input'));
+          .tap(find.byValueKey('framy_dependency_List element 1_input'));
       await driver.enterText('john@gmail.com');
       await driver.waitFor(find.descendant(
         of: find.byValueKey('UserEmailsView'),

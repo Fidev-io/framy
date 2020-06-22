@@ -966,10 +966,13 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
           child: Text('Add'),
           onPressed: () {
             if (dependency.value == null) {
-              dependency.value = [null];
-            } else {
-              dependency.value.add(null);
+              if (listType == 'String') dependency.value = <String>[];
+              if (listType == 'int') dependency.value = <int>[];
+              if (listType == 'double') dependency.value = <double>[];
+              if (listType == 'bool') dependency.value = <bool>[];
+              if (listType == 'User') dependency.value = <User>[];
             }
+            dependency.value.add(null);
             onChanged(dependency);
           },
         ),

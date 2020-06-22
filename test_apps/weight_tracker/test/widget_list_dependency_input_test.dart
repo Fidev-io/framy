@@ -80,5 +80,32 @@ void main() {
       expect(emittedValue, hasLength(1));
       expect(emittedValue.first, 'Foo foo');
     });
+
+    testWidgets('should allow to add first item to null and then change it',
+        (WidgetTester tester) async {
+      //given
+      final dependency = _getStringListModel();
+      await tester.pumpWidget(
+        TestMaterialAppWithScaffold(
+          StatefulBuilder(
+            builder: (context, setState) => FramyWidgetListDependencyInput(
+              dependency: dependency,
+              onChanged: (dep) => setState(() {}),
+              presets: {},
+            ),
+          ),
+        ),
+      );
+      //when
+      await tester.tap(find.text('Add'));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.byKey(Key('framy_dependency_List element 1_input')),
+        'Foo foo',
+      );
+      //then
+      expect(dependency.value, hasLength(1));
+      expect(dependency.value.first, 'Foo foo');
+    });
   });
 }

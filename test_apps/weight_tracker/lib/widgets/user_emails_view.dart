@@ -15,7 +15,7 @@ class UserEmailsView extends StatelessWidget {
       return Text('No email');
     } else if (user.emails.length == 1) {
       return ListTile(
-        title: Text(user.emails.first),
+        title: Text('${user.emails.first}'),
         subtitle: Text('Email'),
         leading: Icon(Icons.email),
       );
@@ -25,7 +25,7 @@ class UserEmailsView extends StatelessWidget {
         children: [
           Text('Emails:'),
           ...user.emails.map((email) => ListTile(
-                title: Text(email),
+                title: Text('$email'),
                 leading: Icon(Icons.email),
               )),
         ],

@@ -14,6 +14,7 @@ void main() {
         FramyDependencyModel<String>('firstName', 'String', null, []),
         FramyDependencyModel<String>('lastName', 'String', null, []),
         FramyDependencyModel<int>('age', 'int', null, []),
+        FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
       ]);
 
   FramyDependencyModel _getStringListModel([List<String> defaultValue]) =>
@@ -46,7 +47,7 @@ void main() {
     testWidgets('should build recursively for User model',
         (WidgetTester tester) async {
       await _buildDependencyInput(tester, _getUserModel());
-      expect(find.byType(FramyWidgetDependencyInput), findsNWidgets(4));
+      expect(find.byType(FramyWidgetDependencyInput), findsNWidgets(5));
     });
 
     testWidgets(

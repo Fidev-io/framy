@@ -15,6 +15,8 @@ void main() {
           FramyDependencyModel<String>('firstName', 'String', null, []),
           FramyDependencyModel<String>('lastName', 'String', null, []),
           FramyDependencyModel<int>('age', 'int', null, []),
+          FramyDependencyModel<List<String>>(
+              'emails', 'List<String>', null, []),
         ]),
       ];
     });
