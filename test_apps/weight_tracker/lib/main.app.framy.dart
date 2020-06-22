@@ -7,10 +7,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/app_theme.dart';
-import 'package:weight_tracker/widgets/user_data_card.dart';
-import 'package:weight_tracker/widgets/user_emails_view.dart';
 import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/models/user.framy.dart';
+import 'package:weight_tracker/widgets/user_data_card.dart';
+import 'package:weight_tracker/widgets/user_emails_view.dart';
 
 void main() {
   runApp(FramyApp());
@@ -980,3 +980,10 @@ Map<String, Map<String, dynamic>> createFramyPresets() => {
         'teenageJohn': teenageJohn(),
       },
     };
+
+class FramyWidgetListDependencyInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}

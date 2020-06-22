@@ -88,5 +88,21 @@ void main() {
     test('should show no email text by default', () async {
       await driver.waitFor(find.text('No email'));
     });
+
+    test('should allow to add an email', () async {
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+      }
+      await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
+      await driver
+          .tap(find.byValueKey('framy_dependency_emails_list_add_button'));
+      await driver
+          .tap(find.byValueKey('framy_dependency_emails_list_item_input'));
+      await driver.enterText('john@gmail.com');
+      await driver.waitFor(find.descendant(
+        of: find.byValueKey('UserEmailsView'),
+        matching: find.text('john@gmail.com'),
+      ));
+    });
   });
 }
