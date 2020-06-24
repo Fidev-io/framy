@@ -47,7 +47,8 @@ class CounterFloatingActionButton {}
         "name": "arg1",
         "type": "String",
         "defaultValue": null,
-        "isNamed": false
+        "isNamed": false,
+        "dependencyType": "FramyWidgetDependencyType.constructor"
       }
     ]
   }
@@ -71,7 +72,8 @@ class WidgetWithConstructor {
         "name": "arg1",
         "type": "String",
         "defaultValue": null,
-        "isNamed": true
+        "isNamed": true,
+        "dependencyType": "FramyWidgetDependencyType.constructor"
       }
     ]
   }
@@ -95,7 +97,8 @@ class WidgetWithConstructorAndKey {
         "name": "arg1",
         "type": "String",
         "defaultValue": "'test1'",
-        "isNamed": true
+        "isNamed": true,
+        "dependencyType": "FramyWidgetDependencyType.constructor"
       }
     ]
   }

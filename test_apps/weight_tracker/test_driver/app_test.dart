@@ -9,6 +9,21 @@ void main() {
       .getBottomRight(find.byValueKey('FramyApp'))
       .then((offset) => offset.dx >= 1000);
 
+  Future<void> closeDependenciesPanelAndGoToOtherPage(String name) async {
+    if (!await isDeviceBig()) {
+      //hide modal bottom sheet
+      await driver.scroll(
+        find.byValueKey('framySheetDragHandle'),
+        0,
+        500,
+        Duration(milliseconds: 100),
+      );
+      await driver.tap(find.byTooltip('Open navigation menu'));
+    }
+    await driver.waitFor(find.text(name));
+    await driver.tap(find.text(name));
+  }
+
   setUpAll(() async {
     driver = await FlutterDriver.connect();
 //    platform = Platform.environment['PLATFORM'] ?? 'default_macos';
@@ -84,18 +99,7 @@ void main() {
 
   group('UserEmailsView', () {
     setUpAll(() async {
-      if (!await isDeviceBig()) {
-        //hide modal bottom sheet
-        await driver.scroll(
-          find.byValueKey('framySheetDragHandle'),
-          0,
-          500,
-          Duration(milliseconds: 100),
-        );
-        await driver.tap(find.byTooltip('Open navigation menu'));
-      }
-      await driver.waitFor(find.text('UserEmailsView'));
-      await driver.tap(find.text('UserEmailsView'));
+      await closeDependenciesPanelAndGoToOtherPage('UserEmailsView');
     });
 
     test('should have UserEmailsView in UserEmailsView page', () async {
@@ -154,6 +158,24 @@ void main() {
       await driver.tap(
           find.byValueKey('framy_dependency_List element 1_delete_button'));
       await driver.waitForAbsent(find.text('john@gmail.com'));
+    });
+  });
+
+  group('ProfilePage', () {
+    test('should have user dependency which is passed by provider', () async {
+      await closeDependenciesPanelAndGoToOtherPage('ProfilePage');
+      //test it by changing name
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+      }
+      await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
+      await driver.tap(find.byValueKey('framy_dependency_age_input'));
+      await driver.enterText('17');
+      await driver.waitFor(find.text('Age: 17'));
+      //test it by preset as well
+      await driver.tap(find.byValueKey('framy_user_preset_dropdown'));
+      await driver.tap(find.text('teenageJohn'));
+      await driver.waitFor(find.text('Age: 13'));
     });
   });
 }

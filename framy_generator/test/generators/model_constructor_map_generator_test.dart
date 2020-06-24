@@ -16,8 +16,8 @@ final framyModelConstructorMap =
 
     test('should generate a model constructor', () {
       //given
-      final stringDependency =
-          FramyWidgetDependency('firstName', 'String', null, false);
+      final stringDependency = FramyWidgetDependency('firstName', 'String',
+          null, false, FramyWidgetDependencyType.constructor);
       final framyModelObjects = [
         FramyObject()
           ..name = 'User'

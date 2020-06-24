@@ -60,3 +60,8 @@ class FramyPreset extends FramyAnnotation {
 }
 
 const framyPreset = FramyPreset();
+
+class FramyUseProvider extends FramyAnnotation {
+  final Type providerType;
+  const FramyUseProvider(this.providerType);
+}
