@@ -173,7 +173,7 @@ void main() {
       await driver.enterText('17');
       await driver.waitFor(find.text('Age: 17'));
       //test it by preset as well
-      await driver.tap(find.byValueKey('framy_user_preset_dropdown'));
+      await driver.tap(find.byValueKey('framy_User_preset_dropdown'));
       await driver.tap(find.text('teenageJohn'));
       await driver.waitFor(find.text('Age: 13'));
     });

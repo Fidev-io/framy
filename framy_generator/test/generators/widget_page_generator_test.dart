@@ -210,6 +210,50 @@ void main() {
         isTrue,
       );
     });
+
+    group('when the provider parameter is passed', () {
+      List<FramyObject> widgetObjects;
+
+      setUp(() {
+        widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+          'String',
+          'String',
+          null,
+          false,
+          FramyWidgetDependencyType.provider,
+        ));
+      });
+
+      test('it should contain the generation of the dependency model', () {
+        //when
+        final result = generateWidgetPages(widgetObjects, []);
+        //then
+        expect(
+          result.contains(
+              'FramyDependencyModel<String>(\'String\', \'String\', null, [])'),
+          isTrue,
+        );
+      });
+
+      test('it should contain MultiProvider', () {
+        //when
+        final result = generateWidgetPages(widgetObjects, []);
+        //then
+        expect(result.contains('MultiProvider'), isTrue);
+      });
+
+      test('it contain a Provider with the proper type using proper dependency',
+          () {
+        //when
+        final result = generateWidgetPages(widgetObjects, []);
+        //then
+        expect(
+          result.contains(
+              'Provider<String>.value(value: dependency(\'String\').value),'),
+          isTrue,
+        );
+      });
+    });
   });
 }
 

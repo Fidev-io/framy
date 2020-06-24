@@ -6,13 +6,13 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:weight_tracker/app_theme.dart';
-import 'package:weight_tracker/models/user.dart';
-import 'package:weight_tracker/models/user.framy.dart';
 import 'package:weight_tracker/pages/profile_page.dart';
+import 'package:provider/provider.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
+import 'package:weight_tracker/models/user.dart';
+import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
   runApp(FramyApp());
@@ -596,7 +596,7 @@ class FramyProfilePageCustomPage extends StatefulWidget {
 class _FramyProfilePageCustomPageState
     extends State<FramyProfilePageCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<User>('user', 'User', null, [
+    FramyDependencyModel<User>('User', 'User', null, [
       FramyDependencyModel<String>('firstName', 'String', null, []),
       FramyDependencyModel<String>('lastName', 'String', null, []),
       FramyDependencyModel<int>('age', 'int', null, []),
@@ -619,8 +619,10 @@ class _FramyProfilePageCustomPageState
           final body = Row(
             children: [
               Expanded(
-                child: Provider<User>.value(
-                  value: dependency('user').value,
+                child: MultiProvider(
+                  providers: [
+                    Provider<User>.value(value: dependency('User').value),
+                  ],
                   child: ProfilePage(),
                 ),
               ),
