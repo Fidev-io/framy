@@ -107,6 +107,26 @@ void main() {
             result.contains('else if (dependency.type == \'User\')'), isTrue);
       });
 
+      test('should ignore enumModel objects', () {
+        //given
+        final models = [
+          FramyObject()
+            ..name = 'User'
+            ..type = FramyObjectType.model
+            ..widgetDependencies = [],
+          FramyObject()
+            ..name = 'WeightUnit'
+            ..type = FramyObjectType.enumModel
+            ..widgetDependencies = []
+        ];
+        //when
+        final result = generateWidgetDependencyInput(models);
+        //then
+        expect(
+            result.contains('else if (dependency.type == \'User\')'), isTrue);
+        expect(result.contains('WeightUnit'), isFalse);
+      });
+
       test('should generate 2 else if conditions when two models are passed',
           () {
         //given
@@ -162,6 +182,11 @@ void main() {
     test('should contain FramyWidgetListDependencyInput', () {
       final result = generateWidgetDependencyInput([]);
       expect(result.contains('FramyWidgetListDependencyInput'), isTrue);
+    });
+
+    test('should contain framyEnumMap reference', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('framyEnumMap'), isTrue);
     });
   });
 }

@@ -881,6 +881,20 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   onChanged(dependency.name, dependency.value),
               presets: presets,
             )
+          else if (framyEnumMap.containsKey(dependency.type))
+            DropdownButton(
+              key: inputKey,
+              value: dependency.value,
+              onChanged: (val) => onChanged(dependency.name, val),
+              items: framyEnumMap[dependency.type]
+                  .map((enumValue) => DropdownMenuItem(
+                        value: enumValue,
+                        child: Text(enumValue
+                            .toString()
+                            .substring(enumValue.toString().indexOf('.') + 1)),
+                      ))
+                  .toList(),
+            )
           else
             Text('Not supported type')
       ],
@@ -1031,8 +1045,14 @@ class FramyPresetDropdown extends StatelessWidget {
 }
 
 final framyModelConstructorMap =
-    <String, dynamic Function(FramyDependencyModel)>{};
+    <String, dynamic Function(FramyDependencyModel)>{
+  ...framyEnumMap.map((type, values) =>
+      MapEntry(type, (FramyDependencyModel dep) => values.first)),
+};
 
+final framyEnumMap = <String, List<dynamic>>{
+  'MaterialTapTargetSize': MaterialTapTargetSize.values,
+};
 Map<String, Map<String, dynamic>> createFramyPresets() => {};
 
 class FramyWidgetDependencyNullSwitch extends StatelessWidget {

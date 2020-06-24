@@ -178,4 +178,50 @@ void main() {
       await driver.waitFor(find.text('Age: 13'));
     });
   });
+
+  group('WeightUnitDisplay', () {
+    test('should have a working enum dropdown', () async {
+      await closeDependenciesPanelAndGoToOtherPage('WeightUnitDisplay');
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+      }
+      await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
+      //by default should be kg
+      await driver.waitFor(find.descendant(
+        of: find.byType('WeightUnitDisplay'),
+        matching: find.text('kg'),
+      ));
+      //select lbs
+      await driver.tap(find.byValueKey('framy_dependency_weightUnit_input'));
+      await driver.tap(find.text('lbs'));
+      //should display lbs in the UI
+      await driver.waitFor(find.descendant(
+        of: find.byType('WeightUnitDisplay'),
+        matching: find.text('lbs'),
+      ));
+    });
+
+    test(
+      'should use first enum value after setting back from null',
+      () async {
+        //set to null
+        await driver
+            .tap(find.byValueKey('framy_dependency_weightUnit_null_switch'));
+        //confirm that "kg" is not displayed
+        await driver.waitForAbsent(find.descendant(
+          of: find.byType('WeightUnitDisplay'),
+          matching: find.text('kg'),
+        ));
+        //set to non-null
+        await driver
+            .tap(find.byValueKey('framy_dependency_weightUnit_null_switch'));
+        //confirm that now "kg" is displayed again
+        await driver.waitFor(find.descendant(
+          of: find.byType('WeightUnitDisplay'),
+          matching: find.text('kg'),
+        ));
+      },
+      skip: true, //TODO: Make this test work after null management is completed
+    );
+  });
 }
