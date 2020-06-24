@@ -6,6 +6,8 @@ import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/json_formatter.dart';
 import 'package:source_gen/source_gen.dart';
 
+const providerChecker = TypeChecker.fromRuntime(FramyUseProvider);
+
 class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
   @override
   String generateForAnnotatedElement(
@@ -14,6 +16,7 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
     final framyObject = _widgetObjectFromElement(element);
     if (element is ClassElement) {
       framyObject.widgetDependencies = [];
+      //get constructor dependencies
       final constructor = element.unnamedConstructor;
       for (ParameterElement param in constructor.parameters) {
         if (param.type.toString() == 'Key') {
@@ -26,6 +29,22 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
             param.defaultValueCode,
             param.isNamed,
             FramyWidgetDependencyType.constructor,
+          ),
+        );
+      }
+
+      //get provider dependencies
+      if (providerChecker.hasAnnotationOf(element)) {
+        final providerAnnotation = providerChecker.firstAnnotationOf(element);
+        final providerReader = ConstantReader(providerAnnotation);
+        final providerType = providerReader.read('providerType').typeValue;
+        framyObject.widgetDependencies.add(
+          FramyWidgetDependency(
+            providerType.getDisplayString(),
+            providerType.getDisplayString(),
+            null,
+            false,
+            FramyWidgetDependencyType.provider,
           ),
         );
       }

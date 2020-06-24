@@ -131,3 +131,42 @@ class WidgetWithNumParam {
 class WidgetWithBoolParam {
   WidgetWithBoolParam(bool arg1) {}
 }
+
+@ShouldGenerate('''
+[
+  {
+    "type": "FramyObjectType.widget",
+    "import": "package:__test__/widget_resolver_test.dart",
+    "name": "WidgetWithStringProviderDependency",
+    "isStatic": false,
+    "kind": "CLASS",
+    "parentObject": null,
+    "widgetDependencies": [
+      {
+        "name": "String",
+        "type": "String",
+        "defaultValue": null,
+        "isNamed": false,
+        "dependencyType": "FramyWidgetDependencyType.provider"
+      }
+    ]
+  }
+]''')
+@FramyUseProvider(String)
+@FramyWidget()
+class WidgetWithStringProviderDependency {
+  WidgetWithStringProviderDependency() {}
+}
+
+@ShouldGenerate('''
+        "name": "User",
+        "type": "User",
+        "defaultValue": null,
+        "isNamed": false,
+        "dependencyType": "FramyWidgetDependencyType.provider"
+''', contains: true)
+@FramyUseProvider(User)
+@FramyWidget()
+class WidgetWithUserProviderDependency {
+  WidgetWithUserProviderDependency() {}
+}
