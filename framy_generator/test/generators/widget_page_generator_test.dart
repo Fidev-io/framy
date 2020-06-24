@@ -204,6 +204,68 @@ void main() {
         isTrue,
       );
     });
+
+    group('onChanged', () {
+      test('should contain definition of onChanged method', () {
+        //given
+        final userDependency =
+        FramyWidgetDependency('user', 'User', null, false);
+        final widgetObjects = getFramyObjectWithDependency(userDependency);
+        final framyModelObjects = [
+          FramyObject()
+            ..name = 'User'
+            ..type = FramyObjectType.model
+            ..widgetDependencies = []
+        ];
+        //when
+        final result = generateWidgetPages(widgetObjects, framyModelObjects);
+        //then
+        expect(
+          result.contains('void onChanged(String name, dynamic dependencyValue)'),
+          isTrue,
+        );
+      });
+
+      test('should contain check if dependencyValue is null', () {
+        //given
+        final userDependency =
+            FramyWidgetDependency('user', 'User', null, false);
+        final widgetObjects = getFramyObjectWithDependency(userDependency);
+        final framyModelObjects = [
+          FramyObject()
+            ..name = 'User'
+            ..type = FramyObjectType.model
+            ..widgetDependencies = []
+        ];
+        //when
+        final result = generateWidgetPages(widgetObjects, framyModelObjects);
+        //then
+        expect(
+          result.contains('dependencyValue == null'),
+          isTrue,
+        );
+      });
+
+      test('should contain setting subDependency.value to null', () {
+        //given
+        final userDependency =
+            FramyWidgetDependency('user', 'User', null, false);
+        final widgetObjects = getFramyObjectWithDependency(userDependency);
+        final framyModelObjects = [
+          FramyObject()
+            ..name = 'User'
+            ..type = FramyObjectType.model
+            ..widgetDependencies = []
+        ];
+        //when
+        final result = generateWidgetPages(widgetObjects, framyModelObjects);
+        //then
+        expect(
+          result.contains('subDependency.value = null'),
+          isTrue,
+        );
+      });
+    });
   });
 }
 

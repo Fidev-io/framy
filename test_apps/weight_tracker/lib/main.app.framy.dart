@@ -599,6 +599,19 @@ class _FramyUserDataCardCustomPageState
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -620,9 +633,7 @@ class _FramyUserDataCardCustomPageState
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -633,9 +644,7 @@ class _FramyUserDataCardCustomPageState
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {
@@ -671,6 +680,19 @@ class _FramyUserEmailsViewCustomPageState
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -692,9 +714,7 @@ class _FramyUserEmailsViewCustomPageState
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -705,9 +725,7 @@ class _FramyUserEmailsViewCustomPageState
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {

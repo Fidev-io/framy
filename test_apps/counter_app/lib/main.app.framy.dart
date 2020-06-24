@@ -586,6 +586,19 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -607,9 +620,7 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -620,9 +631,7 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {
@@ -654,6 +663,19 @@ class _FramyCounterTitleCustomPageState
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -676,9 +698,7 @@ class _FramyCounterTitleCustomPageState
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -689,9 +709,7 @@ class _FramyCounterTitleCustomPageState
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {
@@ -1047,13 +1065,13 @@ class FramyWidgetDependencyNullSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Switch(
       key: Key('framy_dependency_${dependency.name}_null_switch'),
-      value: dependency.value == null,
+      value: dependency.value != null,
       onChanged: (bool isActive) {
         if (isActive) {
-          onChanged(null);
-        } else {
           onChanged(
               framyModelConstructorMap[dependency.type]?.call(dependency));
+        } else {
+          onChanged(null);
         }
       },
     );

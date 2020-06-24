@@ -79,7 +79,9 @@ void main() {
       await driver.tap(find.byValueKey('framy_dependency_user_null_switch'));
       await driver.waitFor(find.text('John Doe'));
       await driver.waitFor(find.text('Age: 17'));
-    });
+    }, skip: true);
+
+    //TODO: when switch will have a label then test the following case: when user is set to null then all switches should be inactive (their values sould be nulls)
   });
 
   group('UserEmailsView', () {
