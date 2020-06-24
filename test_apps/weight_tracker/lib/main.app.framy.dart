@@ -1085,13 +1085,13 @@ class FramyWidgetDependencyNullSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Switch(
       key: Key('framy_dependency_${dependency.name}_null_switch'),
-      value: dependency.value == null,
+      value: dependency.value != null,
       onChanged: (bool isActive) {
         if (isActive) {
-          onChanged(null);
-        } else {
           onChanged(
               framyModelConstructorMap[dependency.type]?.call(dependency));
+        } else {
+          onChanged(null);
         }
       },
     );

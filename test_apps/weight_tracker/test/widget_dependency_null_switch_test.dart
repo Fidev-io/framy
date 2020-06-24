@@ -20,7 +20,7 @@ void main() {
       expect(find.byType(FramyWidgetDependencyNullSwitch), findsOneWidget);
     });
 
-    testWidgets('should be active when dependency.value is null',
+    testWidgets('should be inactive when dependency.value is null',
         (tester) async {
       //given
       final initialValue = null;
@@ -35,10 +35,10 @@ void main() {
         ),
       )));
       //then
-      expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
+      expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
     });
 
-    testWidgets('should be inactive when dependency.value is not null',
+    testWidgets('should be active when dependency.value is not null',
         (tester) async {
       //given
       final initialValue = User(null, null, null);
@@ -53,7 +53,7 @@ void main() {
         ),
       )));
       //then
-      expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+      expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
     });
 
     testWidgets(

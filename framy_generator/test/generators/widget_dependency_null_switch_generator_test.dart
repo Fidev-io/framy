@@ -8,9 +8,9 @@ void main() {
       expect(result.contains('class FramyWidgetDependencyNullSwitch'), isTrue);
     });
 
-    test('should contain check if value is null', () {
+    test('should contain check if value is not null', () {
       String result = generateWidgetDependencyNullSwitch();
-      expect(result.contains('dependency.value == null'), isTrue);
+      expect(result.contains('dependency.value != null'), isTrue);
     });
 
     test('should contain onChanged(null)', () {
