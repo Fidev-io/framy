@@ -7,6 +7,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/app_theme.dart';
+import 'package:weight_tracker/pages/profile_page.dart';
+import 'package:provider/provider.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
 import 'package:weight_tracker/models/user.dart';
@@ -33,6 +35,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/colors': FramyColorsPage(),
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
+    '/ProfilePage': FramyProfilePageCustomPage(),
     '/UserDataCard': FramyUserDataCardCustomPage(),
     '/UserEmailsView': FramyUserEmailsViewCustomPage(),
   };
@@ -132,6 +135,12 @@ class FramyDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('ProfilePage'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/ProfilePage'),
               ),
               ListTile(
                 leading: SizedBox.shrink(),
@@ -570,6 +579,81 @@ class FramyButtonPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class FramyProfilePageCustomPage extends StatefulWidget {
+  const FramyProfilePageCustomPage()
+      : super(key: const Key('Framy_ProfilePage_Page'));
+
+  @override
+  _FramyProfilePageCustomPageState createState() =>
+      _FramyProfilePageCustomPageState();
+}
+
+class _FramyProfilePageCustomPageState
+    extends State<FramyProfilePageCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<User>('User', 'User', null, [
+      FramyDependencyModel<String>('firstName', 'String', null, []),
+      FramyDependencyModel<String>('lastName', 'String', null, []),
+      FramyDependencyModel<int>('age', 'int', null, []),
+      FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
+    ]),
+  ];
+  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final body = Row(
+            children: [
+              Expanded(
+                child: MultiProvider(
+                  providers: [
+                    Provider<User>.value(value: dependency('User').value),
+                  ],
+                  child: ProfilePage(),
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(
+                  width: 300,
+                  child: FramyWidgetDependenciesPanel(
+                    dependencies: dependencies,
+                    presets: presets,
+                    onChanged: (name, val) => setState(
+                      () => dependency(name).value = val,
+                    ),
+                  ),
+                ),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependencies: dependencies,
+                presets: presets,
+                onChanged: (name, val) => setState(
+                  () => dependency(name).value = val,
+                ),
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
       ),
     );
   }

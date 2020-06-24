@@ -18,11 +18,11 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
       for (ParameterElement param in constructor.parameters) {
         framyObject.widgetDependencies.add(
           FramyWidgetDependency(
-            param.name,
-            parseDartType(param.type),
-            param.defaultValueCode,
-            param.isNamed,
-          ),
+              param.name,
+              parseDartType(param.type),
+              param.defaultValueCode,
+              param.isNamed,
+              FramyWidgetDependencyType.constructor),
         );
       }
     }

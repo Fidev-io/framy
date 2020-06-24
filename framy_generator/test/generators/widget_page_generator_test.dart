@@ -93,6 +93,7 @@ void main() {
         'String',
         null,
         false,
+        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -110,6 +111,7 @@ void main() {
         'int',
         '13',
         false,
+        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -128,6 +130,7 @@ void main() {
         'String',
         null,
         false,
+        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -147,6 +150,7 @@ void main() {
         'String',
         null,
         true,
+        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -167,6 +171,7 @@ void main() {
         'String',
         "'fooDefaultValue'",
         false,
+        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -179,9 +184,10 @@ void main() {
 
     test('should generate subDependencies of a WidgetDependency', () {
       //given
-      final userDependency = FramyWidgetDependency('arg1', 'User', null, false);
-      final stringDependency =
-          FramyWidgetDependency('firstName', 'String', null, false);
+      final userDependency = FramyWidgetDependency(
+          'arg1', 'User', null, false, FramyWidgetDependencyType.constructor);
+      final stringDependency = FramyWidgetDependency('firstName', 'String',
+          null, false, FramyWidgetDependencyType.constructor);
 
       final widgetObjects = getFramyObjectWithDependency(userDependency);
       final framyModelObjects = [
@@ -203,6 +209,50 @@ void main() {
             'FramyDependencyModel<String>(\'firstName\', \'String\', null, []),'),
         isTrue,
       );
+    });
+
+    group('when the provider parameter is passed', () {
+      List<FramyObject> widgetObjects;
+
+      setUp(() {
+        widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+          'String',
+          'String',
+          null,
+          false,
+          FramyWidgetDependencyType.provider,
+        ));
+      });
+
+      test('it should contain the generation of the dependency model', () {
+        //when
+        final result = generateWidgetPages(widgetObjects, []);
+        //then
+        expect(
+          result.contains(
+              'FramyDependencyModel<String>(\'String\', \'String\', null, [])'),
+          isTrue,
+        );
+      });
+
+      test('it should contain MultiProvider', () {
+        //when
+        final result = generateWidgetPages(widgetObjects, []);
+        //then
+        expect(result.contains('MultiProvider'), isTrue);
+      });
+
+      test('it contain a Provider with the proper type using proper dependency',
+          () {
+        //when
+        final result = generateWidgetPages(widgetObjects, []);
+        //then
+        expect(
+          result.contains(
+              'Provider<String>.value(value: dependency(\'String\').value),'),
+          isTrue,
+        );
+      });
     });
   });
 }

@@ -47,7 +47,8 @@ class CounterFloatingActionButton {}
         "name": "arg1",
         "type": "String",
         "defaultValue": null,
-        "isNamed": false
+        "isNamed": false,
+        "dependencyType": "FramyWidgetDependencyType.constructor"
       }
     ]
   }
@@ -71,7 +72,8 @@ class WidgetWithConstructor {
         "name": "arg1",
         "type": "String",
         "defaultValue": null,
-        "isNamed": true
+        "isNamed": true,
+        "dependencyType": "FramyWidgetDependencyType.constructor"
       }
     ]
   }
@@ -95,7 +97,8 @@ class WidgetWithConstructorAndKey {
         "name": "arg1",
         "type": "String",
         "defaultValue": "'test1'",
-        "isNamed": true
+        "isNamed": true,
+        "dependencyType": "FramyWidgetDependencyType.constructor"
       }
     ]
   }
@@ -127,4 +130,43 @@ class WidgetWithNumParam {
 @FramyWidget()
 class WidgetWithBoolParam {
   WidgetWithBoolParam(bool arg1) {}
+}
+
+@ShouldGenerate('''
+[
+  {
+    "type": "FramyObjectType.widget",
+    "import": "package:__test__/widget_resolver_test.dart",
+    "name": "WidgetWithStringProviderDependency",
+    "isStatic": false,
+    "kind": "CLASS",
+    "parentObject": null,
+    "widgetDependencies": [
+      {
+        "name": "String",
+        "type": "String",
+        "defaultValue": null,
+        "isNamed": false,
+        "dependencyType": "FramyWidgetDependencyType.provider"
+      }
+    ]
+  }
+]''')
+@FramyUseProvider(String)
+@FramyWidget()
+class WidgetWithStringProviderDependency {
+  WidgetWithStringProviderDependency() {}
+}
+
+@ShouldGenerate('''
+        "name": "User",
+        "type": "User",
+        "defaultValue": null,
+        "isNamed": false,
+        "dependencyType": "FramyWidgetDependencyType.provider"
+''', contains: true)
+@FramyUseProvider(User)
+@FramyWidget()
+class WidgetWithUserProviderDependency {
+  WidgetWithUserProviderDependency() {}
 }

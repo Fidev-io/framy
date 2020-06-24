@@ -140,10 +140,10 @@ void main() {
         expect(find.byType(Switch), findsOneWidget);
       });
 
-      testWidgets('should show 4 switches for User model',
+      testWidgets('should show 5 switches for User model',
           (WidgetTester tester) async {
         await _buildDependencyInput(tester, _getUserModel());
-        expect(find.byType(Switch), findsNWidgets(4));
+        expect(find.byType(Switch), findsNWidgets(5));
       });
     });
 
