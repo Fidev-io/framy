@@ -38,5 +38,37 @@ void main() {
         isFalse,
       );
     });
+
+    testWidgets('should use empty string when dependency is changed to be not null', (WidgetTester tester) async {
+      //given
+      final firstNameSwitchKey = Key('framy_dependency_firstName_null_switch');
+      await tester.pumpWidget(
+          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+      expect(find.text('null null'), findsOneWidget);
+      //when
+      await tester.tap(find.byKey(firstNameSwitchKey));
+      await tester.pumpAndSettle();
+      //then
+      expect(find.text('null null'), findsNothing);
+      await tester.tap(find.byKey(firstNameSwitchKey));
+      await tester.pumpAndSettle();
+      expect(find.text('null null'), findsOneWidget);
+    });
+
+    testWidgets('should use 0 when int dependency is changed to be not null', (WidgetTester tester) async {
+      //given
+      final ageSwitchKey = Key('framy_dependency_age_null_switch');
+      await tester.pumpWidget(
+          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+      expect(find.text('Age: null'), findsOneWidget);
+      //when
+      await tester.tap(find.byKey(ageSwitchKey));
+      await tester.pumpAndSettle();
+      //then
+      expect(find.text('Age: null'), findsNothing);
+      await tester.tap(find.byKey(ageSwitchKey));
+      await tester.pumpAndSettle();
+      expect(find.text('Age: null'), findsOneWidget);
+    });
   });
 }

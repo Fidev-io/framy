@@ -4,6 +4,10 @@ String generateModelConstructorMap(List<FramyObject> models) => '''
 final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
   ${models.fold('', (previousValue, model) => previousValue + _generateModelConstructor(model))}
+  'String': (dep) => '',
+  'double': (dep) => 0.0,
+  'int': (dep) => 0,
+  'bool': (dep) => false,
 };
 ''';
 

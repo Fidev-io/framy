@@ -32,5 +32,15 @@ final framyModelConstructorMap =
               '\'User\': \\(dep\\) => User\\(\n *dep\\.subDependencies\\.singleWhere\\(\\(d\\) => d\\.name == \'firstName\'\\)\\.value,')),
           isTrue);
     });
+
+    test('should generate a primitive types constructors', () {
+      //when
+      final result = generateModelConstructorMap([]);
+      //then
+      expect(result.contains('\'String\': (dep) => \'\','), isTrue);
+      expect(result.contains('\'int\': (dep) => 0,'), isTrue);
+      expect(result.contains('\'double\': (dep) => 0.0,'), isTrue);
+      expect(result.contains('\'bool\': (dep) => false,'), isTrue);
+    });
   });
 }

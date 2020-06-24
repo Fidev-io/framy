@@ -1083,6 +1083,10 @@ final framyModelConstructorMap =
         emails:
             dep.subDependencies.singleWhere((d) => d.name == 'emails').value,
       ),
+  'String': (dep) => '',
+  'double': (dep) => 0.0,
+  'int': (dep) => 0,
+  'bool': (dep) => false,
 };
 
 Map<String, Map<String, dynamic>> createFramyPresets() => {
