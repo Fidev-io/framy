@@ -23,7 +23,6 @@ import 'package:framy_generator/generator/routing_generator.dart';
 import 'package:framy_generator/generator/utils_generator.dart';
 import 'package:framy_generator/generator/widget_dependencies_panel_generator.dart';
 import 'package:framy_generator/generator/widget_dependency_input_generator.dart';
-import 'package:framy_generator/generator/widget_dependency_null_switch_generator.dart';
 import 'package:framy_generator/generator/widget_list_dependency_input_generator.dart';
 import 'package:framy_generator/generator/widget_page_generator.dart';
 import 'package:glob/glob.dart';
@@ -70,7 +69,6 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateModelConstructorMap(modelFramyObjects));
     buffer.writeln(generateEnumMap(modelFramyObjects));
     buffer.writeln(generatePresets(presetFramyObjects));
-    buffer.writeln(generateWidgetDependencyNullSwitch());
     return buffer.toString();
   }
 

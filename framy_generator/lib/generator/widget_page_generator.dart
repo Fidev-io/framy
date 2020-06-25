@@ -44,16 +44,7 @@ class $stateClassName extends State<$className> {
       dependencies.singleWhere((d) => d.name == name);
       
   void onChanged(String name, dynamic dependencyValue) {
-    setState(
-      () {
-        dependency(name).value = dependencyValue;
-        if (dependencyValue == null) {
-          dependency(name).subDependencies.forEach((subDependency) {
-            subDependency.value = null;
-          });
-        }
-      },
-    );
+    setState(() => dependency(name).value = dependencyValue);
   }
 
   @override

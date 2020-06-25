@@ -408,6 +408,19 @@ class FramyHeaderText extends StatelessWidget {
   }
 }
 
+bool isDependencyAPreset(
+  Map<String, Map<String, dynamic>> presets,
+  FramyDependencyModel dependency,
+) =>
+    isValueAPreset(presets, dependency.type, dependency.value);
+
+bool isValueAPreset(
+  Map<String, Map<String, dynamic>> presets,
+  String type,
+  dynamic value,
+) =>
+    presets.containsKey(type) && presets[type].containsValue(value);
+
 class FramyAppBarPage extends StatelessWidget {
   const FramyAppBarPage() : super(key: const Key('FramyAppBarPage'));
 
@@ -587,16 +600,7 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
       dependencies.singleWhere((d) => d.name == name);
 
   void onChanged(String name, dynamic dependencyValue) {
-    setState(
-      () {
-        dependency(name).value = dependencyValue;
-        if (dependencyValue == null) {
-          dependency(name).subDependencies.forEach((subDependency) {
-            subDependency.value = null;
-          });
-        }
-      },
-    );
+    setState(() => dependency(name).value = dependencyValue);
   }
 
   @override
@@ -664,16 +668,7 @@ class _FramyCounterTitleCustomPageState
       dependencies.singleWhere((d) => d.name == name);
 
   void onChanged(String name, dynamic dependencyValue) {
-    setState(
-      () {
-        dependency(name).value = dependencyValue;
-        if (dependencyValue == null) {
-          dependency(name).subDependencies.forEach((subDependency) {
-            subDependency.value = null;
-          });
-        }
-      },
-    );
+    setState(() => dependency(name).value = dependencyValue);
   }
 
   @override
@@ -726,10 +721,10 @@ class FramyDependencyModel<T> {
   final String type;
   T value;
   final List<FramyDependencyModel> subDependencies;
-  T lastNonNullValue;
+  T lastCustomValue;
 
   FramyDependencyModel(this.name, this.type, this.value, this.subDependencies)
-      : lastNonNullValue = value;
+      : lastCustomValue = value;
 }
 
 class FramyWidgetDependenciesPanel extends StatelessWidget {
@@ -817,43 +812,35 @@ class FramyWidgetDependencyInput extends StatelessWidget {
       {Key key, this.dependency, this.onChanged, this.presets})
       : super(key: key);
 
+  void _onValueChanged(dynamic value) {
+    if (value != null && !isValueAPreset(presets, dependency.type, value)) {
+      dependency.lastCustomValue = value;
+    }
+    onChanged(dependency.name, value);
+  }
+
   @override
   Widget build(BuildContext context) {
     final inputKey = Key('framy_dependency_${dependency.name}_input');
-    final chosenPreset = presets[dependency.type]?.values?.firstWhere(
-          (el) => el == dependency.value,
-          orElse: () => null,
-        );
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(dependency.name),
-            FramyWidgetDependencyNullSwitch(
+            FramyPresetDropdown(
               dependency: dependency,
-              onChanged: (val) => onChanged(dependency.name, val),
+              onChanged: _onValueChanged,
+              presets: presets,
             ),
           ],
         ),
-        if (presets.containsKey(dependency.type))
-          FramyPresetDropdown(
-            dependency: dependency,
-            chosenPreset: chosenPreset,
-            onChanged: onChanged,
-            presets: presets,
-          ),
-        if (chosenPreset == null)
+        if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
             DropdownButton<bool>(
               key: inputKey,
               value: dependency.value,
-              onChanged: (val) {
-                if (val != null) {
-                  dependency.lastNonNullValue = val;
-                }
-                onChanged(dependency.name, val);
-              },
+              onChanged: _onValueChanged,
               items: [
                 DropdownMenuItem(
                   value: true,
@@ -895,23 +882,21 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   valueToReturn = s;
                 }
                 if (valueToReturn != null) {
-                  dependency.lastNonNullValue = valueToReturn;
-                  onChanged(dependency.name, valueToReturn);
+                  _onValueChanged(valueToReturn);
                 }
               },
             )
           else if (dependency.type.startsWith('List<'))
             FramyWidgetListDependencyInput(
               dependency: dependency,
-              onChanged: (model) =>
-                  onChanged(dependency.name, dependency.value),
+              onChanged: (_) => _onValueChanged(dependency.value),
               presets: presets,
             )
           else if (framyEnumMap.containsKey(dependency.type))
             DropdownButton(
               key: inputKey,
               value: dependency.value,
-              onChanged: (val) => onChanged(dependency.name, val),
+              onChanged: _onValueChanged,
               items: framyEnumMap[dependency.type]
                   .map((enumValue) => DropdownMenuItem(
                         value: enumValue,
@@ -1033,38 +1018,45 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
 
 class FramyPresetDropdown extends StatelessWidget {
   final FramyDependencyModel dependency;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged onChanged;
   final Map<String, Map<String, dynamic>> presets;
-  final dynamic chosenPreset;
 
   const FramyPresetDropdown(
-      {Key key,
-      this.dependency,
-      this.onChanged,
-      this.presets,
-      this.chosenPreset})
+      {Key key, this.dependency, this.onChanged, this.presets})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var customValue = dependency.value;
+    if (customValue == null || isDependencyAPreset(presets, dependency)) {
+      customValue = framyModelConstructorMap[dependency.type]?.call(dependency);
+    }
     return DropdownButton(
       key: Key('framy_${dependency.name}_preset_dropdown'),
-      value: chosenPreset,
-      onChanged: (val) => onChanged(
-        dependency.name,
-        val ?? framyModelConstructorMap[dependency.type]?.call(dependency),
-      ),
+      value: dependency.value,
+      onChanged: (val) {
+        if (val == customValue) {
+          onChanged(dependency.lastCustomValue ?? customValue);
+        } else {
+          onChanged(val);
+        }
+      },
       items: [
         DropdownMenuItem(
           value: null,
+          child: Text('Null'),
+        ),
+        DropdownMenuItem(
+          value: customValue,
           child: Text('Custom'),
         ),
-        ...presets[dependency.type].entries.map(
-              (entry) => DropdownMenuItem(
-                child: Text(entry.key),
-                value: entry.value,
+        if (presets.containsKey(dependency.type))
+          ...presets[dependency.type].entries.map(
+                (entry) => DropdownMenuItem(
+                  child: Text(entry.key),
+                  value: entry.value,
+                ),
               ),
-            ),
       ],
     );
   }
@@ -1084,31 +1076,3 @@ final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
 Map<String, Map<String, dynamic>> createFramyPresets() => {};
-
-class FramyWidgetDependencyNullSwitch extends StatelessWidget {
-  final ValueChanged<dynamic> onChanged;
-  final FramyDependencyModel dependency;
-
-  const FramyWidgetDependencyNullSwitch(
-      {Key key, this.onChanged, this.dependency})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Switch(
-      key: Key('framy_dependency_${dependency.name}_null_switch'),
-      value: dependency.value != null,
-      onChanged: (bool isActive) {
-        if (isActive) {
-          dependency.subDependencies.forEach((subDependency) {
-            subDependency.value = subDependency.lastNonNullValue;
-          });
-          onChanged(dependency.lastNonNullValue ??
-              framyModelConstructorMap[dependency.type]?.call(dependency));
-        } else {
-          onChanged(null);
-        }
-      },
-    );
-  }
-}

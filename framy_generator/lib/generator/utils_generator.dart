@@ -12,4 +12,18 @@ class FramyHeaderText extends StatelessWidget {
     );
   }
 }
+
+bool isDependencyAPreset(
+  Map<String, Map<String, dynamic>> presets,
+  FramyDependencyModel dependency,
+) =>
+    isValueAPreset(presets, dependency.type, dependency.value);
+
+bool isValueAPreset(
+  Map<String, Map<String, dynamic>> presets,
+  String type,
+  dynamic value,
+) =>
+    presets.containsKey(type) && presets[type].containsValue(value);
+
 ''';
