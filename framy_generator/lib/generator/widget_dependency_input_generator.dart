@@ -23,9 +23,14 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(dependency.name),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                dependency.name,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+            ),
             FramyPresetDropdown(
               dependency: dependency,
               onChanged: _onValueChanged,
@@ -55,6 +60,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               dependency.type == 'double')
             TextFormField(
               key: inputKey,
+              decoration: InputDecoration(
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
               initialValue: dependency.value?.toString(),
               autovalidate: true,
               validator: (value) {
@@ -106,7 +118,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   .toList(),
             )
           else
-            Text('Not supported type')
+            Text('Not supported type'),
       ],
     );
   }
@@ -126,12 +138,8 @@ class FramyModelInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).primaryColor),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(color: const Color(0xFFF8F8F8)),
       child: Column(
         children: dependencies
             .map((dep) => FramyWidgetDependencyInput(

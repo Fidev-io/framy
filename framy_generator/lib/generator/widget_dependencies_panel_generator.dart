@@ -16,14 +16,17 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: SingleChildScrollView(
-          child: Column(
-            children: dependencies
-                .map((dep) => FramyWidgetDependencyInput(
-                      dependency: dep,
-                      onChanged: onChanged,
-                      presets: presets,
-                    ))
-                .toList(),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: dependencies
+                  .map((dep) => FramyWidgetDependencyInput(
+                        dependency: dep,
+                        onChanged: onChanged,
+                        presets: presets,
+                      ))
+                  .toList(),
+            ),
           ),
         ),
       ),
