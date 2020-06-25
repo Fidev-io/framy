@@ -98,6 +98,7 @@ enum FramyObjectType {
   widget,
   model,
   preset,
+  enumModel,
 }
 
 enum FramyWidgetDependencyType { constructor, provider }

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
+import 'package:weight_tracker/widgets/weight_unit_display.dart';
 
 @FramyUseProvider(User)
 @framyWidget
@@ -16,6 +17,7 @@ class ProfilePage extends StatelessWidget {
           children: [
             UserDataCard(user: user),
             UserEmailsView(user: user),
+            WeightUnitDisplay(),
           ],
         );
       },

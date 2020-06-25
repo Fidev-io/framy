@@ -14,16 +14,20 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
     final framyObject = _modelObjectFromElement(element);
     if (element is ClassElement) {
       framyObject.widgetDependencies = [];
-      final constructor = element.unnamedConstructor;
-      for (ParameterElement param in constructor.parameters) {
-        framyObject.widgetDependencies.add(
-          FramyWidgetDependency(
-              param.name,
-              parseDartType(param.type),
-              param.defaultValueCode,
-              param.isNamed,
-              FramyWidgetDependencyType.constructor),
-        );
+      if (element.isEnum) {
+        framyObject.type = FramyObjectType.enumModel;
+      } else {
+        final constructor = element.unnamedConstructor;
+        for (ParameterElement param in constructor.parameters) {
+          framyObject.widgetDependencies.add(
+            FramyWidgetDependency(
+                param.name,
+                parseDartType(param.type),
+                param.defaultValueCode,
+                param.isNamed,
+                FramyWidgetDependencyType.constructor),
+          );
+        }
       }
     }
 

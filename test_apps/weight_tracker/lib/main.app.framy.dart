@@ -11,6 +11,8 @@ import 'package:weight_tracker/pages/profile_page.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
+import 'package:weight_tracker/widgets/weight_unit_display.dart';
+import 'package:weight_tracker/models/weight_unit.dart';
 import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/models/user.framy.dart';
 
@@ -38,6 +40,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/ProfilePage': FramyProfilePageCustomPage(),
     '/UserDataCard': FramyUserDataCardCustomPage(),
     '/UserEmailsView': FramyUserEmailsViewCustomPage(),
+    '/WeightUnitDisplay': FramyWeightUnitDisplayCustomPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -153,6 +156,12 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('UserEmailsView'),
                 onTap: () => Navigator.of(context)
                     .pushReplacementNamed('/UserEmailsView'),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('WeightUnitDisplay'),
+                onTap: () => Navigator.of(context)
+                    .pushReplacementNamed('/WeightUnitDisplay'),
               ),
             ],
           ),
@@ -803,6 +812,74 @@ class _FramyUserEmailsViewCustomPageState
   }
 }
 
+class FramyWeightUnitDisplayCustomPage extends StatefulWidget {
+  const FramyWeightUnitDisplayCustomPage()
+      : super(key: const Key('Framy_WeightUnitDisplay_Page'));
+
+  @override
+  _FramyWeightUnitDisplayCustomPageState createState() =>
+      _FramyWeightUnitDisplayCustomPageState();
+}
+
+class _FramyWeightUnitDisplayCustomPageState
+    extends State<FramyWeightUnitDisplayCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<WeightUnit>(
+        'weightUnit', 'WeightUnit', WeightUnit.kg, []),
+  ];
+  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final body = Row(
+            children: [
+              Expanded(
+                child: WeightUnitDisplay(
+                  weightUnit: dependency('weightUnit').value,
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(
+                  width: 300,
+                  child: FramyWidgetDependenciesPanel(
+                    dependencies: dependencies,
+                    presets: presets,
+                    onChanged: (name, val) => setState(
+                      () => dependency(name).value = val,
+                    ),
+                  ),
+                ),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependencies: dependencies,
+                presets: presets,
+                onChanged: (name, val) => setState(
+                  () => dependency(name).value = val,
+                ),
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
+    );
+  }
+}
+
 class FramyDependencyModel<T> {
   final String name;
   final String type;
@@ -990,6 +1067,20 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   onChanged(dependency.name, dependency.value),
               presets: presets,
             )
+          else if (framyEnumMap.containsKey(dependency.type))
+            DropdownButton(
+              key: inputKey,
+              value: dependency.value,
+              onChanged: (val) => onChanged(dependency.name, val),
+              items: framyEnumMap[dependency.type]
+                  .map((enumValue) => DropdownMenuItem(
+                        value: enumValue,
+                        child: Text(enumValue
+                            .toString()
+                            .substring(enumValue.toString().indexOf('.') + 1)),
+                      ))
+                  .toList(),
+            )
           else
             Text('Not supported type')
       ],
@@ -1090,6 +1181,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               if (listType == 'int') dependency.value = <int>[];
               if (listType == 'double') dependency.value = <double>[];
               if (listType == 'bool') dependency.value = <bool>[];
+              if (listType == 'WeightUnit') dependency.value = <WeightUnit>[];
               if (listType == 'User') dependency.value = <User>[];
             }
             dependency.value.add(null);
@@ -1142,6 +1234,8 @@ class FramyPresetDropdown extends StatelessWidget {
 
 final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
+  ...framyEnumMap.map((type, values) =>
+      MapEntry(type, (FramyDependencyModel dep) => values.first)),
   'User': (dep) => User(
         dep.subDependencies.singleWhere((d) => d.name == 'firstName').value,
         dep.subDependencies.singleWhere((d) => d.name == 'lastName').value,
@@ -1151,6 +1245,10 @@ final framyModelConstructorMap =
       ),
 };
 
+final framyEnumMap = <String, List<dynamic>>{
+  'MaterialTapTargetSize': MaterialTapTargetSize.values,
+  'WeightUnit': WeightUnit.values,
+};
 Map<String, Map<String, dynamic>> createFramyPresets() => {
       'User': {
         'teenageJohn': teenageJohn(),

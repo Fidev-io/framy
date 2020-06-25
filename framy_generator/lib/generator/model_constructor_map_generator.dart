@@ -1,11 +1,17 @@
 import 'package:framy_generator/framy_object.dart';
 
-String generateModelConstructorMap(List<FramyObject> models) => '''
+String generateModelConstructorMap(List<FramyObject> modelObjects) {
+  final models = modelObjects
+      .where((element) => element.type == FramyObjectType.model)
+      .toList();
+  return '''
 final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
+  ...framyEnumMap.map((type, values) => MapEntry(type, (FramyDependencyModel dep) => values.first)),
   ${models.fold('', (previousValue, model) => previousValue + _generateModelConstructor(model))}
 };
 ''';
+}
 
 String _generateModelConstructor(FramyObject model) {
   return ''''${model.name}': (dep) => ${model.name}(

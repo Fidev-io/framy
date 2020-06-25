@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weight_tracker/main.app.framy.dart';
 import 'package:weight_tracker/models/user.dart';
+import 'package:weight_tracker/models/weight_unit.dart';
 
 import 'test_utils.dart';
 
@@ -21,6 +22,10 @@ void main() {
   FramyDependencyModel _getStringListModel([List<String> defaultValue]) =>
       FramyDependencyModel<List<String>>(
           'strings', 'List<String>', defaultValue, []);
+
+  FramyDependencyModel _getEnumModel([WeightUnit defaultValue]) =>
+      FramyDependencyModel<WeightUnit>(
+          'weightUnit', 'WeightUnit', defaultValue, []);
 
   Future<void> _buildDependencyInput(
     WidgetTester tester,
@@ -157,6 +162,44 @@ void main() {
           (WidgetTester tester) async {
         await _buildDependencyInput(tester, _getStringListModel());
         expect(find.byType(FramyWidgetListDependencyInput), findsOneWidget);
+      });
+    });
+
+    group('when the type is an enum', () {
+      testWidgets('it should build', (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getEnumModel());
+        expect(find.byType(FramyWidgetDependencyInput), findsOneWidget);
+      });
+
+      testWidgets('it should have a dropdown', (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getEnumModel());
+        expect(find.byType(DropdownButton), findsOneWidget);
+      });
+
+      testWidgets('it should show default enum name',
+          (WidgetTester tester) async {
+        await _buildDependencyInput(
+          tester,
+          _getEnumModel(WeightUnit.lbs),
+        );
+        expect(find.text('lbs'), findsOneWidget);
+      });
+
+      testWidgets('it should emit new value on dropdown change',
+          (WidgetTester tester) async {
+        //given
+        WeightUnit emittedValue;
+        await _buildDependencyInput(
+          tester,
+          _getEnumModel(),
+          onChanged: (name, val) => emittedValue = val,
+        );
+        //when
+        await tester.tap(find.byKey(Key('framy_dependency_weightUnit_input')));
+        await tester.pump();
+        await tester.tap(find.text('lbs').last);
+        //then
+        expect(emittedValue, WeightUnit.lbs);
       });
     });
   });
