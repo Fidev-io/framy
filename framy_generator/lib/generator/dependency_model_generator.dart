@@ -4,9 +4,9 @@ class FramyDependencyModel<T> {
   final String type;
   T value;
   final List<FramyDependencyModel> subDependencies;
-  T lastNonNullValue;
+  T lastCustomValue;
 
   FramyDependencyModel(this.name, this.type, this.value, this.subDependencies)
-        : lastNonNullValue = value;
+        : lastCustomValue = value;
 }
 ''';

@@ -57,6 +57,17 @@ void main() {
           findsOneWidget);
     });
 
+    Future<void> selectInDropdown(
+        WidgetTester tester,
+        String text,
+        String fieldName,
+        ) async {
+      await tester.tap(find.byKey(Key('framy_${fieldName}_preset_dropdown')));
+      await tester.pump();
+      await tester.tap(find.text(text).last);
+      await tester.pump();
+    }
+
     testWidgets(
         'should restore default value after setting to null and setting back to non-null',
         (tester) async {
@@ -66,13 +77,11 @@ void main() {
           findsOneWidget);
       //when
       //set to null
-      await tester.tap(find.byKey(Key('framy_dependency_verb_null_switch')));
-      await tester.pump();
+      await selectInDropdown(tester, 'Null', 'verb');
       expect(find.text('You have null the button this many times:'),
           findsOneWidget);
       //set to non-null
-      await tester.tap(find.byKey(Key('framy_dependency_verb_null_switch')));
-      await tester.pump();
+      await selectInDropdown(tester, 'Custom', 'verb');
       //then
       expect(
         find.text('You have pushed the button this many times:'),

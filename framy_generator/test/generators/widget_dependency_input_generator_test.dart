@@ -10,6 +10,16 @@ void main() {
           isTrue);
     });
 
+    test('should have _onValueChanged method', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('void _onValueChanged('), isTrue);
+    });
+
+    test('should have lastCustomValue assignment', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('.lastCustomValue = '), isTrue);
+    });
+
     test('should contain class FramyWidgetDependencyInput', () {
       final result = generateWidgetDependencyInput([]);
       expect(result.contains('class FramyWidgetDependencyInput'), isTrue);
@@ -155,22 +165,9 @@ void main() {
       });
     });
 
-    group('with presets feature', () {
-      test('should contain check if preset exists', () {
-        final result = generateWidgetDependencyInput([]);
-        expect(result.contains('if (presets.containsKey(dependency.type))'),
-            isTrue);
-      });
-
-      test('should contain FramyPresetDropdown', () {
-        final result = generateWidgetDependencyInput([]);
-        expect(result.contains('FramyPresetDropdown'), isTrue);
-      });
-    });
-
-    test('should contain FramyWidgetDependencyNullSwitch(', () {
+    test('should contain FramyPresetDropdown', () {
       final result = generateWidgetDependencyInput([]);
-      expect(result.contains('FramyWidgetDependencyNullSwitch('), isTrue);
+      expect(result.contains('FramyPresetDropdown'), isTrue);
     });
 
     test('should contain check for list', () {
@@ -187,18 +184,6 @@ void main() {
     test('should contain framyEnumMap reference', () {
       final result = generateWidgetDependencyInput([]);
       expect(result.contains('framyEnumMap'), isTrue);
-    });
-
-    test('should contain setting value to lastNonNullValue for bool type', () {
-      final result = generateWidgetDependencyInput([]);
-      expect(result.contains('dependency.lastNonNullValue = val'),
-          isTrue);
-    });
-
-    test('should contain setting value to lastNonNullValue for String, int, double types', () {
-      final result = generateWidgetDependencyInput([]);
-      expect(result.contains('dependency.lastNonNullValue = valueToReturn'),
-          isTrue);
     });
   });
 }

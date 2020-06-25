@@ -287,12 +287,14 @@ void main() {
     });
 
     test('should allow to set verb to null', () async {
-      await driver.tap(find.byValueKey('framy_dependency_verb_null_switch'));
+      await driver.tap(find.byValueKey('framy_verb_preset_dropdown'));
+      await driver.tap(find.text('Null'));
       await driver.waitFor(find.text('You have null the button this many times:'));
     });
 
     test('should use the default value after setting back to non-null', () async {
-      await driver.tap(find.byValueKey('framy_dependency_verb_null_switch'));
+      await driver.tap(find.byValueKey('framy_verb_preset_dropdown'));
+      await driver.tap(find.text('Custom'));
       await driver.waitFor(find.text('You have pushed the button this many times:'));
     });
 

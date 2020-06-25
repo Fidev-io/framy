@@ -63,34 +63,13 @@ void main() {
         );
       });
 
-      group('onChanged', () {
-        test('should contain definition of onChanged method', () {
-          //when
-          final result = generateWidgetPages(widgetObjects, []);
-          //then
-          expect(
-            result
-                .contains('void onChanged(String name, dynamic dependencyValue)'),
-            isTrue,
-          );
-        });
-
-        test('should contain check if dependencyValue is null', () {
-          //when
-          final result = generateWidgetPages(widgetObjects, []);
-          //then
-          expect(result.contains('dependencyValue == null'), isTrue);
-        });
-
-        test('should contain setting subDependency.value to null', () {
-          //when
-          final result = generateWidgetPages(widgetObjects, []);
-          //then
-          expect(
-            result.contains('subDependency.value = null'),
-            isTrue,
-          );
-        });
+      test('should contain definition of onChanged method', () {
+        final result = generateWidgetPages(widgetObjects, []);
+        expect(
+          result
+              .contains('void onChanged(String name, dynamic dependencyValue)'),
+          isTrue,
+        );
       });
     });
 

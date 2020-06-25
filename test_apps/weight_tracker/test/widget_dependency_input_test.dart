@@ -57,10 +57,10 @@ void main() {
     });
 
     testWidgets(
-        'should not show presets dropdown for User when no presets for User',
+        'should show presets dropdown for User when no presets for User',
         (WidgetTester tester) async {
       await _buildDependencyInput(tester, _getUserModel());
-      expect(find.byKey(Key('framy_user_preset_dropdown')), findsNothing);
+      expect(find.byKey(Key('framy_user_preset_dropdown')), findsOneWidget);
     });
 
     group('when User has presets', () {
@@ -118,9 +118,7 @@ void main() {
         User emitted;
         final presetUser = User('John', 'Doe', 11);
         final customModel = _getUserModel(presetUser);
-        customModel.subDependencies[0].value = 'Adam';
-        customModel.subDependencies[1].value = 'Smith';
-        customModel.subDependencies[2].value = 25;
+        customModel.lastCustomValue = User('Adam', 'Smith', 25);
         await _buildDependencyInput(
           tester,
           customModel,
@@ -135,20 +133,6 @@ void main() {
         expect(emitted.firstName, 'Adam');
         expect(emitted.lastName, 'Smith');
         expect(emitted.age, 25);
-      });
-    });
-
-    group('null switch', () {
-      testWidgets('should show switch for String model',
-          (WidgetTester tester) async {
-        await _buildDependencyInput(tester, _getStringModel());
-        expect(find.byType(Switch), findsOneWidget);
-      });
-
-      testWidgets('should show 5 switches for User model',
-          (WidgetTester tester) async {
-        await _buildDependencyInput(tester, _getUserModel());
-        expect(find.byType(Switch), findsNWidgets(5));
       });
     });
 
@@ -171,9 +155,10 @@ void main() {
         expect(find.byType(FramyWidgetDependencyInput), findsOneWidget);
       });
 
-      testWidgets('it should have a dropdown', (WidgetTester tester) async {
+      testWidgets('it should have extra dropdown', (WidgetTester tester) async {
         await _buildDependencyInput(tester, _getEnumModel());
-        expect(find.byType(DropdownButton), findsOneWidget);
+        //one for presets, second for enum values
+        expect(find.byType(DropdownButton), findsNWidgets(2));
       });
 
       testWidgets('it should show default enum name',

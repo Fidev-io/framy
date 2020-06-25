@@ -85,13 +85,15 @@ void main() {
     });
 
     test('should set user to null', () async {
-      await driver.tap(find.byValueKey('framy_dependency_user_null_switch'));
+      await driver.tap(find.byValueKey('framy_user_preset_dropdown'));
+      await driver.tap(find.text('Null'));
       await driver.waitFor(find.text('null null'));
       await driver.waitFor(find.text('Age: null'));
     });
 
     test('should restore user properties to not null values when user is set to not null', () async {
-      await driver.tap(find.byValueKey('framy_dependency_user_null_switch'));
+      await driver.tap(find.byValueKey('framy_user_preset_dropdown'));
+      await driver.tap(find.text('Custom'));
       await driver.waitFor(find.text('John Doe'));
       await driver.waitFor(find.text('Age: 17'));
     });
@@ -204,26 +206,25 @@ void main() {
     });
 
     test(
-      'should use first enum value after setting back from null',
+      'should use previous enum value after setting back from null',
       () async {
         //set to null
-        await driver
-            .tap(find.byValueKey('framy_dependency_weightUnit_null_switch'));
+        await driver.tap(find.byValueKey('framy_weightUnit_preset_dropdown'));
+        await driver.tap(find.text('Null'));
         //confirm that "kg" is not displayed
         await driver.waitForAbsent(find.descendant(
           of: find.byType('WeightUnitDisplay'),
-          matching: find.text('kg'),
+          matching: find.text('lbs'),
         ));
         //set to non-null
-        await driver
-            .tap(find.byValueKey('framy_dependency_weightUnit_null_switch'));
+        await driver.tap(find.byValueKey('framy_weightUnit_preset_dropdown'));
+        await driver.tap(find.text('Custom'));
         //confirm that now "kg" is displayed again
         await driver.waitFor(find.descendant(
           of: find.byType('WeightUnitDisplay'),
-          matching: find.text('kg'),
+          matching: find.text('lbs'),
         ));
       },
-      skip: true, //TODO: Make this test work after null management is completed
     );
   });
 }
