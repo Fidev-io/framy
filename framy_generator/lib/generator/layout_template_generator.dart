@@ -19,7 +19,7 @@ class FramyLayoutTemplate extends StatelessWidget {
               ),
             ],
           ),
-          drawer: isSmallDevice ? FramyDrawer() : null,
+          drawer: isSmallDevice ? FramyDrawer(showHeader: true) : null,
         );
       },
     );
