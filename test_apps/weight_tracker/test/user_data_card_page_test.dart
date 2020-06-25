@@ -53,7 +53,7 @@ void main() {
       await tester.tap(find.byKey(firstNameSwitchKey));
       await tester.pumpAndSettle();
       //then
-      expect(find.text('null null'), findsNothing);
+      expect(find.text(' null'), findsOneWidget);
       await tester.tap(find.byKey(firstNameSwitchKey));
       await tester.pumpAndSettle();
       expect(find.text('null null'), findsOneWidget);
@@ -70,7 +70,7 @@ void main() {
       //set age to not null
       await tester.tap(find.byKey(ageSwitchKey));
       await tester.pumpAndSettle();
-      expect(find.text('Age: null'), findsNothing);
+      expect(find.text('Age: 0'), findsOneWidget);
       //set age to null
       await tester.tap(find.byKey(ageSwitchKey));
       await tester.pumpAndSettle();
