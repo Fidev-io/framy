@@ -8,9 +8,9 @@ void main() {
       expect(result.contains('class FramyWidgetDependencyNullSwitch'), isTrue);
     });
 
-    test('should contain check if value is null', () {
+    test('should contain check if value is not null', () {
       String result = generateWidgetDependencyNullSwitch();
-      expect(result.contains('dependency.value == null'), isTrue);
+      expect(result.contains('dependency.value != null'), isTrue);
     });
 
     test('should contain onChanged(null)', () {
@@ -18,14 +18,24 @@ void main() {
       expect(result.contains('onChanged(null)'), isTrue);
     });
 
-    test('should contain onChanged(framyModelConstructorMap[dependency.type]?.call(dependency))', () {
+    test('should contain framyModelConstructorMap[dependency.type]?.call(dependency)', () {
       String result = generateWidgetDependencyNullSwitch();
-      expect(result.contains('onChanged(framyModelConstructorMap[dependency.type]?.call(dependency))'), isTrue);
+      expect(result.contains('framyModelConstructorMap[dependency.type]?.call(dependency)'), isTrue);
+    });
+
+    test('should contain dependency.lastNonNullValue', () {
+      String result = generateWidgetDependencyNullSwitch();
+      expect(result.contains('dependency.lastNonNullValue'), isTrue);
     });
 
     test('should contain key Key(\'framy_dependency_\${dependency.name}_null_switch\')', () {
       String result = generateWidgetDependencyNullSwitch();
       expect(result.contains('Key(\'framy_dependency_\${dependency.name}_null_switch\')'), isTrue);
+    });
+
+    test('should contain subDependency.value = subDependency.lastNonNullValue', () {
+      String result = generateWidgetDependencyNullSwitch();
+      expect(result.contains('subDependency.value = subDependency.lastNonNullValue'), isTrue);
     });
   });
 }

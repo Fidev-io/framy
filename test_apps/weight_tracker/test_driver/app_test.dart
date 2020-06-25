@@ -90,11 +90,13 @@ void main() {
       await driver.waitFor(find.text('Age: null'));
     });
 
-    test('should set user to default value', () async {
+    test('should restore user properties to not null values when user is set to not null', () async {
       await driver.tap(find.byValueKey('framy_dependency_user_null_switch'));
       await driver.waitFor(find.text('John Doe'));
       await driver.waitFor(find.text('Age: 17'));
     });
+
+    //TODO: when switch will have a label then test the following case: when user is set to null then all switches should be inactive (their values sould be nulls)
   });
 
   group('UserEmailsView', () {

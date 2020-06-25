@@ -15,8 +15,8 @@ void main() {
 
     test('should generate a model constructor', () {
       //given
-      final stringDependency = FramyWidgetDependency('firstName', 'String',
-          null, false, FramyWidgetDependencyType.constructor);
+      final stringDependency =
+          FramyWidgetDependency('firstName', 'String', null, false);
       final framyModelObjects = [
         FramyObject()
           ..name = 'User'
@@ -44,6 +44,16 @@ void main() {
       final result = generateModelConstructorMap(framyModelObjects);
       //then
       expect(result.contains('FooModel'), isFalse);
+    });
+
+    test('should generate a primitive types constructors', () {
+      //when
+      final result = generateModelConstructorMap([]);
+      //then
+      expect(result.contains('\'String\': (dep) => \'\','), isTrue);
+      expect(result.contains('\'int\': (dep) => 0,'), isTrue);
+      expect(result.contains('\'double\': (dep) => 0.0,'), isTrue);
+      expect(result.contains('\'bool\': (dep) => false,'), isTrue);
     });
   });
 }

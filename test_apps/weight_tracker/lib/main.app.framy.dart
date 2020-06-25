@@ -617,6 +617,19 @@ class _FramyProfilePageCustomPageState
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -641,9 +654,7 @@ class _FramyProfilePageCustomPageState
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -654,9 +665,7 @@ class _FramyProfilePageCustomPageState
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {
@@ -692,6 +701,19 @@ class _FramyUserDataCardCustomPageState
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -713,9 +735,7 @@ class _FramyUserDataCardCustomPageState
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -726,9 +746,7 @@ class _FramyUserDataCardCustomPageState
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {
@@ -764,6 +782,19 @@ class _FramyUserEmailsViewCustomPageState
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -785,9 +816,7 @@ class _FramyUserEmailsViewCustomPageState
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -798,9 +827,7 @@ class _FramyUserEmailsViewCustomPageState
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {
@@ -832,6 +859,19 @@ class _FramyWeightUnitDisplayCustomPageState
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -853,9 +893,7 @@ class _FramyWeightUnitDisplayCustomPageState
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -866,9 +904,7 @@ class _FramyWeightUnitDisplayCustomPageState
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {
@@ -885,8 +921,10 @@ class FramyDependencyModel<T> {
   final String type;
   T value;
   final List<FramyDependencyModel> subDependencies;
+  T lastNonNullValue;
 
-  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies);
+  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies)
+      : lastNonNullValue = value;
 }
 
 class FramyWidgetDependenciesPanel extends StatelessWidget {
@@ -1005,7 +1043,12 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             DropdownButton<bool>(
               key: inputKey,
               value: dependency.value,
-              onChanged: (val) => onChanged(dependency.name, val),
+              onChanged: (val) {
+                if (val != null) {
+                  dependency.lastNonNullValue = val;
+                }
+                onChanged(dependency.name, val);
+              },
               items: [
                 DropdownMenuItem(
                   value: true,
@@ -1047,6 +1090,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   valueToReturn = s;
                 }
                 if (valueToReturn != null) {
+                  dependency.lastNonNullValue = valueToReturn;
                   onChanged(dependency.name, valueToReturn);
                 }
               },
@@ -1243,6 +1287,10 @@ final framyModelConstructorMap =
         emails:
             dep.subDependencies.singleWhere((d) => d.name == 'emails').value,
       ),
+  'String': (dep) => '',
+  'double': (dep) => 0.0,
+  'int': (dep) => 0,
+  'bool': (dep) => false,
 };
 
 final framyEnumMap = <String, List<dynamic>>{
@@ -1267,13 +1315,16 @@ class FramyWidgetDependencyNullSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Switch(
       key: Key('framy_dependency_${dependency.name}_null_switch'),
-      value: dependency.value == null,
+      value: dependency.value != null,
       onChanged: (bool isActive) {
         if (isActive) {
-          onChanged(null);
-        } else {
-          onChanged(
+          dependency.subDependencies.forEach((subDependency) {
+            subDependency.value = subDependency.lastNonNullValue;
+          });
+          onChanged(dependency.lastNonNullValue ??
               framyModelConstructorMap[dependency.type]?.call(dependency));
+        } else {
+          onChanged(null);
         }
       },
     );

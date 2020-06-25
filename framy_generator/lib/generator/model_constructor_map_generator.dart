@@ -9,6 +9,10 @@ final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
   ...framyEnumMap.map((type, values) => MapEntry(type, (FramyDependencyModel dep) => values.first)),
   ${models.fold('', (previousValue, model) => previousValue + _generateModelConstructor(model))}
+  'String': (dep) => '',
+  'double': (dep) => 0.0,
+  'int': (dep) => 0,
+  'bool': (dep) => false,
 };
 ''';
 }

@@ -56,5 +56,28 @@ void main() {
       expect(find.text('You have foo the button this many times:'),
           findsOneWidget);
     });
+
+    testWidgets(
+        'should restore default value after setting to null and setting back to non-null',
+        (tester) async {
+      //given
+      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      expect(find.text('You have pushed the button this many times:'),
+          findsOneWidget);
+      //when
+      //set to null
+      await tester.tap(find.byKey(Key('framy_dependency_verb_null_switch')));
+      await tester.pump();
+      expect(find.text('You have null the button this many times:'),
+          findsOneWidget);
+      //set to non-null
+      await tester.tap(find.byKey(Key('framy_dependency_verb_null_switch')));
+      await tester.pump();
+      //then
+      expect(
+        find.text('You have pushed the button this many times:'),
+        findsOneWidget,
+      );
+    });
   });
 }
