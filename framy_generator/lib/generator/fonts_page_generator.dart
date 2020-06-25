@@ -6,23 +6,26 @@ class FramyFontsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          FramySingleFontRow('Headline1', textTheme.headline1),
-          FramySingleFontRow('Headline2', textTheme.headline2),
-          FramySingleFontRow('Headline3', textTheme.headline3),
-          FramySingleFontRow('Headline4', textTheme.headline4),
-          FramySingleFontRow('Headline5', textTheme.headline5),
-          FramySingleFontRow('Headline6', textTheme.headline6),
-          FramySingleFontRow('Subtitle1', textTheme.subtitle1),
-          FramySingleFontRow('Subtitle2', textTheme.subtitle2),
-          FramySingleFontRow('BodyText1', textTheme.bodyText1),
-          FramySingleFontRow('BodyText2', textTheme.bodyText2),
-          FramySingleFontRow('Caption', textTheme.caption),
-          FramySingleFontRow('Button', textTheme.button),
-          FramySingleFontRow('Overline', textTheme.overline),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FramySingleFontRow('Headline1', textTheme.headline1),
+            FramySingleFontRow('Headline2', textTheme.headline2),
+            FramySingleFontRow('Headline3', textTheme.headline3),
+            FramySingleFontRow('Headline4', textTheme.headline4),
+            FramySingleFontRow('Headline5', textTheme.headline5),
+            FramySingleFontRow('Headline6', textTheme.headline6),
+            FramySingleFontRow('Subtitle1', textTheme.subtitle1),
+            FramySingleFontRow('Subtitle2', textTheme.subtitle2),
+            FramySingleFontRow('BodyText1', textTheme.bodyText1),
+            FramySingleFontRow('BodyText2', textTheme.bodyText2),
+            FramySingleFontRow('Caption', textTheme.caption),
+            FramySingleFontRow('Button', textTheme.button),
+            FramySingleFontRow('Overline', textTheme.overline),
+          ],
+        ),
       ),
     );
   }
