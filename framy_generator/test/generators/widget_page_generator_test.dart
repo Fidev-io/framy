@@ -93,7 +93,6 @@ void main() {
         'String',
         null,
         false,
-        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -111,7 +110,6 @@ void main() {
         'int',
         '13',
         false,
-        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -130,7 +128,6 @@ void main() {
         'String',
         null,
         false,
-        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -150,7 +147,6 @@ void main() {
         'String',
         null,
         true,
-        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -171,7 +167,6 @@ void main() {
         'String',
         "'fooDefaultValue'",
         false,
-        FramyWidgetDependencyType.constructor,
       ));
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -184,10 +179,9 @@ void main() {
 
     test('should generate subDependencies of a WidgetDependency', () {
       //given
-      final userDependency = FramyWidgetDependency(
-          'arg1', 'User', null, false, FramyWidgetDependencyType.constructor);
-      final stringDependency = FramyWidgetDependency('firstName', 'String',
-          null, false, FramyWidgetDependencyType.constructor);
+      final userDependency = FramyWidgetDependency('arg1', 'User', null, false);
+      final stringDependency =
+          FramyWidgetDependency('firstName', 'String', null, false);
 
       final widgetObjects = getFramyObjectWithDependency(userDependency);
       final framyModelObjects = [
@@ -220,7 +214,7 @@ void main() {
           'String',
           null,
           false,
-          FramyWidgetDependencyType.provider,
+          dependencyType: FramyWidgetDependencyType.provider,
         ));
       });
 
@@ -259,7 +253,7 @@ void main() {
       test('should contain definition of onChanged method', () {
         //given
         final userDependency =
-        FramyWidgetDependency('user', 'User', null, false);
+            FramyWidgetDependency('user', 'User', null, false);
         final widgetObjects = getFramyObjectWithDependency(userDependency);
         final framyModelObjects = [
           FramyObject()
@@ -271,7 +265,8 @@ void main() {
         final result = generateWidgetPages(widgetObjects, framyModelObjects);
         //then
         expect(
-          result.contains('void onChanged(String name, dynamic dependencyValue)'),
+          result
+              .contains('void onChanged(String name, dynamic dependencyValue)'),
           isTrue,
         );
       });

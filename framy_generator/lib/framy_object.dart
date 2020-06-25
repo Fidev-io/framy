@@ -70,7 +70,7 @@ class FramyWidgetDependency {
     this.type,
     this.defaultValueCode,
     this.isNamed,
-    this.dependencyType,
+    {this.dependencyType = FramyWidgetDependencyType.constructor}
   );
 
   FramyWidgetDependency.fromJson(Map<String, dynamic> json)

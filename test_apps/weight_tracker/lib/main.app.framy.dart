@@ -617,6 +617,19 @@ class _FramyProfilePageCustomPageState
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -641,9 +654,7 @@ class _FramyProfilePageCustomPageState
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -654,9 +665,7 @@ class _FramyProfilePageCustomPageState
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {
@@ -850,6 +859,19 @@ class _FramyWeightUnitDisplayCustomPageState
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(
+      () {
+        dependency(name).value = dependencyValue;
+        if (dependencyValue == null) {
+          dependency(name).subDependencies.forEach((subDependency) {
+            subDependency.value = null;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -871,9 +893,7 @@ class _FramyWeightUnitDisplayCustomPageState
                   child: FramyWidgetDependenciesPanel(
                     dependencies: dependencies,
                     presets: presets,
-                    onChanged: (name, val) => setState(
-                      () => dependency(name).value = val,
-                    ),
+                    onChanged: onChanged,
                   ),
                 ),
             ],
@@ -884,9 +904,7 @@ class _FramyWeightUnitDisplayCustomPageState
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
-                onChanged: (name, val) => setState(
-                  () => dependency(name).value = val,
-                ),
+                onChanged: onChanged,
               ),
             );
           } else {

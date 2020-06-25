@@ -16,8 +16,7 @@ class FramyWidgetDependencyNullSwitch extends StatelessWidget {
           dependency.subDependencies.forEach((subDependency) {
             subDependency.value = subDependency.lastNonNullValue;
           });
-          onChanged(dependency.lastNonNullValue ??
-              framyModelConstructorMap[dependency.type]?.call(dependency));
+          onChanged(dependency.lastNonNullValue ?? framyModelConstructorMap[dependency.type]?.call(dependency));
         } else {
           onChanged(null);
         }

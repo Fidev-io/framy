@@ -28,7 +28,6 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
             parseDartType(param.type),
             param.defaultValueCode,
             param.isNamed,
-            FramyWidgetDependencyType.constructor,
           ),
         );
       }
@@ -44,7 +43,7 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
             providerType.getDisplayString(),
             null,
             false,
-            FramyWidgetDependencyType.provider,
+            dependencyType: FramyWidgetDependencyType.provider,
           ),
         );
       }

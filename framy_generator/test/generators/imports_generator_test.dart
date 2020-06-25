@@ -34,7 +34,12 @@ void main() {
         ..type = FramyObjectType.widget
         ..widgetDependencies = [
           FramyWidgetDependency(
-              '', '', '', false, FramyWidgetDependencyType.provider),
+            '',
+            '',
+            '',
+            false,
+            dependencyType: FramyWidgetDependencyType.provider,
+          ),
         ];
       //when
       final result = generateImports([framyObject]);
