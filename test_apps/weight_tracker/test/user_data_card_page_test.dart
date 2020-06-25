@@ -14,13 +14,15 @@ void main() {
     });
 
     testWidgets(
-        'should all subdependencies switches be set to null state when user is set to null',
+        'should all subDependencies switches be set to null state when user is set to null',
         (WidgetTester tester) async {
       //given
       final userSwitchKey = Key('framy_dependency_user_null_switch');
       final firstNameSwitchKey = Key('framy_dependency_firstName_null_switch');
       await tester.pumpWidget(
           TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+      //when
+      //enter text in firstname input
       await tester.enterText(
           find.byKey(Key('framy_dependency_firstName_input')), 'John');
       await tester.pump();
@@ -28,7 +30,7 @@ void main() {
         tester.widget<Switch>(find.byKey(firstNameSwitchKey)).value,
         isTrue,
       );
-      //when
+      //set user to null
       await tester.tap(find.byKey(userSwitchKey));
       await tester.pump();
       //then
@@ -39,7 +41,9 @@ void main() {
       );
     });
 
-    testWidgets('should use empty string when dependency is changed to be not null', (WidgetTester tester) async {
+    testWidgets(
+        'should use empty string when dependency is changed to be not null',
+        (WidgetTester tester) async {
       //given
       final firstNameSwitchKey = Key('framy_dependency_firstName_null_switch');
       await tester.pumpWidget(
@@ -55,20 +59,70 @@ void main() {
       expect(find.text('null null'), findsOneWidget);
     });
 
-    testWidgets('should use 0 when int dependency is changed to be not null', (WidgetTester tester) async {
+    testWidgets('should use 0 when int dependency is changed to be not null',
+        (WidgetTester tester) async {
       //given
       final ageSwitchKey = Key('framy_dependency_age_null_switch');
       await tester.pumpWidget(
           TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
       expect(find.text('Age: null'), findsOneWidget);
       //when
+      //set age to not null
+      await tester.tap(find.byKey(ageSwitchKey));
+      await tester.pumpAndSettle();
+      expect(find.text('Age: null'), findsNothing);
+      //set age to null
       await tester.tap(find.byKey(ageSwitchKey));
       await tester.pumpAndSettle();
       //then
-      expect(find.text('Age: null'), findsNothing);
-      await tester.tap(find.byKey(ageSwitchKey));
-      await tester.pumpAndSettle();
       expect(find.text('Age: null'), findsOneWidget);
+    });
+
+    testWidgets('should show previous non-null value for int dependency',
+        (WidgetTester tester) async {
+      //given
+      final ageSwitchKey = Key('framy_dependency_age_null_switch');
+      await tester.pumpWidget(
+          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+      //when
+      //enter text in age input
+      await tester.enterText(
+          find.byKey(Key('framy_dependency_age_input')), '25');
+      await tester.pump();
+      expect(find.text('Age: 25'), findsOneWidget);
+      //set age to null
+      await tester.tap(find.byKey(ageSwitchKey));
+      await tester.pump();
+      expect(find.text('Age: null'), findsOneWidget);
+      //set age to not null
+      await tester.tap(find.byKey(ageSwitchKey));
+      await tester.pump();
+      //then
+      expect(find.text('Age: 25'), findsOneWidget);
+    });
+
+    testWidgets(
+        'should show previous non-null subDependencies values for User dependency',
+        (WidgetTester tester) async {
+      //given
+      final userSwitchKey = Key('framy_dependency_user_null_switch');
+      await tester.pumpWidget(
+          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+      //when
+      //enter text in age input
+      await tester.enterText(
+          find.byKey(Key('framy_dependency_age_input')), '25');
+      await tester.pump();
+      expect(find.text('Age: 25'), findsOneWidget);
+      //set user to null
+      await tester.tap(find.byKey(userSwitchKey));
+      await tester.pump();
+      expect(find.text('Age: null'), findsOneWidget);
+      //set user to not null and restore subDependencies not null values
+      await tester.tap(find.byKey(userSwitchKey));
+      await tester.pump();
+      //then
+      expect(find.text('Age: 25'), findsOneWidget);
     });
   });
 }

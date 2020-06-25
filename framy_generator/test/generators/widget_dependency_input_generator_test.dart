@@ -163,5 +163,18 @@ void main() {
       final result = generateWidgetDependencyInput([]);
       expect(result.contains('FramyWidgetListDependencyInput'), isTrue);
     });
+
+
+    test('should contain setting value to lastNonNullValue for bool type', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('dependency.lastNonNullValue = val'),
+          isTrue);
+    });
+
+    test('should contain setting value to lastNonNullValue for String, int, double types', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('dependency.lastNonNullValue = valueToReturn'),
+          isTrue);
+    });
   });
 }

@@ -27,5 +27,10 @@ void main() {
       String result = generateWidgetDependencyNullSwitch();
       expect(result.contains('Key(\'framy_dependency_\${dependency.name}_null_switch\')'), isTrue);
     });
+
+    test('should contain subDependency.value = subDependency.lastNonNullValue', () {
+      String result = generateWidgetDependencyNullSwitch();
+      expect(result.contains('subDependency.value = subDependency.lastNonNullValue'), isTrue);
+    });
   });
 }

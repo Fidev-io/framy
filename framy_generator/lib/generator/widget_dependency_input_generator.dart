@@ -41,7 +41,12 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             DropdownButton<bool>(
               key: inputKey,
               value: dependency.value,
-              onChanged: (val) => onChanged(dependency.name, val),
+              onChanged: (val) {
+                if (val != null) {
+                  dependency.lastNonNullValue = val;
+                }
+                onChanged(dependency.name, val);
+              },
               items: [
                 DropdownMenuItem(
                   value: true,
@@ -83,6 +88,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   valueToReturn = s;
                 }
                 if (valueToReturn != null) {
+                  dependency.lastNonNullValue = valueToReturn;
                   onChanged(dependency.name, valueToReturn);
                 }
               },

@@ -726,6 +726,7 @@ class FramyDependencyModel<T> {
   final String type;
   T value;
   final List<FramyDependencyModel> subDependencies;
+  T lastNonNullValue;
 
   FramyDependencyModel(this.name, this.type, this.value, this.subDependencies);
 }
@@ -846,7 +847,12 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             DropdownButton<bool>(
               key: inputKey,
               value: dependency.value,
-              onChanged: (val) => onChanged(dependency.name, val),
+              onChanged: (val) {
+                if (val != null) {
+                  dependency.lastNonNullValue = val;
+                }
+                onChanged(dependency.name, val);
+              },
               items: [
                 DropdownMenuItem(
                   value: true,
@@ -888,6 +894,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   valueToReturn = s;
                 }
                 if (valueToReturn != null) {
+                  dependency.lastNonNullValue = valueToReturn;
                   onChanged(dependency.name, valueToReturn);
                 }
               },
@@ -1049,7 +1056,12 @@ class FramyPresetDropdown extends StatelessWidget {
 }
 
 final framyModelConstructorMap =
-    <String, dynamic Function(FramyDependencyModel)>{};
+    <String, dynamic Function(FramyDependencyModel)>{
+  'String': (dep) => '',
+  'double': (dep) => 0.0,
+  'int': (dep) => 0,
+  'bool': (dep) => false,
+};
 
 Map<String, Map<String, dynamic>> createFramyPresets() => {};
 
@@ -1068,7 +1080,10 @@ class FramyWidgetDependencyNullSwitch extends StatelessWidget {
       value: dependency.value != null,
       onChanged: (bool isActive) {
         if (isActive) {
-          onChanged(
+          dependency.subDependencies.forEach((subDependency) {
+            subDependency.value = subDependency.lastNonNullValue;
+          });
+          onChanged(dependency.lastNonNullValue ??
               framyModelConstructorMap[dependency.type]?.call(dependency));
         } else {
           onChanged(null);
