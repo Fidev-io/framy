@@ -25,5 +25,22 @@ void main() {
       expect(
           result.contains('import \'package:my_app/theme.dart\';\n'), isTrue);
     });
+
+    test(
+        'should contain provider import if any widget has a provider dependency',
+        () {
+      //given
+      final framyObject = FramyObject()
+        ..type = FramyObjectType.widget
+        ..widgetDependencies = [
+          FramyWidgetDependency(
+              '', '', '', false, FramyWidgetDependencyType.provider),
+        ];
+      //when
+      final result = generateImports([framyObject]);
+      //then
+      expect(result.contains('import \'package:provider/provider.dart\';\n'),
+          isTrue);
+    });
   });
 }

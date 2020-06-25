@@ -101,6 +101,20 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   onChanged(dependency.name, dependency.value),
               presets: presets,
             )
+          else if (framyEnumMap.containsKey(dependency.type))
+            DropdownButton(
+              key: inputKey,
+              value: dependency.value,
+              onChanged: (val) => onChanged(dependency.name, val),
+              items: framyEnumMap[dependency.type]
+                  .map((enumValue) => DropdownMenuItem(
+                        value: enumValue,
+                        child: Text(enumValue
+                            .toString()
+                            .substring(enumValue.toString().indexOf('\.') + 1)),
+                      ))
+                  .toList(),
+            )
           else
             Text('Not supported type')
       ],
@@ -145,7 +159,10 @@ class FramyModelInput extends StatelessWidget {
 }
 ''';
 
-String _generateModelInputs(List<FramyObject> models) {
+String _generateModelInputs(List<FramyObject> modelObjects) {
+  final models = modelObjects
+      .where((element) => element.type == FramyObjectType.model)
+      .toList();
   if (models.isEmpty) {
     return '';
   } else {

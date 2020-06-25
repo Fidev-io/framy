@@ -10,6 +10,7 @@ import 'package:framy_generator/generator/button_page_generator.dart';
 import 'package:framy_generator/generator/colors_page_generator.dart';
 import 'package:framy_generator/generator/dependency_model_generator.dart';
 import 'package:framy_generator/generator/drawer_generator.dart';
+import 'package:framy_generator/generator/enum_map_generator.dart';
 import 'package:framy_generator/generator/fonts_page_generator.dart';
 import 'package:framy_generator/generator/framy_app_generator.dart';
 import 'package:framy_generator/generator/imports_generator.dart';
@@ -36,6 +37,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
         await _loadFramyObjects(buildStep, '**.theme.framy.json');
     final widgetFramyObjects =
         await _loadFramyObjects(buildStep, '**.widget.framy.json');
+    //it contains both data classes and enums
     final modelFramyObjects =
         await _loadFramyObjects(buildStep, '**.model.framy.json');
     final presetFramyObjects =
@@ -66,6 +68,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateWidgetListDependencyInput(modelFramyObjects));
     buffer.writeln(generatePresetDropdown());
     buffer.writeln(generateModelConstructorMap(modelFramyObjects));
+    buffer.writeln(generateEnumMap(modelFramyObjects));
     buffer.writeln(generatePresets(presetFramyObjects));
     buffer.writeln(generateWidgetDependencyNullSwitch());
     return buffer.toString();

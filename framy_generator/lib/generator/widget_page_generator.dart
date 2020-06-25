@@ -10,9 +10,18 @@ String generateWidgetPages(
 }
 
 String _generateWidgetPage(FramyObject framyObject, List<FramyObject> models) {
+  final constructorDependencies = framyObject.widgetDependencies
+      .where(
+          (dep) => dep.dependencyType == FramyWidgetDependencyType.constructor)
+      .toList();
+  final providerDependencies = framyObject.widgetDependencies
+      .where((dep) => dep.dependencyType == FramyWidgetDependencyType.provider)
+      .toList();
+
   final constructor = '''${framyObject.name}(
-  ${framyObject.widgetDependencies.fold('', (s, dep) => s + _generateParamUsageInConstructor(dep))}
+  ${constructorDependencies.fold('', (s, dep) => s + _generateParamUsageInConstructor(dep))}
   )''';
+
   final className = 'Framy${framyObject.name}CustomPage';
   final stateClassName = '_Framy${framyObject.name}CustomPageState';
   final key = 'Framy_${framyObject.name}_Page';
@@ -58,7 +67,7 @@ class $stateClassName extends State<$className> {
           final body = Row(
             children: [
               Expanded(
-                child: $constructor,
+                child: ${_wrapConstructorWithProvider(constructor, providerDependencies)},
               ),
               if (!isSmallDevice)
                 SizedBox(
@@ -90,6 +99,24 @@ class $stateClassName extends State<$className> {
 }
 ''';
 }
+
+String _wrapConstructorWithProvider(
+    String constructor, List<FramyWidgetDependency> providerDependencies) {
+  if (providerDependencies.isEmpty) {
+    return constructor;
+  } else {
+    return '''
+      MultiProvider(
+        providers: [
+          ${providerDependencies.fold('', (prev, dep) => prev + _providerDependencyToProviderWidget(dep))}
+        ],
+        child: $constructor,
+      )''';
+  }
+}
+
+String _providerDependencyToProviderWidget(FramyWidgetDependency dependency) =>
+    'Provider<${dependency.type}>.value(value: dependency(\'${dependency.name}\').value),\n';
 
 String _dependencyInitializationLine(
     FramyWidgetDependency dependency, List<FramyObject> models) {

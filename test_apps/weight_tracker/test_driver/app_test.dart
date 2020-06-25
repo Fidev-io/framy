@@ -9,6 +9,21 @@ void main() {
       .getBottomRight(find.byValueKey('FramyApp'))
       .then((offset) => offset.dx >= 1000);
 
+  Future<void> closeDependenciesPanelAndGoToOtherPage(String name) async {
+    if (!await isDeviceBig()) {
+      //hide modal bottom sheet
+      await driver.scroll(
+        find.byValueKey('framySheetDragHandle'),
+        0,
+        500,
+        Duration(milliseconds: 100),
+      );
+      await driver.tap(find.byTooltip('Open navigation menu'));
+    }
+    await driver.waitFor(find.text(name));
+    await driver.tap(find.text(name));
+  }
+
   setUpAll(() async {
     driver = await FlutterDriver.connect();
 //    platform = Platform.environment['PLATFORM'] ?? 'default_macos';
@@ -86,18 +101,7 @@ void main() {
 
   group('UserEmailsView', () {
     setUpAll(() async {
-      if (!await isDeviceBig()) {
-        //hide modal bottom sheet
-        await driver.scroll(
-          find.byValueKey('framySheetDragHandle'),
-          0,
-          500,
-          Duration(milliseconds: 100),
-        );
-        await driver.tap(find.byTooltip('Open navigation menu'));
-      }
-      await driver.waitFor(find.text('UserEmailsView'));
-      await driver.tap(find.text('UserEmailsView'));
+      await closeDependenciesPanelAndGoToOtherPage('UserEmailsView');
     });
 
     test('should have UserEmailsView in UserEmailsView page', () async {
@@ -157,5 +161,69 @@ void main() {
           find.byValueKey('framy_dependency_List element 1_delete_button'));
       await driver.waitForAbsent(find.text('john@gmail.com'));
     });
+  });
+
+  group('ProfilePage', () {
+    test('should have user dependency which is passed by provider', () async {
+      await closeDependenciesPanelAndGoToOtherPage('ProfilePage');
+      //test it by changing name
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+      }
+      await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
+      await driver.tap(find.byValueKey('framy_dependency_age_input'));
+      await driver.enterText('17');
+      await driver.waitFor(find.text('Age: 17'));
+      //test it by preset as well
+      await driver.tap(find.byValueKey('framy_User_preset_dropdown'));
+      await driver.tap(find.text('teenageJohn'));
+      await driver.waitFor(find.text('Age: 13'));
+    });
+  });
+
+  group('WeightUnitDisplay', () {
+    test('should have a working enum dropdown', () async {
+      await closeDependenciesPanelAndGoToOtherPage('WeightUnitDisplay');
+      if (!await isDeviceBig()) {
+        await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+      }
+      await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
+      //by default should be kg
+      await driver.waitFor(find.descendant(
+        of: find.byType('WeightUnitDisplay'),
+        matching: find.text('kg'),
+      ));
+      //select lbs
+      await driver.tap(find.byValueKey('framy_dependency_weightUnit_input'));
+      await driver.tap(find.text('lbs'));
+      //should display lbs in the UI
+      await driver.waitFor(find.descendant(
+        of: find.byType('WeightUnitDisplay'),
+        matching: find.text('lbs'),
+      ));
+    });
+
+    test(
+      'should use first enum value after setting back from null',
+      () async {
+        //set to null
+        await driver
+            .tap(find.byValueKey('framy_dependency_weightUnit_null_switch'));
+        //confirm that "kg" is not displayed
+        await driver.waitForAbsent(find.descendant(
+          of: find.byType('WeightUnitDisplay'),
+          matching: find.text('kg'),
+        ));
+        //set to non-null
+        await driver
+            .tap(find.byValueKey('framy_dependency_weightUnit_null_switch'));
+        //confirm that now "kg" is displayed again
+        await driver.waitFor(find.descendant(
+          of: find.byType('WeightUnitDisplay'),
+          matching: find.text('kg'),
+        ));
+      },
+      skip: true, //TODO: Make this test work after null management is completed
+    );
   });
 }
