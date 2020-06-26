@@ -6,15 +6,15 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:weight_tracker/app_theme.dart';
-import 'package:weight_tracker/pages/profile_page.dart';
 import 'package:provider/provider.dart';
+import 'package:weight_tracker/app_theme.dart';
+import 'package:weight_tracker/models/user.dart';
+import 'package:weight_tracker/models/user.framy.dart';
+import 'package:weight_tracker/models/weight_unit.dart';
+import 'package:weight_tracker/pages/profile_page.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
 import 'package:weight_tracker/widgets/weight_unit_display.dart';
-import 'package:weight_tracker/models/weight_unit.dart';
-import 'package:weight_tracker/models/user.dart';
-import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
   runApp(FramyApp());
@@ -996,9 +996,10 @@ class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
   final void Function(String name, dynamic value) onChanged;
   final Map<String, Map<String, dynamic>> presets;
+  final Widget trailing;
 
   const FramyWidgetDependencyInput(
-      {Key key, this.dependency, this.onChanged, this.presets})
+      {Key key, this.dependency, this.onChanged, this.presets, this.trailing})
       : super(key: key);
 
   void _onValueChanged(dynamic value) {
@@ -1009,33 +1010,41 @@ class FramyWidgetDependencyInput extends StatelessWidget {
   }
 
   InputDecoration get _inputDecoration => InputDecoration(
-    filled: true,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide.none,
-    ),
-  );
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide.none,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
     final inputKey = Key('framy_dependency_${dependency.name}_input');
     return Column(
       children: [
-        Row(
-          children: [
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                dependency.name,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    dependency.name,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  if (trailing != null) trailing,
+                ],
               ),
-            ),
-            FramyPresetDropdown(
-              dependency: dependency,
-              onChanged: _onValueChanged,
-              presets: presets,
-            ),
-          ],
+              FramyPresetDropdown(
+                dependency: dependency,
+                onChanged: _onValueChanged,
+                presets: presets,
+              ),
+            ],
+          ),
         ),
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
@@ -1115,9 +1124,8 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   items: framyEnumMap[dependency.type]
                       .map((enumValue) => DropdownMenuItem(
                             value: enumValue,
-                            child: Text(enumValue
-                                .toString()
-                                .substring(enumValue.toString().indexOf('.') + 1)),
+                            child: Text(enumValue.toString().substring(
+                                enumValue.toString().indexOf('.') + 1)),
                           ))
                       .toList(),
                 ),
@@ -1151,7 +1159,7 @@ class FramyModelInput extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
+                      padding: const EdgeInsets.only(top: 15.0, right: 2),
                       child: Text('•'),
                     ),
                     Expanded(
@@ -1192,34 +1200,37 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
       children: [
         if (dependency.value != null)
           for (int i = 0; i < dependency.value.length; i++)
-            Row(
-              children: [
-                Expanded(
-                  child: FramyWidgetDependencyInput(
-                    dependency: FramyDependencyModel(
-                      'List element ${i + 1}',
-                      listType,
-                      dependency.value[i],
-                      [],
-                    ),
-                    onChanged: (name, val) {
-                      dependency.value[i] = val;
-                      onChanged(dependency);
-                    },
-                    presets: presets,
-                  ),
-                ),
-                SizedBox(width: 8),
-                IconButton(
+            FramyWidgetDependencyInput(
+              dependency: FramyDependencyModel(
+                'List element ${i + 1}',
+                listType,
+                dependency.value[i],
+                [],
+              ),
+              onChanged: (name, val) {
+                dependency.value[i] = val;
+                onChanged(dependency);
+              },
+              presets: presets,
+              trailing: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: IconButton(
                   key: Key(
                       'framy_dependency_List element ${i + 1}_delete_button'),
                   icon: Icon(Icons.close),
+                  iconSize: 16,
                   onPressed: () {
                     dependency.value.removeAt(i);
                     onChanged(dependency);
                   },
-                )
-              ],
+                  splashRadius: 16,
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints.tightFor(
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              ),
             ),
         FlatButton(
           child: Text('Add'),

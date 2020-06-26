@@ -5,9 +5,10 @@ class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
   final void Function(String name, dynamic value) onChanged;
   final Map<String, Map<String, dynamic>> presets;
-
+  final Widget trailing;
+  
   const FramyWidgetDependencyInput(
-      {Key key, this.dependency, this.onChanged, this.presets})
+      {Key key, this.dependency, this.onChanged, this.presets, this.trailing})
       : super(key: key);
 
   void _onValueChanged(dynamic value) {
@@ -30,21 +31,29 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     final inputKey = Key('framy_dependency_\${dependency.name}_input');
     return Column(
       children: [
-        Row(
-          children: [
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                dependency.name,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    dependency.name,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  if (trailing != null) trailing,
+                ],
               ),
-            ),
-            FramyPresetDropdown(
-              dependency: dependency,
-              onChanged: _onValueChanged,
-              presets: presets,
-            ),
-          ],
+              FramyPresetDropdown(
+                dependency: dependency,
+                onChanged: _onValueChanged,
+                presets: presets,
+              ),
+            ],
+          ),
         ),
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
@@ -153,7 +162,7 @@ class FramyModelInput extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
+                      padding: const EdgeInsets.only(top: 15.0, right: 2),
                       child: Text('•'),
                     ),
                     Expanded(
