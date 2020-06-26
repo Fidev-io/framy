@@ -867,6 +867,7 @@ class _FramyWeightUnitDisplayCustomPageState
           final isSmallDevice =
               constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
           final body = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: WeightUnitDisplay(
