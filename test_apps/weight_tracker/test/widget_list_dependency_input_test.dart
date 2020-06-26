@@ -34,7 +34,7 @@ void main() {
 
     testWidgets('should have Add button', (WidgetTester tester) async {
       await _buildDependencyInput(tester, _getStringListModel());
-      expect(find.text('Add'), findsOneWidget);
+      expect(find.text('+ Add strings element'), findsOneWidget);
     });
 
     testWidgets('should add new list element when Add is pressed',
@@ -47,7 +47,7 @@ void main() {
         onChanged: (model) => emittedValue = model.value,
       );
       //when
-      await tester.tap(find.text('Add'));
+      await tester.tap(find.text('+ Add strings element'));
       //then
       expect(emittedValue, hasLength(1));
       expect(emittedValue.first, isNull);
@@ -97,7 +97,7 @@ void main() {
         ),
       );
       //when
-      await tester.tap(find.text('Add'));
+      await tester.tap(find.text('+ Add strings element'));
       await tester.pumpAndSettle();
       await tester.enterText(
         find.byKey(Key('framy_dependency_List element 1_input')),

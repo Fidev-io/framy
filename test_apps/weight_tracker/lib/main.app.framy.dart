@@ -1233,7 +1233,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               ),
             ),
         FlatButton(
-          child: Text('Add'),
+          child: Text('+ Add ${dependency.name} element'),
           onPressed: () {
             if (dependency.value == null) {
               if (listType == 'String') dependency.value = <String>[];

@@ -91,7 +91,9 @@ void main() {
       await driver.waitFor(find.text('Age: null'));
     });
 
-    test('should restore user properties to not null values when user is set to not null', () async {
+    test(
+        'should restore user properties to not null values when user is set to not null',
+        () async {
       await driver.tap(find.byValueKey('framy_user_preset_dropdown'));
       await driver.tap(find.text('Custom'));
       await driver.waitFor(find.text('John Doe'));
@@ -117,7 +119,7 @@ void main() {
     Future<void> _scrollToAddButton() {
       return driver.scrollUntilVisible(
         find.byType('SingleChildScrollView'),
-        find.text('Add'),
+        find.text('+ Add emails element'),
         dyScroll: -100,
       );
     }
@@ -128,7 +130,7 @@ void main() {
       }
       await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
       await _scrollToAddButton();
-      await driver.tap(find.text('Add'));
+      await driver.tap(find.text('+ Add emails element'));
       await _scrollToAddButton();
       await driver
           .tap(find.byValueKey('framy_dependency_List element 1_input'));
@@ -141,7 +143,7 @@ void main() {
 
     test('should allow to add second email', () async {
       await _scrollToAddButton();
-      await driver.tap(find.text('Add'));
+      await driver.tap(find.text('+ Add emails element'));
       await _scrollToAddButton();
       await driver
           .tap(find.byValueKey('framy_dependency_List element 2_input'));

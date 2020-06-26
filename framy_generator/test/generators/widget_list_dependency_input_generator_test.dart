@@ -11,7 +11,7 @@ void main() {
 
     test('should contain Add label for a button', () {
       final result = generateWidgetListDependencyInput([]);
-      expect(result.contains('\'Add\''), isTrue);
+      expect(result.contains('\'+ Add \${dependency.name} element\''), isTrue);
     });
 
     test('should have .add( method call', () {
