@@ -12,6 +12,7 @@ class FramyLayoutTemplate extends StatelessWidget {
         return Scaffold(
           appBar: FramyAppBar(),
           body: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (!isSmallDevice) FramyDrawer(),
               Expanded(
