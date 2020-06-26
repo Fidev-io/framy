@@ -1251,6 +1251,11 @@ class FramyPresetDropdown extends StatelessWidget {
     return DropdownButton(
       key: Key('framy_${dependency.name}_preset_dropdown'),
       value: dependency.value,
+      underline: Container(
+        color: Colors.grey.withOpacity(0.2),
+        height: 1,
+        width: double.infinity,
+      ),
       onChanged: (val) {
         if (val == customValue) {
           onChanged(dependency.lastCustomValue ?? customValue);
