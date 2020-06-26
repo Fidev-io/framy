@@ -1008,6 +1008,14 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     onChanged(dependency.name, value);
   }
 
+  InputDecoration get _inputDecoration => InputDecoration(
+    filled: true,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide.none,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final inputKey = Key('framy_dependency_${dependency.name}_input');
@@ -1051,13 +1059,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               dependency.type == 'double')
             TextFormField(
               key: inputKey,
-              decoration: InputDecoration(
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide.none,
-                ),
-              ),
+              decoration: _inputDecoration,
               initialValue: dependency.value?.toString(),
               autovalidate: true,
               validator: (value) {
@@ -1102,18 +1104,24 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               presets: presets,
             )
           else if (framyEnumMap.containsKey(dependency.type))
-            DropdownButton(
-              key: inputKey,
-              value: dependency.value,
-              onChanged: _onValueChanged,
-              items: framyEnumMap[dependency.type]
-                  .map((enumValue) => DropdownMenuItem(
-                        value: enumValue,
-                        child: Text(enumValue
-                            .toString()
-                            .substring(enumValue.toString().indexOf('.') + 1)),
-                      ))
-                  .toList(),
+            InputDecorator(
+              decoration: _inputDecoration,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  isDense: true,
+                  key: inputKey,
+                  value: dependency.value,
+                  onChanged: _onValueChanged,
+                  items: framyEnumMap[dependency.type]
+                      .map((enumValue) => DropdownMenuItem(
+                            value: enumValue,
+                            child: Text(enumValue
+                                .toString()
+                                .substring(enumValue.toString().indexOf('.') + 1)),
+                          ))
+                      .toList(),
+                ),
+              ),
             )
           else
             Text('Not supported type'),
