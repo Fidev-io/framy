@@ -138,17 +138,27 @@ class FramyModelInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(color: const Color(0xFFF8F8F8)),
+      padding: const EdgeInsets.only(left: 8),
       child: Column(
         children: dependencies
-            .map((dep) => FramyWidgetDependencyInput(
-                  dependency: dep,
-                  presets: presets,
-                  onChanged: (name, value) {
-                    dependency(name).value = value;
-                    onChanged(dependencies);
-                  },
+            .map((dep) => Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: Text('•'),
+                    ),
+                    Expanded(
+                      child: FramyWidgetDependencyInput(
+                        dependency: dep,
+                        presets: presets,
+                        onChanged: (name, value) {
+                          dependency(name).value = value;
+                          onChanged(dependencies);
+                        },
+                      ),
+                    ),
+                  ],
                 ))
             .toList(),
       ),
