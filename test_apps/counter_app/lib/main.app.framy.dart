@@ -52,6 +52,7 @@ class FramyLayoutTemplate extends StatelessWidget {
         return Scaffold(
           appBar: FramyAppBar(),
           body: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (!isSmallDevice) FramyDrawer(),
               Expanded(
@@ -59,7 +60,7 @@ class FramyLayoutTemplate extends StatelessWidget {
               ),
             ],
           ),
-          drawer: isSmallDevice ? FramyDrawer() : null,
+          drawer: isSmallDevice ? FramyDrawer(showHeader: true) : null,
         );
       },
     );
@@ -80,18 +81,24 @@ class FramyAppBar extends StatelessWidget with PreferredSizeWidget {
 }
 
 class FramyDrawer extends StatelessWidget {
+  final bool showHeader;
+
+  const FramyDrawer({Key key, this.showHeader = false}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       key: Key('FramyDrawer'),
       child: SingleChildScrollView(
         child: SafeArea(
+          top: false,
           child: Column(
             children: [
-              const SizedBox(
-                height: kToolbarHeight,
-                child: Text('Framy App'),
-              ),
+              if (showHeader)
+                AppBar(
+                  automaticallyImplyLeading: false,
+                  title: Text('Framy App'),
+                ),
               ListTile(
                 leading: Icon(Icons.text_fields),
                 title: Text('Typography'),
@@ -156,23 +163,26 @@ class FramyFontsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          FramySingleFontRow('Headline1', textTheme.headline1),
-          FramySingleFontRow('Headline2', textTheme.headline2),
-          FramySingleFontRow('Headline3', textTheme.headline3),
-          FramySingleFontRow('Headline4', textTheme.headline4),
-          FramySingleFontRow('Headline5', textTheme.headline5),
-          FramySingleFontRow('Headline6', textTheme.headline6),
-          FramySingleFontRow('Subtitle1', textTheme.subtitle1),
-          FramySingleFontRow('Subtitle2', textTheme.subtitle2),
-          FramySingleFontRow('BodyText1', textTheme.bodyText1),
-          FramySingleFontRow('BodyText2', textTheme.bodyText2),
-          FramySingleFontRow('Caption', textTheme.caption),
-          FramySingleFontRow('Button', textTheme.button),
-          FramySingleFontRow('Overline', textTheme.overline),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FramySingleFontRow('Headline1', textTheme.headline1),
+            FramySingleFontRow('Headline2', textTheme.headline2),
+            FramySingleFontRow('Headline3', textTheme.headline3),
+            FramySingleFontRow('Headline4', textTheme.headline4),
+            FramySingleFontRow('Headline5', textTheme.headline5),
+            FramySingleFontRow('Headline6', textTheme.headline6),
+            FramySingleFontRow('Subtitle1', textTheme.subtitle1),
+            FramySingleFontRow('Subtitle2', textTheme.subtitle2),
+            FramySingleFontRow('BodyText1', textTheme.bodyText1),
+            FramySingleFontRow('BodyText2', textTheme.bodyText2),
+            FramySingleFontRow('Caption', textTheme.caption),
+            FramySingleFontRow('Button', textTheme.button),
+            FramySingleFontRow('Overline', textTheme.overline),
+          ],
+        ),
       ),
     );
   }
@@ -612,6 +622,7 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
           final isSmallDevice =
               constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
           final body = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: CounterFAB(
@@ -680,6 +691,7 @@ class _FramyCounterTitleCustomPageState
           final isSmallDevice =
               constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
           final body = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: CounterTitle(
@@ -744,14 +756,17 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: SingleChildScrollView(
-          child: Column(
-            children: dependencies
-                .map((dep) => FramyWidgetDependencyInput(
-                      dependency: dep,
-                      onChanged: onChanged,
-                      presets: presets,
-                    ))
-                .toList(),
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: dependencies
+                  .map((dep) => FramyWidgetDependencyInput(
+                        dependency: dep,
+                        onChanged: onChanged,
+                        presets: presets,
+                      ))
+                  .toList(),
+            ),
           ),
         ),
       ),
@@ -807,9 +822,10 @@ class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
   final void Function(String name, dynamic value) onChanged;
   final Map<String, Map<String, dynamic>> presets;
+  final Widget trailing;
 
   const FramyWidgetDependencyInput(
-      {Key key, this.dependency, this.onChanged, this.presets})
+      {Key key, this.dependency, this.onChanged, this.presets, this.trailing})
       : super(key: key);
 
   void _onValueChanged(dynamic value) {
@@ -819,21 +835,42 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     onChanged(dependency.name, value);
   }
 
+  InputDecoration get _inputDecoration => InputDecoration(
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide.none,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final inputKey = Key('framy_dependency_${dependency.name}_input');
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(dependency.name),
-            FramyPresetDropdown(
-              dependency: dependency,
-              onChanged: _onValueChanged,
-              presets: presets,
-            ),
-          ],
+        SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    dependency.name,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  if (trailing != null) trailing,
+                ],
+              ),
+              FramyPresetDropdown(
+                dependency: dependency,
+                onChanged: _onValueChanged,
+                presets: presets,
+              ),
+            ],
+          ),
         ),
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
@@ -857,6 +894,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               dependency.type == 'double')
             TextFormField(
               key: inputKey,
+              decoration: _inputDecoration,
               initialValue: dependency.value?.toString(),
               autovalidate: true,
               validator: (value) {
@@ -893,21 +931,26 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               presets: presets,
             )
           else if (framyEnumMap.containsKey(dependency.type))
-            DropdownButton(
-              key: inputKey,
-              value: dependency.value,
-              onChanged: _onValueChanged,
-              items: framyEnumMap[dependency.type]
-                  .map((enumValue) => DropdownMenuItem(
-                        value: enumValue,
-                        child: Text(enumValue
-                            .toString()
-                            .substring(enumValue.toString().indexOf('.') + 1)),
-                      ))
-                  .toList(),
+            InputDecorator(
+              decoration: _inputDecoration,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  isDense: true,
+                  key: inputKey,
+                  value: dependency.value,
+                  onChanged: _onValueChanged,
+                  items: framyEnumMap[dependency.type]
+                      .map((enumValue) => DropdownMenuItem(
+                            value: enumValue,
+                            child: Text(enumValue.toString().substring(
+                                enumValue.toString().indexOf('.') + 1)),
+                          ))
+                      .toList(),
+                ),
+              ),
             )
           else
-            Text('Not supported type')
+            Text('Not supported type'),
       ],
     );
   }
@@ -927,21 +970,27 @@ class FramyModelInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).primaryColor),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      padding: const EdgeInsets.only(left: 8),
       child: Column(
         children: dependencies
-            .map((dep) => FramyWidgetDependencyInput(
-                  dependency: dep,
-                  presets: presets,
-                  onChanged: (name, value) {
-                    dependency(name).value = value;
-                    onChanged(dependencies);
-                  },
+            .map((dep) => Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0, right: 2),
+                      child: Text('•'),
+                    ),
+                    Expanded(
+                      child: FramyWidgetDependencyInput(
+                        dependency: dep,
+                        presets: presets,
+                        onChanged: (name, value) {
+                          dependency(name).value = value;
+                          onChanged(dependencies);
+                        },
+                      ),
+                    ),
+                  ],
                 ))
             .toList(),
       ),
@@ -969,37 +1018,40 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
       children: [
         if (dependency.value != null)
           for (int i = 0; i < dependency.value.length; i++)
-            Row(
-              children: [
-                Expanded(
-                  child: FramyWidgetDependencyInput(
-                    dependency: FramyDependencyModel(
-                      'List element ${i + 1}',
-                      listType,
-                      dependency.value[i],
-                      [],
-                    ),
-                    onChanged: (name, val) {
-                      dependency.value[i] = val;
-                      onChanged(dependency);
-                    },
-                    presets: presets,
-                  ),
-                ),
-                SizedBox(width: 8),
-                IconButton(
+            FramyWidgetDependencyInput(
+              dependency: FramyDependencyModel(
+                'List element ${i + 1}',
+                listType,
+                dependency.value[i],
+                [],
+              ),
+              onChanged: (name, val) {
+                dependency.value[i] = val;
+                onChanged(dependency);
+              },
+              presets: presets,
+              trailing: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: IconButton(
                   key: Key(
                       'framy_dependency_List element ${i + 1}_delete_button'),
                   icon: Icon(Icons.close),
+                  iconSize: 16,
                   onPressed: () {
                     dependency.value.removeAt(i);
                     onChanged(dependency);
                   },
-                )
-              ],
+                  splashRadius: 16,
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints.tightFor(
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              ),
             ),
         FlatButton(
-          child: Text('Add'),
+          child: Text('+ Add ${dependency.name} element'),
           onPressed: () {
             if (dependency.value == null) {
               if (listType == 'String') dependency.value = <String>[];
@@ -1034,6 +1086,11 @@ class FramyPresetDropdown extends StatelessWidget {
     return DropdownButton(
       key: Key('framy_${dependency.name}_preset_dropdown'),
       value: dependency.value,
+      underline: Container(
+        color: Colors.grey.withOpacity(0.2),
+        height: 1,
+        width: double.infinity,
+      ),
       onChanged: (val) {
         if (val == customValue) {
           onChanged(dependency.lastCustomValue ?? customValue);

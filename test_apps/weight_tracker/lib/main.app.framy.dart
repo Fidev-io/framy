@@ -6,15 +6,15 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:weight_tracker/app_theme.dart';
-import 'package:weight_tracker/models/user.dart';
-import 'package:weight_tracker/models/user.framy.dart';
-import 'package:weight_tracker/models/weight_unit.dart';
 import 'package:weight_tracker/pages/profile_page.dart';
+import 'package:provider/provider.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
 import 'package:weight_tracker/widgets/weight_unit_display.dart';
+import 'package:weight_tracker/models/weight_unit.dart';
+import 'package:weight_tracker/models/user.dart';
+import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
   runApp(FramyApp());
@@ -653,6 +653,7 @@ class _FramyProfilePageCustomPageState
           final isSmallDevice =
               constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
           final body = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: MultiProvider(
@@ -728,6 +729,7 @@ class _FramyUserDataCardCustomPageState
           final isSmallDevice =
               constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
           final body = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: UserDataCard(
@@ -800,6 +802,7 @@ class _FramyUserEmailsViewCustomPageState
           final isSmallDevice =
               constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
           final body = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: UserEmailsView(
@@ -1326,7 +1329,6 @@ final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
   'WeightUnit': WeightUnit.values,
 };
-
 Map<String, Map<String, dynamic>> createFramyPresets() => {
       'User': {
         'teenageJohn': teenageJohn(),
