@@ -5,9 +5,10 @@ class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
   final void Function(String name, dynamic value) onChanged;
   final Map<String, Map<String, dynamic>> presets;
-
+  final Widget trailing;
+  
   const FramyWidgetDependencyInput(
-      {Key key, this.dependency, this.onChanged, this.presets})
+      {Key key, this.dependency, this.onChanged, this.presets, this.trailing})
       : super(key: key);
 
   void _onValueChanged(dynamic value) {
@@ -17,21 +18,42 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     onChanged(dependency.name, value);
   }
   
+  InputDecoration get _inputDecoration => InputDecoration(
+    filled: true,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide.none,
+    ),
+  );
+  
   @override
   Widget build(BuildContext context) {
     final inputKey = Key('framy_dependency_\${dependency.name}_input');
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(dependency.name),
-            FramyPresetDropdown(
-              dependency: dependency,
-              onChanged: _onValueChanged,
-              presets: presets,
-            ),
-          ],
+        SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    dependency.name,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  if (trailing != null) trailing,
+                ],
+              ),
+              FramyPresetDropdown(
+                dependency: dependency,
+                onChanged: _onValueChanged,
+                presets: presets,
+              ),
+            ],
+          ),
         ),
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
@@ -55,6 +77,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               dependency.type == 'double')
             TextFormField(
               key: inputKey,
+              decoration: _inputDecoration,
               initialValue: dependency.value?.toString(),
               autovalidate: true,
               validator: (value) {
@@ -92,21 +115,27 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               presets: presets,
             )
           else if (framyEnumMap.containsKey(dependency.type))
-            DropdownButton(
-              key: inputKey,
-              value: dependency.value,
-              onChanged: _onValueChanged,
-              items: framyEnumMap[dependency.type]
-                  .map((enumValue) => DropdownMenuItem(
-                        value: enumValue,
-                        child: Text(enumValue
-                            .toString()
-                            .substring(enumValue.toString().indexOf('.') + 1)),
-                      ))
-                  .toList(),
+            InputDecorator(
+              decoration: _inputDecoration,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  isDense: true,
+                  key: inputKey,
+                  value: dependency.value,
+                  onChanged: _onValueChanged,
+                  items: framyEnumMap[dependency.type]
+                      .map((enumValue) => DropdownMenuItem(
+                            value: enumValue,
+                            child: Text(enumValue
+                                .toString()
+                                .substring(enumValue.toString().indexOf('.') + 1)),
+                          ))
+                      .toList(),
+                ),
+              ),
             )
           else
-            Text('Not supported type')
+            Text('Not supported type'),
       ],
     );
   }
@@ -126,21 +155,27 @@ class FramyModelInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).primaryColor),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      padding: const EdgeInsets.only(left: 8),
       child: Column(
         children: dependencies
-            .map((dep) => FramyWidgetDependencyInput(
-                  dependency: dep,
-                  presets: presets,
-                  onChanged: (name, value) {
-                    dependency(name).value = value;
-                    onChanged(dependencies);
-                  },
+            .map((dep) => Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0, right: 2),
+                      child: Text('•'),
+                    ),
+                    Expanded(
+                      child: FramyWidgetDependencyInput(
+                        dependency: dep,
+                        presets: presets,
+                        onChanged: (name, value) {
+                          dependency(name).value = value;
+                          onChanged(dependencies);
+                        },
+                      ),
+                    ),
+                  ],
                 ))
             .toList(),
       ),

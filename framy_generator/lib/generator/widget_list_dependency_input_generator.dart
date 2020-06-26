@@ -21,37 +21,40 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
       children: [
         if (dependency.value != null)
           for (int i = 0; i < dependency.value.length; i++)
-            Row(
-              children: [
-                Expanded(
-                  child: FramyWidgetDependencyInput(
-                    dependency: FramyDependencyModel(
-                      'List element \${i + 1}',
-                      listType,
-                      dependency.value[i],
-                      [],
-                    ),
-                    onChanged: (name, val) {
-                      dependency.value[i] = val;
-                      onChanged(dependency);
-                    },
-                    presets: presets,
-                  ),
-                ),
-                SizedBox(width: 8),
-                IconButton(
+            FramyWidgetDependencyInput(
+              dependency: FramyDependencyModel(
+                'List element \${i + 1}',
+                listType,
+                dependency.value[i],
+                [],
+              ),
+              onChanged: (name, val) {
+                dependency.value[i] = val;
+                onChanged(dependency);
+              },
+              presets: presets,
+              trailing: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: IconButton(
                   key: Key(
                       'framy_dependency_List element \${i + 1}_delete_button'),
                   icon: Icon(Icons.close),
+                  iconSize: 16,
                   onPressed: () {
                     dependency.value.removeAt(i);
                     onChanged(dependency);
                   },
-                )
-              ],
+                  splashRadius: 16,
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints.tightFor(
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              ),
             ),
         FlatButton(
-          child: Text('Add'),
+          child: Text('+ Add \${dependency.name} element'),
           onPressed: () {
             if (dependency.value == null) {
               ${_generateEmptyList('String')}

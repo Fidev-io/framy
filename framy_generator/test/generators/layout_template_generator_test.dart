@@ -20,7 +20,7 @@ void main() {
 
     test('should contain FramyDrawer or null', () {
       final result = generateLayoutTemplate();
-      expect(result.contains('FramyDrawer() : null'), isTrue);
+      expect(result.contains('FramyDrawer(showHeader: true) : null'), isTrue);
     });
 
     test('should contain LayoutBuilder', () {

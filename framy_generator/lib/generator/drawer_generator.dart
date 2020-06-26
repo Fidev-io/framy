@@ -2,18 +2,24 @@ import 'package:framy_generator/framy_object.dart';
 
 String generateDrawer(List<FramyObject> widgetFramyObjects) => '''
 class FramyDrawer extends StatelessWidget {
+  final bool showHeader;
+
+  const FramyDrawer({Key key, this.showHeader = false}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       key: Key('FramyDrawer'),
       child: SingleChildScrollView(
         child: SafeArea(
+          top: false,
           child: Column(
             children: [
-              const SizedBox(
-                height: kToolbarHeight,
-                child: Text('Framy App'),
-              ),
+              if (showHeader)
+                AppBar(
+                  automaticallyImplyLeading: false,
+                  title: Text('Framy App'),
+                ),
               ListTile(
                 leading: Icon(Icons.text_fields),
                 title: Text('Typography'),
