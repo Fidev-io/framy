@@ -57,20 +57,26 @@ class FramyWidgetDependencyInput extends StatelessWidget {
         ),
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
-            DropdownButton<bool>(
-              key: inputKey,
-              value: dependency.value,
-              onChanged: _onValueChanged,
-              items: [
-                DropdownMenuItem(
-                  value: true,
-                  child: Text('True'),
+             InputDecorator(
+              decoration: _inputDecoration,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<bool>(
+                  isDense: true,
+                  key: inputKey,
+                  value: dependency.value,
+                  onChanged: _onValueChanged,
+                  items: [
+                    DropdownMenuItem(
+                      value: true,
+                      child: Text('True'),
+                    ),
+                    DropdownMenuItem(
+                      value: false,
+                      child: Text('False'),
+                    )
+                  ],
                 ),
-                DropdownMenuItem(
-                  value: false,
-                  child: Text('False'),
-                )
-              ],
+              ),
             )
           else if (dependency.type == 'String' ||
               dependency.type == 'int' ||
