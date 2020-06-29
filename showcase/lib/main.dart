@@ -45,25 +45,27 @@ class ShowcasePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Framy examples', style: TextStyle(color: Colors.white)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Wrap(
-          runSpacing: 24,
-          spacing: 24,
-          children: [
-            ExampleCard(
-              title: 'Counter',
-              image: 'assets/counter.png',
-              routeName: AppRoutes.couterRoute,
-              description: 'Generated Framy app for well-known Counter app!',
-            ),
-            ExampleCard(
-              title: 'Weight tracker',
-              image: 'assets/weight_tracker.png',
-              routeName: AppRoutes.weightTrackerRoute,
-              description: 'Generated Framy app for Weight-Tracker prototype!',
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Wrap(
+            runSpacing: 24,
+            spacing: 24,
+            children: [
+              ExampleCard(
+                title: 'Counter',
+                image: 'assets/counter.png',
+                routeName: AppRoutes.couterRoute,
+                description: 'Generated Framy app for well-known Counter app!',
+              ),
+              ExampleCard(
+                title: 'Weight tracker',
+                image: 'assets/weight_tracker.png',
+                routeName: AppRoutes.weightTrackerRoute,
+                description: 'Generated Framy app for Weight-Tracker prototype!',
+              ),
+            ],
+          ),
         ),
       ),
     );
