@@ -91,8 +91,11 @@ class ExampleCard extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.grey.withOpacity(0.4))),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.grey.withOpacity(0.4),
+        ),
+      ),
       constraints: BoxConstraints(maxWidth: maxWidth),
       child: AspectRatio(
         aspectRatio: maxWidth / maxHeight,
@@ -112,10 +115,12 @@ class ExampleCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [Colors.white, Colors.white.withOpacity(0.3)])),
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [Colors.white, Colors.white.withOpacity(0.3)],
+                  ),
+                ),
                 height: 100,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
