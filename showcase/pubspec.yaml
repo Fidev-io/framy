@@ -9,6 +9,8 @@ dependencies:
     sdk: flutter
   counter_app:
     path: ../test_apps/counter_app
+  weight_tracker:
+    path: ../test_apps/weight_tracker
   cupertino_icons: ^0.1.3
 
 dev_dependencies:
@@ -17,3 +19,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/weight_tracker.png
+    - assets/counter.png
