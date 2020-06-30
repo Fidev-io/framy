@@ -7,8 +7,6 @@ import 'dart:convert';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-import 'package:dart_style/dart_style.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:source_gen/source_gen.dart';
 
 /// A [Builder] wrapping on one or more [Generator]s.
@@ -44,7 +42,7 @@ class _Builder extends Builder {
             ...additionalOutputExtensions,
           ]
         },
-        formatOutput = formatOutput ?? _formatter.format,
+        formatOutput = formatOutput,
         _header = (header ?? defaultFileHeader).trim() {
     if (_generatedExtension == null) {
       throw ArgumentError.notNull('generatedExtension');
@@ -111,7 +109,7 @@ class _Builder extends Builder {
     }
 
     print('writing...');
-    unawaited(buildStep.writeAsString(outputId, genPartContent));
+    buildStep.writeAsString(outputId, genPartContent);
   }
 
   @override
@@ -119,73 +117,7 @@ class _Builder extends Builder {
       'Generating $_generatedExtension: ${_generators.join(', ')}';
 }
 
-/// A [Builder] which generates content intended for `part of` files.
-///
-/// Generated files will be prefixed with a `partId` to ensure multiple
-/// [SharedPartBuilder]s can produce non conflicting `part of` files. When the
-/// `source_gen|combining_builder` is applied to the primary input these
-/// snippets will be concatenated into the final `.g.dart` output.
-///
-/// This builder can be used when multiple generators may need to output to the
-/// same part file but [PartBuilder] can't be used because the generators are
-/// not all defined in the same location. As a convention most codegen which
-/// generates code should use this approach to get content into a `.g.dart` file
-/// instead of having individual outputs for each building package.
-class SharedPartBuilder extends _Builder {
-  /// Wrap [generators] as a [Builder] that generates `part of` files.
-  ///
-  /// [partId] indicates what files will be created for each `.dart`
-  /// input. This extension should be unique as to not conflict with other
-  /// [SharedPartBuilder]s. The resulting file will be of the form
-  /// `<generatedExtension>.g.part`. If any generator in [generators] will
-  /// create additional outputs through the [BuildStep] they should be indicated
-  /// in [additionalOutputExtensions].
-  ///
-  /// [formatOutput] is called to format the generated code. Defaults to
-  /// [DartFormatter.format].
-  SharedPartBuilder(
-    List<Generator> generators,
-    String partId, {
-    String Function(String code) formatOutput,
-    List<String> additionalOutputExtensions = const [],
-  }) : super(
-          generators,
-          formatOutput: formatOutput,
-          generatedExtension: '.$partId.g.part',
-          additionalOutputExtensions: additionalOutputExtensions,
-          header: '',
-        ) {
-    if (!_partIdRegExp.hasMatch(partId)) {
-      throw ArgumentError.value(
-          partId,
-          'partId',
-          '`partId` can only contain letters, numbers, `_` and `.`. '
-              'It cannot start or end with `.`.');
-    }
-  }
-}
-
-/// A [Builder] which generates standalone Dart library files.
-///
-/// A single [Generator] is responsible for generating the entirety of the
-/// output since it must also output any relevant import directives at the
-/// beginning of it's output.
 class JsonLibraryBuilder extends _Builder {
-  /// Wrap [generator] as a [Builder] that generates Dart library files.
-  ///
-  /// [generatedExtension] indicates what files will be created for each `.dart`
-  /// input.
-  /// Defaults to `.g.dart`, however this should usually be changed to
-  /// avoid conflicts with outputs from a [SharedPartBuilder].
-  /// If [generator] will create additional outputs through the [BuildStep] they
-  /// should be indicated in [additionalOutputExtensions].
-  ///
-  /// [formatOutput] is called to format the generated code. Defaults to
-  /// [DartFormatter.format].
-  ///
-  /// [header] is used to specify the content at the top of each generated file.
-  /// If `null`, the content of [defaultFileHeader] is used.
-  /// If [header] is an empty `String` no header is added.
   JsonLibraryBuilder(
     Generator generator, {
     String Function(String code) formatOutput,
@@ -234,13 +166,9 @@ Stream<GeneratedOutput> _generate(
   }
 }
 
-final _formatter = DartFormatter();
-
 const defaultFileHeader = '// GENERATED CODE - DO NOT MODIFY BY HAND';
 
 const partIdRegExpLiteral = r'[A-Za-z_\d-]+';
-
-final _partIdRegExp = RegExp('^$partIdRegExpLiteral\$');
 
 class GeneratedOutput {
   final String output;

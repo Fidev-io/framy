@@ -9,7 +9,7 @@ packages:
     source: hosted
     version: "4.0.0"
   analyzer:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
@@ -172,9 +172,9 @@ packages:
   framy_annotation:
     dependency: "direct main"
     description:
-      path: "../framy_annotation"
-      relative: true
-    source: path
+      name: framy_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.1.0"
   glob:
     dependency: "direct main"
