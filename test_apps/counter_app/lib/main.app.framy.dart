@@ -1047,7 +1047,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                     dependency.value.removeAt(i);
                     onChanged(dependency);
                   },
-                  splashRadius: 16,
+                  // splashRadius: 16, //--not in Stable channel yet
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints.tightFor(
                     height: 20,
