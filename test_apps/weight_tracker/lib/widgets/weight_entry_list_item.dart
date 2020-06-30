@@ -14,7 +14,7 @@ class WeightEntryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateTime = weightEntry.dateTime ?? DateTime.now();
+    final dateTime = weightEntry?.dateTime ?? DateTime.now();
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Row(
@@ -39,7 +39,7 @@ class WeightEntryListItem extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (weightEntry.note?.isNotEmpty ?? false)
+                if (weightEntry?.note?.isNotEmpty ?? false)
                   Padding(
                     padding: EdgeInsets.only(left: 4.0),
                     child: Icon(
@@ -52,7 +52,7 @@ class WeightEntryListItem extends StatelessWidget {
             ),
           ),
           Text(
-            weightEntry.weight.toStringAsFixed(1),
+            weightEntry?.weight?.toStringAsFixed(1) ?? 'No data',
             textScaleFactor: 2.0,
           ),
           Expanded(
@@ -68,12 +68,12 @@ class WeightEntryListItem extends StatelessWidget {
   }
 
   String get _differenceText {
-    if (weightDifference > 0) {
+    if (weightDifference == null || weightDifference == 0) {
+      return '-';
+    } else if (weightDifference > 0) {
       return "+" + weightDifference.toStringAsFixed(1);
-    } else if (weightDifference < 0) {
-      return weightDifference.toStringAsFixed(1);
     } else {
-      return "-";
+      return weightDifference.toStringAsFixed(1);
     }
   }
 }
