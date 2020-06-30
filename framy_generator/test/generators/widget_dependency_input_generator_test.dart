@@ -185,5 +185,10 @@ void main() {
       final result = generateWidgetDependencyInput([]);
       expect(result.contains('framyEnumMap'), isTrue);
     });
+
+    test('should contain FramyDateTimeDependencyInput', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('FramyDateTimeDependencyInput'), isTrue);
+    });
   });
 }

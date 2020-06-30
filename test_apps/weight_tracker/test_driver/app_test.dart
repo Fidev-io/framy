@@ -9,7 +9,8 @@ void main() {
       .getBottomRight(find.byValueKey('FramyApp'))
       .then((offset) => offset.dx >= 1000);
 
-  Future<void> closeDependenciesPanelAndGoToOtherPage(String name) async {
+  Future<void> closeDependenciesPanelAndGoToOtherPage(String name,
+      {bool openDependenciesPanel = false}) async {
     if (!await isDeviceBig()) {
       //hide modal bottom sheet
       await driver.scroll(
@@ -22,6 +23,9 @@ void main() {
     }
     await driver.waitFor(find.text(name));
     await driver.tap(find.text(name));
+    if (openDependenciesPanel && !await isDeviceBig()) {
+      await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+    }
   }
 
   setUpAll(() async {
@@ -228,5 +232,24 @@ void main() {
         ));
       },
     );
+  });
+
+  group('WeightEntryListItem', () {
+    test('should show datepicker when DateTime dependency', () async {
+      await closeDependenciesPanelAndGoToOtherPage(
+        'WeightEntryListItem',
+        openDependenciesPanel: true,
+      );
+      await driver.tap(find.byValueKey('framy_dependency_dateTime_input'));
+      await driver.waitFor(find.byType('_DatePickerDialog'));
+    });
+
+    test('should update value on datePicker selection', () async {
+      final now = DateTime.now();
+      await driver.tap(find.text('17'));
+      await driver.tap(find.text('OK'));
+      await driver.waitFor(find.text(
+          '${now.year}-${now.month.toString().padLeft(2, '0')}-17 00:00:00'));
+    });
   });
 }

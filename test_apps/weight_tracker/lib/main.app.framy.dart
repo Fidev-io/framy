@@ -12,8 +12,10 @@ import 'package:provider/provider.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
 import 'package:weight_tracker/widgets/weight_unit_display.dart';
+import 'package:weight_tracker/widgets/weight_entry_list_item.dart';
 import 'package:weight_tracker/models/weight_unit.dart';
 import 'package:weight_tracker/models/user.dart';
+import 'package:weight_tracker/models/weight_entry.dart';
 import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
@@ -41,6 +43,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/UserDataCard': FramyUserDataCardCustomPage(),
     '/UserEmailsView': FramyUserEmailsViewCustomPage(),
     '/WeightUnitDisplay': FramyWeightUnitDisplayCustomPage(),
+    '/WeightEntryListItem': FramyWeightEntryListItemCustomPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -169,6 +172,12 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('WeightUnitDisplay'),
                 onTap: () => Navigator.of(context)
                     .pushReplacementNamed('/WeightUnitDisplay'),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('WeightEntryListItem'),
+                onTap: () => Navigator.of(context)
+                    .pushReplacementNamed('/WeightEntryListItem'),
               ),
             ],
           ),
@@ -907,6 +916,80 @@ class _FramyWeightUnitDisplayCustomPageState
   }
 }
 
+class FramyWeightEntryListItemCustomPage extends StatefulWidget {
+  const FramyWeightEntryListItemCustomPage()
+      : super(key: const Key('Framy_WeightEntryListItem_Page'));
+
+  @override
+  _FramyWeightEntryListItemCustomPageState createState() =>
+      _FramyWeightEntryListItemCustomPageState();
+}
+
+class _FramyWeightEntryListItemCustomPageState
+    extends State<FramyWeightEntryListItemCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry', null, [
+      FramyDependencyModel<DateTime>('dateTime', 'DateTime', null, []),
+      FramyDependencyModel<double>('weight', 'double', null, []),
+      FramyDependencyModel<String>('note', 'String', null, []),
+    ]),
+    FramyDependencyModel<double>('weightDifference', 'double', 0, []),
+  ];
+  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(() => dependency(name).value = dependencyValue);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final body = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: WeightEntryListItem(
+                  weightEntry: dependency('weightEntry').value,
+                  weightDifference: dependency('weightDifference').value,
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(
+                  width: 300,
+                  child: FramyWidgetDependenciesPanel(
+                    dependencies: dependencies,
+                    presets: presets,
+                    onChanged: onChanged,
+                  ),
+                ),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependencies: dependencies,
+                presets: presets,
+                onChanged: onChanged,
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
+    );
+  }
+}
+
 class FramyDependencyModel<T> {
   final String name;
   final String type;
@@ -997,6 +1080,14 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
   }
 }
 
+InputDecoration get _framyInputDecoration => InputDecoration(
+      filled: true,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide.none,
+      ),
+    );
+
 class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
   final void Function(String name, dynamic value) onChanged;
@@ -1013,14 +1104,6 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     }
     onChanged(dependency.name, value);
   }
-
-  InputDecoration get _inputDecoration => InputDecoration(
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -1054,7 +1137,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
             InputDecorator(
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<bool>(
                   isDense: true,
@@ -1079,7 +1162,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               dependency.type == 'double')
             TextFormField(
               key: inputKey,
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               initialValue: dependency.value?.toString(),
               autovalidate: true,
               validator: (value) {
@@ -1109,7 +1192,15 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 }
               },
             )
-          else if (dependency.type == 'User')
+          else if (dependency.type == 'DateTime')
+            FramyDateTimeDependencyInput(
+              key: inputKey,
+              dependency: dependency,
+              presets: presets,
+              onChanged: _onValueChanged,
+            )
+          else if (dependency.type == 'User' ||
+              dependency.type == 'WeightEntry')
             FramyModelInput(
               dependencies: dependency.subDependencies,
               presets: presets,
@@ -1125,7 +1216,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             )
           else if (framyEnumMap.containsKey(dependency.type))
             InputDecorator(
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   isDense: true,
@@ -1186,6 +1277,46 @@ class FramyModelInput extends StatelessWidget {
                   ],
                 ))
             .toList(),
+      ),
+    );
+  }
+}
+
+class FramyDateTimeDependencyInput extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final void Function(dynamic value) onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+
+  const FramyDateTimeDependencyInput(
+      {Key key, this.dependency, this.onChanged, this.presets})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final text = dependency.value == null
+        ? '-'
+        : (dependency.value as DateTime)
+            .toIso8601String()
+            .replaceFirst('T', ' ')
+            .replaceFirst(RegExp('\\..*'), '');
+    return InkWell(
+      onTap: () {
+        showDatePicker(
+          context: context,
+          initialDate: dependency.value ?? DateTime.now(),
+          firstDate: DateTime(1000),
+          lastDate: DateTime(3000),
+        ).then((value) {
+          if (value != null) {
+            onChanged(value);
+          }
+        });
+      },
+      child: InputDecorator(
+        decoration: _framyInputDecoration.copyWith(
+          suffixIcon: Icon(Icons.calendar_today),
+        ),
+        child: Text(text),
       ),
     );
   }
@@ -1253,6 +1384,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               if (listType == 'bool') dependency.value = <bool>[];
               if (listType == 'WeightUnit') dependency.value = <WeightUnit>[];
               if (listType == 'User') dependency.value = <User>[];
+              if (listType == 'WeightEntry') dependency.value = <WeightEntry>[];
             }
             dependency.value.add(null);
             onChanged(dependency);
@@ -1324,6 +1456,11 @@ final framyModelConstructorMap =
         dep.subDependencies.singleWhere((d) => d.name == 'age').value,
         emails:
             dep.subDependencies.singleWhere((d) => d.name == 'emails').value,
+      ),
+  'WeightEntry': (dep) => WeightEntry(
+        dep.subDependencies.singleWhere((d) => d.name == 'dateTime').value,
+        dep.subDependencies.singleWhere((d) => d.name == 'weight').value,
+        dep.subDependencies.singleWhere((d) => d.name == 'note').value,
       ),
   'String': (dep) => '',
   'double': (dep) => 0.0,
