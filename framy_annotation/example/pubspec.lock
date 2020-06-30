@@ -156,14 +156,14 @@ packages:
   framy_annotation:
     dependency: "direct main"
     description:
-      path: "../../framy_annotation"
+      path: ".."
       relative: true
     source: path
     version: "0.1.0"
   framy_generator:
     dependency: "direct dev"
     description:
-      path: ".."
+      path: "../../framy_generator"
       relative: true
     source: path
     version: "0.1.0"

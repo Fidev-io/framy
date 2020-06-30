@@ -8,12 +8,12 @@ dependencies:
   flutter:
     sdk: flutter
   framy_annotation:
-    path: ../../framy_annotation
+    path: ../
 
 dev_dependencies:
   build_runner: any
   framy_generator:
-    path: ../
+    path: ../../framy_generator
 
 flutter:
   uses-material-design: true
