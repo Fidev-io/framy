@@ -1,6 +1,14 @@
 import 'package:framy_generator/framy_object.dart';
 
 String generateWidgetDependencyInput(List<FramyObject> models) => '''
+InputDecoration get _framyInputDecoration => InputDecoration(
+      filled: true,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide.none,
+      ),
+    );
+    
 class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
   final void Function(String name, dynamic value) onChanged;
@@ -17,14 +25,6 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     }
     onChanged(dependency.name, value);
   }
-  
-  InputDecoration get _inputDecoration => InputDecoration(
-    filled: true,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide.none,
-    ),
-  );
   
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
              InputDecorator(
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<bool>(
                   isDense: true,
@@ -83,7 +83,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               dependency.type == 'double')
             TextFormField(
               key: inputKey,
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               initialValue: dependency.value?.toString(),
               autovalidate: true,
               validator: (value) {
@@ -113,6 +113,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 }
               },
             )
+          else if (dependency.type == 'DateTime')
+            FramyDateTimeDependencyInput(
+              key: inputKey,
+              dependency: dependency,
+              presets: presets,
+              onChanged: _onValueChanged,
+            )
           ${_generateModelInputs(models)}
           else if (dependency.type.startsWith('List<'))
             FramyWidgetListDependencyInput(
@@ -122,7 +129,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             )
           else if (framyEnumMap.containsKey(dependency.type))
             InputDecorator(
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   isDense: true,

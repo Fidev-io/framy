@@ -27,6 +27,9 @@ void main() {
       FramyDependencyModel<WeightUnit>(
           'weightUnit', 'WeightUnit', defaultValue, []);
 
+  FramyDependencyModel _getDateTimeModel([DateTime defaultValue]) =>
+      FramyDependencyModel<DateTime>('dateTime', 'DateTime', defaultValue, []);
+
   Future<void> _buildDependencyInput(
     WidgetTester tester,
     FramyDependencyModel dependency, {
@@ -185,6 +188,73 @@ void main() {
         await tester.tap(find.text('lbs').last);
         //then
         expect(emittedValue, WeightUnit.lbs);
+      });
+    });
+
+    group('when the type is an DateTime', () {
+      testWidgets('it should build', (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getDateTimeModel());
+        expect(find.byType(FramyWidgetDependencyInput), findsOneWidget);
+      });
+
+      testWidgets('it should show "-" when value is null',
+          (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getDateTimeModel());
+        expect(find.text('-'), findsOneWidget);
+      });
+
+      testWidgets('it should show default DateTime',
+          (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getDateTimeModel(DateTime(2020)));
+        expect(find.text('2020-01-01 00:00:00'), findsOneWidget);
+      });
+
+      testWidgets('it should show a dialog on tap',
+          (WidgetTester tester) async {
+        //given
+        await _buildDependencyInput(tester, _getDateTimeModel(DateTime(2020)));
+        //when
+        await tester.tap(find.byKey(Key('framy_dependency_dateTime_input')));
+        await tester.pump();
+        //then
+        expect(find.byType(Dialog), findsOneWidget);
+      });
+
+      testWidgets('it should emit new value on date selection',
+          (WidgetTester tester) async {
+        //given
+        DateTime emitted;
+        await _buildDependencyInput(
+          tester,
+          _getDateTimeModel(DateTime(2020)),
+          onChanged: (_, val) => emitted = val,
+        );
+        await tester.tap(find.byKey(Key('framy_dependency_dateTime_input')));
+        await tester.pump();
+        //when
+        await tester.tap(find.text('31'));
+        await tester.tap(find.text('OK'));
+        await tester.pump();
+        //then
+        expect(emitted.day, 31);
+      });
+
+      testWidgets('it should not emit any value when ',
+          (WidgetTester tester) async {
+        //given
+        bool didEmit = false;
+        await _buildDependencyInput(
+          tester,
+          _getDateTimeModel(DateTime(2020)),
+          onChanged: (_, val) => didEmit = true,
+        );
+        await tester.tap(find.byKey(Key('framy_dependency_dateTime_input')));
+        await tester.pump();
+        //when
+        await tester.tap(find.text('CANCEL'));
+        await tester.pump();
+        //then
+        expect(didEmit, isFalse);
       });
     });
   });

@@ -818,6 +818,14 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
   }
 }
 
+InputDecoration get _framyInputDecoration => InputDecoration(
+      filled: true,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide.none,
+      ),
+    );
+
 class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
   final void Function(String name, dynamic value) onChanged;
@@ -834,14 +842,6 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     }
     onChanged(dependency.name, value);
   }
-
-  InputDecoration get _inputDecoration => InputDecoration(
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -875,7 +875,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
             InputDecorator(
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<bool>(
                   isDense: true,
@@ -900,7 +900,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               dependency.type == 'double')
             TextFormField(
               key: inputKey,
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               initialValue: dependency.value?.toString(),
               autovalidate: true,
               validator: (value) {
@@ -930,6 +930,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 }
               },
             )
+          else if (dependency.type == 'DateTime')
+            FramyDateTimeDependencyInput(
+              key: inputKey,
+              dependency: dependency,
+              presets: presets,
+              onChanged: _onValueChanged,
+            )
           else if (dependency.type.startsWith('List<'))
             FramyWidgetListDependencyInput(
               dependency: dependency,
@@ -938,7 +945,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             )
           else if (framyEnumMap.containsKey(dependency.type))
             InputDecorator(
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   isDense: true,
@@ -999,6 +1006,46 @@ class FramyModelInput extends StatelessWidget {
                   ],
                 ))
             .toList(),
+      ),
+    );
+  }
+}
+
+class FramyDateTimeDependencyInput extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final void Function(dynamic value) onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+
+  const FramyDateTimeDependencyInput(
+      {Key key, this.dependency, this.onChanged, this.presets})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final text = dependency.value == null
+        ? '-'
+        : (dependency.value as DateTime)
+            .toIso8601String()
+            .replaceFirst('T', ' ')
+            .replaceFirst(RegExp('\\..*'), '');
+    return InkWell(
+      onTap: () {
+        showDatePicker(
+          context: context,
+          initialDate: dependency.value ?? DateTime.now(),
+          firstDate: DateTime(1000),
+          lastDate: DateTime(3000),
+        ).then((value) {
+          if (value != null) {
+            onChanged(value);
+          }
+        });
+      },
+      child: InputDecorator(
+        decoration: _framyInputDecoration.copyWith(
+          suffixIcon: Icon(Icons.calendar_today),
+        ),
+        child: Text(text),
       ),
     );
   }
