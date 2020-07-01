@@ -1,6 +1,13 @@
 String generateButtonPage() => '''
-class FramyButtonPage extends StatelessWidget {
+class FramyButtonPage extends StatefulWidget {
   const FramyButtonPage() : super(key: const Key('FramyButtonPage'));
+
+  @override
+  _FramyButtonPageState createState() => _FramyButtonPageState();
+}
+
+class _FramyButtonPageState extends State<FramyButtonPage> {
+  String selectedOptionInDropdown;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +85,28 @@ class FramyButtonPage extends StatelessWidget {
                 children: [
                   IconButton(icon: Icon(Icons.favorite), onPressed: () {}),
                   IconButton(
-                      icon: Icon(Icons.favorite_border), onPressed: null),
+                    icon: Icon(Icons.favorite_border),
+                    onPressed: null,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const FramyHeaderText('Dropdown button'),
+              const SizedBox(height: 4),
+              DropdownButton(
+                hint: Text('Select option'),
+                value: selectedOptionInDropdown,
+                onChanged: (option) =>
+                    setState(() => selectedOptionInDropdown = option),
+                items: [
+                  DropdownMenuItem(
+                    child: Text('Option A'),
+                    value: 'Option A',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('Option B'),
+                    value: 'Option B',
+                  ),
                 ],
               ),
             ],

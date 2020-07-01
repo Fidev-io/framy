@@ -39,6 +39,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/colors': FramyColorsPage(),
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
+    '/toggle': FramyTogglePage(),
     '/ProfilePage': FramyProfilePageCustomPage(),
     '/UserDataCard': FramyUserDataCardCustomPage(),
     '/UserEmailsView': FramyUserEmailsViewCustomPage(),
@@ -145,6 +146,12 @@ class FramyDrawer extends StatelessWidget {
                       title: Text('Button'),
                       onTap: () =>
                           Navigator.of(context).pushReplacementNamed('/button'),
+                    ),
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('Toggle'),
+                      onTap: () =>
+                          Navigator.of(context).pushReplacementNamed('/toggle'),
                     ),
                   ],
                 ),
@@ -439,6 +446,72 @@ class _FramyColorItem extends StatelessWidget {
   String _hex(int val) => val.toRadixString(16).padLeft(2, '0').toUpperCase();
 }
 
+class FramyTogglePage extends StatefulWidget {
+  const FramyTogglePage() : super(key: const Key('FramyTogglePage'));
+
+  @override
+  _FramyTogglePageState createState() => _FramyTogglePageState();
+}
+
+class _FramyTogglePageState extends State<FramyTogglePage> {
+  bool switchState = false;
+  List<bool> toggleState = [false, true, false];
+  bool checkboxState = false;
+  String radioState = 'Option A';
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const FramyHeaderText('Switch'),
+            Switch(
+              value: switchState,
+              onChanged: (bool value) => setState(() => switchState = value),
+            ),
+            const FramyHeaderText('Toggle buttons'),
+            const SizedBox(height: 8),
+            ToggleButtons(
+              onPressed: (index) =>
+                  setState(() => toggleState[index] = !toggleState[index]),
+              isSelected: toggleState,
+              children: [
+                Icon(Icons.format_bold),
+                Icon(Icons.format_italic),
+                Icon(Icons.format_align_center),
+              ],
+            ),
+            const SizedBox(height: 8),
+            const FramyHeaderText('Checkbox'),
+            CheckboxListTile(
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: (bool value) => setState(() => checkboxState = value),
+              value: checkboxState,
+              title: Text('Option'),
+            ),
+            const FramyHeaderText('Radio'),
+            RadioListTile(
+              value: 'Option A',
+              onChanged: (system) => setState(() => radioState = system),
+              groupValue: radioState,
+              title: Text('Option A'),
+            ),
+            RadioListTile(
+              value: 'Option B',
+              onChanged: (system) => setState(() => radioState = system),
+              groupValue: radioState,
+              title: Text('Option B'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class FramyHeaderText extends StatelessWidget {
   final String text;
 
@@ -535,8 +608,15 @@ class FramyAppBarPage extends StatelessWidget {
   }
 }
 
-class FramyButtonPage extends StatelessWidget {
+class FramyButtonPage extends StatefulWidget {
   const FramyButtonPage() : super(key: const Key('FramyButtonPage'));
+
+  @override
+  _FramyButtonPageState createState() => _FramyButtonPageState();
+}
+
+class _FramyButtonPageState extends State<FramyButtonPage> {
+  String selectedOptionInDropdown;
 
   @override
   Widget build(BuildContext context) {
@@ -614,7 +694,28 @@ class FramyButtonPage extends StatelessWidget {
                 children: [
                   IconButton(icon: Icon(Icons.favorite), onPressed: () {}),
                   IconButton(
-                      icon: Icon(Icons.favorite_border), onPressed: null),
+                    icon: Icon(Icons.favorite_border),
+                    onPressed: null,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const FramyHeaderText('Dropdown button'),
+              const SizedBox(height: 4),
+              DropdownButton(
+                hint: Text('Select option'),
+                value: selectedOptionInDropdown,
+                onChanged: (option) =>
+                    setState(() => selectedOptionInDropdown = option),
+                items: [
+                  DropdownMenuItem(
+                    child: Text('Option A'),
+                    value: 'Option A',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('Option B'),
+                    value: 'Option B',
+                  ),
                 ],
               ),
             ],

@@ -65,6 +65,16 @@ void main() {
         expect(
             result.contains('Key(\'MaterialComponentsButtonButton\')'), isTrue);
       });
+
+      test('should contain Toggle text', () {
+        final String result = generateDrawer([]);
+        expect(result.contains('Text(\'Toggle\''), isTrue);
+      });
+
+      test('should contain /toggle route name', () {
+        final String result = generateDrawer([]);
+        expect(result.contains('\'/toggle\''), isTrue);
+      });
     });
 
     group('when custom widget is given', () {

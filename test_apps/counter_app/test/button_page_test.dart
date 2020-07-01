@@ -61,5 +61,10 @@ void main() {
       await tester.pumpWidget(TestMaterialAppWithScaffold(FramyButtonPage()));
       expect(find.byType(IconButton), findsNWidgets(2));
     });
+
+    testWidgets('should have Dropdown button', (tester) async {
+      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyButtonPage()));
+      expect(find.byType(DropdownButton<String>().runtimeType), findsOneWidget);
+    });
   });
 }
