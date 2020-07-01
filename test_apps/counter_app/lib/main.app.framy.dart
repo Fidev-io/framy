@@ -1286,5 +1286,4 @@ final framyModelConstructorMap =
 final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
-
 Map<String, Map<String, dynamic>> createFramyPresets() => {};
