@@ -108,7 +108,7 @@ void main() {
       //then
       final expectedList = '''
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<String>('arg1', 'String', null, []),''';
+    FramyDependencyModel<String>('arg1', 'String', null, createSubDependencies('String')),''';
       expect(result.contains(expectedList), isTrue);
     });
 
@@ -124,7 +124,7 @@ void main() {
       final result = generateWidgetPages(widgetObjects, []);
       //then
       final expectedDependency =
-          'FramyDependencyModel<int>(\'arg1\', \'int\', 13, []),';
+          'FramyDependencyModel<int>(\'arg1\', \'int\', 13, createSubDependencies(\'int\')),';
       expect(result.contains(expectedDependency), isTrue);
     });
 
@@ -186,34 +186,6 @@ void main() {
       );
     });
 
-    test('should generate subDependencies of a WidgetDependency', () {
-      //given
-      final userDependency = FramyWidgetDependency('arg1', 'User', null, false);
-      final stringDependency =
-          FramyWidgetDependency('firstName', 'String', null, false);
-
-      final widgetObjects = getFramyObjectWithDependency(userDependency);
-      final framyModelObjects = [
-        FramyObject()
-          ..name = 'User'
-          ..type = FramyObjectType.model
-          ..widgetDependencies = [stringDependency]
-      ];
-      //when
-      final result = generateWidgetPages(widgetObjects, framyModelObjects);
-      //then
-      expect(
-        result
-            .contains('FramyDependencyModel<User>(\'arg1\', \'User\', null, ['),
-        isTrue,
-      );
-      expect(
-        result.contains(
-            'FramyDependencyModel<String>(\'firstName\', \'String\', null, []),'),
-        isTrue,
-      );
-    });
-
     group('when the provider parameter is passed', () {
       List<FramyObject> widgetObjects;
 
@@ -233,7 +205,7 @@ void main() {
         //then
         expect(
           result.contains(
-              'FramyDependencyModel<String>(\'String\', \'String\', null, [])'),
+              'FramyDependencyModel<String>(\'String\', \'String\', null, createSubDependencies(\'String\'))'),
           isTrue,
         );
       });

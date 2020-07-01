@@ -7,6 +7,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/app_theme.dart';
+import 'package:weight_tracker/pages/history_page.dart';
 import 'package:weight_tracker/pages/profile_page.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
@@ -40,6 +41,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
     '/toggle': FramyTogglePage(),
+    '/HistoryPage': FramyHistoryPageCustomPage(),
     '/ProfilePage': FramyProfilePageCustomPage(),
     '/UserDataCard': FramyUserDataCardCustomPage(),
     '/UserEmailsView': FramyUserEmailsViewCustomPage(),
@@ -155,6 +157,12 @@ class FramyDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('HistoryPage'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/HistoryPage'),
               ),
               ListTile(
                 leading: SizedBox.shrink(),
@@ -726,6 +734,75 @@ class _FramyButtonPageState extends State<FramyButtonPage> {
   }
 }
 
+class FramyHistoryPageCustomPage extends StatefulWidget {
+  const FramyHistoryPageCustomPage()
+      : super(key: const Key('Framy_HistoryPage_Page'));
+
+  @override
+  _FramyHistoryPageCustomPageState createState() =>
+      _FramyHistoryPageCustomPageState();
+}
+
+class _FramyHistoryPageCustomPageState
+    extends State<FramyHistoryPageCustomPage> {
+  List<FramyDependencyModel> dependencies = [
+    FramyDependencyModel<List<WeightEntry>>('weightEntries',
+        'List<WeightEntry>', null, createSubDependencies('List<WeightEntry>')),
+  ];
+  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  void onChanged(String name, dynamic dependencyValue) {
+    setState(() => dependency(name).value = dependencyValue);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallDevice =
+              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
+          final body = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: HistoryPage(
+                  weightEntries: dependency('weightEntries').value,
+                ),
+              ),
+              if (!isSmallDevice)
+                SizedBox(
+                  width: 300,
+                  child: FramyWidgetDependenciesPanel(
+                    dependencies: dependencies,
+                    presets: presets,
+                    onChanged: onChanged,
+                  ),
+                ),
+            ],
+          );
+          if (isSmallDevice) {
+            return Scaffold(
+              body: body,
+              floatingActionButton: FramyWidgetDependenciesFAB(
+                dependencies: dependencies,
+                presets: presets,
+                onChanged: onChanged,
+              ),
+            );
+          } else {
+            return body;
+          }
+        },
+      ),
+    );
+  }
+}
+
 class FramyProfilePageCustomPage extends StatefulWidget {
   const FramyProfilePageCustomPage()
       : super(key: const Key('Framy_ProfilePage_Page'));
@@ -738,12 +815,8 @@ class FramyProfilePageCustomPage extends StatefulWidget {
 class _FramyProfilePageCustomPageState
     extends State<FramyProfilePageCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<User>('User', 'User', null, [
-      FramyDependencyModel<String>('firstName', 'String', null, []),
-      FramyDependencyModel<String>('lastName', 'String', null, []),
-      FramyDependencyModel<int>('age', 'int', null, []),
-      FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
-    ]),
+    FramyDependencyModel<User>(
+        'User', 'User', null, createSubDependencies('User')),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
@@ -814,12 +887,8 @@ class FramyUserDataCardCustomPage extends StatefulWidget {
 class _FramyUserDataCardCustomPageState
     extends State<FramyUserDataCardCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<User>('user', 'User', null, [
-      FramyDependencyModel<String>('firstName', 'String', null, []),
-      FramyDependencyModel<String>('lastName', 'String', null, []),
-      FramyDependencyModel<int>('age', 'int', null, []),
-      FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
-    ]),
+    FramyDependencyModel<User>(
+        'user', 'User', null, createSubDependencies('User')),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
@@ -887,12 +956,8 @@ class FramyUserEmailsViewCustomPage extends StatefulWidget {
 class _FramyUserEmailsViewCustomPageState
     extends State<FramyUserEmailsViewCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<User>('user', 'User', null, [
-      FramyDependencyModel<String>('firstName', 'String', null, []),
-      FramyDependencyModel<String>('lastName', 'String', null, []),
-      FramyDependencyModel<int>('age', 'int', null, []),
-      FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
-    ]),
+    FramyDependencyModel<User>(
+        'user', 'User', null, createSubDependencies('User')),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
@@ -960,8 +1025,8 @@ class FramyWeightUnitDisplayCustomPage extends StatefulWidget {
 class _FramyWeightUnitDisplayCustomPageState
     extends State<FramyWeightUnitDisplayCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<WeightUnit>(
-        'weightUnit', 'WeightUnit', WeightUnit.kg, []),
+    FramyDependencyModel<WeightUnit>('weightUnit', 'WeightUnit', WeightUnit.kg,
+        createSubDependencies('WeightUnit')),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
@@ -1029,12 +1094,10 @@ class FramyWeightEntryListItemCustomPage extends StatefulWidget {
 class _FramyWeightEntryListItemCustomPageState
     extends State<FramyWeightEntryListItemCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry', null, [
-      FramyDependencyModel<DateTime>('dateTime', 'DateTime', null, []),
-      FramyDependencyModel<double>('weight', 'double', null, []),
-      FramyDependencyModel<String>('note', 'String', null, []),
-    ]),
-    FramyDependencyModel<double>('weightDifference', 'double', 0, []),
+    FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry', null,
+        createSubDependencies('WeightEntry')),
+    FramyDependencyModel<double>(
+        'weightDifference', 'double', 0, createSubDependencies('double')),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
@@ -1303,6 +1366,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
           else if (dependency.type == 'User' ||
               dependency.type == 'WeightEntry')
             FramyModelInput(
+              key: inputKey,
               dependencies: dependency.subDependencies,
               presets: presets,
               onChanged: (_) => _onValueChanged(
@@ -1448,7 +1512,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 'List element ${i + 1}',
                 listType,
                 dependency.value[i],
-                [],
+                dependency.subDependencies[i].subDependencies,
               ),
               onChanged: (name, val) {
                 dependency.value[i] = val;
@@ -1464,6 +1528,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                   iconSize: 16,
                   onPressed: () {
                     dependency.value.removeAt(i);
+                    dependency.subDependencies.removeAt(i);
                     onChanged(dependency);
                   },
                   // splashRadius: 16, //--not in Stable channel yet
@@ -1488,6 +1553,12 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               if (listType == 'WeightEntry') dependency.value = <WeightEntry>[];
             }
             dependency.value.add(null);
+            dependency.subDependencies.add(FramyDependencyModel(
+              '_',
+              listType,
+              null,
+              createSubDependencies(listType),
+            ));
             onChanged(dependency);
           },
         ),
@@ -1573,6 +1644,34 @@ final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
   'WeightUnit': WeightUnit.values,
 };
+List<FramyDependencyModel> createSubDependencies(String type) {
+  switch (type) {
+    case 'User':
+      return [
+        FramyDependencyModel<String>(
+            'firstName', 'String', null, createSubDependencies('String')),
+        FramyDependencyModel<String>(
+            'lastName', 'String', null, createSubDependencies('String')),
+        FramyDependencyModel<int>(
+            'age', 'int', null, createSubDependencies('int')),
+        FramyDependencyModel<List<String>>('emails', 'List<String>', null,
+            createSubDependencies('List<String>')),
+      ];
+    case 'WeightEntry':
+      return [
+        FramyDependencyModel<DateTime>(
+            'dateTime', 'DateTime', null, createSubDependencies('DateTime')),
+        FramyDependencyModel<double>(
+            'weight', 'double', null, createSubDependencies('double')),
+        FramyDependencyModel<String>(
+            'note', 'String', null, createSubDependencies('String')),
+      ];
+
+    default:
+      return [];
+  }
+}
+
 Map<String, Map<String, dynamic>> createFramyPresets() => {
       'User': {
         'teenageJohn': teenageJohn(),

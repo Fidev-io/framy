@@ -28,6 +28,14 @@ void main() {
     }
   }
 
+  Future<void> _scrollToAddButton(String fieldName) {
+    return driver.scrollUntilVisible(
+      find.byType('SingleChildScrollView'),
+      find.text('+ Add $fieldName element'),
+      dyScroll: -100,
+    );
+  }
+
   setUpAll(() async {
     driver = await FlutterDriver.connect();
 //    platform = Platform.environment['PLATFORM'] ?? 'default_macos';
@@ -120,22 +128,14 @@ void main() {
       await driver.waitFor(find.text('No email'));
     });
 
-    Future<void> _scrollToAddButton() {
-      return driver.scrollUntilVisible(
-        find.byType('SingleChildScrollView'),
-        find.text('+ Add emails element'),
-        dyScroll: -100,
-      );
-    }
-
     test('should allow to add an email', () async {
       if (!await isDeviceBig()) {
         await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
       }
       await driver.waitFor(find.byValueKey('FramyWidgetDependenciesPanel'));
-      await _scrollToAddButton();
+      await _scrollToAddButton('emails');
       await driver.tap(find.text('+ Add emails element'));
-      await _scrollToAddButton();
+      await _scrollToAddButton('emails');
       await driver
           .tap(find.byValueKey('framy_dependency_List element 1_input'));
       await driver.enterText('john@gmail.com');
@@ -146,9 +146,9 @@ void main() {
     });
 
     test('should allow to add second email', () async {
-      await _scrollToAddButton();
+      await _scrollToAddButton('emails');
       await driver.tap(find.text('+ Add emails element'));
-      await _scrollToAddButton();
+      await _scrollToAddButton('emails');
       await driver
           .tap(find.byValueKey('framy_dependency_List element 2_input'));
       await driver.enterText('john2@gmail.com');
@@ -250,6 +250,52 @@ void main() {
       await driver.tap(find.text('OK'));
       await driver.waitFor(find.text(
           '${now.year}-${now.month.toString().padLeft(2, '0')}-17 00:00:00'));
+    });
+  });
+
+  group('HistoryPage', () {
+    Future<void> waitForHistoryPageText(String text) {
+      return driver.waitFor(find.descendant(
+        of: find.byType('HistoryPage'),
+        matching: find.text(text),
+      ));
+    }
+
+    test('should allow to add one weight entry', () async {
+      await closeDependenciesPanelAndGoToOtherPage(
+        'HistoryPage',
+        openDependenciesPanel: true,
+      );
+
+      await _scrollToAddButton('weightEntries');
+      await driver.tap(find.text('+ Add weightEntries element'));
+      await _scrollToAddButton('weightEntries');
+      await driver.tap(find.byValueKey('framy_dependency_weight_input'));
+      await driver.enterText('78');
+      await waitForHistoryPageText('78.0');
+    });
+
+    test('should allow to add second weight entry', () async {
+      await _scrollToAddButton('weightEntries');
+      await driver.tap(find.text('+ Add weightEntries element'));
+      await _scrollToAddButton('weightEntries');
+      await driver.tap(find.descendant(
+        of: find.byValueKey('framy_dependency_List element 2_input'),
+        matching: find.byValueKey('framy_dependency_weight_input'),
+      ));
+      await driver.enterText('79');
+      await waitForHistoryPageText('78.0');
+      await waitForHistoryPageText('79.0');
+    });
+
+    test('should keep the weight value when note is added', () async {
+      await driver.tap(find.descendant(
+        of: find.byValueKey('framy_dependency_List element 2_input'),
+        matching: find.byValueKey('framy_dependency_note_input'),
+      ));
+      await driver.enterText('Some note');
+      await waitForHistoryPageText('78.0');
+      await waitForHistoryPageText('79.0');
     });
   });
 }
