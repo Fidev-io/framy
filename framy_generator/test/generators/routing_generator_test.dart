@@ -39,6 +39,11 @@ void main() {
       expect(result.contains('FramyTogglePage'), isTrue);
     });
 
+    test('should contain FramyTextFieldPage', () {
+      final result = generateRouting([]);
+      expect(result.contains('FramyTextFieldPage'), isTrue);
+    });
+
     test(
         'should contain dynamically generated widget page name when widget object is passed',
         () {

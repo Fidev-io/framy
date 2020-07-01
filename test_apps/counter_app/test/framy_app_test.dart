@@ -56,6 +56,28 @@ void main() {
       expect(find.byKey(Key('FramyButtonPage')), findsOneWidget);
     });
 
+    testWidgets('should show Toggle page on tap in drawer', (tester) async {
+      //given
+      await tester.pumpWidget(FramyApp());
+      expect(find.byKey(Key('FramyTogglePage')), findsNothing);
+      //when
+      await _goToMaterialComponentPage(
+          tester, find.text('Toggle'));
+      //then
+      expect(find.byKey(Key('FramyTogglePage')), findsOneWidget);
+    });
+
+    testWidgets('should show TextField page on tap in drawer', (tester) async {
+      //given
+      await tester.pumpWidget(FramyApp());
+      expect(find.byKey(Key('FramyTextFieldPage')), findsNothing);
+      //when
+      await _goToMaterialComponentPage(
+          tester, find.text('TextField'));
+      //then
+      expect(find.byKey(Key('FramyTextFieldPage')), findsOneWidget);
+    });
+
     testWidgets('should show CounterFAB page on tap in drawer', (tester) async {
       //given
       await tester.pumpWidget(FramyApp());

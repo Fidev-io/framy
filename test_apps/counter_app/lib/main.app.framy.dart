@@ -30,6 +30,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
     '/toggle': FramyTogglePage(),
+    '/textfield': FramyTextFieldPage(),
     '/CounterFAB': FramyCounterFABCustomPage(),
     '/CounterTitle': FramyCounterTitleCustomPage(),
   };
@@ -139,6 +140,12 @@ class FramyDrawer extends StatelessWidget {
                       title: Text('Toggle'),
                       onTap: () =>
                           Navigator.of(context).pushReplacementNamed('/toggle'),
+                    ),
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('TextField'),
+                      onTap: () =>
+                          Navigator.of(context).pushReplacementNamed('/textfield'),
                     ),
                   ],
                 ),
@@ -688,6 +695,15 @@ class _FramyButtonPageState extends State<FramyButtonPage> {
         ),
       ),
     );
+  }
+}
+
+class FramyTextFieldPage extends StatelessWidget {
+  const FramyTextFieldPage() : super(key: const Key('FramyTextFieldPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 
