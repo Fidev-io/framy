@@ -7,6 +7,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/colors': FramyColorsPage(),
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
+    '/toggle': FramyTogglePage(),
     ${_generateCustomWidgetPages(widgetFramyObjects)}
   };
   final page = routes[settings.name] ?? FramyFontsPage();

@@ -85,6 +85,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.1.0"
+  characters:
+    dependency: transitive
+    description:
+      name: characters
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   charcode:
     dependency: transitive
     description:
@@ -156,9 +163,9 @@ packages:
   framy_annotation:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      name: framy_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.1.0"
   framy_generator:
     dependency: "direct dev"
@@ -166,7 +173,7 @@ packages:
       path: "../../framy_generator"
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.1.1"
   glob:
     dependency: transitive
     description:
@@ -425,4 +432,4 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.7.0 <3.0.0"
+  dart: ">=2.9.0-14.0.dev <3.0.0"
