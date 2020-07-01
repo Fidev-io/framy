@@ -39,9 +39,11 @@ class _FramyTogglePageState extends State<FramyTogglePage> {
             ),
             const SizedBox(height: 8),
             const FramyHeaderText('Checkbox'),
-            Checkbox(
+            CheckboxListTile(
+              controlAffinity: ListTileControlAffinity.leading,
               onChanged: (bool value) => setState(() => checkboxState = value),
               value: checkboxState,
+              title: Text('Option'),
             ),
             const FramyHeaderText('Radio'),
             RadioListTile(

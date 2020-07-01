@@ -23,9 +23,9 @@ void main() {
       expect(result.contains('ToggleButtons('), isTrue);
     });
 
-    test('should contain Checkbox', () {
+    test('should contain CheckboxListTile', () {
       final result = generateTogglePage();
-      expect(result.contains('Checkbox('), isTrue);
+      expect(result.contains('CheckboxListTile('), isTrue);
     });
 
     test('should contain RadioListTiles', () {
