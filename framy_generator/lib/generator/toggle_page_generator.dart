@@ -9,7 +9,20 @@ class FramyTogglePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const FramyHeaderText('Toggle'),
+            const FramyHeaderText('Switch'),
+            Switch(
+              value: true,
+              onChanged: (bool value) {},
+            ),
+            const FramyHeaderText('Toggle buttons'),
+            ToggleButtons(
+              isSelected: [false, true, false],
+              children: [
+                Text('1'),
+                Text('2'),
+                Text('3'),
+              ],
+            ),
           ],
         ),
       ),

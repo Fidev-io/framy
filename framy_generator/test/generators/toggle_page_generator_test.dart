@@ -12,5 +12,15 @@ void main() {
       final result = generateTogglePage();
       expect(result.contains('Key(\'FramyTogglePage\')'), isTrue);
     });
+
+    test('should contain Switch', () {
+      final result = generateTogglePage();
+      expect(result.contains('Switch('), isTrue);
+    });
+
+    test('should contain ToggleButtons', () {
+      final result = generateTogglePage();
+      expect(result.contains('ToggleButtons('), isTrue);
+    });
   });
 }
