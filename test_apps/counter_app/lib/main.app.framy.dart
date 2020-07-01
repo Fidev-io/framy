@@ -29,6 +29,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/colors': FramyColorsPage(),
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
+    '/toggle': FramyTogglePage(),
     '/CounterFAB': FramyCounterFABCustomPage(),
     '/CounterTitle': FramyCounterTitleCustomPage(),
   };
@@ -132,6 +133,12 @@ class FramyDrawer extends StatelessWidget {
                       title: Text('Button'),
                       onTap: () =>
                           Navigator.of(context).pushReplacementNamed('/button'),
+                    ),
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('Toggle'),
+                      onTap: () =>
+                          Navigator.of(context).pushReplacementNamed('/toggle'),
                     ),
                   ],
                 ),
@@ -584,6 +591,24 @@ class FramyButtonPage extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class FramyTogglePage extends StatelessWidget {
+  const FramyTogglePage() : super(key: const Key('FramyTogglePage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            const FramyHeaderText('Toggle'),
+          ],
         ),
       ),
     );
@@ -1185,4 +1210,5 @@ final framyModelConstructorMap =
 final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
+
 Map<String, Map<String, dynamic>> createFramyPresets() => {};

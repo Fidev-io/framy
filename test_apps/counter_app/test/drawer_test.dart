@@ -39,6 +39,11 @@ void main() {
         await openMaterialComponentsMenu(tester);
         expect(find.text('Button'), findsOneWidget);
       });
+
+      testWidgets('should have Toggle list item', (tester) async {
+        await openMaterialComponentsMenu(tester);
+        expect(find.text('Toggle'), findsOneWidget);
+      });
     });
 
     testWidgets('should have CounterFAB', (tester) async {

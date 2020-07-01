@@ -237,6 +237,14 @@ void main() {
       await driver.waitFor(find.byValueKey('FramyButtonPage'));
       await ozzie.takeScreenshot('${platform}_button_page');
     });
+
+    test('should have Button page', () async {
+      await driver.tap(find.text('Material components'));
+      await driver.waitFor(find.text('Toggle'));
+      await driver.tap(find.text('Toggle'));
+      await driver.waitFor(find.byValueKey('FramyTogglePage'));
+      await ozzie.takeScreenshot('${platform}_toggle_page');
+    });
   });
 
   group('CounterFAB', () {
