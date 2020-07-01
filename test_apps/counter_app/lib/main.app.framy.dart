@@ -452,11 +452,10 @@ class _FramyTogglePageState extends State<FramyTogglePage> {
             const SizedBox(height: 8),
             const FramyHeaderText('Checkbox'),
             CheckboxListTile(
-                controlAffinity: ListTileControlAffinity.leading,
-                onChanged: (bool value) =>
-                    setState(() => checkboxState = value),
-                value: checkboxState,
-                title: Text('Option'),
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: (bool value) => setState(() => checkboxState = value),
+              value: checkboxState,
+              title: Text('Option'),
             ),
             const FramyHeaderText('Radio'),
             RadioListTile(
@@ -574,8 +573,15 @@ class FramyAppBarPage extends StatelessWidget {
   }
 }
 
-class FramyButtonPage extends StatelessWidget {
+class FramyButtonPage extends StatefulWidget {
   const FramyButtonPage() : super(key: const Key('FramyButtonPage'));
+
+  @override
+  _FramyButtonPageState createState() => _FramyButtonPageState();
+}
+
+class _FramyButtonPageState extends State<FramyButtonPage> {
+  String selectedOptionInDropdown;
 
   @override
   Widget build(BuildContext context) {
@@ -653,7 +659,28 @@ class FramyButtonPage extends StatelessWidget {
                 children: [
                   IconButton(icon: Icon(Icons.favorite), onPressed: () {}),
                   IconButton(
-                      icon: Icon(Icons.favorite_border), onPressed: null),
+                    icon: Icon(Icons.favorite_border),
+                    onPressed: null,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const FramyHeaderText('Dropdown button'),
+              const SizedBox(height: 4),
+              DropdownButton(
+                hint: Text('Select option'),
+                value: selectedOptionInDropdown,
+                onChanged: (option) =>
+                    setState(() => selectedOptionInDropdown = option),
+                items: [
+                  DropdownMenuItem(
+                    child: Text('Option A'),
+                    value: 'Option A',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('Option B'),
+                    value: 'Option B',
+                  ),
                 ],
               ),
             ],
@@ -1259,4 +1286,5 @@ final framyModelConstructorMap =
 final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
+
 Map<String, Map<String, dynamic>> createFramyPresets() => {};

@@ -68,5 +68,16 @@ void main() {
       expect(
           result.contains('const FramyHeaderText(\'Icon button\'),'), isTrue);
     });
+
+    test('should contain Dropdown button header', () {
+      final result = generateButtonPage();
+      expect(
+          result.contains('const FramyHeaderText(\'Dropdown button\'),'), isTrue);
+    });
+
+    test('should contain Dropdown button', () {
+      final result = generateButtonPage();
+      expect(result.contains('DropdownButton('), isTrue);
+    });
   });
 }
