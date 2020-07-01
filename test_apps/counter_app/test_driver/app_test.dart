@@ -238,7 +238,7 @@ void main() {
       await ozzie.takeScreenshot('${platform}_button_page');
     });
 
-    test('should have Button page', () async {
+    test('should have Toggle page', () async {
       await driver.tap(find.text('Material components'));
       await driver.waitFor(find.text('Toggle'));
       await driver.tap(find.text('Toggle'));

@@ -22,5 +22,15 @@ void main() {
       final result = generateTogglePage();
       expect(result.contains('ToggleButtons('), isTrue);
     });
+
+    test('should contain Checkbox', () {
+      final result = generateTogglePage();
+      expect(result.contains('Checkbox('), isTrue);
+    });
+
+    test('should contain RadioListTiles', () {
+      final result = generateTogglePage();
+      expect('RadioListTile('.allMatches(result), hasLength(2));
+    });
   });
 }

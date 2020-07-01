@@ -20,5 +20,15 @@ void main() {
       await tester.pumpWidget(TestMaterialAppWithScaffold(FramyTogglePage()));
       expect(find.byType(ToggleButtons), findsOneWidget);
     });
+
+    testWidgets('should have Checkbox', (tester) async {
+      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyTogglePage()));
+      expect(find.byType(Checkbox), findsOneWidget);
+    });
+
+    testWidgets('should have Radio buttons', (tester) async {
+      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyTogglePage()));
+      expect(find.byType(Radio<String>().runtimeType), findsNWidgets(2));
+    });
   });
 }
