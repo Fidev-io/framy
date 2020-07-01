@@ -21,6 +21,7 @@ import 'package:framy_generator/generator/model_constructor_map_generator.dart';
 import 'package:framy_generator/generator/preset_dropdown_generator.dart';
 import 'package:framy_generator/generator/presets_map_generator.dart';
 import 'package:framy_generator/generator/routing_generator.dart';
+import 'package:framy_generator/generator/subdependencies_map_generator.dart';
 import 'package:framy_generator/generator/utils_generator.dart';
 import 'package:framy_generator/generator/widget_dependencies_panel_generator.dart';
 import 'package:framy_generator/generator/widget_dependency_input_generator.dart';
@@ -70,6 +71,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generatePresetDropdown());
     buffer.writeln(generateModelConstructorMap(modelFramyObjects));
     buffer.writeln(generateEnumMap(modelFramyObjects));
+    buffer.writeln(generateSubDependenciesMap(modelFramyObjects));
     buffer.writeln(generatePresets(presetFramyObjects));
     return buffer.toString();
   }

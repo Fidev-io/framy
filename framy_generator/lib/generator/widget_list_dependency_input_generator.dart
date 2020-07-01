@@ -26,7 +26,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 'List element \${i + 1}',
                 listType,
                 dependency.value[i],
-                [],
+                dependency.subDependencies[i].subDependencies,
               ),
               onChanged: (name, val) {
                 dependency.value[i] = val;
@@ -42,6 +42,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                   iconSize: 16,
                   onPressed: () {
                     dependency.value.removeAt(i);
+                    dependency.subDependencies.removeAt(i);
                     onChanged(dependency);
                   },
                   // splashRadius: 16, //--not in Stable channel yet
@@ -64,6 +65,12 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               ${modelObjects.fold('', (prev, modelObject) => prev + _generateEmptyList(modelObject.name) + '\n')}
             }
             dependency.value.add(null);
+            dependency.subDependencies.add(FramyDependencyModel(
+              '_',
+              listType,
+              null,
+              createSubDependencies(listType),
+            ));
             onChanged(dependency);
           },
         ),

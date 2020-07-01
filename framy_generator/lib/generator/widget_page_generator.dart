@@ -1,15 +1,15 @@
 import 'package:framy_generator/framy_object.dart';
+import 'package:framy_generator/generator/utils.dart';
 
 String generateWidgetPages(
     List<FramyObject> widgetFramyObjects, List<FramyObject> modelFramyObjects) {
   return widgetFramyObjects.fold(
     '',
-    (previousValue, element) =>
-        previousValue + _generateWidgetPage(element, modelFramyObjects),
+    (previousValue, element) => previousValue + _generateWidgetPage(element),
   );
 }
 
-String _generateWidgetPage(FramyObject framyObject, List<FramyObject> models) {
+String _generateWidgetPage(FramyObject framyObject) {
   final constructorDependencies = framyObject.widgetDependencies
       .where(
           (dep) => dep.dependencyType == FramyWidgetDependencyType.constructor)
@@ -36,7 +36,7 @@ class $className extends StatefulWidget {
 
 class $stateClassName extends State<$className> {
   List<FramyDependencyModel> dependencies = [
-    ${framyObject.widgetDependencies.fold('', (s, dep) => s + _dependencyInitializationLine(dep, models))}
+    ${framyObject.widgetDependencies.fold('', (s, dep) => s + dependencyInitializationLine(dep))}
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
@@ -109,26 +109,6 @@ String _wrapConstructorWithProvider(
 
 String _providerDependencyToProviderWidget(FramyWidgetDependency dependency) =>
     'Provider<${dependency.type}>.value(value: dependency(\'${dependency.name}\').value),\n';
-
-String _dependencyInitializationLine(
-    FramyWidgetDependency dependency, List<FramyObject> models) {
-  final String type = dependency.type;
-  final String name = dependency.name;
-  final String defaultValue = dependency.defaultValueCode;
-  final model = models.singleWhere(
-    (element) => element.name == type,
-    orElse: () => null,
-  );
-
-  String subDependencies = model == null
-      ? ''
-      : model.widgetDependencies.fold(
-          '',
-          (s, dep) => s + _dependencyInitializationLine(dep, models),
-        );
-
-  return 'FramyDependencyModel<$type>(\'$name\', \'$type\', $defaultValue, [$subDependencies]),\n';
-}
 
 String _generateParamUsageInConstructor(FramyWidgetDependency dependency) {
   final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';

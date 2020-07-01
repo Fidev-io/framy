@@ -1,13 +1,34 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weight_tracker/main.app.framy.dart';
+import 'package:weight_tracker/models/weight_entry.dart';
 
 import 'test_utils.dart';
 
 void main() {
   FramyDependencyModel _getStringListModel([List<String> defaultValue]) =>
       FramyDependencyModel<List<String>>(
-          'strings', 'List<String>', defaultValue, []);
+        'strings',
+        'List<String>',
+        defaultValue,
+        defaultValue == null
+            ? []
+            : List.generate(
+                defaultValue.length,
+                (i) => FramyDependencyModel<String>('_', 'String', null, []),
+              ),
+      );
+
+  FramyDependencyModel _getWeightEntriesModel([
+    List<WeightEntry> defaultValue,
+    List<FramyDependencyModel> subDependencies,
+  ]) =>
+      FramyDependencyModel(
+        'weightEntries',
+        'List<WeightEntry>',
+        defaultValue,
+        subDependencies ?? [],
+      );
 
   Future<void> _buildDependencyInput(
     WidgetTester tester,
@@ -17,10 +38,12 @@ void main() {
   }) async {
     await tester.pumpWidget(
       TestMaterialAppWithScaffold(
-        FramyWidgetListDependencyInput(
-          dependency: dependency,
-          onChanged: onChanged ?? (_) {},
-          presets: presets,
+        SingleChildScrollView(
+          child: FramyWidgetListDependencyInput(
+            dependency: dependency,
+            onChanged: onChanged ?? (_) {},
+            presets: presets,
+          ),
         ),
       ),
     );
@@ -149,6 +172,121 @@ void main() {
       //then
       expect(find.text('value1'), findsNothing);
       expect(find.text('value2'), findsOneWidget);
+    });
+
+    group('with custom model', () {
+      testWidgets('should build', (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getWeightEntriesModel());
+        expect(find.byType(FramyWidgetListDependencyInput), findsOneWidget);
+      });
+
+      testWidgets('should display model input when its passed',
+          (WidgetTester tester) async {
+        //given
+        final entry = WeightEntry(DateTime(2020), 90, 'foo');
+        final model = FramyDependencyModel<WeightEntry>(
+          '_',
+          'WeightEntry',
+          entry,
+          [
+            FramyDependencyModel<DateTime>(
+                'dateTime', 'DateTime', DateTime(2020), []),
+            FramyDependencyModel<double>('weight', 'double', 90.0, []),
+            FramyDependencyModel<String>('note', 'String', 'foo', []),
+          ],
+        );
+        //when
+        await _buildDependencyInput(
+          tester,
+          _getWeightEntriesModel([entry], [model]),
+        );
+        //then
+        expect(find.text('foo'), findsOneWidget);
+        expect(find.text('90.0'), findsOneWidget);
+        expect(find.text('2020-01-01 00:00:00'), findsOneWidget);
+      });
+
+      testWidgets('should display two model inputs when its passed',
+          (WidgetTester tester) async {
+        //given
+        final entry = WeightEntry(DateTime(2020), 90, 'foo');
+        final model = FramyDependencyModel<WeightEntry>(
+          '_',
+          'WeightEntry',
+          entry,
+          [
+            FramyDependencyModel<DateTime>(
+                'dateTime', 'DateTime', DateTime(2020), []),
+            FramyDependencyModel<double>('weight', 'double', 90.0, []),
+            FramyDependencyModel<String>('note', 'String', 'foo', []),
+          ],
+        );
+        //when
+        await _buildDependencyInput(
+          tester,
+          _getWeightEntriesModel([entry, entry], [model, model]),
+        );
+        //then
+        expect(find.text('foo'), findsNWidgets(2));
+        expect(find.text('90.0'), findsNWidgets(2));
+        expect(find.text('2020-01-01 00:00:00'), findsNWidgets(2));
+      });
+
+      testWidgets('should emit new value on Add pressed',
+          (WidgetTester tester) async {
+        //given
+        FramyDependencyModel emittedModel;
+        await _buildDependencyInput(
+          tester,
+          _getWeightEntriesModel(),
+          onChanged: (model) => emittedModel = model,
+        );
+        //when
+        await tester.tap(find.text('+ Add weightEntries element'));
+        //then
+        expect(emittedModel.value, hasLength(1));
+        expect(emittedModel.value.first, isNull);
+      });
+
+      testWidgets(
+          'should emit proper values and subDependencies when fields are changed',
+          (WidgetTester tester) async {
+        //given
+        final entry = WeightEntry(DateTime(2020), 90, 'foo');
+        final model = FramyDependencyModel<WeightEntry>(
+          '_',
+          'WeightEntry',
+          entry,
+          [
+            FramyDependencyModel<DateTime>(
+                'dateTime', 'DateTime', DateTime(2020), []),
+            FramyDependencyModel<double>('weight', 'double', 90.0, []),
+            FramyDependencyModel<String>('note', 'String', 'foo', []),
+          ],
+        );
+        FramyDependencyModel emittedModel;
+        await _buildDependencyInput(
+          tester,
+          _getWeightEntriesModel([entry], [model]),
+          onChanged: (model) => emittedModel = model,
+        );
+
+        //when
+        await tester.enterText(
+            find.byKey(Key('framy_dependency_weight_input')), '89.0');
+        await tester.enterText(
+            find.byKey(Key('framy_dependency_note_input')), 'FooFoo');
+
+        //then
+        expect(emittedModel.value.first.weight, 89.0);
+        expect(emittedModel.value.first.note, 'FooFoo');
+        expect(emittedModel.subDependencies.first.subDependencies[0].value,
+            DateTime(2020));
+        expect(
+            emittedModel.subDependencies.first.subDependencies[1].value, 89.0);
+        expect(emittedModel.subDependencies.first.subDependencies[2].value,
+            'FooFoo');
+      });
     });
   });
 }

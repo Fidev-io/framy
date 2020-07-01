@@ -601,8 +601,8 @@ class FramyCounterFABCustomPage extends StatefulWidget {
 
 class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<void Function()>(
-        'onPressed', 'void Function()', null, []),
+    FramyDependencyModel<void Function()>('onPressed', 'void Function()', null,
+        createSubDependencies('void Function()')),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
@@ -670,8 +670,10 @@ class FramyCounterTitleCustomPage extends StatefulWidget {
 class _FramyCounterTitleCustomPageState
     extends State<FramyCounterTitleCustomPage> {
   List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<String>('verb', 'String', 'pushed', []),
-    FramyDependencyModel<int>('counter', 'int', 0, []),
+    FramyDependencyModel<String>(
+        'verb', 'String', 'pushed', createSubDependencies('String')),
+    FramyDependencyModel<int>(
+        'counter', 'int', 0, createSubDependencies('int')),
   ];
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
@@ -1076,7 +1078,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 'List element ${i + 1}',
                 listType,
                 dependency.value[i],
-                [],
+                dependency.subDependencies[i].subDependencies,
               ),
               onChanged: (name, val) {
                 dependency.value[i] = val;
@@ -1092,6 +1094,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                   iconSize: 16,
                   onPressed: () {
                     dependency.value.removeAt(i);
+                    dependency.subDependencies.removeAt(i);
                     onChanged(dependency);
                   },
                   // splashRadius: 16, //--not in Stable channel yet
@@ -1113,6 +1116,12 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               if (listType == 'bool') dependency.value = <bool>[];
             }
             dependency.value.add(null);
+            dependency.subDependencies.add(FramyDependencyModel(
+              '_',
+              listType,
+              null,
+              createSubDependencies(listType),
+            ));
             onChanged(dependency);
           },
         ),
@@ -1185,4 +1194,11 @@ final framyModelConstructorMap =
 final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
+List<FramyDependencyModel> createSubDependencies(String type) {
+  switch (type) {
+    default:
+      return [];
+  }
+}
+
 Map<String, Map<String, dynamic>> createFramyPresets() => {};
