@@ -202,6 +202,8 @@ class FramyDrawer extends StatelessWidget {
   }
 }
 
+// ======================== MATERIAL PAGES ===========================
+
 class FramyFontsPage extends StatelessWidget {
   const FramyFontsPage() : super(key: const Key('FramyFontsPage'));
 
@@ -734,25 +736,28 @@ class _FramyButtonPageState extends State<FramyButtonPage> {
   }
 }
 
-class FramyHistoryPageCustomPage extends StatefulWidget {
-  const FramyHistoryPageCustomPage()
-      : super(key: const Key('Framy_HistoryPage_Page'));
+// ======================== CUSTOM PAGES ===========================
+
+typedef dynamic DependencyValueGetter(String name);
+
+class FramyCustomPage extends StatefulWidget {
+  final List<FramyDependencyModel> dependencies;
+  final Widget Function(DependencyValueGetter dependencyValueGetter) builder;
+
+  const FramyCustomPage({Key key, this.dependencies, this.builder})
+      : super(key: key);
 
   @override
-  _FramyHistoryPageCustomPageState createState() =>
-      _FramyHistoryPageCustomPageState();
+  _FramyCustomPageState createState() => _FramyCustomPageState();
 }
 
-class _FramyHistoryPageCustomPageState
-    extends State<FramyHistoryPageCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<List<WeightEntry>>('weightEntries',
-        'List<WeightEntry>', null, createSubDependencies('List<WeightEntry>')),
-  ];
+class _FramyCustomPageState extends State<FramyCustomPage> {
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
   FramyDependencyModel dependency(String name) =>
-      dependencies.singleWhere((d) => d.name == name);
+      widget.dependencies.singleWhere((d) => d.name == name);
+
+  dynamic dependencyValue(String name) => dependency(name).value;
 
   void onChanged(String name, dynamic dependencyValue) {
     setState(() => dependency(name).value = dependencyValue);
@@ -770,15 +775,13 @@ class _FramyHistoryPageCustomPageState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: HistoryPage(
-                  weightEntries: dependency('weightEntries').value,
-                ),
+                child: widget.builder(dependencyValue),
               ),
               if (!isSmallDevice)
                 SizedBox(
                   width: 300,
                   child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
+                    dependencies: widget.dependencies,
                     presets: presets,
                     onChanged: onChanged,
                   ),
@@ -789,7 +792,7 @@ class _FramyHistoryPageCustomPageState
             return Scaffold(
               body: body,
               floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: dependencies,
+                dependencies: widget.dependencies,
                 presets: presets,
                 onChanged: onChanged,
               ),
@@ -803,353 +806,119 @@ class _FramyHistoryPageCustomPageState
   }
 }
 
-class FramyProfilePageCustomPage extends StatefulWidget {
-  const FramyProfilePageCustomPage()
-      : super(key: const Key('Framy_ProfilePage_Page'));
-
-  @override
-  _FramyProfilePageCustomPageState createState() =>
-      _FramyProfilePageCustomPageState();
-}
-
-class _FramyProfilePageCustomPageState
-    extends State<FramyProfilePageCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<User>(
-        'User', 'User', null, createSubDependencies('User')),
-  ];
-  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
-
-  FramyDependencyModel dependency(String name) =>
-      dependencies.singleWhere((d) => d.name == name);
-
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
-  }
-
+class FramyHistoryPageCustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmallDevice =
-              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
-          final body = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: MultiProvider(
-                  providers: [
-                    Provider<User>.value(value: dependency('User').value),
-                  ],
-                  child: ProfilePage(),
-                ),
-              ),
-              if (!isSmallDevice)
-                SizedBox(
-                  width: 300,
-                  child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
-                    presets: presets,
-                    onChanged: onChanged,
-                  ),
-                ),
-            ],
-          );
-          if (isSmallDevice) {
-            return Scaffold(
-              body: body,
-              floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: dependencies,
-                presets: presets,
-                onChanged: onChanged,
-              ),
-            );
-          } else {
-            return body;
-          }
-        },
-      ),
+    return FramyCustomPage(
+      key: Key('Framy_HistoryPage_Page'),
+      dependencies: [
+        FramyDependencyModel<List<WeightEntry>>(
+            'weightEntries',
+            'List<WeightEntry>',
+            null,
+            createSubDependencies('List<WeightEntry>')),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return HistoryPage(
+          weightEntries: valueGetter('weightEntries'),
+        );
+      },
     );
   }
 }
 
-class FramyUserDataCardCustomPage extends StatefulWidget {
-  const FramyUserDataCardCustomPage()
-      : super(key: const Key('Framy_UserDataCard_Page'));
-
-  @override
-  _FramyUserDataCardCustomPageState createState() =>
-      _FramyUserDataCardCustomPageState();
-}
-
-class _FramyUserDataCardCustomPageState
-    extends State<FramyUserDataCardCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<User>(
-        'user', 'User', null, createSubDependencies('User')),
-  ];
-  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
-
-  FramyDependencyModel dependency(String name) =>
-      dependencies.singleWhere((d) => d.name == name);
-
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
-  }
-
+class FramyProfilePageCustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmallDevice =
-              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
-          final body = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: UserDataCard(
-                  user: dependency('user').value,
-                ),
-              ),
-              if (!isSmallDevice)
-                SizedBox(
-                  width: 300,
-                  child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
-                    presets: presets,
-                    onChanged: onChanged,
-                  ),
-                ),
-            ],
-          );
-          if (isSmallDevice) {
-            return Scaffold(
-              body: body,
-              floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: dependencies,
-                presets: presets,
-                onChanged: onChanged,
-              ),
-            );
-          } else {
-            return body;
-          }
-        },
-      ),
+    return FramyCustomPage(
+      key: Key('Framy_ProfilePage_Page'),
+      dependencies: [
+        FramyDependencyModel<User>(
+            'User', 'User', null, createSubDependencies('User')),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return MultiProvider(
+          providers: [
+            Provider<User>.value(value: valueGetter('User')),
+          ],
+          child: ProfilePage(),
+        );
+      },
     );
   }
 }
 
-class FramyUserEmailsViewCustomPage extends StatefulWidget {
-  const FramyUserEmailsViewCustomPage()
-      : super(key: const Key('Framy_UserEmailsView_Page'));
-
-  @override
-  _FramyUserEmailsViewCustomPageState createState() =>
-      _FramyUserEmailsViewCustomPageState();
-}
-
-class _FramyUserEmailsViewCustomPageState
-    extends State<FramyUserEmailsViewCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<User>(
-        'user', 'User', null, createSubDependencies('User')),
-  ];
-  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
-
-  FramyDependencyModel dependency(String name) =>
-      dependencies.singleWhere((d) => d.name == name);
-
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
-  }
-
+class FramyUserDataCardCustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmallDevice =
-              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
-          final body = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: UserEmailsView(
-                  user: dependency('user').value,
-                ),
-              ),
-              if (!isSmallDevice)
-                SizedBox(
-                  width: 300,
-                  child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
-                    presets: presets,
-                    onChanged: onChanged,
-                  ),
-                ),
-            ],
-          );
-          if (isSmallDevice) {
-            return Scaffold(
-              body: body,
-              floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: dependencies,
-                presets: presets,
-                onChanged: onChanged,
-              ),
-            );
-          } else {
-            return body;
-          }
-        },
-      ),
+    return FramyCustomPage(
+      key: Key('Framy_UserDataCard_Page'),
+      dependencies: [
+        FramyDependencyModel<User>(
+            'user', 'User', null, createSubDependencies('User')),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return UserDataCard(
+          user: valueGetter('user'),
+        );
+      },
     );
   }
 }
 
-class FramyWeightUnitDisplayCustomPage extends StatefulWidget {
-  const FramyWeightUnitDisplayCustomPage()
-      : super(key: const Key('Framy_WeightUnitDisplay_Page'));
-
-  @override
-  _FramyWeightUnitDisplayCustomPageState createState() =>
-      _FramyWeightUnitDisplayCustomPageState();
-}
-
-class _FramyWeightUnitDisplayCustomPageState
-    extends State<FramyWeightUnitDisplayCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<WeightUnit>('weightUnit', 'WeightUnit', WeightUnit.kg,
-        createSubDependencies('WeightUnit')),
-  ];
-  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
-
-  FramyDependencyModel dependency(String name) =>
-      dependencies.singleWhere((d) => d.name == name);
-
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
-  }
-
+class FramyUserEmailsViewCustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmallDevice =
-              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
-          final body = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: WeightUnitDisplay(
-                  weightUnit: dependency('weightUnit').value,
-                ),
-              ),
-              if (!isSmallDevice)
-                SizedBox(
-                  width: 300,
-                  child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
-                    presets: presets,
-                    onChanged: onChanged,
-                  ),
-                ),
-            ],
-          );
-          if (isSmallDevice) {
-            return Scaffold(
-              body: body,
-              floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: dependencies,
-                presets: presets,
-                onChanged: onChanged,
-              ),
-            );
-          } else {
-            return body;
-          }
-        },
-      ),
+    return FramyCustomPage(
+      key: Key('Framy_UserEmailsView_Page'),
+      dependencies: [
+        FramyDependencyModel<User>(
+            'user', 'User', null, createSubDependencies('User')),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return UserEmailsView(
+          user: valueGetter('user'),
+        );
+      },
     );
   }
 }
 
-class FramyWeightEntryListItemCustomPage extends StatefulWidget {
-  const FramyWeightEntryListItemCustomPage()
-      : super(key: const Key('Framy_WeightEntryListItem_Page'));
-
-  @override
-  _FramyWeightEntryListItemCustomPageState createState() =>
-      _FramyWeightEntryListItemCustomPageState();
-}
-
-class _FramyWeightEntryListItemCustomPageState
-    extends State<FramyWeightEntryListItemCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry', null,
-        createSubDependencies('WeightEntry')),
-    FramyDependencyModel<double>(
-        'weightDifference', 'double', 0, createSubDependencies('double')),
-  ];
-  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
-
-  FramyDependencyModel dependency(String name) =>
-      dependencies.singleWhere((d) => d.name == name);
-
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
-  }
-
+class FramyWeightUnitDisplayCustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmallDevice =
-              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
-          final body = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: WeightEntryListItem(
-                  weightEntry: dependency('weightEntry').value,
-                  weightDifference: dependency('weightDifference').value,
-                ),
-              ),
-              if (!isSmallDevice)
-                SizedBox(
-                  width: 300,
-                  child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
-                    presets: presets,
-                    onChanged: onChanged,
-                  ),
-                ),
-            ],
-          );
-          if (isSmallDevice) {
-            return Scaffold(
-              body: body,
-              floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: dependencies,
-                presets: presets,
-                onChanged: onChanged,
-              ),
-            );
-          } else {
-            return body;
-          }
-        },
-      ),
+    return FramyCustomPage(
+      key: Key('Framy_WeightUnitDisplay_Page'),
+      dependencies: [
+        FramyDependencyModel<WeightUnit>('weightUnit', 'WeightUnit',
+            WeightUnit.kg, createSubDependencies('WeightUnit')),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return WeightUnitDisplay(
+          weightUnit: valueGetter('weightUnit'),
+        );
+      },
+    );
+  }
+}
+
+class FramyWeightEntryListItemCustomPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FramyCustomPage(
+      key: Key('Framy_WeightEntryListItem_Page'),
+      dependencies: [
+        FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry', null,
+            createSubDependencies('WeightEntry')),
+        FramyDependencyModel<double>(
+            'weightDifference', 'double', 0, createSubDependencies('double')),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return WeightEntryListItem(
+          weightEntry: valueGetter('weightEntry'),
+          weightDifference: valueGetter('weightDifference'),
+        );
+      },
     );
   }
 }
@@ -1243,6 +1012,8 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
     );
   }
 }
+
+// ======================== DEPENDENCY INPUTS ===========================
 
 InputDecoration get _framyInputDecoration => InputDecoration(
       filled: true,
@@ -1617,6 +1388,8 @@ class FramyPresetDropdown extends StatelessWidget {
     );
   }
 }
+
+// ======================== MAPS etc ===========================
 
 final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{

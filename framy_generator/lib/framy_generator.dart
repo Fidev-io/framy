@@ -24,6 +24,7 @@ import 'package:framy_generator/generator/routing_generator.dart';
 import 'package:framy_generator/generator/subdependencies_map_generator.dart';
 import 'package:framy_generator/generator/toggle_page_generator.dart';
 import 'package:framy_generator/generator/utils_generator.dart';
+import 'package:framy_generator/generator/widget_cutom_page_template_generator.dart';
 import 'package:framy_generator/generator/widget_dependencies_panel_generator.dart';
 import 'package:framy_generator/generator/widget_dependency_input_generator.dart';
 import 'package:framy_generator/generator/widget_list_dependency_input_generator.dart';
@@ -58,19 +59,28 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());
     buffer.writeln(generateDrawer(widgetFramyObjects));
+    buffer.writeln(
+        '\n// ======================== MATERIAL PAGES ===========================\n');
     buffer.writeln(generateFontsPage());
     buffer.writeln(generateColorsPage(themeFramyObjects));
     buffer.writeln(generateTogglePage());
     buffer.writeln(generateUtils());
     buffer.writeln(generateAppBarPage());
     buffer.writeln(generateButtonPage());
+    buffer.writeln(
+        '\n// ======================== CUSTOM PAGES ===========================\n');
+    buffer.writeln(generateCustomPage());
     buffer.writeln(generateWidgetPages(widgetFramyObjects, modelFramyObjects));
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
+    buffer.writeln(
+        '\n// ======================== DEPENDENCY INPUTS ===========================\n');
     buffer.writeln(generateWidgetDependencyInput(modelFramyObjects));
     buffer.writeln(generateDateTimeDependencyInput());
     buffer.writeln(generateWidgetListDependencyInput(modelFramyObjects));
     buffer.writeln(generatePresetDropdown());
+    buffer.writeln(
+        '\n// ======================== MAPS etc ===========================\n');
     buffer.writeln(generateModelConstructorMap(modelFramyObjects));
     buffer.writeln(generateEnumMap(modelFramyObjects));
     buffer.writeln(generateSubDependenciesMap(modelFramyObjects));
