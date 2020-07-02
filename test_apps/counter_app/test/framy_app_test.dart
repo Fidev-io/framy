@@ -78,6 +78,17 @@ void main() {
       expect(find.byKey(Key('FramyTextFieldPage')), findsOneWidget);
     });
 
+    testWidgets('should show BottomNavigationBar page on tap in drawer', (tester) async {
+      //given
+      await tester.pumpWidget(FramyApp());
+      expect(find.byKey(Key('FramyBottomNavigationBarPage')), findsNothing);
+      //when
+      await _goToMaterialComponentPage(
+          tester, find.text('BottomNavigationBar'));
+      //then
+      expect(find.byKey(Key('FramyBottomNavigationBarPage')), findsOneWidget);
+    });
+
     testWidgets('should show CounterFAB page on tap in drawer', (tester) async {
       //given
       await tester.pumpWidget(FramyApp());

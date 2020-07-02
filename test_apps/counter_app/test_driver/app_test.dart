@@ -251,6 +251,12 @@ void main() {
       await driver.waitFor(find.byValueKey('FramyTextFieldPage'));
       await ozzie.takeScreenshot('${platform}_textfield_page');
     });
+
+    test('should have BottomNavigationBar page', () async {
+      await openMaterialComponentsPage('BottomNavigationBar');
+      await driver.waitFor(find.byValueKey('BottomNavigationBarPage'));
+      await ozzie.takeScreenshot('${platform}_bottom_navigation_bar_page');
+    });
   });
 
   group('CounterFAB', () {

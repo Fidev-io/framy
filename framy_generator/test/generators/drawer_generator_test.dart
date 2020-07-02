@@ -85,6 +85,16 @@ void main() {
         final String result = generateDrawer([]);
         expect(result.contains('\'/textfield\''), isTrue);
       });
+
+      test('should contain BottomNavigationBar text', () {
+        final String result = generateDrawer([]);
+        expect(result.contains('Text(\'BottomNavigationBar\''), isTrue);
+      });
+
+      test('should contain /bottom_navigation_bar route name', () {
+        final String result = generateDrawer([]);
+        expect(result.contains('\'/bottom_navigation_bar\''), isTrue);
+      });
     });
 
     group('when custom widget is given', () {

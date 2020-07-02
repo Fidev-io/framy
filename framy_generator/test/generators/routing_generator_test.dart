@@ -44,6 +44,11 @@ void main() {
       expect(result.contains('FramyTextFieldPage'), isTrue);
     });
 
+    test('should contain FramyBottomNavigationBarPage', () {
+      final result = generateRouting([]);
+      expect(result.contains('FramyBottomNavigationBarPage'), isTrue);
+    });
+
     test(
         'should contain dynamically generated widget page name when widget object is passed',
         () {

@@ -31,6 +31,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/button': FramyButtonPage(),
     '/toggle': FramyTogglePage(),
     '/textfield': FramyTextFieldPage(),
+    '/bottom_navigation_bar': FramyBottomNavigationBarPage(),
     '/CounterFAB': FramyCounterFABCustomPage(),
     '/CounterTitle': FramyCounterTitleCustomPage(),
   };
@@ -146,6 +147,12 @@ class FramyDrawer extends StatelessWidget {
                       title: Text('TextField'),
                       onTap: () => Navigator.of(context)
                           .pushReplacementNamed('/textfield'),
+                    ),
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('BottomNavigationBar'),
+                      onTap: () => Navigator.of(context)
+                          .pushReplacementNamed('/bottom_navigation_bar'),
                     ),
                   ],
                 ),
@@ -771,6 +778,15 @@ class FramyTextFieldPage extends StatelessWidget {
   }
 }
 
+class FramyBottomNavigationBarPage extends StatelessWidget {
+  const FramyBottomNavigationBarPage() : super(key: const Key('FramyBottomNavigationBarPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 // ======================== CUSTOM PAGES ===========================
 
 typedef dynamic DependencyValueGetter(String name);
@@ -1348,6 +1364,7 @@ final framyModelConstructorMap =
 final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
+
 List<FramyDependencyModel> createSubDependencies(String type) {
   switch (type) {
     default:
