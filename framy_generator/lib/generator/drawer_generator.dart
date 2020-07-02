@@ -66,12 +66,6 @@ class FramyDrawer extends StatelessWidget {
                       onTap: () =>
                           Navigator.of(context).pushReplacementNamed('/textfield'),
                     ),
-                    ListTile(
-                      leading: SizedBox.shrink(),
-                      title: Text('BottomNavigationBar'),
-                      onTap: () =>
-                          Navigator.of(context).pushReplacementNamed('/bottom_navigation_bar'),
-                    ),
                   ],
                 ),
               ),

@@ -49,11 +49,6 @@ void main() {
         await openMaterialComponentsMenu(tester);
         expect(find.text('TextField'), findsOneWidget);
       });
-
-      testWidgets('should have BottomNavigationBar list item', (tester) async {
-        await openMaterialComponentsMenu(tester);
-        expect(find.text('BottomNavigationBar'), findsOneWidget);
-      });
     });
 
     testWidgets('should have CounterFAB', (tester) async {
