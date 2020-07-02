@@ -8,6 +8,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
     '/toggle': FramyTogglePage(),
+    '/textfield': FramyTextFieldPage(),
     ${_generateCustomWidgetPages(widgetFramyObjects)}
   };
   final page = routes[settings.name] ?? FramyFontsPage();
