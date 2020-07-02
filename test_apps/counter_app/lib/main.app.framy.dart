@@ -30,7 +30,6 @@ Route onGenerateRoute(RouteSettings settings) {
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
     '/toggle': FramyTogglePage(),
-    '/textfield': FramyTextFieldPage(),
     '/CounterFAB': FramyCounterFABCustomPage(),
     '/CounterTitle': FramyCounterTitleCustomPage(),
   };
@@ -141,12 +140,6 @@ class FramyDrawer extends StatelessWidget {
                       onTap: () =>
                           Navigator.of(context).pushReplacementNamed('/toggle'),
                     ),
-                    ListTile(
-                      leading: SizedBox.shrink(),
-                      title: Text('TextField'),
-                      onTap: () =>
-                          Navigator.of(context).pushReplacementNamed('/textfield'),
-                    ),
                   ],
                 ),
               ),
@@ -169,6 +162,8 @@ class FramyDrawer extends StatelessWidget {
     );
   }
 }
+
+// ======================== MATERIAL PAGES ===========================
 
 class FramyFontsPage extends StatelessWidget {
   const FramyFontsPage() : super(key: const Key('FramyFontsPage'));
@@ -698,33 +693,28 @@ class _FramyButtonPageState extends State<FramyButtonPage> {
   }
 }
 
-class FramyTextFieldPage extends StatelessWidget {
-  const FramyTextFieldPage() : super(key: const Key('FramyTextFieldPage'));
+// ======================== CUSTOM PAGES ===========================
+
+typedef dynamic DependencyValueGetter(String name);
+
+class FramyCustomPage extends StatefulWidget {
+  final List<FramyDependencyModel> dependencies;
+  final Widget Function(DependencyValueGetter dependencyValueGetter) builder;
+
+  const FramyCustomPage({Key key, this.dependencies, this.builder})
+      : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
+  _FramyCustomPageState createState() => _FramyCustomPageState();
 }
 
-class FramyCounterFABCustomPage extends StatefulWidget {
-  const FramyCounterFABCustomPage()
-      : super(key: const Key('Framy_CounterFAB_Page'));
-
-  @override
-  _FramyCounterFABCustomPageState createState() =>
-      _FramyCounterFABCustomPageState();
-}
-
-class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<void Function()>(
-        'onPressed', 'void Function()', null, []),
-  ];
+class _FramyCustomPageState extends State<FramyCustomPage> {
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
 
   FramyDependencyModel dependency(String name) =>
-      dependencies.singleWhere((d) => d.name == name);
+      widget.dependencies.singleWhere((d) => d.name == name);
+
+  dynamic dependencyValue(String name) => dependency(name).value;
 
   void onChanged(String name, dynamic dependencyValue) {
     setState(() => dependency(name).value = dependencyValue);
@@ -742,15 +732,13 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: CounterFAB(
-                  onPressed: dependency('onPressed').value,
-                ),
+                child: widget.builder(dependencyValue),
               ),
               if (!isSmallDevice)
                 SizedBox(
                   width: 300,
                   child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
+                    dependencies: widget.dependencies,
                     presets: presets,
                     onChanged: onChanged,
                   ),
@@ -761,7 +749,7 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
             return Scaffold(
               body: body,
               floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: dependencies,
+                dependencies: widget.dependencies,
                 presets: presets,
                 onChanged: onChanged,
               ),
@@ -775,72 +763,41 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
   }
 }
 
-class FramyCounterTitleCustomPage extends StatefulWidget {
-  const FramyCounterTitleCustomPage()
-      : super(key: const Key('Framy_CounterTitle_Page'));
-
-  @override
-  _FramyCounterTitleCustomPageState createState() =>
-      _FramyCounterTitleCustomPageState();
-}
-
-class _FramyCounterTitleCustomPageState
-    extends State<FramyCounterTitleCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<String>('verb', 'String', 'pushed', []),
-    FramyDependencyModel<int>('counter', 'int', 0, []),
-  ];
-  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
-
-  FramyDependencyModel dependency(String name) =>
-      dependencies.singleWhere((d) => d.name == name);
-
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
-  }
-
+class FramyCounterFABCustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmallDevice =
-              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
-          final body = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: CounterTitle(
-                  verb: dependency('verb').value,
-                  counter: dependency('counter').value,
-                ),
-              ),
-              if (!isSmallDevice)
-                SizedBox(
-                  width: 300,
-                  child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
-                    presets: presets,
-                    onChanged: onChanged,
-                  ),
-                ),
-            ],
-          );
-          if (isSmallDevice) {
-            return Scaffold(
-              body: body,
-              floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: dependencies,
-                presets: presets,
-                onChanged: onChanged,
-              ),
-            );
-          } else {
-            return body;
-          }
-        },
-      ),
+    return FramyCustomPage(
+      key: Key('Framy_CounterFAB_Page'),
+      dependencies: [
+        FramyDependencyModel<void Function()>('onPressed', 'void Function()',
+            null, createSubDependencies('void Function()')),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return CounterFAB(
+          onPressed: valueGetter('onPressed'),
+        );
+      },
+    );
+  }
+}
+
+class FramyCounterTitleCustomPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FramyCustomPage(
+      key: Key('Framy_CounterTitle_Page'),
+      dependencies: [
+        FramyDependencyModel<String>(
+            'verb', 'String', 'pushed', createSubDependencies('String')),
+        FramyDependencyModel<int>(
+            'counter', 'int', 0, createSubDependencies('int')),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return CounterTitle(
+          verb: valueGetter('verb'),
+          counter: valueGetter('counter'),
+        );
+      },
     );
   }
 }
@@ -934,6 +891,8 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
     );
   }
 }
+
+// ======================== DEPENDENCY INPUTS ===========================
 
 InputDecoration get _framyInputDecoration => InputDecoration(
       filled: true,
@@ -1193,7 +1152,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 'List element ${i + 1}',
                 listType,
                 dependency.value[i],
-                [],
+                dependency.subDependencies[i].subDependencies,
               ),
               onChanged: (name, val) {
                 dependency.value[i] = val;
@@ -1209,6 +1168,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                   iconSize: 16,
                   onPressed: () {
                     dependency.value.removeAt(i);
+                    dependency.subDependencies.removeAt(i);
                     onChanged(dependency);
                   },
                   // splashRadius: 16, //--not in Stable channel yet
@@ -1230,6 +1190,12 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               if (listType == 'bool') dependency.value = <bool>[];
             }
             dependency.value.add(null);
+            dependency.subDependencies.add(FramyDependencyModel(
+              '_',
+              listType,
+              null,
+              createSubDependencies(listType),
+            ));
             onChanged(dependency);
           },
         ),
@@ -1289,6 +1255,8 @@ class FramyPresetDropdown extends StatelessWidget {
   }
 }
 
+// ======================== MAPS etc ===========================
+
 final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
   ...framyEnumMap.map((type, values) =>
@@ -1302,4 +1270,11 @@ final framyModelConstructorMap =
 final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
+List<FramyDependencyModel> createSubDependencies(String type) {
+  switch (type) {
+    default:
+      return [];
+  }
+}
+
 Map<String, Map<String, dynamic>> createFramyPresets() => {};

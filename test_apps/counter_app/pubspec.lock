@@ -225,7 +225,7 @@ packages:
       path: "../../framy_generator"
       relative: true
     source: path
-    version: "0.1.1"
+    version: "0.1.2"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter

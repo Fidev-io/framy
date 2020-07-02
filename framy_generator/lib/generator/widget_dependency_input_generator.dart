@@ -211,6 +211,7 @@ String _generateModelInputs(List<FramyObject> modelObjects) {
     modelElse += ')\n';
     modelElse += '''
     FramyModelInput(
+      key: inputKey,
       dependencies: dependency.subDependencies,
       presets: presets,
       onChanged: (_) => _onValueChanged(
