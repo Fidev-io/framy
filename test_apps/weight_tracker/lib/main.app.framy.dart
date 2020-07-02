@@ -42,6 +42,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/button': FramyButtonPage(),
     '/toggle': FramyTogglePage(),
     '/textfield': FramyTextFieldPage(),
+    '/bottom_navigation_bar': FramyBottomNavigationBarPage(),
     '/HistoryPage': FramyHistoryPageCustomPage(),
     '/ProfilePage': FramyProfilePageCustomPage(),
     '/UserDataCard': FramyUserDataCardCustomPage(),
@@ -161,6 +162,12 @@ class FramyDrawer extends StatelessWidget {
                       title: Text('TextField'),
                       onTap: () => Navigator.of(context)
                           .pushReplacementNamed('/textfield'),
+                    ),
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('BottomNavigationBar'),
+                      onTap: () => Navigator.of(context)
+                          .pushReplacementNamed('/bottom_navigation_bar'),
                     ),
                   ],
                 ),
@@ -757,60 +764,70 @@ class FramyTextFieldPage extends StatelessWidget {
             const FramyHeaderText('TextField'),
             const SizedBox(height: 16),
             TextField(),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
-                labelText: 'Name',
+                labelText: 'TextField with label',
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 filled: true,
-                labelText: 'Name',
+                labelText: 'Filled TextField with label',
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
-                labelText: 'Name',
+                labelText: 'Outline TextField',
                 focusedBorder: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.email),
-                labelText: 'Name',
+                labelText: 'TextField with prefixIcon',
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 suffixIcon: Icon(Icons.remove_red_eye),
-                labelText: 'Name',
+                labelText: 'TextField with suffixIcon',
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
-                labelText: 'Name',
+                labelText: 'TextField with error message',
                 errorText: 'Invalid value',
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
             TextField(
               enabled: false,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.email),
-                hintText: 'Enter email address',
+                hintText: 'Disabled TextField',
               ),
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class FramyBottomNavigationBarPage extends StatelessWidget {
+  const FramyBottomNavigationBarPage()
+      : super(key: const Key('FramyBottomNavigationBarPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 
