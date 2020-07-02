@@ -7,5 +7,15 @@ void main() {
       String result = generateTextFieldPage();
       expect(result.contains('class FramyTextFieldPage'), isTrue);
     });
+
+    test('should contain proper key', () {
+      String result = generateTextFieldPage();
+      expect(result.contains('Key(\'FramyTextFieldPage\')'), isTrue);
+    });
+
+    test('should contain 8 textfields', () {
+      String result = generateTextFieldPage();
+      expect('TextField('.allMatches(result), hasLength(8));
+    });
   });
 }
