@@ -24,6 +24,7 @@ import 'package:framy_generator/generator/preset_dropdown_generator.dart';
 import 'package:framy_generator/generator/presets_map_generator.dart';
 import 'package:framy_generator/generator/routing_generator.dart';
 import 'package:framy_generator/generator/subdependencies_map_generator.dart';
+import 'package:framy_generator/generator/text_field_generator.dart';
 import 'package:framy_generator/generator/toggle_page_generator.dart';
 import 'package:framy_generator/generator/utils_generator.dart';
 import 'package:framy_generator/generator/widget_cutom_page_template_generator.dart';
@@ -65,10 +66,11 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
         '\n// ======================== MATERIAL PAGES ===========================\n');
     buffer.writeln(generateFontsPage());
     buffer.writeln(generateColorsPage(themeFramyObjects));
-    buffer.writeln(generateTogglePage());
     buffer.writeln(generateUtils());
     buffer.writeln(generateAppBarPage());
     buffer.writeln(generateButtonPage());
+    buffer.writeln(generateTogglePage());
+    buffer.writeln(generateTextFieldPage());
     buffer.writeln(
         '\n// ======================== CUSTOM PAGES ===========================\n');
     buffer.writeln(generateCustomPage());

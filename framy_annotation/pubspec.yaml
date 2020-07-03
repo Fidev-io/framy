@@ -2,7 +2,7 @@ name: framy_annotation
 description: >
   Annotations for framy_generator.
   This package does nothing without framy_generator.
-version: 0.1.0
+version: 0.1.0-dev.2
 repository: https://github.com/Fidev-io/framy
 homepage: https://framy.dev
 

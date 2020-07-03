@@ -70,6 +70,12 @@ build/
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 
+# pubspec.lock
+framy_annotation/pubspec.lock
+framy_annotation/example/pubspec.lock
+framy_generator/pubspec.lock
+framy_generator/example/pubspec.lock
+
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3
 !**/ios/**/default.mode2v3

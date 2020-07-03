@@ -75,6 +75,16 @@ void main() {
         final String result = generateDrawer([]);
         expect(result.contains('\'/toggle\''), isTrue);
       });
+
+      test('should contain TextField text', () {
+        final String result = generateDrawer([]);
+        expect(result.contains('Text(\'TextField\''), isTrue);
+      });
+
+      test('should contain /textfield route name', () {
+        final String result = generateDrawer([]);
+        expect(result.contains('\'/textfield\''), isTrue);
+      });
     });
 
     group('when custom widget is given', () {

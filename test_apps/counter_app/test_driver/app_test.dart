@@ -222,28 +222,34 @@ void main() {
       }
     });
 
-    test('should have AppBar page', () async {
+    Future<void> openMaterialComponentsPage(String name) async {
       await driver.tap(find.text('Material components'));
-      await driver.waitFor(find.text('AppBar'));
-      await driver.tap(find.text('AppBar'));
+      await driver.waitFor(find.text(name));
+      await driver.tap(find.text(name));
+    }
+
+    test('should have AppBar page', () async {
+      await openMaterialComponentsPage('AppBar');
       await driver.waitFor(find.byValueKey('FramyAppBarPage'));
       await ozzie.takeScreenshot('${platform}_appbar_page');
     });
 
     test('should have Button page', () async {
-      await driver.tap(find.text('Material components'));
-      await driver.waitFor(find.text('Button'));
-      await driver.tap(find.text('Button'));
+      await openMaterialComponentsPage('Button');
       await driver.waitFor(find.byValueKey('FramyButtonPage'));
       await ozzie.takeScreenshot('${platform}_button_page');
     });
 
     test('should have Toggle page', () async {
-      await driver.tap(find.text('Material components'));
-      await driver.waitFor(find.text('Toggle'));
-      await driver.tap(find.text('Toggle'));
+      await openMaterialComponentsPage('Toggle');
       await driver.waitFor(find.byValueKey('FramyTogglePage'));
       await ozzie.takeScreenshot('${platform}_toggle_page');
+    });
+
+    test('should have TextField page', () async {
+      await openMaterialComponentsPage('TextField');
+      await driver.waitFor(find.byValueKey('FramyTextFieldPage'));
+      await ozzie.takeScreenshot('${platform}_textfield_page');
     });
   });
 
