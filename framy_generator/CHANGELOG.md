@@ -1,4 +1,8 @@
 # Changelog
+## [0.1.3]
+
+* Support for models with multiple constructors
+
 ## [0.1.2]
 
 * Support for List dependencies of classes annotated with @FramyModel
