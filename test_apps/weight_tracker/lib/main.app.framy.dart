@@ -1417,8 +1417,9 @@ final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
   'WeightUnit': WeightUnit.values,
 };
-List<FramyDependencyModel> createSubDependencies(String type) {
-  switch (type) {
+List<FramyDependencyModel> createSubDependencies(String type,
+    [String constructor = '']) {
+  switch (type + constructor) {
     case 'User':
       return [
         FramyDependencyModel<String>(
@@ -1430,6 +1431,7 @@ List<FramyDependencyModel> createSubDependencies(String type) {
         FramyDependencyModel<List<String>>('emails', 'List<String>', null,
             createSubDependencies('List<String>')),
       ];
+
     case 'WeightEntry':
       return [
         FramyDependencyModel<DateTime>(
@@ -1438,6 +1440,11 @@ List<FramyDependencyModel> createSubDependencies(String type) {
             'weight', 'double', null, createSubDependencies('double')),
         FramyDependencyModel<String>(
             'note', 'String', null, createSubDependencies('String')),
+      ];
+    case 'WeightEntry.now':
+      return [
+        FramyDependencyModel<double>(
+            'weight', 'double', null, createSubDependencies('double')),
       ];
 
     default:

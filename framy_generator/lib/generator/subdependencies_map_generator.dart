@@ -6,11 +6,10 @@ String generateSubDependenciesMap(List<FramyObject> modelObjects) {
       .where((element) => element.type == FramyObjectType.model)
       .toList();
   return '''
-List<FramyDependencyModel> createSubDependencies(String type) {
-  switch (type) {
+List<FramyDependencyModel> createSubDependencies(String type, [String constructor = '']) {
+  switch (type + constructor) {
     ${models.fold('', (prev, model) => prev + _generateForModel(model))}
-    default:
-      return [];
+    default: return [];
   }
 }
 
@@ -19,9 +18,16 @@ List<FramyDependencyModel> createSubDependencies(String type) {
 
 String _generateForModel(FramyObject object) {
   return '''
-  case '${object.name}':
+${object.constructors.fold('', (prev, cons) => prev + _generateForConstructor(object, cons))}
+''';
+}
+
+String _generateForConstructor(
+    FramyObject object, FramyObjectConstructor constructor) {
+  return '''
+  case '${object.name + constructor.name}':
     return [
-      ${object.constructors.first.dependencies.fold('', (prev, dep) => prev + dependencyInitializationLine(dep))}
+      ${constructor.dependencies.fold('', (prev, dep) => prev + dependencyInitializationLine(dep))}
     ];
   ''';
 }

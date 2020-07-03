@@ -1270,8 +1270,9 @@ final framyModelConstructorMap =
 final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
-List<FramyDependencyModel> createSubDependencies(String type) {
-  switch (type) {
+List<FramyDependencyModel> createSubDependencies(String type,
+    [String constructor = '']) {
+  switch (type + constructor) {
     default:
       return [];
   }
