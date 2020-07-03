@@ -29,3 +29,29 @@ Future<void> main() async {
 ]''')
 @FramyModel()
 enum SimpleEnum { val1, val2 }
+
+@ShouldGenerate('''
+[
+  {
+    "type": "FramyObjectType.model",
+    "import": "package:__test__/model_resolver_test.dart",
+    "name": "ClassWithTwoConstructors",
+    "isStatic": false,
+    "kind": "CLASS",
+    "constructors": [
+      {
+        "name": "",
+        "dependencies": []
+      },
+      {
+        "name": ".secondConstructor",
+        "dependencies": []
+      }
+    ]
+  }
+]''')
+@FramyModel()
+class ClassWithTwoConstructors {
+  ClassWithTwoConstructors();
+  ClassWithTwoConstructors.secondConstructor();
+}

@@ -17,17 +17,23 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
       if (element.isEnum) {
         framyObject.type = FramyObjectType.enumModel;
       } else {
-        final constructor = element.unnamedConstructor;
-        framyObject.constructors.add(FramyObjectConstructor('', []));
-        for (ParameterElement param in constructor.parameters) {
-          framyObject.constructors.first.dependencies.add(
-            FramyObjectDependency(
-              param.name,
-              parseDartType(param.type),
-              param.defaultValueCode,
-              param.isNamed,
-            ),
-          );
+        for (ConstructorElement constructorElement in element.constructors) {
+          String constructorName = constructorElement.name;
+          if (constructorName.isNotEmpty) {
+            constructorName = '.$constructorName';
+          }
+          framyObject.constructors
+              .add(FramyObjectConstructor(constructorName, []));
+          for (ParameterElement param in constructorElement.parameters) {
+            framyObject.constructors.first.dependencies.add(
+              FramyObjectDependency(
+                param.name,
+                parseDartType(param.type),
+                param.defaultValueCode,
+                param.isNamed,
+              ),
+            );
+          }
         }
       }
     }
