@@ -23,7 +23,7 @@ Future<void> main() async {
     "import": "package:__test__/model_resolver_test.dart",
     "name": "SimpleEnum",
     "isStatic": false,
-    "kind": "CLASS",
+    "kind": "ENUM",
     "parentObject": null,
     "widgetDependencies": []
   }
