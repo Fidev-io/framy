@@ -55,3 +55,45 @@ class ClassWithTwoConstructors {
   ClassWithTwoConstructors();
   ClassWithTwoConstructors.secondConstructor();
 }
+
+@ShouldGenerate('''
+[
+  {
+    "type": "FramyObjectType.model",
+    "import": "package:__test__/model_resolver_test.dart",
+    "name": "ClassWithTwoConstructorsWithDependencies",
+    "isStatic": false,
+    "kind": "CLASS",
+    "constructors": [
+      {
+        "name": ".first",
+        "dependencies": [
+          {
+            "name": "a",
+            "type": "int",
+            "defaultValue": null,
+            "isNamed": false,
+            "dependencyType": "FramyDependencyType.constructor"
+          }
+        ]
+      },
+      {
+        "name": ".second",
+        "dependencies": [
+          {
+            "name": "b",
+            "type": "String",
+            "defaultValue": null,
+            "isNamed": false,
+            "dependencyType": "FramyDependencyType.constructor"
+          }
+        ]
+      }
+    ]
+  }
+]''')
+@FramyModel()
+class ClassWithTwoConstructorsWithDependencies {
+  ClassWithTwoConstructorsWithDependencies.first(int a);
+  ClassWithTwoConstructorsWithDependencies.second(String b);
+}

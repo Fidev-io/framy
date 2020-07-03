@@ -1445,6 +1445,11 @@ List<FramyDependencyModel> createSubDependencies(String type) {
   }
 }
 
+Map<String, List<String>> framyAvailableConstructorNames = {
+  'User': [''],
+  'WeightEntry': ['', '.now'],
+};
+
 Map<String, Map<String, dynamic>> createFramyPresets() => {
       'User': {
         'teenageJohn': teenageJohn(),

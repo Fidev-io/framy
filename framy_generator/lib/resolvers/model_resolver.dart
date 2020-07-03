@@ -22,10 +22,10 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
           if (constructorName.isNotEmpty) {
             constructorName = '.$constructorName';
           }
-          framyObject.constructors
-              .add(FramyObjectConstructor(constructorName, []));
+          final constructorObject = FramyObjectConstructor(constructorName, []);
+
           for (ParameterElement param in constructorElement.parameters) {
-            framyObject.constructors.first.dependencies.add(
+            constructorObject.dependencies.add(
               FramyObjectDependency(
                 param.name,
                 parseDartType(param.type),
@@ -34,6 +34,8 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
               ),
             );
           }
+
+          framyObject.constructors.add(constructorObject);
         }
       }
     }

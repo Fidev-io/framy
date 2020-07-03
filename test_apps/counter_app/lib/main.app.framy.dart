@@ -1277,4 +1277,6 @@ List<FramyDependencyModel> createSubDependencies(String type) {
   }
 }
 
+Map<String, List<String>> framyAvailableConstructorNames = {};
+
 Map<String, Map<String, dynamic>> createFramyPresets() => {};
