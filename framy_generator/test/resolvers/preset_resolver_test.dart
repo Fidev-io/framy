@@ -26,8 +26,6 @@ Future<void> main() async {
     "name": "authenticatedUser",
     "isStatic": true,
     "kind": "FUNCTION",
-    "parentObject": null,
-    "widgetDependencies": null,
     "returnType": "User"
   }
 ]''')

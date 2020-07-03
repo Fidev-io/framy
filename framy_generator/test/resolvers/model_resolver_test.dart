@@ -24,8 +24,7 @@ Future<void> main() async {
     "name": "SimpleEnum",
     "isStatic": false,
     "kind": "CLASS",
-    "parentObject": null,
-    "widgetDependencies": []
+    "constructors": []
   }
 ]''')
 @FramyModel()

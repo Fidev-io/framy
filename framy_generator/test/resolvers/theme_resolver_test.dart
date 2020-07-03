@@ -25,9 +25,7 @@ Future<void> main() async {
     "import": "package:__test__/theme_resolver_test.dart",
     "name": "getThemeData",
     "isStatic": true,
-    "kind": "FUNCTION",
-    "parentObject": null,
-    "widgetDependencies": null
+    "kind": "FUNCTION"
   }
 ]''')
 @FramyTheme()
@@ -51,11 +49,8 @@ ThemeData _privateThemeData() => ThemeData();
       "import": "package:__test__/theme_resolver_test.dart",
       "name": "AppTheme",
       "isStatic": false,
-      "kind": "CLASS",
-      "parentObject": null,
-      "widgetDependencies": null
-    },
-    "widgetDependencies": null
+      "kind": "CLASS"
+    }
   }
 ]''')
 @FramyTheme()
@@ -88,11 +83,8 @@ class AppTheme3 {
       "import": "package:__test__/theme_resolver_test.dart",
       "name": "AppThemeWithColor1",
       "isStatic": false,
-      "kind": "CLASS",
-      "parentObject": null,
-      "widgetDependencies": null
-    },
-    "widgetDependencies": null
+      "kind": "CLASS"
+    }
   }
 ]''')
 @FramyTheme()

@@ -108,7 +108,7 @@ void main() {
         FramyObject()
           ..name = 'User'
           ..type = FramyObjectType.model
-          ..widgetDependencies = []
+          ..constructors = [FramyObjectConstructor('', [])],
       ];
 
       test('should generate else if statement', () {
@@ -123,11 +123,11 @@ void main() {
           FramyObject()
             ..name = 'User'
             ..type = FramyObjectType.model
-            ..widgetDependencies = [],
+            ..constructors = [FramyObjectConstructor('', [])],
           FramyObject()
             ..name = 'WeightUnit'
             ..type = FramyObjectType.enumModel
-            ..widgetDependencies = []
+            ..constructors = [FramyObjectConstructor('', [])],
         ];
         //when
         final result = generateWidgetDependencyInput(models);
@@ -144,11 +144,11 @@ void main() {
           FramyObject()
             ..name = 'User'
             ..type = FramyObjectType.model
-            ..widgetDependencies = [],
+            ..constructors = [FramyObjectConstructor('', [])],
           FramyObject()
             ..name = 'Address'
             ..type = FramyObjectType.model
-            ..widgetDependencies = []
+            ..constructors = [FramyObjectConstructor('', [])],
         ];
         //when
         final result = generateWidgetDependencyInput(models);

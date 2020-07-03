@@ -10,12 +10,11 @@ String generateWidgetPages(
 }
 
 String _generateWidgetPage(FramyObject framyObject) {
-  final constructorDependencies = framyObject.widgetDependencies
-      .where(
-          (dep) => dep.dependencyType == FramyWidgetDependencyType.constructor)
+  final constructorDependencies = framyObject.constructors.first.dependencies
+      .where((dep) => dep.dependencyType == FramyDependencyType.constructor)
       .toList();
-  final providerDependencies = framyObject.widgetDependencies
-      .where((dep) => dep.dependencyType == FramyWidgetDependencyType.provider)
+  final providerDependencies = framyObject.constructors.first.dependencies
+      .where((dep) => dep.dependencyType == FramyDependencyType.provider)
       .toList();
 
   final constructor = '''${framyObject.name}(
@@ -32,7 +31,7 @@ class $className extends StatelessWidget {
     return FramyCustomPage(
       key: Key('$key'),
       dependencies: [
-        ${framyObject.widgetDependencies.fold('', (s, dep) => s + dependencyInitializationLine(dep))}
+        ${framyObject.constructors.first.dependencies.fold('', (s, dep) => s + dependencyInitializationLine(dep))}
       ],
       builder: (DependencyValueGetter valueGetter) {
         return ${_wrapConstructorWithProvider(constructor, providerDependencies)};
@@ -44,7 +43,7 @@ class $className extends StatelessWidget {
 }
 
 String _wrapConstructorWithProvider(
-    String constructor, List<FramyWidgetDependency> providerDependencies) {
+    String constructor, List<FramyObjectDependency> providerDependencies) {
   if (providerDependencies.isEmpty) {
     return constructor;
   } else {
@@ -58,10 +57,10 @@ String _wrapConstructorWithProvider(
   }
 }
 
-String _providerDependencyToProviderWidget(FramyWidgetDependency dependency) =>
+String _providerDependencyToProviderWidget(FramyObjectDependency dependency) =>
     'Provider<${dependency.type}>.value(value: valueGetter(\'${dependency.name}\')),\n';
 
-String _generateParamUsageInConstructor(FramyWidgetDependency dependency) {
+String _generateParamUsageInConstructor(FramyObjectDependency dependency) {
   final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';
   return '${nameInConstructor}valueGetter(\'${dependency.name}\'),\n';
 }

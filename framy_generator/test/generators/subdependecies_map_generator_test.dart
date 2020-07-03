@@ -7,12 +7,14 @@ void main() {
     test('should generate a switch for model', () {
       //given
       final stringDependency =
-          FramyWidgetDependency('firstName', 'String', null, false);
+          FramyObjectDependency('firstName', 'String', null, false);
       final framyModelObjects = [
         FramyObject()
           ..name = 'User'
           ..type = FramyObjectType.model
-          ..widgetDependencies = [stringDependency]
+          ..constructors = [
+            FramyObjectConstructor('', [stringDependency])
+          ]
       ];
       //when
       final result = generateSubDependenciesMap(framyModelObjects);
@@ -23,12 +25,14 @@ void main() {
     test('should generate subDependency row', () {
       //given
       final stringDependency =
-          FramyWidgetDependency('firstName', 'String', null, false);
+          FramyObjectDependency('firstName', 'String', null, false);
       final framyModelObjects = [
         FramyObject()
           ..name = 'User'
           ..type = FramyObjectType.model
-          ..widgetDependencies = [stringDependency]
+          ..constructors = [
+            FramyObjectConstructor('', [stringDependency])
+          ]
       ];
       //when
       final result = generateSubDependenciesMap(framyModelObjects);
@@ -45,7 +49,7 @@ void main() {
         FramyObject()
           ..name = 'FooModel'
           ..type = FramyObjectType.enumModel
-          ..widgetDependencies = []
+          ..constructors = [FramyObjectConstructor('', [])]
       ];
       //when
       final result = generateSubDependenciesMap(framyModelObjects);
@@ -59,7 +63,7 @@ void main() {
         FramyObject()
           ..name = 'FooModel'
           ..type = FramyObjectType.model
-          ..widgetDependencies = []
+          ..constructors = [FramyObjectConstructor('', [])]
       ];
       //when
       final result = generateSubDependenciesMap(framyModelObjects);

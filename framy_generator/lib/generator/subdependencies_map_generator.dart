@@ -21,7 +21,7 @@ String _generateForModel(FramyObject object) {
   return '''
   case '${object.name}':
     return [
-      ${object.widgetDependencies.fold('', (prev, dep) => prev + dependencyInitializationLine(dep))}
+      ${object.constructors.first.dependencies.fold('', (prev, dep) => prev + dependencyInitializationLine(dep))}
     ];
   ''';
 }

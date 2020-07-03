@@ -19,11 +19,11 @@ final framyModelConstructorMap =
 
 String _generateModelConstructor(FramyObject model) {
   return ''''${model.name}': (dep) => ${model.name}(
-    ${model.widgetDependencies.fold('', (s, dep) => s + _generateParamUsageInConstructor(dep))}),
+    ${model.constructors.first.dependencies.fold('', (s, dep) => s + _generateParamUsageInConstructor(dep))}),
 ''';
 }
 
-String _generateParamUsageInConstructor(FramyWidgetDependency dependency) {
+String _generateParamUsageInConstructor(FramyObjectDependency dependency) {
   final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';
   return '${nameInConstructor}dep.subDependencies.singleWhere((d) => d.name == \'${dependency.name}\').value,\n';
 }
