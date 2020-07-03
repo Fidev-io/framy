@@ -6,8 +6,12 @@ abstract class FramyAnnotation {
 /// Specifies a location where generated Framy app will be placed
 /// Required to be used exactly once inside the app
 /// Typically annotates main app widget (e.g. MyApp, MainApp, etc)
+/// [useDevicePreview] - setting this to true will cause wrapping widgets in DevicePreview in generated Framy app
+/// we highly recommend using this feature,
+/// **IMPORTANT**: when it's set to true then it is required to add device_preview package as dependency in pubspec.yaml!
 class FramyApp extends FramyAnnotation {
-  const FramyApp();
+  final bool useDevicePreview;
+  const FramyApp({this.useDevicePreview = false});
 }
 
 const framyApp = FramyApp();
