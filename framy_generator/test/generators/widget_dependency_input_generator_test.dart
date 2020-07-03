@@ -190,5 +190,10 @@ void main() {
       final result = generateWidgetDependencyInput([]);
       expect(result.contains('FramyDateTimeDependencyInput'), isTrue);
     });
+
+    test('should contain FramyConstructorDropdown', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('FramyConstructorDropdown'), isTrue);
+    });
   });
 }

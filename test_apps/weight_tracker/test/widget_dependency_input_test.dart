@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weight_tracker/main.app.framy.dart';
 import 'package:weight_tracker/models/user.dart';
+import 'package:weight_tracker/models/weight_entry.dart';
+import 'package:weight_tracker/models/weight_entry.framy.dart';
 import 'package:weight_tracker/models/weight_unit.dart';
 
 import 'test_utils.dart';
@@ -18,6 +20,10 @@ void main() {
         FramyDependencyModel<int>('age', 'int', null, []),
         FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
       ]);
+
+  FramyDependencyModel _getWeightEntryModel([WeightEntry defaultValue]) =>
+      FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry',
+          defaultValue, createSubDependencies('WeightEntry'));
 
   FramyDependencyModel _getStringListModel([List<String> defaultValue]) =>
       FramyDependencyModel<List<String>>(
@@ -255,7 +261,40 @@ void main() {
         await tester.pump();
         //then
         expect(didEmit, isFalse);
-      }); //wip
+      });
+    });
+
+    group('ConstructorDropdown usage', () {
+      testWidgets(
+          'should not show constructor dropdown when class has only one constructor',
+          (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getUserModel());
+        expect(find.byType(FramyConstructorDropdown), findsNothing);
+      });
+
+      testWidgets(
+          'should show constructor dropdown when class has more than one constructor',
+          (WidgetTester tester) async {
+        //given
+        expect(framyAvailableConstructorNames['WeightEntry'], hasLength(2));
+        final model = _getWeightEntryModel();
+        //when
+        await _buildDependencyInput(tester, model);
+        //then
+        expect(find.byType(FramyConstructorDropdown), findsOneWidget);
+      });
+
+      testWidgets(
+          'should not show constructor dropdown when chosen value is a preset',
+          (WidgetTester tester) async {
+        //given
+        expect(framyAvailableConstructorNames['WeightEntry'], hasLength(2));
+        final model = _getWeightEntryModel(presetEntry());
+        //when
+        await _buildDependencyInput(tester, model);
+        //then
+        expect(find.byType(FramyConstructorDropdown), findsOneWidget);
+      });
     });
   });
 }

@@ -56,6 +56,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             ],
           ),
         ),
+        if (!isDependencyAPreset(presets, dependency) &&
+            framyAvailableConstructorNames.containsKey(dependency.type) &&
+            framyAvailableConstructorNames[dependency.type].length > 1)
+          FramyConstructorDropdown(
+            dependency: dependency,
+            onChanged: onChanged,
+          ),
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
              InputDecorator(

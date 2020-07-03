@@ -17,6 +17,7 @@ import 'package:weight_tracker/widgets/weight_entry_list_item.dart';
 import 'package:weight_tracker/models/weight_unit.dart';
 import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/models/weight_entry.dart';
+import 'package:weight_tracker/models/weight_entry.framy.dart';
 import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
@@ -1072,6 +1073,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             ],
           ),
         ),
+        if (!isDependencyAPreset(presets, dependency) &&
+            framyAvailableConstructorNames.containsKey(dependency.type) &&
+            framyAvailableConstructorNames[dependency.type].length > 1)
+          FramyConstructorDropdown(
+            dependency: dependency,
+            onChanged: onChanged,
+          ),
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
             InputDecorator(
@@ -1286,9 +1294,14 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 listType,
                 dependency.value[i],
                 dependency.subDependencies[i].subDependencies,
+                constructor: dependency.subDependencies[i].constructor,
               ),
               onChanged: (changedDep) {
                 dependency.value[i] = changedDep.value;
+                dependency.subDependencies[i].constructor =
+                    changedDep.constructor;
+                dependency.subDependencies[i].subDependencies =
+                    changedDep.subDependencies;
                 onChanged(dependency);
               },
               presets: presets,
@@ -1391,6 +1404,50 @@ class FramyPresetDropdown extends StatelessWidget {
   }
 }
 
+class FramyConstructorDropdown extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final ValueChanged<FramyDependencyModel> onChanged;
+
+  FramyConstructorDropdown({this.dependency, this.onChanged})
+      : super(
+          key: Key('framy_dependency_${dependency.name}_constructor_dropdown'),
+        );
+
+  @override
+  Widget build(BuildContext context) {
+    return InputDecorator(
+      decoration: InputDecoration(
+        labelText: 'Constructor',
+        isDense: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(),
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isDense: true,
+          value: dependency.constructor,
+          onChanged: (conName) {
+            dependency.constructor = conName;
+            dependency.subDependencies =
+                createSubDependencies(dependency.type, dependency.constructor);
+            onChanged(dependency);
+          },
+          items: framyAvailableConstructorNames[dependency.type]
+              .map((constructorName) => DropdownMenuItem<String>(
+                    value: constructorName,
+                    child: Text(constructorName.isEmpty
+                        ? 'Default'
+                        : constructorName.replaceAll('.', '')),
+                  ))
+              .toList(),
+        ),
+      ),
+    );
+  }
+}
+
 // ======================== MAPS etc ===========================
 
 final framyModelConstructorMap =
@@ -1475,6 +1532,9 @@ Map<String, List<String>> framyAvailableConstructorNames = {
 };
 
 Map<String, Map<String, dynamic>> createFramyPresets() => {
+      'WeightEntry': {
+        'presetEntry': presetEntry(),
+      },
       'User': {
         'teenageJohn': teenageJohn(),
       },

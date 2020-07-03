@@ -263,13 +263,13 @@ void main() {
       await driver.waitForAbsent(find.text('dateTime'));
       await driver.waitForAbsent(find.text('note'));
       await driver.waitFor(find.text('weight'));
-    }, skip: true); //wip
+    });
 
     test('should allow use changed constructor', () async {
       await driver.tap(find.byValueKey('framy_dependency_weight_input'));
       await driver.enterText('33');
       await driver.waitFor(find.text('33.0'));
-    }, skip: true); //wip
+    });
   });
 
   group('HistoryPage', () {
@@ -336,6 +336,6 @@ void main() {
       await driver.enterText('13');
       //confirm changed weight in UI
       await waitForHistoryPageText('13.0');
-    }, skip: true); //wip
+    });
   });
 }
