@@ -20,12 +20,12 @@ void main() {
 
   Future<void> _buildDependencyInput(
       WidgetTester tester, FramyDependencyModel dependency,
-      [Function(String, dynamic) onChanged]) async {
+      [ValueChanged<FramyDependencyModel> onChanged]) async {
     await tester.pumpWidget(
       TestMaterialAppWithScaffold(
         FramyWidgetDependencyInput(
           dependency: dependency,
-          onChanged: onChanged ?? (_, __) {},
+          onChanged: onChanged ?? (_) {},
           presets: {},
         ),
       ),
@@ -51,7 +51,7 @@ void main() {
         await _buildDependencyInput(
           tester,
           _getIntModel(0),
-          (name, val) => emittedValue = val,
+          (dep) => emittedValue = dep.value,
         );
         //when
         await tester.enterText(
@@ -80,7 +80,7 @@ void main() {
         await _buildDependencyInput(
           tester,
           _getIntModel(-1),
-          (name, val) => emittedValue = val,
+          (dep) => emittedValue = dep.value,
         );
         //when
         await tester.enterText(
@@ -98,7 +98,7 @@ void main() {
         await _buildDependencyInput(
           tester,
           _getDoubleModel(0),
-          (name, val) => emittedValue = val,
+          (dep) => emittedValue = dep.value,
         );
         //when
         await tester.enterText(
@@ -128,7 +128,7 @@ void main() {
         await _buildDependencyInput(
           tester,
           _getDoubleModel(-1),
-          (name, val) => emittedValue = val,
+          (dep) => emittedValue = dep.value,
         );
         //when
         await tester.enterText(
@@ -147,7 +147,7 @@ void main() {
         await _buildDependencyInput(
           tester,
           _getBoolModel(false),
-          (name, val) => emittedValue = val,
+          (dep) => emittedValue = dep.value,
         );
         //when
         await tester.tap(find.byKey(Key('framy_dependency_boolVal_input')));

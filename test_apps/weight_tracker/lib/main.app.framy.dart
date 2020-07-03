@@ -759,8 +759,8 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 
   dynamic dependencyValue(String name) => dependency(name).value;
 
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
+  void onChanged(FramyDependencyModel dependencyModel) {
+    setState(() {});
   }
 
   @override
@@ -938,7 +938,7 @@ class FramyDependencyModel<T> {
 
 class FramyWidgetDependenciesPanel extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
 
   const FramyWidgetDependenciesPanel(
@@ -973,7 +973,7 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
 
 class FramyWidgetDependenciesFAB extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
 
   const FramyWidgetDependenciesFAB(
@@ -1000,9 +1000,9 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
                 child: FramyWidgetDependenciesPanel(
                   dependencies: dependencies,
                   presets: presets,
-                  onChanged: (s, v) {
+                  onChanged: (dep) {
                     setState(() {});
-                    onChanged(s, v);
+                    onChanged(dep);
                   },
                 ),
               ),
@@ -1027,7 +1027,7 @@ InputDecoration get _framyInputDecoration => InputDecoration(
 
 class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
   final Widget trailing;
 
@@ -1039,7 +1039,8 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     if (value != null && !isValueAPreset(presets, dependency.type, value)) {
       dependency.lastCustomValue = value;
     }
-    onChanged(dependency.name, value);
+    dependency.value = value;
+    onChanged(dependency);
   }
 
   @override
@@ -1206,8 +1207,7 @@ class FramyModelInput extends StatelessWidget {
                       child: FramyWidgetDependencyInput(
                         dependency: dep,
                         presets: presets,
-                        onChanged: (name, value) {
-                          dependency(name).value = value;
+                        onChanged: (changedDep) {
                           onChanged(dependencies);
                         },
                       ),
@@ -1222,7 +1222,7 @@ class FramyModelInput extends StatelessWidget {
 
 class FramyDateTimeDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
-  final void Function(dynamic value) onChanged;
+  final ValueChanged<dynamic> onChanged;
   final Map<String, Map<String, dynamic>> presets;
 
   const FramyDateTimeDependencyInput(
@@ -1287,8 +1287,8 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 dependency.value[i],
                 dependency.subDependencies[i].subDependencies,
               ),
-              onChanged: (name, val) {
-                dependency.value[i] = val;
+              onChanged: (changedDep) {
+                dependency.value[i] = changedDep.value;
                 onChanged(dependency);
               },
               presets: presets,

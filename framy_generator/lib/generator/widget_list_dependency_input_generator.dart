@@ -28,8 +28,8 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 dependency.value[i],
                 dependency.subDependencies[i].subDependencies,
               ),
-              onChanged: (name, val) {
-                dependency.value[i] = val;
+              onChanged: (changedDep) {
+                dependency.value[i] = changedDep.value;
                 onChanged(dependency);
               },
               presets: presets,

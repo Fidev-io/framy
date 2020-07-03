@@ -1,7 +1,7 @@
 String generateDateTimeDependencyInput() => '''
 class FramyDateTimeDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
-  final void Function(dynamic value) onChanged;
+  final ValueChanged<dynamic> onChanged;
   final Map<String, Map<String, dynamic>> presets;
 
   const FramyDateTimeDependencyInput(

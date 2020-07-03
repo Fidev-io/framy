@@ -11,7 +11,7 @@ InputDecoration get _framyInputDecoration => InputDecoration(
     
 class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
   final Widget trailing;
   
@@ -23,7 +23,8 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     if (value != null && !isValueAPreset(presets, dependency.type, value)) {
       dependency.lastCustomValue = value;
     }
-    onChanged(dependency.name, value);
+    dependency.value = value;
+    onChanged(dependency);
   }
   
   @override
@@ -182,8 +183,7 @@ class FramyModelInput extends StatelessWidget {
                       child: FramyWidgetDependencyInput(
                         dependency: dep,
                         presets: presets,
-                        onChanged: (name, value) {
-                          dependency(name).value = value;
+                        onChanged: (changedDep) {
                           onChanged(dependencies);
                         },
                       ),

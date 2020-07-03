@@ -94,7 +94,6 @@ void main() {
       ];
       //when
       final result = generateSubDependenciesMap(framyModelObjects);
-      print(result);
       //then
       expect(result.contains("case 'FooModel':"), isTrue);
       expect(result.contains("case 'FooModel.second':"), isTrue);

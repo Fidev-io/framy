@@ -111,8 +111,6 @@ void main() {
       await driver.waitFor(find.text('John Doe'));
       await driver.waitFor(find.text('Age: 17'));
     });
-
-    //TODO: when switch will have a label then test the following case: when user is set to null then all switches should be inactive (their values sould be nulls)
   });
 
   group('UserEmailsView', () {
@@ -251,6 +249,27 @@ void main() {
       await driver.waitFor(find.text(
           '${now.year}-${now.month.toString().padLeft(2, '0')}-17 00:00:00'));
     });
+
+    test('should allow to change WeightEntry constructor', () async {
+      //before changing, those fields should be visible
+      await driver.waitFor(find.text('dateTime'));
+      await driver.waitFor(find.text('note'));
+      await driver.waitFor(find.text('weight'));
+      //change constructor
+      await driver.tap(
+          find.byValueKey('framy_dependency_weightEntry_constructor_dropdown'));
+      await driver.tap(find.text('now'));
+      //now only weight should be visible
+      await driver.waitForAbsent(find.text('dateTime'));
+      await driver.waitForAbsent(find.text('note'));
+      await driver.waitFor(find.text('weight'));
+    }, skip: true); //wip
+
+    test('should allow use changed constructor', () async {
+      await driver.tap(find.byValueKey('framy_dependency_weight_input'));
+      await driver.enterText('33');
+      await driver.waitFor(find.text('33.0'));
+    }, skip: true); //wip
   });
 
   group('HistoryPage', () {
@@ -297,5 +316,26 @@ void main() {
       await waitForHistoryPageText('78.0');
       await waitForHistoryPageText('79.0');
     });
+
+    test('should allow to change constructor in list', () async {
+      //change constructor
+      await driver.tap(
+        find.byValueKey('framy_dependency_List element 2_constructor_dropdown'),
+      );
+      await driver.tap(find.text('now'));
+      //confirm there is no date
+      await driver.waitForAbsent(find.descendant(
+        of: find.byValueKey('framy_dependency_List element 2_input'),
+        matching: find.text('dateTime'),
+      ));
+      //change the weight
+      await driver.tap(find.descendant(
+        of: find.byValueKey('framy_dependency_List element 2_input'),
+        matching: find.byValueKey('framy_dependency_weight_input'),
+      ));
+      await driver.enterText('13');
+      //confirm changed weight in UI
+      await waitForHistoryPageText('13.0');
+    }, skip: true); //wip
   });
 }
