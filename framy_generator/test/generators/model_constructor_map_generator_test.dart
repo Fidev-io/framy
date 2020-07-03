@@ -30,7 +30,7 @@ void main() {
       //then
       expect(
           result.contains(RegExp(
-              '\'User\': \\(dep\\) => User\\(\n *dep\\.subDependencies\\.singleWhere\\(\\(d\\) => d\\.name == \'firstName\'\\)\\.value,')),
+              'User\\(\n *dep\\.subDependencies\\.singleWhere\\(\\(d\\) => d\\.name == \'firstName\'\\)\\.value,')),
           isTrue);
     });
 
@@ -56,6 +56,34 @@ void main() {
       expect(result.contains('\'int\': (dep) => 0,'), isTrue);
       expect(result.contains('\'double\': (dep) => 0.0,'), isTrue);
       expect(result.contains('\'bool\': (dep) => false,'), isTrue);
+    });
+
+    test('should generate if statement for unnamed constructor', () {
+      //given
+      final framyModelObjects = [
+        FramyObject()
+          ..name = 'User'
+          ..type = FramyObjectType.model
+          ..constructors = [FramyObjectConstructor('', [])]
+      ];
+      //when
+      final result = generateModelConstructorMap(framyModelObjects);
+      //then
+      expect(result.contains('if (dep.constructor == \'\')'), isTrue);
+    });
+
+    test('should have else return null', () {
+      //given
+      final framyModelObjects = [
+        FramyObject()
+          ..name = 'User'
+          ..type = FramyObjectType.model
+          ..constructors = [FramyObjectConstructor('', [])]
+      ];
+      //when
+      final result = generateModelConstructorMap(framyModelObjects);
+      //then
+      expect(result.contains('else return null;'), isTrue);
     });
   });
 }

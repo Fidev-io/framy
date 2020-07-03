@@ -1397,18 +1397,33 @@ final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
   ...framyEnumMap.map((type, values) =>
       MapEntry(type, (FramyDependencyModel dep) => values.first)),
-  'User': (dep) => User(
+  'User': (dep) {
+    if (dep.constructor == '') {
+      return User(
         dep.subDependencies.singleWhere((d) => d.name == 'firstName').value,
         dep.subDependencies.singleWhere((d) => d.name == 'lastName').value,
         dep.subDependencies.singleWhere((d) => d.name == 'age').value,
         emails:
             dep.subDependencies.singleWhere((d) => d.name == 'emails').value,
-      ),
-  'WeightEntry': (dep) => WeightEntry(
+      );
+    } else
+      return null;
+  },
+  'WeightEntry': (dep) {
+    if (dep.constructor == '') {
+      return WeightEntry(
         dep.subDependencies.singleWhere((d) => d.name == 'dateTime').value,
         dep.subDependencies.singleWhere((d) => d.name == 'weight').value,
         dep.subDependencies.singleWhere((d) => d.name == 'note').value,
-      ),
+      );
+    }
+    if (dep.constructor == '.now') {
+      return WeightEntry.now(
+        dep.subDependencies.singleWhere((d) => d.name == 'weight').value,
+      );
+    } else
+      return null;
+  },
   'String': (dep) => '',
   'double': (dep) => 0.0,
   'int': (dep) => 0,
