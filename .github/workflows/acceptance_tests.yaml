@@ -3,8 +3,6 @@ name: Acceptance tests
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
   schedule:
     - cron: "0 2 * * *" #Every day on 2AM
 
