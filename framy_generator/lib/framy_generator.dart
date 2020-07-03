@@ -9,6 +9,7 @@ import 'package:framy_generator/generator/app_bar_page_generator.dart';
 import 'package:framy_generator/generator/available_constructor_names_generator.dart';
 import 'package:framy_generator/generator/button_page_generator.dart';
 import 'package:framy_generator/generator/colors_page_generator.dart';
+import 'package:framy_generator/generator/constructor_dropdown_generator.dart';
 import 'package:framy_generator/generator/datetime_dependency_input_generator.dart';
 import 'package:framy_generator/generator/dependency_model_generator.dart';
 import 'package:framy_generator/generator/drawer_generator.dart';
@@ -80,6 +81,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateDateTimeDependencyInput());
     buffer.writeln(generateWidgetListDependencyInput(modelFramyObjects));
     buffer.writeln(generatePresetDropdown());
+    buffer.writeln(generateConstructorDropdown());
     buffer.writeln(
         '\n// ======================== MAPS etc ===========================\n');
     buffer.writeln(generateModelConstructorMap(modelFramyObjects));
