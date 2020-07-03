@@ -26,8 +26,12 @@ Future<void> main() async {
     "name": "CounterFloatingActionButton",
     "isStatic": false,
     "kind": "CLASS",
-    "parentObject": null,
-    "widgetDependencies": []
+    "constructors": [
+      {
+        "name": "",
+        "dependencies": []
+      }
+    ]
   }
 ]''')
 @FramyWidget()
@@ -41,14 +45,18 @@ class CounterFloatingActionButton {}
     "name": "WidgetWithConstructor",
     "isStatic": false,
     "kind": "CLASS",
-    "parentObject": null,
-    "widgetDependencies": [
+    "constructors": [
       {
-        "name": "arg1",
-        "type": "String",
-        "defaultValue": null,
-        "isNamed": false,
-        "dependencyType": "FramyWidgetDependencyType.constructor"
+        "name": "",
+        "dependencies": [
+          {
+            "name": "arg1",
+            "type": "String",
+            "defaultValue": null,
+            "isNamed": false,
+            "dependencyType": "FramyDependencyType.constructor"
+          }
+        ]
       }
     ]
   }
@@ -66,14 +74,18 @@ class WidgetWithConstructor {
     "name": "WidgetWithConstructorAndKey",
     "isStatic": false,
     "kind": "CLASS",
-    "parentObject": null,
-    "widgetDependencies": [
+    "constructors": [
       {
-        "name": "arg1",
-        "type": "String",
-        "defaultValue": null,
-        "isNamed": true,
-        "dependencyType": "FramyWidgetDependencyType.constructor"
+        "name": "",
+        "dependencies": [
+          {
+            "name": "arg1",
+            "type": "String",
+            "defaultValue": null,
+            "isNamed": true,
+            "dependencyType": "FramyDependencyType.constructor"
+          }
+        ]
       }
     ]
   }
@@ -91,14 +103,18 @@ class WidgetWithConstructorAndKey {
     "name": "WidgetWithConstructorWithDefaultParamValue",
     "isStatic": false,
     "kind": "CLASS",
-    "parentObject": null,
-    "widgetDependencies": [
+    "constructors": [
       {
-        "name": "arg1",
-        "type": "String",
-        "defaultValue": "'test1'",
-        "isNamed": true,
-        "dependencyType": "FramyWidgetDependencyType.constructor"
+        "name": "",
+        "dependencies": [
+          {
+            "name": "arg1",
+            "type": "String",
+            "defaultValue": "'test1'",
+            "isNamed": true,
+            "dependencyType": "FramyDependencyType.constructor"
+          }
+        ]
       }
     ]
   }
@@ -140,14 +156,18 @@ class WidgetWithBoolParam {
     "name": "WidgetWithStringProviderDependency",
     "isStatic": false,
     "kind": "CLASS",
-    "parentObject": null,
-    "widgetDependencies": [
+    "constructors": [
       {
-        "name": "String",
-        "type": "String",
-        "defaultValue": null,
-        "isNamed": false,
-        "dependencyType": "FramyWidgetDependencyType.provider"
+        "name": "",
+        "dependencies": [
+          {
+            "name": "String",
+            "type": "String",
+            "defaultValue": null,
+            "isNamed": false,
+            "dependencyType": "FramyDependencyType.provider"
+          }
+        ]
       }
     ]
   }
@@ -159,11 +179,11 @@ class WidgetWithStringProviderDependency {
 }
 
 @ShouldGenerate('''
-        "name": "User",
-        "type": "User",
-        "defaultValue": null,
-        "isNamed": false,
-        "dependencyType": "FramyWidgetDependencyType.provider"
+            "name": "User",
+            "type": "User",
+            "defaultValue": null,
+            "isNamed": false,
+            "dependencyType": "FramyDependencyType.provider"
 ''', contains: true)
 @FramyUseProvider(User)
 @FramyWidget()

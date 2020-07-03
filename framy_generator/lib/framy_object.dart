@@ -10,7 +10,7 @@ class FramyObject {
   bool isStatic;
   ElementKind kind;
   FramyObject parentObject;
-  List<FramyWidgetDependency> widgetDependencies;
+  List<FramyObjectConstructor> constructors;
   String returnType;
 
   FramyObject();
@@ -29,9 +29,9 @@ class FramyObject {
       'name': name,
       'isStatic': isStatic,
       'kind': kind.toString(),
-      'parentObject': parentObject?.toMap(),
-      'widgetDependencies':
-          widgetDependencies?.map((dep) => dep.toMap())?.toList(),
+      if (parentObject != null) 'parentObject': parentObject.toMap(),
+      if (constructors != null)
+        'constructors': constructors.map((con) => con.toMap()).toList(),
       if (returnType != null) 'returnType': returnType,
     };
   }
@@ -49,36 +49,32 @@ class FramyObject {
     parentObject = json['parentObject'] == null
         ? null
         : FramyObject.fromJson(json['parentObject']);
-    widgetDependencies = json['widgetDependencies'] == null
+    constructors = json['constructors'] == null
         ? null
-        : (json['widgetDependencies'] as List)
-            .map((map) => FramyWidgetDependency.fromJson(map))
+        : (json['constructors'] as List)
+            .map((map) => FramyObjectConstructor.fromJson(map))
             .toList();
     returnType = json['returnType'];
   }
 }
 
-class FramyWidgetDependency {
+class FramyObjectDependency {
   final String name;
   final String type;
   final String defaultValueCode;
   final bool isNamed;
-  final FramyWidgetDependencyType dependencyType;
+  final FramyDependencyType dependencyType;
 
-  FramyWidgetDependency(
-    this.name,
-    this.type,
-    this.defaultValueCode,
-    this.isNamed,
-    {this.dependencyType = FramyWidgetDependencyType.constructor}
-  );
+  FramyObjectDependency(
+      this.name, this.type, this.defaultValueCode, this.isNamed,
+      {this.dependencyType = FramyDependencyType.constructor});
 
-  FramyWidgetDependency.fromJson(Map<String, dynamic> json)
+  FramyObjectDependency.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         defaultValueCode = json['defaultValue'],
         type = json['type'],
         isNamed = json['isNamed'],
-        dependencyType = FramyWidgetDependencyType.values
+        dependencyType = FramyDependencyType.values
             .singleWhere((type) => type.toString() == json['dependencyType']);
 
   Map<String, dynamic> toMap() {
@@ -92,6 +88,27 @@ class FramyWidgetDependency {
   }
 }
 
+class FramyObjectConstructor {
+  final String name;
+  final List<FramyObjectDependency> dependencies;
+
+  FramyObjectConstructor(this.name, this.dependencies);
+
+  FramyObjectConstructor.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        dependencies = json['dependencies'] == null
+            ? null
+            : (json['dependencies'] as List)
+                .map((map) => FramyObjectDependency.fromJson(map))
+                .toList();
+
+  Map<String, dynamic> toMap() => {
+        'name': name,
+        if (dependencies != null)
+          'dependencies': dependencies?.map((dep) => dep.toMap())?.toList(),
+      };
+}
+
 enum FramyObjectType {
   themeData,
   color,
@@ -101,4 +118,4 @@ enum FramyObjectType {
   enumModel,
 }
 
-enum FramyWidgetDependencyType { constructor, provider }
+enum FramyDependencyType { constructor, provider }

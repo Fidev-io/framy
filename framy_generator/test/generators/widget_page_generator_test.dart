@@ -15,7 +15,7 @@ void main() {
         FramyObject()
           ..name = 'MyWidget'
           ..type = FramyObjectType.widget
-          ..widgetDependencies = []
+          ..constructors = [FramyObjectConstructor('', [])],
       ];
 
       test('should have a class with name FramyXXXCustomPage', () {
@@ -41,11 +41,11 @@ void main() {
         FramyObject()
           ..name = 'Widget1'
           ..type = FramyObjectType.widget
-          ..widgetDependencies = [],
+          ..constructors = [FramyObjectConstructor('', [])],
         FramyObject()
           ..name = 'Widget2'
           ..type = FramyObjectType.widget
-          ..widgetDependencies = [],
+          ..constructors = [FramyObjectConstructor('', [])],
       ];
       //when
       final result = generateWidgetPages(widgetObjects, []);
@@ -58,7 +58,7 @@ void main() {
         'should contain initialized dependencies list when widget has dependency',
         () {
       //given
-      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+      final widgetObjects = getFramyObjectWithDependency(FramyObjectDependency(
         'arg1',
         'String',
         null,
@@ -74,7 +74,7 @@ void main() {
 
     test('should properly handle int dependency', () {
       //given
-      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+      final widgetObjects = getFramyObjectWithDependency(FramyObjectDependency(
         'arg1',
         'int',
         '13',
@@ -92,7 +92,7 @@ void main() {
         'should use dependency in widget constructor when the non-named dependency is passed',
         () {
       //given
-      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+      final widgetObjects = getFramyObjectWithDependency(FramyObjectDependency(
         'arg1',
         'String',
         null,
@@ -111,7 +111,7 @@ void main() {
         'should use dependency in widget constructor when the named dependency is passed',
         () {
       //given
-      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+      final widgetObjects = getFramyObjectWithDependency(FramyObjectDependency(
         'arg1',
         'String',
         null,
@@ -131,7 +131,7 @@ void main() {
         'should use default value in dependency initialization when default value is present',
         () {
       //given
-      final widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+      final widgetObjects = getFramyObjectWithDependency(FramyObjectDependency(
         'arg1',
         'String',
         "'fooDefaultValue'",
@@ -150,12 +150,12 @@ void main() {
       List<FramyObject> widgetObjects;
 
       setUp(() {
-        widgetObjects = getFramyObjectWithDependency(FramyWidgetDependency(
+        widgetObjects = getFramyObjectWithDependency(FramyObjectDependency(
           'String',
           'String',
           null,
           false,
-          dependencyType: FramyWidgetDependencyType.provider,
+          dependencyType: FramyDependencyType.provider,
         ));
       });
 
@@ -193,11 +193,13 @@ void main() {
 }
 
 List<FramyObject> getFramyObjectWithDependency(
-    FramyWidgetDependency dependency) {
+    FramyObjectDependency dependency) {
   return [
     FramyObject()
       ..name = 'Widget1'
       ..type = FramyObjectType.widget
-      ..widgetDependencies = [dependency]
+      ..constructors = [
+        FramyObjectConstructor('', [dependency])
+      ],
   ];
 }

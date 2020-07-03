@@ -7,8 +7,8 @@ String generateImports(List<FramyObject> framyObjects) {
   framyObjects.forEach((object) {
     imports.add(object.import);
     if (object.type == FramyObjectType.widget &&
-        object.widgetDependencies.any((element) =>
-            element.dependencyType == FramyWidgetDependencyType.provider)) {
+        object.constructors.first.dependencies.any((element) =>
+            element.dependencyType == FramyDependencyType.provider)) {
       imports.add('package:provider/provider.dart');
     }
   });

@@ -38,7 +38,7 @@ void main() {
       await tester.pumpWidget(TestMaterialAppWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: dependencies,
-          onChanged: (name, user) => emitted = user,
+          onChanged: (dependency) => emitted = dependency.value,
           presets: {},
         ),
       ));

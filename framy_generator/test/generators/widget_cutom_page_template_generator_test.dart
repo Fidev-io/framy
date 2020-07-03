@@ -36,7 +36,7 @@ void main() {
     test('should contain definition of onChanged method', () {
       final result = generateCustomPage();
       expect(
-        result.contains('void onChanged(String name, dynamic dependencyValue)'),
+        result.contains('void onChanged(FramyDependencyModel dependencyModel)'),
         isTrue,
       );
     });

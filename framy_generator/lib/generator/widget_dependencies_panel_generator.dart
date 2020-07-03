@@ -1,7 +1,7 @@
 String generateWidgetDependenciesPanel() => '''
 class FramyWidgetDependenciesPanel extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
 
   const FramyWidgetDependenciesPanel(
@@ -36,7 +36,7 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
 
 class FramyWidgetDependenciesFAB extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
 
   const FramyWidgetDependenciesFAB(
@@ -63,9 +63,9 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
                 child: FramyWidgetDependenciesPanel(
                   dependencies: dependencies,
                   presets: presets,
-                  onChanged: (s, v) {
+                  onChanged: (dep) {
                     setState(() {});
-                    onChanged(s, v);
+                    onChanged(dep);
                   },
                 ),
               ),

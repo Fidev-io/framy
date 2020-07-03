@@ -20,8 +20,8 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 
   dynamic dependencyValue(String name) => dependency(name).value;
 
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
+  void onChanged(FramyDependencyModel dependencyModel) {
+    setState(() {});
   }
 
   @override
