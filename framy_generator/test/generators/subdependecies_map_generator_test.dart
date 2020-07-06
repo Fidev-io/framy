@@ -7,12 +7,14 @@ void main() {
     test('should generate a switch for model', () {
       //given
       final stringDependency =
-          FramyWidgetDependency('firstName', 'String', null, false);
+          FramyObjectDependency('firstName', 'String', null, false);
       final framyModelObjects = [
         FramyObject()
           ..name = 'User'
           ..type = FramyObjectType.model
-          ..widgetDependencies = [stringDependency]
+          ..constructors = [
+            FramyObjectConstructor('', [stringDependency])
+          ]
       ];
       //when
       final result = generateSubDependenciesMap(framyModelObjects);
@@ -23,12 +25,14 @@ void main() {
     test('should generate subDependency row', () {
       //given
       final stringDependency =
-          FramyWidgetDependency('firstName', 'String', null, false);
+          FramyObjectDependency('firstName', 'String', null, false);
       final framyModelObjects = [
         FramyObject()
           ..name = 'User'
           ..type = FramyObjectType.model
-          ..widgetDependencies = [stringDependency]
+          ..constructors = [
+            FramyObjectConstructor('', [stringDependency])
+          ]
       ];
       //when
       final result = generateSubDependenciesMap(framyModelObjects);
@@ -45,7 +49,7 @@ void main() {
         FramyObject()
           ..name = 'FooModel'
           ..type = FramyObjectType.enumModel
-          ..widgetDependencies = []
+          ..constructors = [FramyObjectConstructor('', [])]
       ];
       //when
       final result = generateSubDependenciesMap(framyModelObjects);
@@ -59,12 +63,40 @@ void main() {
         FramyObject()
           ..name = 'FooModel'
           ..type = FramyObjectType.model
-          ..widgetDependencies = []
+          ..constructors = [FramyObjectConstructor('', [])]
       ];
       //when
       final result = generateSubDependenciesMap(framyModelObjects);
       //then
-      expect(result.contains('default: return [];'), isFalse);
+      expect(result.contains('default: return [];'), isTrue);
+    });
+
+    test('should contain constructor parameter with default empty string', () {
+      final result = generateSubDependenciesMap([]);
+      expect(result.contains('[String constructor = \'\']'), isTrue);
+    });
+
+    test('should switch on type+constructor', () {
+      final result = generateSubDependenciesMap([]);
+      expect(result.contains('switch (type + constructor)'), isTrue);
+    });
+
+    test('should contain generate case for each constructor', () {
+      //given
+      final framyModelObjects = [
+        FramyObject()
+          ..name = 'FooModel'
+          ..type = FramyObjectType.model
+          ..constructors = [
+            FramyObjectConstructor('', []),
+            FramyObjectConstructor('.second', []),
+          ]
+      ];
+      //when
+      final result = generateSubDependenciesMap(framyModelObjects);
+      //then
+      expect(result.contains("case 'FooModel':"), isTrue);
+      expect(result.contains("case 'FooModel.second':"), isTrue);
     });
   });
 }

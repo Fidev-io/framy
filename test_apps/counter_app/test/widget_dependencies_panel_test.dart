@@ -42,8 +42,8 @@ void main() {
       await tester.pumpWidget(TestMaterialAppWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: [model],
-          onChanged: (name, val) =>
-              model = FramyDependencyModel<String>(name, 'String', val, []),
+          onChanged: (dep) => model =
+              FramyDependencyModel<String>(dep.name, 'String', dep.value, []),
           presets: {},
         ),
       ));

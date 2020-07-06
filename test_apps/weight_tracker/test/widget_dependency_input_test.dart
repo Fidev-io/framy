@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weight_tracker/main.app.framy.dart';
 import 'package:weight_tracker/models/user.dart';
+import 'package:weight_tracker/models/weight_entry.dart';
+import 'package:weight_tracker/models/weight_entry.framy.dart';
 import 'package:weight_tracker/models/weight_unit.dart';
 
 import 'test_utils.dart';
@@ -19,6 +21,10 @@ void main() {
         FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
       ]);
 
+  FramyDependencyModel _getWeightEntryModel([WeightEntry defaultValue]) =>
+      FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry',
+          defaultValue, createSubDependencies('WeightEntry'));
+
   FramyDependencyModel _getStringListModel([List<String> defaultValue]) =>
       FramyDependencyModel<List<String>>(
           'strings', 'List<String>', defaultValue, []);
@@ -33,14 +39,14 @@ void main() {
   Future<void> _buildDependencyInput(
     WidgetTester tester,
     FramyDependencyModel dependency, {
-    Function(String, dynamic) onChanged,
+    ValueChanged<FramyDependencyModel> onChanged,
     Map<String, Map<String, dynamic>> presets = const {},
   }) async {
     await tester.pumpWidget(
       TestMaterialAppWithScaffold(
         FramyWidgetDependencyInput(
           dependency: dependency,
-          onChanged: onChanged ?? (_, __) {},
+          onChanged: onChanged ?? (_) {},
           presets: presets,
         ),
       ),
@@ -91,7 +97,7 @@ void main() {
           presets: {
             'User': {'user1': presetUser}
           },
-          onChanged: (name, value) => emitted = value,
+          onChanged: (dep) => emitted = dep.value,
         );
         //when
         await choosePreset(tester, 'user1');
@@ -128,7 +134,7 @@ void main() {
           presets: {
             'User': {'user1': presetUser}
           },
-          onChanged: (name, value) => emitted = value,
+          onChanged: (dep) => emitted = dep.value,
         );
         //when
         await choosePreset(tester, 'Custom');
@@ -180,7 +186,7 @@ void main() {
         await _buildDependencyInput(
           tester,
           _getEnumModel(),
-          onChanged: (name, val) => emittedValue = val,
+          onChanged: (dep) => emittedValue = dep.value,
         );
         //when
         await tester.tap(find.byKey(Key('framy_dependency_weightUnit_input')));
@@ -227,7 +233,7 @@ void main() {
         await _buildDependencyInput(
           tester,
           _getDateTimeModel(DateTime(2020)),
-          onChanged: (_, val) => emitted = val,
+          onChanged: (dep) => emitted = dep.value,
         );
         await tester.tap(find.byKey(Key('framy_dependency_dateTime_input')));
         await tester.pump();
@@ -246,7 +252,7 @@ void main() {
         await _buildDependencyInput(
           tester,
           _getDateTimeModel(DateTime(2020)),
-          onChanged: (_, val) => didEmit = true,
+          onChanged: (dep) => didEmit = true,
         );
         await tester.tap(find.byKey(Key('framy_dependency_dateTime_input')));
         await tester.pump();
@@ -255,6 +261,39 @@ void main() {
         await tester.pump();
         //then
         expect(didEmit, isFalse);
+      });
+    });
+
+    group('ConstructorDropdown usage', () {
+      testWidgets(
+          'should not show constructor dropdown when class has only one constructor',
+          (WidgetTester tester) async {
+        await _buildDependencyInput(tester, _getUserModel());
+        expect(find.byType(FramyConstructorDropdown), findsNothing);
+      });
+
+      testWidgets(
+          'should show constructor dropdown when class has more than one constructor',
+          (WidgetTester tester) async {
+        //given
+        expect(framyAvailableConstructorNames['WeightEntry'], hasLength(2));
+        final model = _getWeightEntryModel();
+        //when
+        await _buildDependencyInput(tester, model);
+        //then
+        expect(find.byType(FramyConstructorDropdown), findsOneWidget);
+      });
+
+      testWidgets(
+          'should not show constructor dropdown when chosen value is a preset',
+          (WidgetTester tester) async {
+        //given
+        expect(framyAvailableConstructorNames['WeightEntry'], hasLength(2));
+        final model = _getWeightEntryModel(presetEntry());
+        //when
+        await _buildDependencyInput(tester, model);
+        //then
+        expect(find.byType(FramyConstructorDropdown), findsOneWidget);
       });
     });
   });

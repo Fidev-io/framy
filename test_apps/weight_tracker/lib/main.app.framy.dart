@@ -18,6 +18,7 @@ import 'package:weight_tracker/widgets/weight_entry_list_item.dart';
 import 'package:weight_tracker/models/weight_unit.dart';
 import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/models/weight_entry.dart';
+import 'package:weight_tracker/models/weight_entry.framy.dart';
 import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
@@ -838,8 +839,8 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 
   dynamic dependencyValue(String name) => dependency(name).value;
 
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
+  void onChanged(FramyDependencyModel dependencyModel) {
+    setState(() {});
   }
 
   @override
@@ -1016,16 +1017,18 @@ class FramyDependencyModel<T> {
   final String name;
   final String type;
   T value;
-  final List<FramyDependencyModel> subDependencies;
   T lastCustomValue;
+  String constructor;
+  List<FramyDependencyModel> subDependencies;
 
-  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies)
+  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies,
+      {this.constructor = ''})
       : lastCustomValue = value;
 }
 
 class FramyWidgetDependenciesPanel extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
 
   const FramyWidgetDependenciesPanel(
@@ -1060,7 +1063,7 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
 
 class FramyWidgetDependenciesFAB extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
 
   const FramyWidgetDependenciesFAB(
@@ -1087,9 +1090,9 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
                 child: FramyWidgetDependenciesPanel(
                   dependencies: dependencies,
                   presets: presets,
-                  onChanged: (s, v) {
+                  onChanged: (dep) {
                     setState(() {});
-                    onChanged(s, v);
+                    onChanged(dep);
                   },
                 ),
               ),
@@ -1114,7 +1117,7 @@ InputDecoration get _framyInputDecoration => InputDecoration(
 
 class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
   final Widget trailing;
 
@@ -1126,7 +1129,8 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     if (value != null && !isValueAPreset(presets, dependency.type, value)) {
       dependency.lastCustomValue = value;
     }
-    onChanged(dependency.name, value);
+    dependency.value = value;
+    onChanged(dependency);
   }
 
   @override
@@ -1158,6 +1162,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             ],
           ),
         ),
+        if (!isDependencyAPreset(presets, dependency) &&
+            framyAvailableConstructorNames.containsKey(dependency.type) &&
+            framyAvailableConstructorNames[dependency.type].length > 1)
+          FramyConstructorDropdown(
+            dependency: dependency,
+            onChanged: onChanged,
+          ),
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
             InputDecorator(
@@ -1293,8 +1304,7 @@ class FramyModelInput extends StatelessWidget {
                       child: FramyWidgetDependencyInput(
                         dependency: dep,
                         presets: presets,
-                        onChanged: (name, value) {
-                          dependency(name).value = value;
+                        onChanged: (changedDep) {
                           onChanged(dependencies);
                         },
                       ),
@@ -1309,7 +1319,7 @@ class FramyModelInput extends StatelessWidget {
 
 class FramyDateTimeDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
-  final void Function(dynamic value) onChanged;
+  final ValueChanged<dynamic> onChanged;
   final Map<String, Map<String, dynamic>> presets;
 
   const FramyDateTimeDependencyInput(
@@ -1373,9 +1383,14 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 listType,
                 dependency.value[i],
                 dependency.subDependencies[i].subDependencies,
+                constructor: dependency.subDependencies[i].constructor,
               ),
-              onChanged: (name, val) {
-                dependency.value[i] = val;
+              onChanged: (changedDep) {
+                dependency.value[i] = changedDep.value;
+                dependency.subDependencies[i].constructor =
+                    changedDep.constructor;
+                dependency.subDependencies[i].subDependencies =
+                    changedDep.subDependencies;
                 onChanged(dependency);
               },
               presets: presets,
@@ -1478,24 +1493,83 @@ class FramyPresetDropdown extends StatelessWidget {
   }
 }
 
+class FramyConstructorDropdown extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final ValueChanged<FramyDependencyModel> onChanged;
+
+  FramyConstructorDropdown({this.dependency, this.onChanged})
+      : super(
+          key: Key('framy_dependency_${dependency.name}_constructor_dropdown'),
+        );
+
+  @override
+  Widget build(BuildContext context) {
+    return InputDecorator(
+      decoration: InputDecoration(
+        labelText: 'Constructor',
+        isDense: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(),
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isDense: true,
+          value: dependency.constructor,
+          onChanged: (conName) {
+            dependency.constructor = conName;
+            dependency.subDependencies =
+                createSubDependencies(dependency.type, dependency.constructor);
+            onChanged(dependency);
+          },
+          items: framyAvailableConstructorNames[dependency.type]
+              .map((constructorName) => DropdownMenuItem<String>(
+                    value: constructorName,
+                    child: Text(constructorName.isEmpty
+                        ? 'Default'
+                        : constructorName.replaceAll('.', '')),
+                  ))
+              .toList(),
+        ),
+      ),
+    );
+  }
+}
+
 // ======================== MAPS etc ===========================
 
 final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
   ...framyEnumMap.map((type, values) =>
       MapEntry(type, (FramyDependencyModel dep) => values.first)),
-  'User': (dep) => User(
+  'User': (dep) {
+    if (dep.constructor == '') {
+      return User(
         dep.subDependencies.singleWhere((d) => d.name == 'firstName').value,
         dep.subDependencies.singleWhere((d) => d.name == 'lastName').value,
         dep.subDependencies.singleWhere((d) => d.name == 'age').value,
         emails:
             dep.subDependencies.singleWhere((d) => d.name == 'emails').value,
-      ),
-  'WeightEntry': (dep) => WeightEntry(
+      );
+    } else
+      return null;
+  },
+  'WeightEntry': (dep) {
+    if (dep.constructor == '') {
+      return WeightEntry(
         dep.subDependencies.singleWhere((d) => d.name == 'dateTime').value,
         dep.subDependencies.singleWhere((d) => d.name == 'weight').value,
         dep.subDependencies.singleWhere((d) => d.name == 'note').value,
-      ),
+      );
+    }
+    if (dep.constructor == '.now') {
+      return WeightEntry.now(
+        dep.subDependencies.singleWhere((d) => d.name == 'weight').value,
+      );
+    } else
+      return null;
+  },
   'String': (dep) => '',
   'double': (dep) => 0.0,
   'int': (dep) => 0,
@@ -1506,8 +1580,9 @@ final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
   'WeightUnit': WeightUnit.values,
 };
-List<FramyDependencyModel> createSubDependencies(String type) {
-  switch (type) {
+List<FramyDependencyModel> createSubDependencies(String type,
+    [String constructor = '']) {
+  switch (type + constructor) {
     case 'User':
       return [
         FramyDependencyModel<String>(
@@ -1519,6 +1594,7 @@ List<FramyDependencyModel> createSubDependencies(String type) {
         FramyDependencyModel<List<String>>('emails', 'List<String>', null,
             createSubDependencies('List<String>')),
       ];
+
     case 'WeightEntry':
       return [
         FramyDependencyModel<DateTime>(
@@ -1528,13 +1604,26 @@ List<FramyDependencyModel> createSubDependencies(String type) {
         FramyDependencyModel<String>(
             'note', 'String', null, createSubDependencies('String')),
       ];
+    case 'WeightEntry.now':
+      return [
+        FramyDependencyModel<double>(
+            'weight', 'double', null, createSubDependencies('double')),
+      ];
 
     default:
       return [];
   }
 }
 
+Map<String, List<String>> framyAvailableConstructorNames = {
+  'User': [''],
+  'WeightEntry': ['', '.now'],
+};
+
 Map<String, Map<String, dynamic>> createFramyPresets() => {
+      'WeightEntry': {
+        'presetEntry': presetEntry(),
+      },
       'User': {
         'teenageJohn': teenageJohn(),
       },

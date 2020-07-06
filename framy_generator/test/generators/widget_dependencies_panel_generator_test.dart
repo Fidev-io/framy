@@ -24,8 +24,7 @@ void main() {
     test('should contain onChanged callback', () {
       final result = generateWidgetDependenciesPanel();
       expect(
-        result.contains(
-            'final void Function(String name, dynamic value) onChanged;'),
+        result.contains('final ValueChanged<FramyDependencyModel> onChanged;'),
         isTrue,
       );
     });

@@ -15,15 +15,16 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
     List<FramyObject> framyObjectsToReturn = [];
     final framyObject = _widgetObjectFromElement(element);
     if (element is ClassElement) {
-      framyObject.widgetDependencies = [];
+      framyObject.constructors = [];
       //get constructor dependencies
+      framyObject.constructors.add(FramyObjectConstructor('', []));
       final constructor = element.unnamedConstructor;
       for (ParameterElement param in constructor.parameters) {
         if (param.type.toString() == 'Key') {
           continue;
         }
-        framyObject.widgetDependencies.add(
-          FramyWidgetDependency(
+        framyObject.constructors.first.dependencies.add(
+          FramyObjectDependency(
             param.name,
             parseDartType(param.type),
             param.defaultValueCode,
@@ -37,13 +38,13 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
         final providerAnnotation = providerChecker.firstAnnotationOf(element);
         final providerReader = ConstantReader(providerAnnotation);
         final providerType = providerReader.read('providerType').typeValue;
-        framyObject.widgetDependencies.add(
-          FramyWidgetDependency(
+        framyObject.constructors.first.dependencies.add(
+          FramyObjectDependency(
             providerType.getDisplayString(),
             providerType.getDisplayString(),
             null,
             false,
-            dependencyType: FramyWidgetDependencyType.provider,
+            dependencyType: FramyDependencyType.provider,
           ),
         );
       }

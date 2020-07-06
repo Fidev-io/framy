@@ -7,4 +7,8 @@ class WeightEntry {
   final String note;
 
   WeightEntry(this.dateTime, this.weight, this.note);
+
+  WeightEntry.now(this.weight)
+      : note = '',
+        dateTime = DateTime.now();
 }

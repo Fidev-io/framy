@@ -16,19 +16,21 @@ void main() {
     test('should generate a model constructor', () {
       //given
       final stringDependency =
-          FramyWidgetDependency('firstName', 'String', null, false);
+          FramyObjectDependency('firstName', 'String', null, false);
       final framyModelObjects = [
         FramyObject()
           ..name = 'User'
           ..type = FramyObjectType.model
-          ..widgetDependencies = [stringDependency]
+          ..constructors = [
+            FramyObjectConstructor('', [stringDependency])
+          ]
       ];
       //when
       final result = generateModelConstructorMap(framyModelObjects);
       //then
       expect(
           result.contains(RegExp(
-              '\'User\': \\(dep\\) => User\\(\n *dep\\.subDependencies\\.singleWhere\\(\\(d\\) => d\\.name == \'firstName\'\\)\\.value,')),
+              'User\\(\n *dep\\.subDependencies\\.singleWhere\\(\\(d\\) => d\\.name == \'firstName\'\\)\\.value,')),
           isTrue);
     });
 
@@ -38,7 +40,7 @@ void main() {
         FramyObject()
           ..name = 'FooModel'
           ..type = FramyObjectType.enumModel
-          ..widgetDependencies = []
+          ..constructors = [FramyObjectConstructor('', [])]
       ];
       //when
       final result = generateModelConstructorMap(framyModelObjects);
@@ -54,6 +56,34 @@ void main() {
       expect(result.contains('\'int\': (dep) => 0,'), isTrue);
       expect(result.contains('\'double\': (dep) => 0.0,'), isTrue);
       expect(result.contains('\'bool\': (dep) => false,'), isTrue);
+    });
+
+    test('should generate if statement for unnamed constructor', () {
+      //given
+      final framyModelObjects = [
+        FramyObject()
+          ..name = 'User'
+          ..type = FramyObjectType.model
+          ..constructors = [FramyObjectConstructor('', [])]
+      ];
+      //when
+      final result = generateModelConstructorMap(framyModelObjects);
+      //then
+      expect(result.contains('if (dep.constructor == \'\')'), isTrue);
+    });
+
+    test('should have else return null', () {
+      //given
+      final framyModelObjects = [
+        FramyObject()
+          ..name = 'User'
+          ..type = FramyObjectType.model
+          ..constructors = [FramyObjectConstructor('', [])]
+      ];
+      //when
+      final result = generateModelConstructorMap(framyModelObjects);
+      //then
+      expect(result.contains('else return null;'), isTrue);
     });
   });
 }
