@@ -6,6 +6,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:weight_tracker/app_theme.dart';
 import 'package:weight_tracker/pages/history_page.dart';
 import 'package:weight_tracker/pages/profile_page.dart';
@@ -853,7 +854,17 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: widget.builder(dependencyValue),
+                child: DevicePreview(
+                  style: DevicePreviewStyle(
+                    toolBar: DevicePreviewToolBarStyle.light(
+                      position: DevicePreviewToolBarPosition.right,
+                    ),
+                    background: BoxDecoration(),
+                  ),
+                  builder: (context) => Scaffold(
+                    body: widget.builder(dependencyValue),
+                  ),
+                ),
               ),
               if (!isSmallDevice)
                 SizedBox(

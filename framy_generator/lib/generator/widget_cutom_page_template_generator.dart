@@ -1,4 +1,4 @@
-String generateCustomPage() => '''
+String generateCustomPage(bool useDevicePreview) => '''
 typedef dynamic DependencyValueGetter(String name);
 
 class FramyCustomPage extends StatefulWidget {
@@ -36,7 +36,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: widget.builder(dependencyValue),
+                child: ${_generateWidgetBuilderUsage(useDevicePreview)}
               ),
               if (!isSmallDevice)
                 SizedBox(
@@ -67,3 +67,25 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
   }
 }
 ''';
+
+String _generateWidgetBuilderUsage(bool useDevicePreview) {
+  if (useDevicePreview) {
+    return '''
+DevicePreview(
+  style: DevicePreviewStyle(
+    toolBar: DevicePreviewToolBarStyle.light(
+      position: DevicePreviewToolBarPosition.right,
+    ),
+    background: BoxDecoration(),
+  ),
+  builder: (context) => Scaffold(
+    body: ${_widgetBuilderUsage}
+  ),
+),
+''';
+  } else {
+    return _widgetBuilderUsage;
+  }
+}
+
+String _widgetBuilderUsage = 'widget.builder(dependencyValue),';

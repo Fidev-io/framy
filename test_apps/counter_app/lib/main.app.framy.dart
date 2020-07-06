@@ -6,6 +6,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:counter_app/main.dart';
 
 void main() {
@@ -810,7 +811,17 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: widget.builder(dependencyValue),
+                child: DevicePreview(
+                  style: DevicePreviewStyle(
+                    toolBar: DevicePreviewToolBarStyle.light(
+                      position: DevicePreviewToolBarPosition.right,
+                    ),
+                    background: BoxDecoration(),
+                  ),
+                  builder: (context) => Scaffold(
+                    body: widget.builder(dependencyValue),
+                  ),
+                ),
               ),
               if (!isSmallDevice)
                 SizedBox(
