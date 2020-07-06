@@ -2,6 +2,7 @@
 ## [0.1.3]
 
 * Support for models with multiple constructors
+* Added usage of DevicePreview 
 
 ## [0.1.2]
 

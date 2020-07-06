@@ -48,6 +48,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
         await _loadFramyObjects(buildStep, '**.model.framy.json');
     final presetFramyObjects =
         await _loadFramyObjects(buildStep, '**.preset.framy.json');
+    final useDevicePreview = annotation.read('useDevicePreview').boolValue;
 
     final buffer = StringBuffer();
     buffer.writeln(generateImports([
@@ -55,7 +56,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
       ...widgetFramyObjects,
       ...modelFramyObjects,
       ...presetFramyObjects,
-    ]));
+    ], useDevicePreview: useDevicePreview));
     buffer.writeln(generateMain());
     buffer.writeln(generateFramyApp(themeFramyObjects));
     buffer.writeln(generateRouting(widgetFramyObjects));
@@ -73,7 +74,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateTextFieldPage());
     buffer.writeln(
         '\n// ======================== CUSTOM PAGES ===========================\n');
-    buffer.writeln(generateCustomPage());
+    buffer.writeln(generateCustomPage(useDevicePreview));
     buffer.writeln(generateWidgetPages(widgetFramyObjects, modelFramyObjects));
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());

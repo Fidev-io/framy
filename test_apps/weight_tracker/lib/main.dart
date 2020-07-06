@@ -7,7 +7,7 @@ void main() {
   runApp(WeightTrackerApp());
 }
 
-@framyApp
+@FramyApp(useDevicePreview: true)
 class WeightTrackerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

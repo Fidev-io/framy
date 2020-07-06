@@ -1,5 +1,6 @@
 import 'package:counter_app/main.app.framy.dart';
 import 'package:counter_app/main.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -15,6 +16,17 @@ void main() {
     testWidgets('should have CounterTitle', (tester) async {
       await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
       expect(find.byType(CounterTitle), findsOneWidget);
+    });
+
+    testWidgets('should have DevicePreview', (tester) async {
+      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      expect(
+        find.descendant(
+          of: find.byType(FramyCounterTitleCustomPage),
+          matching: find.byType(DevicePreview),
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('should have default title', (tester) async {
@@ -58,10 +70,10 @@ void main() {
     });
 
     Future<void> selectInDropdown(
-        WidgetTester tester,
-        String text,
-        String fieldName,
-        ) async {
+      WidgetTester tester,
+      String text,
+      String fieldName,
+    ) async {
       await tester.tap(find.byKey(Key('framy_${fieldName}_preset_dropdown')));
       await tester.pump();
       await tester.tap(find.text(text).last);

@@ -1,9 +1,12 @@
 import 'package:framy_generator/framy_object.dart';
 
-String generateImports(List<FramyObject> framyObjects) {
+String generateImports(List<FramyObject> framyObjects, {bool useDevicePreview = false}) {
   Set<String> imports = {};
   imports.add('package:flutter/foundation.dart');
   imports.add('package:flutter/material.dart');
+  if (useDevicePreview) {
+    imports.add('package:device_preview/device_preview.dart');
+  }
   framyObjects.forEach((object) {
     imports.add(object.import);
     if (object.type == FramyObjectType.widget &&

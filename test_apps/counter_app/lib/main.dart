@@ -5,7 +5,7 @@ void main() {
   runApp(MyApp());
 }
 
-@FramyApp()
+@FramyApp(useDevicePreview: true)
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
