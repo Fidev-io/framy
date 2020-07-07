@@ -9,6 +9,7 @@ String generateImports(List<FramyObject> framyObjects, {bool useDevicePreview = 
   }
   framyObjects.forEach((object) {
     imports.add(object.import);
+    imports.addAll(object.dependencyImports);
     if (object.type == FramyObjectType.widget &&
         object.constructors.first.dependencies.any((element) =>
             element.dependencyType == FramyDependencyType.provider)) {

@@ -4,6 +4,7 @@
 
 * Fixed bug with losing state on hot reload #96
 * Fixed bug with generating theme #98
+* Fixed bug with imports for models not annotated with FramyModel #99
 
 ## [0.1.3]
 

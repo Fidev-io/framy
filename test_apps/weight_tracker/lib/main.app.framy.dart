@@ -8,16 +8,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:weight_tracker/app_theme.dart';
+import 'package:framy_annotation/framy_annotation.dart';
+import 'dart:core';
 import 'package:weight_tracker/pages/history_page.dart';
+import 'package:weight_tracker/widgets/weight_entry_list_item.dart';
+import 'package:weight_tracker/models/weight_entry.dart';
 import 'package:weight_tracker/pages/profile_page.dart';
 import 'package:provider/provider.dart';
-import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
-import 'package:weight_tracker/widgets/weight_unit_display.dart';
-import 'package:weight_tracker/widgets/weight_entry_list_item.dart';
-import 'package:weight_tracker/models/weight_unit.dart';
+import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/models/user.dart';
-import 'package:weight_tracker/models/weight_entry.dart';
+import 'package:weight_tracker/widgets/weight_unit_display.dart';
+import 'package:weight_tracker/widgets/dummy_test_widget.dart';
+import 'package:weight_tracker/models/dummy_test_widget_model.dart';
+import 'package:weight_tracker/models/weight_unit.dart';
+import 'package:intl/intl.dart';
 import 'package:weight_tracker/models/weight_entry.framy.dart';
 import 'package:weight_tracker/models/user.framy.dart';
 
@@ -46,6 +51,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/textfield': FramyTextFieldPage(),
     '/HistoryPage': FramyHistoryPageCustomPage(),
     '/ProfilePage': FramyProfilePageCustomPage(),
+    '/DummyTestWidget': FramyDummyTestWidgetCustomPage(),
     '/UserDataCard': FramyUserDataCardCustomPage(),
     '/UserEmailsView': FramyUserEmailsViewCustomPage(),
     '/WeightUnitDisplay': FramyWeightUnitDisplayCustomPage(),
@@ -178,6 +184,12 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('ProfilePage'),
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/ProfilePage'),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('DummyTestWidget'),
+                onTap: () => Navigator.of(context)
+                    .pushReplacementNamed('/DummyTestWidget'),
               ),
               ListTile(
                 leading: SizedBox.shrink(),
@@ -939,6 +951,27 @@ class FramyProfilePageCustomPage extends StatelessWidget {
             Provider<User>.value(value: valueGetter('User')),
           ],
           child: ProfilePage(),
+        );
+      },
+    );
+  }
+}
+
+class FramyDummyTestWidgetCustomPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FramyCustomPage(
+      key: Key('Framy_DummyTestWidget_Page'),
+      dependencies: [
+        FramyDependencyModel<DummyTestWidgetModel>(
+            'model',
+            'DummyTestWidgetModel',
+            null,
+            createSubDependencies('DummyTestWidgetModel')),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return DummyTestWidget(
+          model: valueGetter('model'),
         );
       },
     );
