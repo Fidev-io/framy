@@ -18,7 +18,8 @@ String _generateThemeDataLine(List<FramyObject> themeObjects) {
   if (themeObjects == null || themeObjects.isEmpty) {
     return '';
   } else {
-    final themeObject = themeObjects.first;
+    final themeObject = themeObjects
+        .firstWhere((object) => object.type == FramyObjectType.themeData);
     return 'theme: ${generateAccessibleElement(themeObject)},';
   }
 }

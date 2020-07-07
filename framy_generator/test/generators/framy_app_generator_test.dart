@@ -32,6 +32,7 @@ void main() {
     test('should contain theme when passed', () {
       //given
       final themeDataObject = FramyObject()
+        ..type = FramyObjectType.themeData
         ..name = 'getThemeData'
         ..kind = ElementKind.FUNCTION
         ..isStatic = true;
@@ -44,6 +45,7 @@ void main() {
     test('should contain theme with parent when parent object is passed', () {
       //given
       final themeDataObject = FramyObject()
+        ..type = FramyObjectType.themeData
         ..name = 'getThemeData'
         ..isStatic = false
         ..kind = ElementKind.METHOD
@@ -59,6 +61,7 @@ void main() {
         () {
       //given
       final themeDataObject = FramyObject()
+        ..type = FramyObjectType.themeData
         ..name = 'getThemeData'
         ..isStatic = true
         ..kind = ElementKind.METHOD
@@ -72,6 +75,7 @@ void main() {
     test('should contain field theme from parent', () {
       //given
       final themeDataObject = FramyObject()
+        ..type = FramyObjectType.themeData
         ..name = 'theme'
         ..isStatic = false
         ..kind = ElementKind.GETTER
@@ -80,6 +84,27 @@ void main() {
       final result = generateFramyApp([themeDataObject]);
       //then
       expect(result.contains('theme: CustomAppTheme().theme,'), isTrue);
+    });
+
+    test('should contain correct themeData', () {
+      //given
+      final parentObject = FramyObject()..name = 'AppThemeWithGetter';
+      final colorObject = FramyObject()
+        ..type = FramyObjectType.color
+        ..name = 'defaultAvatarColor'
+        ..isStatic = true
+        ..kind = ElementKind.GETTER
+        ..parentObject = parentObject;
+      final themeObject = FramyObject()
+        ..type = FramyObjectType.themeData
+        ..name = 'themeData'
+        ..isStatic = true
+        ..kind = ElementKind.GETTER
+        ..parentObject = parentObject;
+      //when
+      final result = generateFramyApp([colorObject, themeObject]);
+      //then
+      expect(result.contains('theme: AppThemeWithGetter.themeData,'), isTrue);
     });
   });
 }

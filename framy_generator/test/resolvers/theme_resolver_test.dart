@@ -58,6 +58,44 @@ class AppTheme {
   ThemeData getTheme() => ThemeData();
 }
 
+@ShouldGenerate('''
+[
+  {
+    "type": "FramyObjectType.color",
+    "import": "package:__test__/theme_resolver_test.dart",
+    "name": "defaultAvatarColor",
+    "isStatic": true,
+    "kind": "GETTER",
+    "parentObject": {
+      "type": null,
+      "import": "package:__test__/theme_resolver_test.dart",
+      "name": "AppThemeWithGetter",
+      "isStatic": false,
+      "kind": "CLASS"
+    }
+  },
+  {
+    "type": "FramyObjectType.themeData",
+    "import": "package:__test__/theme_resolver_test.dart",
+    "name": "themeData",
+    "isStatic": true,
+    "kind": "GETTER",
+    "parentObject": {
+      "type": null,
+      "import": "package:__test__/theme_resolver_test.dart",
+      "name": "AppThemeWithGetter",
+      "isStatic": false,
+      "kind": "CLASS"
+    }
+  }
+]''')
+@FramyTheme()
+class AppThemeWithGetter {
+  static ThemeData get themeData => ThemeData();
+
+  static const defaultAvatarColor = Color(0xFFB0DFB0);
+}
+
 @ShouldGenerate('"isStatic": true', contains: true)
 @FramyTheme()
 class AppTheme2 {
