@@ -1,4 +1,9 @@
 # Changelog
+
+## [0.1.4]
+
+* Fixed bug with losing state on hot reload
+
 ## [0.1.3]
 
 * Support for models with multiple constructors

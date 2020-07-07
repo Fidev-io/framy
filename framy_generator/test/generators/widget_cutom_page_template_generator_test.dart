@@ -56,5 +56,18 @@ void main() {
         isFalse,
       );
     });
+
+    test('should not contain DevicePreview when false as param is passed', () {
+      final result = generateCustomPage(false);
+      expect(
+        result.contains('DevicePreview('),
+        isFalse,
+      );
+    });
+
+    test('should contain copy widget.dependencies to dependencies', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('dependencies = widget.dependencies'), isTrue);
+    });
   });
 }
