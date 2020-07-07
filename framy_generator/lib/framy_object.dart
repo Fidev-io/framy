@@ -12,7 +12,7 @@ class FramyObject {
   FramyObject parentObject;
   List<FramyObjectConstructor> constructors;
   String returnType;
-  List<String> dependencyImports;
+  List<String> imports;
 
   FramyObject();
 
@@ -22,7 +22,7 @@ class FramyObject {
         kind = element.kind,
         isStatic = (element is ExecutableElement && element.isStatic) ||
             (element is FieldElement && element.isStatic),
-        dependencyImports = element.library.importedLibraries
+        imports = element.library.importedLibraries
             .map((lib) => lib.location.toString())
             .toList();
 
@@ -30,6 +30,7 @@ class FramyObject {
     return {
       'type': type?.toString(),
       'import': import,
+      'imports': imports,
       'name': name,
       'isStatic': isStatic,
       'kind': kind.toString(),
@@ -37,7 +38,6 @@ class FramyObject {
       if (constructors != null)
         'constructors': constructors.map((con) => con.toMap()).toList(),
       if (returnType != null) 'returnType': returnType,
-      'dependencyImports': dependencyImports,
     };
   }
 
@@ -60,7 +60,7 @@ class FramyObject {
             .map((map) => FramyObjectConstructor.fromJson(map))
             .toList();
     returnType = json['returnType'];
-    dependencyImports = List.from(json['dependencyImports'] ?? []);
+    imports = List.from(json['imports'] ?? []);
   }
 }
 
