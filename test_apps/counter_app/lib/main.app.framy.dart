@@ -789,9 +789,16 @@ class FramyCustomPage extends StatefulWidget {
 
 class _FramyCustomPageState extends State<FramyCustomPage> {
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
+  List<FramyDependencyModel> dependencies;
+
+  @override
+  void initState() {
+    super.initState();
+    dependencies = widget.dependencies;
+  }
 
   FramyDependencyModel dependency(String name) =>
-      widget.dependencies.singleWhere((d) => d.name == name);
+      dependencies.singleWhere((d) => d.name == name);
 
   dynamic dependencyValue(String name) => dependency(name).value;
 
@@ -827,7 +834,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                 SizedBox(
                   width: 300,
                   child: FramyWidgetDependenciesPanel(
-                    dependencies: widget.dependencies,
+                    dependencies: dependencies,
                     presets: presets,
                     onChanged: onChanged,
                   ),
@@ -838,7 +845,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
             return Scaffold(
               body: body,
               floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: widget.dependencies,
+                dependencies: dependencies,
                 presets: presets,
                 onChanged: onChanged,
               ),
