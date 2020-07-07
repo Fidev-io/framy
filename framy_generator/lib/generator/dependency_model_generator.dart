@@ -8,7 +8,25 @@ class FramyDependencyModel<T> {
   List<FramyDependencyModel> subDependencies;
 
   FramyDependencyModel(this.name, this.type, this.value, this.subDependencies,
-        {this.constructor = ''})
-        : lastCustomValue = value;
+      {this.constructor = ''}) {
+    if (value == null) {
+      updateValue();
+    }
+    lastCustomValue = value;
+  }
+
+  String get listType => type.substring(
+        type.indexOf('<') + 1,
+        type.lastIndexOf('>'),
+      );
+
+  void updateValue() {
+    if (type.startsWith('List<')) {
+      value = initList(listType);
+    } else {
+      value = framyModelConstructorMap[type]?.call(this);
+    }
+    lastCustomValue = value;
+  }
 }
 ''';

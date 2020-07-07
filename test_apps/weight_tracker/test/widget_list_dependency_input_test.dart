@@ -73,7 +73,7 @@ void main() {
       await tester.tap(find.text('+ Add strings element'));
       //then
       expect(emittedValue, hasLength(1));
-      expect(emittedValue.first, isNull);
+      expect(emittedValue.first, '');
     });
 
     testWidgets('should show an input for every list item',
@@ -245,7 +245,7 @@ void main() {
         await tester.tap(find.text('+ Add weightEntries element'));
         //then
         expect(emittedModel.value, hasLength(1));
-        expect(emittedModel.value.first, isNull);
+        expect(emittedModel.value.first, isNotNull);
       });
 
       testWidgets(
