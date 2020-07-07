@@ -12,10 +12,6 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String listType = dependency.type.substring(
-      dependency.type.indexOf('<') + 1,
-      dependency.type.lastIndexOf('>'),
-    );
     return Column(
       key: Key(dependency.value?.length?.toString()),
       children: [
@@ -24,7 +20,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
             FramyWidgetDependencyInput(
               dependency: FramyDependencyModel(
                 'List element \${i + 1}',
-                listType,
+                dependency.listType,
                 dependency.value[i],
                 dependency.subDependencies[i].subDependencies,
                 constructor: dependency.subDependencies[i].constructor,
@@ -63,19 +59,16 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
           child: Text('+ Add \${dependency.name} element'),
           onPressed: () {
             if (dependency.value == null) {
-              ${_generateEmptyList('String')}
-              ${_generateEmptyList('int')}
-              ${_generateEmptyList('double')}
-              ${_generateEmptyList('bool')}
-              ${modelObjects.fold('', (prev, modelObject) => prev + _generateEmptyList(modelObject.name) + '\n')}
+              dependency.value = initList(dependency.listType);
             }
-            dependency.value.add(null);
-            dependency.subDependencies.add(FramyDependencyModel(
+            final newModel = FramyDependencyModel<dynamic>(
               '_',
-              listType,
+              dependency.listType,
               null,
-              createSubDependencies(listType),
-            ));
+              createSubDependencies(dependency.listType),
+            );
+            dependency.subDependencies.add(newModel);
+            dependency.value.add(newModel.value);
             onChanged(dependency);
           },
         ),
@@ -83,7 +76,17 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
     );
   }
 }
+
+dynamic initList(String listType) {
+  ${_generateEmptyList('String')}
+  ${_generateEmptyList('int')}
+  ${_generateEmptyList('double')}
+  ${_generateEmptyList('bool')}
+  ${modelObjects.fold('', (prev, modelObject) => prev + _generateEmptyList(modelObject.name) + '\n')}
+  else
+    return [];
+}
 ''';
 
 String _generateEmptyList(String type) =>
-    "if (listType == '$type') dependency.value = <$type>[];";
+    "if (listType == '$type') return <$type>[];";

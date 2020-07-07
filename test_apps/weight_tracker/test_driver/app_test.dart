@@ -60,6 +60,13 @@ void main() {
       await driver.waitFor(find.byValueKey('UserDataCard'));
     });
 
+    test('should have use default values', () async {
+      await driver.waitFor(find.byValueKey('UserDataCard'));
+      await driver.waitForAbsent(find.text('null'));
+      await driver.waitFor(find.text(' '));
+      await driver.waitFor(find.text('Age: 0'));
+    });
+
     test('should allow to change user parameters', () async {
       if (!await isDeviceBig()) {
         await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
