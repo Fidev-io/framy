@@ -23,6 +23,13 @@ Future<void> main() async {
   {
     "type": "FramyObjectType.themeData",
     "import": "package:__test__/theme_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "dart:core",
+      "package:framy_generator/resolvers/theme_resolver.dart"
+    ],
     "name": "getThemeData",
     "isStatic": true,
     "kind": "FUNCTION"
@@ -41,12 +48,26 @@ ThemeData _privateThemeData() => ThemeData();
   {
     "type": "FramyObjectType.themeData",
     "import": "package:__test__/theme_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "dart:core",
+      "package:framy_generator/resolvers/theme_resolver.dart"
+    ],
     "name": "getTheme",
     "isStatic": false,
     "kind": "METHOD",
     "parentObject": {
       "type": null,
       "import": "package:__test__/theme_resolver_test.dart",
+      "imports": [
+        "package:source_gen_test/source_gen_test.dart",
+        "package:__test__/dummy_classes.dart",
+        "package:framy_annotation/framy_annotation.dart",
+        "dart:core",
+        "package:framy_generator/resolvers/theme_resolver.dart"
+      ],
       "name": "AppTheme",
       "isStatic": false,
       "kind": "CLASS"
@@ -63,12 +84,26 @@ class AppTheme {
   {
     "type": "FramyObjectType.color",
     "import": "package:__test__/theme_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "dart:core",
+      "package:framy_generator/resolvers/theme_resolver.dart"
+    ],
     "name": "defaultAvatarColor",
     "isStatic": true,
     "kind": "GETTER",
     "parentObject": {
       "type": null,
       "import": "package:__test__/theme_resolver_test.dart",
+      "imports": [
+        "package:source_gen_test/source_gen_test.dart",
+        "package:__test__/dummy_classes.dart",
+        "package:framy_annotation/framy_annotation.dart",
+        "dart:core",
+        "package:framy_generator/resolvers/theme_resolver.dart"
+      ],
       "name": "AppThemeWithGetter",
       "isStatic": false,
       "kind": "CLASS"
@@ -77,12 +112,26 @@ class AppTheme {
   {
     "type": "FramyObjectType.themeData",
     "import": "package:__test__/theme_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "dart:core",
+      "package:framy_generator/resolvers/theme_resolver.dart"
+    ],
     "name": "themeData",
     "isStatic": true,
     "kind": "GETTER",
     "parentObject": {
       "type": null,
       "import": "package:__test__/theme_resolver_test.dart",
+      "imports": [
+        "package:source_gen_test/source_gen_test.dart",
+        "package:__test__/dummy_classes.dart",
+        "package:framy_annotation/framy_annotation.dart",
+        "dart:core",
+        "package:framy_generator/resolvers/theme_resolver.dart"
+      ],
       "name": "AppThemeWithGetter",
       "isStatic": false,
       "kind": "CLASS"
@@ -113,12 +162,26 @@ class AppTheme3 {
   {
     "type": "FramyObjectType.color",
     "import": "package:__test__/theme_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "dart:core",
+      "package:framy_generator/resolvers/theme_resolver.dart"
+    ],
     "name": "myCustomColor",
     "isStatic": false,
     "kind": "GETTER",
     "parentObject": {
       "type": null,
       "import": "package:__test__/theme_resolver_test.dart",
+      "imports": [
+        "package:source_gen_test/source_gen_test.dart",
+        "package:__test__/dummy_classes.dart",
+        "package:framy_annotation/framy_annotation.dart",
+        "dart:core",
+        "package:framy_generator/resolvers/theme_resolver.dart"
+      ],
       "name": "AppThemeWithColor1",
       "isStatic": false,
       "kind": "CLASS"

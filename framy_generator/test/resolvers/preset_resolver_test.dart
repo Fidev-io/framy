@@ -23,6 +23,13 @@ Future<void> main() async {
   {
     "type": "FramyObjectType.preset",
     "import": "package:__test__/preset_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "dart:core",
+      "package:framy_generator/resolvers/preset_resolver.dart"
+    ],
     "name": "authenticatedUser",
     "isStatic": true,
     "kind": "FUNCTION",

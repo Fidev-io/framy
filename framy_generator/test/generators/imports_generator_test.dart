@@ -18,7 +18,9 @@ void main() {
 
     test('should contain import from FramyObject', () {
       //given
-      final framyObject = FramyObject()..import = 'package:my_app/theme.dart';
+      final framyObject = FramyObject()
+        ..import = 'package:my_app/theme.dart'
+        ..imports = [];
       //when
       final result = generateImports([framyObject]);
       //then
@@ -32,6 +34,7 @@ void main() {
       //given
       final framyObject = FramyObject()
         ..type = FramyObjectType.widget
+        ..imports = []
         ..constructors = [
           FramyObjectConstructor(
             '',

@@ -5,6 +5,7 @@
 * Fixed bug with losing state on hot reload #96
 * Fixed bug with generating theme #98
 * Framy now defaults to custom objects instead of nulls in dependency panel #97
+* Fixed bug with imports for models not annotated with FramyModel #99
 
 ## [0.1.3]
 

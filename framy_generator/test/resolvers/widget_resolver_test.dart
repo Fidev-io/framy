@@ -23,6 +23,13 @@ Future<void> main() async {
   {
     "type": "FramyObjectType.widget",
     "import": "package:__test__/widget_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/widget_resolver.dart",
+      "dart:core"
+    ],
     "name": "CounterFloatingActionButton",
     "isStatic": false,
     "kind": "CLASS",
@@ -42,6 +49,13 @@ class CounterFloatingActionButton {}
   {
     "type": "FramyObjectType.widget",
     "import": "package:__test__/widget_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/widget_resolver.dart",
+      "dart:core"
+    ],
     "name": "WidgetWithConstructor",
     "isStatic": false,
     "kind": "CLASS",
@@ -71,6 +85,13 @@ class WidgetWithConstructor {
   {
     "type": "FramyObjectType.widget",
     "import": "package:__test__/widget_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/widget_resolver.dart",
+      "dart:core"
+    ],
     "name": "WidgetWithConstructorAndKey",
     "isStatic": false,
     "kind": "CLASS",
@@ -100,6 +121,13 @@ class WidgetWithConstructorAndKey {
   {
     "type": "FramyObjectType.widget",
     "import": "package:__test__/widget_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/widget_resolver.dart",
+      "dart:core"
+    ],
     "name": "WidgetWithConstructorWithDefaultParamValue",
     "isStatic": false,
     "kind": "CLASS",
@@ -153,6 +181,13 @@ class WidgetWithBoolParam {
   {
     "type": "FramyObjectType.widget",
     "import": "package:__test__/widget_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/widget_resolver.dart",
+      "dart:core"
+    ],
     "name": "WidgetWithStringProviderDependency",
     "isStatic": false,
     "kind": "CLASS",

@@ -345,4 +345,17 @@ void main() {
       await waitForHistoryPageText('13.0');
     });
   });
+
+  group('DummyTestWidget', () {
+    test('should go to DummyTestWidget page', () async {
+      await closeDependenciesPanelAndGoToOtherPage(
+        'DummyTestWidget',
+        openDependenciesPanel: true,
+      );
+    });
+
+    test('should display \'Not supported type\' text', () async {
+      await driver.waitFor(find.text('Not supported type'));
+    });
+  });
 }

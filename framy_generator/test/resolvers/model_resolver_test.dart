@@ -21,6 +21,12 @@ Future<void> main() async {
   {
     "type": "FramyObjectType.enumModel",
     "import": "package:__test__/model_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/model_resolver.dart",
+      "dart:core"
+    ],
     "name": "SimpleEnum",
     "isStatic": false,
     "kind": "ENUM",
@@ -35,6 +41,12 @@ enum SimpleEnum { val1, val2 }
   {
     "type": "FramyObjectType.model",
     "import": "package:__test__/model_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/model_resolver.dart",
+      "dart:core"
+    ],
     "name": "ClassWithTwoConstructors",
     "isStatic": false,
     "kind": "CLASS",
@@ -61,6 +73,12 @@ class ClassWithTwoConstructors {
   {
     "type": "FramyObjectType.model",
     "import": "package:__test__/model_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/model_resolver.dart",
+      "dart:core"
+    ],
     "name": "ClassWithTwoConstructorsWithDependencies",
     "isStatic": false,
     "kind": "CLASS",
