@@ -56,5 +56,10 @@ void main() {
         isFalse,
       );
     });
+
+    test('should contain copy widget.dependencies to dependencies', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('dependencies = widget.dependencies'), isTrue);
+    });
   });
 }
