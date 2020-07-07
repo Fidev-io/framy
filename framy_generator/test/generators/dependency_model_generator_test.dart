@@ -17,5 +17,16 @@ void main() {
       final result = generateDependencyModel();
       expect(result.contains('void updateValue()'), isTrue);
     });
+
+    test('should contain createSubDependencies', () {
+      final result = generateDependencyModel();
+      expect(
+          result.contains('createSubDependencies(type, constructor)'), isTrue);
+    });
+
+    test('should look for framyAvailableConstructorNames', () {
+      final result = generateDependencyModel();
+      expect(result.contains('framyAvailableConstructorNames'), isTrue);
+    });
   });
 }

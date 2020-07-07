@@ -7,8 +7,14 @@ class FramyDependencyModel<T> {
   String constructor;
   List<FramyDependencyModel> subDependencies;
 
-  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies,
-      {this.constructor = ''}) {
+  FramyDependencyModel(this.name, this.type, this.value,
+      {this.subDependencies, this.constructor}) {
+    if (constructor == null) {
+      constructor = framyAvailableConstructorNames[type]?.first ?? '';
+    }
+    if (subDependencies == null) {
+      subDependencies = createSubDependencies(type, constructor);
+    }
     if (value == null) {
       updateValue();
     }

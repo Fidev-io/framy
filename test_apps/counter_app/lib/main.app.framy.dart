@@ -867,8 +867,8 @@ class FramyCounterFABCustomPage extends StatelessWidget {
     return FramyCustomPage(
       key: Key('Framy_CounterFAB_Page'),
       dependencies: [
-        FramyDependencyModel<void Function()>('onPressed', 'void Function()',
-            null, createSubDependencies('void Function()')),
+        FramyDependencyModel<void Function()>(
+            'onPressed', 'void Function()', null),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return CounterFAB(
@@ -885,10 +885,8 @@ class FramyCounterTitleCustomPage extends StatelessWidget {
     return FramyCustomPage(
       key: Key('Framy_CounterTitle_Page'),
       dependencies: [
-        FramyDependencyModel<String>(
-            'verb', 'String', 'pushed', createSubDependencies('String')),
-        FramyDependencyModel<int>(
-            'counter', 'int', 0, createSubDependencies('int')),
+        FramyDependencyModel<String>('verb', 'String', 'pushed'),
+        FramyDependencyModel<int>('counter', 'int', 0),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return CounterTitle(
@@ -908,8 +906,14 @@ class FramyDependencyModel<T> {
   String constructor;
   List<FramyDependencyModel> subDependencies;
 
-  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies,
-      {this.constructor = ''}) {
+  FramyDependencyModel(this.name, this.type, this.value,
+      {this.subDependencies, this.constructor}) {
+    if (constructor == null) {
+      constructor = framyAvailableConstructorNames[type]?.first ?? '';
+    }
+    if (subDependencies == null) {
+      subDependencies = createSubDependencies(type, constructor);
+    }
     if (value == null) {
       updateValue();
     }
@@ -1273,7 +1277,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 'List element ${i + 1}',
                 dependency.listType,
                 dependency.value[i],
-                dependency.subDependencies[i].subDependencies,
+                subDependencies: dependency.subDependencies[i].subDependencies,
                 constructor: dependency.subDependencies[i].constructor,
               ),
               onChanged: (changedDep) {
@@ -1316,7 +1320,6 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               '_',
               dependency.listType,
               null,
-              createSubDependencies(dependency.listType),
             );
             dependency.subDependencies.add(newModel);
             dependency.value.add(newModel.value);
@@ -1417,6 +1420,7 @@ class FramyConstructorDropdown extends StatelessWidget {
             dependency.constructor = conName;
             dependency.subDependencies =
                 createSubDependencies(dependency.type, dependency.constructor);
+            dependency.updateValue();
             onChanged(dependency);
           },
           items: framyAvailableConstructorNames[dependency.type]

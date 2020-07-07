@@ -11,11 +11,11 @@ void main() {
         'strings',
         'List<String>',
         defaultValue,
-        defaultValue == null
+        subDependencies: defaultValue == null
             ? []
             : List.generate(
                 defaultValue.length,
-                (i) => FramyDependencyModel<String>('_', 'String', null, []),
+                (i) => FramyDependencyModel<String>('_', 'String', null),
               ),
       );
 
@@ -27,7 +27,7 @@ void main() {
         'weightEntries',
         'List<WeightEntry>',
         defaultValue,
-        subDependencies ?? [],
+        subDependencies: subDependencies ?? [],
       );
 
   Future<void> _buildDependencyInput(
@@ -188,11 +188,11 @@ void main() {
           '_',
           'WeightEntry',
           entry,
-          [
+          subDependencies: [
             FramyDependencyModel<DateTime>(
-                'dateTime', 'DateTime', DateTime(2020), []),
-            FramyDependencyModel<double>('weight', 'double', 90.0, []),
-            FramyDependencyModel<String>('note', 'String', 'foo', []),
+                'dateTime', 'DateTime', DateTime(2020)),
+            FramyDependencyModel<double>('weight', 'double', 90.0),
+            FramyDependencyModel<String>('note', 'String', 'foo'),
           ],
         );
         //when
@@ -214,11 +214,11 @@ void main() {
           '_',
           'WeightEntry',
           entry,
-          [
+          subDependencies: [
             FramyDependencyModel<DateTime>(
-                'dateTime', 'DateTime', DateTime(2020), []),
-            FramyDependencyModel<double>('weight', 'double', 90.0, []),
-            FramyDependencyModel<String>('note', 'String', 'foo', []),
+                'dateTime', 'DateTime', DateTime(2020)),
+            FramyDependencyModel<double>('weight', 'double', 90.0),
+            FramyDependencyModel<String>('note', 'String', 'foo'),
           ],
         );
         //when
@@ -257,11 +257,11 @@ void main() {
           '_',
           'WeightEntry',
           entry,
-          [
+          subDependencies: [
             FramyDependencyModel<DateTime>(
-                'dateTime', 'DateTime', DateTime(2020), []),
-            FramyDependencyModel<double>('weight', 'double', 90.0, []),
-            FramyDependencyModel<String>('note', 'String', 'foo', []),
+                'dateTime', 'DateTime', DateTime(2020)),
+            FramyDependencyModel<double>('weight', 'double', 90.0),
+            FramyDependencyModel<String>('note', 'String', 'foo'),
           ],
         );
         FramyDependencyModel emittedModel;

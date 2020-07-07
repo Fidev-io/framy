@@ -22,7 +22,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 'List element \${i + 1}',
                 dependency.listType,
                 dependency.value[i],
-                dependency.subDependencies[i].subDependencies,
+                subDependencies: dependency.subDependencies[i].subDependencies,
                 constructor: dependency.subDependencies[i].constructor,
               ),
               onChanged: (changedDep) {
@@ -65,7 +65,6 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               '_',
               dependency.listType,
               null,
-              createSubDependencies(dependency.listType),
             );
             dependency.subDependencies.add(newModel);
             dependency.value.add(newModel.value);
