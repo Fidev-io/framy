@@ -20,8 +20,8 @@ void main() {
         (WidgetTester tester) async {
       //given
       final dependencies = [
-        FramyDependencyModel('name1', 'String', null, []),
-        FramyDependencyModel('name2', 'int', null, []),
+        FramyDependencyModel<String>('name1', 'String', null, []),
+        FramyDependencyModel<String>('name2', 'int', null, []),
       ];
       //when
       await tester.pumpWidget(TestMaterialAppWithScaffold(

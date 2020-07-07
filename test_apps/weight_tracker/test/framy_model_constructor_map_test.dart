@@ -10,7 +10,8 @@ void main() {
         'WeightEntry',
         defaultValue,
         createSubDependencies('WeightEntry', constructor),
-      )..constructor = constructor;
+        constructor: constructor,
+      );
 
   group('framyModelConstructorMap', () {
     test('should use default constructor for WeightEntry', () {

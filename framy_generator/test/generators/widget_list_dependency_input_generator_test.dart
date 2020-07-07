@@ -61,5 +61,10 @@ void main() {
       expect(result.contains('key: Key(dependency.value?.length?.toString()),'),
           isTrue);
     });
+
+    test('should have initList method', () {
+      final result = generateWidgetListDependencyInput([]);
+      expect(result.contains('initList(String listType)'), isTrue);
+    });
   });
 }

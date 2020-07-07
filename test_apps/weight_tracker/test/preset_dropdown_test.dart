@@ -25,10 +25,15 @@ void main() {
 
     testWidgets('should display Null when dependency.value is null',
         (tester) async {
+      //given
+      final model = getUserModel();
+      model.value = null;
+      //when
       await tester.pumpWidget(TestMaterialAppWithScaffold(FramyPresetDropdown(
-        dependency: getUserModel(),
+        dependency: model,
         presets: {},
       )));
+      //then
       expect(find.text('Null').hitTestable(), findsOneWidget);
       expect(find.text('Custom').hitTestable(), findsNothing);
     });

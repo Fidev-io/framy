@@ -1029,8 +1029,26 @@ class FramyDependencyModel<T> {
   List<FramyDependencyModel> subDependencies;
 
   FramyDependencyModel(this.name, this.type, this.value, this.subDependencies,
-      {this.constructor = ''})
-      : lastCustomValue = value;
+      {this.constructor = ''}) {
+    if (value == null) {
+      updateValue();
+    }
+    lastCustomValue = value;
+  }
+
+  String get listType => type.substring(
+        type.indexOf('<') + 1,
+        type.lastIndexOf('>'),
+      );
+
+  void updateValue() {
+    if (type.startsWith('List<')) {
+      value = initList(listType);
+    } else {
+      value = framyModelConstructorMap[type]?.call(this);
+    }
+    lastCustomValue = value;
+  }
 }
 
 class FramyWidgetDependenciesPanel extends StatelessWidget {
@@ -1375,10 +1393,6 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String listType = dependency.type.substring(
-      dependency.type.indexOf('<') + 1,
-      dependency.type.lastIndexOf('>'),
-    );
     return Column(
       key: Key(dependency.value?.length?.toString()),
       children: [
@@ -1387,7 +1401,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
             FramyWidgetDependencyInput(
               dependency: FramyDependencyModel(
                 'List element ${i + 1}',
-                listType,
+                dependency.listType,
                 dependency.value[i],
                 dependency.subDependencies[i].subDependencies,
                 constructor: dependency.subDependencies[i].constructor,
@@ -1426,27 +1440,35 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
           child: Text('+ Add ${dependency.name} element'),
           onPressed: () {
             if (dependency.value == null) {
-              if (listType == 'String') dependency.value = <String>[];
-              if (listType == 'int') dependency.value = <int>[];
-              if (listType == 'double') dependency.value = <double>[];
-              if (listType == 'bool') dependency.value = <bool>[];
-              if (listType == 'WeightUnit') dependency.value = <WeightUnit>[];
-              if (listType == 'User') dependency.value = <User>[];
-              if (listType == 'WeightEntry') dependency.value = <WeightEntry>[];
+              dependency.value = initList(dependency.listType);
             }
-            dependency.value.add(null);
-            dependency.subDependencies.add(FramyDependencyModel(
+            final newModel = FramyDependencyModel<dynamic>(
               '_',
-              listType,
+              dependency.listType,
               null,
-              createSubDependencies(listType),
-            ));
+              createSubDependencies(dependency.listType),
+            );
+            dependency.subDependencies.add(newModel);
+            dependency.value.add(newModel.value);
             onChanged(dependency);
           },
         ),
       ],
     );
   }
+}
+
+dynamic initList(String listType) {
+  if (listType == 'String') return <String>[];
+  if (listType == 'int') return <int>[];
+  if (listType == 'double') return <double>[];
+  if (listType == 'bool') return <bool>[];
+  if (listType == 'WeightUnit') return <WeightUnit>[];
+  if (listType == 'User') return <User>[];
+  if (listType == 'WeightEntry')
+    return <WeightEntry>[];
+  else
+    return [];
 }
 
 class FramyPresetDropdown extends StatelessWidget {

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:weight_tracker/main.app.framy.dart';
+import 'package:weight_tracker/widgets/user_data_card.dart';
 
 import 'test_utils.dart';
 
@@ -24,31 +25,35 @@ void main() {
       await tester.pump();
     }
 
-    testWidgets(
-        'should use empty string when dependency is changed to be not null',
+    testWidgets('should use null string when dependency is changed to be null',
         (WidgetTester tester) async {
       //given
       await tester.pumpWidget(
           TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
-      expect(find.text('null null'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(UserDataCard),
+          matching: find.text(' '),
+        ),
+        findsOneWidget,
+      );
       //when
-      await selectInDropdown(tester, 'Custom', 'firstName');
+      await selectInDropdown(tester, 'Null', 'firstName');
       //then
-      expect(find.text(' null'), findsOneWidget);
+      expect(find.text('null '), findsOneWidget);
     });
 
-    testWidgets(
-        'should use 0 when int dependency is changed to be not null',
-            (WidgetTester tester) async {
-          //given
-          await tester.pumpWidget(
-              TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
-          expect(find.text('Age: null'), findsOneWidget);
-          //when
-          await selectInDropdown(tester, 'Custom', 'age');
-          //then
-          expect(find.text('Age: 0'), findsOneWidget);
-        });
+    testWidgets('should use null when int dependency is changed to be null',
+        (WidgetTester tester) async {
+      //given
+      await tester.pumpWidget(
+          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+      expect(find.text('Age: 0'), findsOneWidget);
+      //when
+      await selectInDropdown(tester, 'Null', 'age');
+      //then
+      expect(find.text('Age: null'), findsOneWidget);
+    });
 
     testWidgets('should show previous non-null value for int dependency',
         (WidgetTester tester) async {
