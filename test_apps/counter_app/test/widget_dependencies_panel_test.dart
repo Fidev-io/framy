@@ -21,7 +21,7 @@ void main() {
       //given
       final dependencies = [
         FramyDependencyModel<String>('name1', 'String', null, []),
-        FramyDependencyModel<String>('name2', 'int', null, []),
+        FramyDependencyModel<int>('name2', 'int', null, []),
       ];
       //when
       await tester.pumpWidget(TestMaterialAppWithScaffold(
