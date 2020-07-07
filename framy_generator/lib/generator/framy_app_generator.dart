@@ -19,7 +19,7 @@ String _generateThemeDataLine(List<FramyObject> themeObjects) {
     return '';
   } else {
     final themeObject = themeObjects
-        .singleWhere((object) => object.type == FramyObjectType.themeData);
+        .firstWhere((object) => object.type == FramyObjectType.themeData);
     return 'theme: ${generateAccessibleElement(themeObject)},';
   }
 }

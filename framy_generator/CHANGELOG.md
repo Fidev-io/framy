@@ -2,7 +2,8 @@
 
 ## [0.1.4]
 
-* Fixed bug with losing state on hot reload
+* Fixed bug with losing state on hot reload #96
+* Fixed bug with generating theme #98
 
 ## [0.1.3]
 
