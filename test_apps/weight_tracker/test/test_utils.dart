@@ -11,6 +11,8 @@ class FramyAppWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return FramyAppSettingsState(
       wrapWithScaffold: true,
+      wrapWithSafeArea: false,
+      wrapWithCenter: false,
       child: MaterialApp(
         theme: AppTheme.themeData,
         home: child,

@@ -33,8 +33,8 @@ void main() {
       await ozzie.takeScreenshot('${platform}_appbar_is_visible');
     });
 
-    test('should have Switch for wrapping with Scaffold', () async {
-      await driver.waitFor(find.byValueKey('FramyAppScaffoldSwitch'));
+    test('should have settings button', () async {
+      await driver.waitFor(find.byValueKey('FramyAppBarSettingsButton'));
     });
   });
 

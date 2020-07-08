@@ -33,6 +33,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 
   @override
   Widget build(BuildContext context) {
+    final state = FramyAppSettingsState.of(context);
     return SafeArea(
       bottom: false,
       child: LayoutBuilder(
@@ -77,9 +78,17 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 
 String _generateWidgetBuilderUsage(bool useDevicePreview) {
   String usage = '''
-FramyAppSettingsState.of(context).wrapWithScaffold ? Scaffold(
-  body: ${_widgetBuilderUsage}
-) : ${_widgetBuilderUsage}
+Widget widgetToDisplay = ${_widgetBuilderUsage};
+if (state.wrapWithCenter) {
+  widgetToDisplay = Center(child: widgetToDisplay);
+}
+if (state.wrapWithSafeArea) {
+  widgetToDisplay = SafeArea(child: widgetToDisplay);
+}
+if (state.wrapWithScaffold) {
+  widgetToDisplay = Scaffold(body: widgetToDisplay);
+}
+return widgetToDisplay;
 ''';
   if (useDevicePreview) {
     return '''
@@ -90,12 +99,20 @@ DevicePreview(
     ),
     background: BoxDecoration(),
   ),
-  builder: (context) => $usage
+  builder: (context) { 
+  $usage
+  },
 ),
 ''';
   } else {
-    return usage;
+    return '''
+Builder(
+  builder: (_) {
+  $usage 
+  },
+),    
+''';
   }
 }
 
-String _widgetBuilderUsage = 'widget.builder(dependencyValue),';
+String _widgetBuilderUsage = 'widget.builder(dependencyValue)';

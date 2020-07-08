@@ -1,5 +1,6 @@
 import 'package:counter_app/main.app.framy.dart';
 import 'package:counter_app/main.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -88,34 +89,100 @@ void main() {
       expect(find.byKey(Key('Framy_CounterFAB_Page')), findsOneWidget);
     });
 
-    testWidgets(
-        'should wrap widget with Scaffold by default (when Scaffold switch in settings is on)',
-        (tester) async {
-      //given
-      await tester.pumpWidget(FramyApp(key: framyAppStateKey));
-      await _openDrawer(tester);
-      //when
-      await tester.tap(find.text('CounterFAB'));
-      await tester.pumpAndSettle();
-      //then
-      //one for Framy App, second for wrapping widget
-      expect(find.byType(Scaffold), findsNWidgets(2));
-    });
+    group('Settings dialog', () {
+      Future<void> goToCounterFabPage(WidgetTester tester) async {
+        await tester.pumpWidget(FramyApp(key: framyAppStateKey));
+        await _openDrawer(tester);
+        await tester.tap(find.text('CounterFAB'));
+        await tester.pumpAndSettle();
+      }
 
-    testWidgets(
-        'should not wrap widget with Scaffold when Scaffold switch in settings is off',
-        (tester) async {
-      //given
-      await tester.pumpWidget(FramyApp(key: framyAppStateKey));
-      await _openDrawer(tester);
-      await tester.tap(find.text('CounterFAB'));
-      await tester.pumpAndSettle();
-      //when
-      await tester.tap(find.byKey(ValueKey('FramyAppScaffoldSwitch')));
-      await tester.pumpAndSettle();
-      //then
-      //one for Framy App
-      expect(find.byType(Scaffold), findsOneWidget);
+      testWidgets(
+          'should wrap widget with Scaffold when Scaffold switch is on',
+          (tester) async {
+        //given
+        await goToCounterFabPage(tester);
+        //then
+        //one for Framy App, second for wrapping widget
+        expect(find.byType(Scaffold), findsNWidgets(2));
+      });
+
+      testWidgets(
+          'should not wrap widget with Scaffold when Scaffold switch is off',
+          (tester) async {
+        //given
+        await goToCounterFabPage(tester);
+        //when
+        await tester.tap(find.byKey(ValueKey('FramyAppBarSettingsButton')));
+        await tester.pump();
+        await tester.tap(find.byKey(ValueKey('FramyAppScaffoldSwitch')));
+        await tester.pumpAndSettle();
+        //then
+        //one for Framy App
+        expect(find.byType(Scaffold), findsOneWidget);
+      });
+
+      testWidgets(
+          'should not wrap widget with Center when Center switch is off',
+          (tester) async {
+        //given
+        await goToCounterFabPage(tester);
+        //then
+        expect(
+          find.ancestor(
+              of: find.byType(CounterFAB), matching: find.byType(Center)),
+          findsNothing,
+        );
+      });
+
+      testWidgets(
+          'should wrap widget with Center when Center switch is on',
+          (tester) async {
+        //given
+        await goToCounterFabPage(tester);
+        //when
+        await tester.tap(find.byKey(ValueKey('FramyAppBarSettingsButton')));
+        await tester.pump();
+        await tester.tap(find.byKey(ValueKey('FramyAppCenterSwitch')));
+        await tester.pump();
+        //then
+        expect(
+          find.ancestor(
+              of: find.byType(CounterFAB), matching: find.byType(Center)),
+          findsOneWidget,
+        );
+      });
+
+      testWidgets(
+          'should not wrap widget with SafeArea when SafeArea switch is off',
+          (tester) async {
+        //given
+        await goToCounterFabPage(tester);
+        //then
+        expect(
+          find.descendant(
+              of: find.byType(DevicePreview), matching: find.byType(SafeArea)),
+          findsNothing,
+        );
+      });
+
+      testWidgets(
+          'should wrap widget with SafeArea when SafeArea switch is on',
+          (tester) async {
+        //given
+        await goToCounterFabPage(tester);
+        //when
+        await tester.tap(find.byKey(ValueKey('FramyAppBarSettingsButton')));
+        await tester.pump();
+        await tester.tap(find.byKey(ValueKey('FramyAppSafeAreaSwitch')));
+        await tester.pump();
+        //then
+        expect(
+          find.descendant(
+              of: find.byType(DevicePreview), matching: find.byType(SafeArea)),
+          findsOneWidget,
+        );
+      });
     });
   });
 }

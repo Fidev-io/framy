@@ -20,10 +20,10 @@ void main() {
       expect(find.byIcon(Icons.menu), findsOneWidget);
     });
 
-    testWidgets('should have Switch for wrapping with Scaffold',
+    testWidgets('should have Settings button',
         (tester) async {
       await tester.pumpWidget(_TestAppBar(drawer: Container()));
-      expect(find.byKey(ValueKey('FramyAppScaffoldSwitch')), findsOneWidget);
+      expect(find.byKey(ValueKey('FramyAppBarSettingsButton')), findsOneWidget);
     });
   });
 }
@@ -37,6 +37,8 @@ class _TestAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return FramyAppSettingsState(
       wrapWithScaffold: true,
+      wrapWithSafeArea: false,
+      wrapWithCenter: false,
       child: MaterialApp(
         home: Scaffold(
           appBar: FramyAppBar(),

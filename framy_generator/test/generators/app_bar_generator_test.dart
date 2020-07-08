@@ -42,13 +42,42 @@ void main() {
       );
     });
 
+    test('should contain key for Settings button', () {
+      //when
+      final String result = generateAppBar();
+      //then
+      expect(
+        result.contains('key: ValueKey(\'FramyAppBarSettingsButton\')'),
+        isTrue,
+      );
+    });
+
     test('should contain key for Scaffold switch', () {
       //when
       final String result = generateAppBar();
       //then
       expect(
-        result.contains(
-            'key: ValueKey(\'FramyAppScaffoldSwitch\')'),
+        result.contains('key: ValueKey(\'FramyAppScaffoldSwitch\')'),
+        isTrue,
+      );
+    });
+
+    test('should contain key for Center switch', () {
+      //when
+      final String result = generateAppBar();
+      //then
+      expect(
+        result.contains('key: ValueKey(\'FramyAppCenterSwitch\')'),
+        isTrue,
+      );
+    });
+
+    test('should contain key for SafeArea switch', () {
+      //when
+      final String result = generateAppBar();
+      //then
+      expect(
+        result.contains('key: ValueKey(\'FramyAppSafeAreaSwitch\')'),
         isTrue,
       );
     });

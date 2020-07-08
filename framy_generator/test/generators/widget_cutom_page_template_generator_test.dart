@@ -64,7 +64,32 @@ void main() {
 
     test('should contain getting wrapWithScaffold value from FramyAppSettingsState', () {
       final result = generateCustomPage(false);
-      expect(result.contains('FramyAppSettingsState.of(context).wrapWithScaffold'), isTrue);
+      expect(result.contains('state.wrapWithScaffold'), isTrue);
+    });
+
+    test('should contain getting wrapWithCenter value from FramyAppSettingsState', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('state.wrapWithCenter'), isTrue);
+    });
+
+    test('should contain getting wrapWithSafeArea value from FramyAppSettingsState', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('state.wrapWithSafeArea'), isTrue);
+    });
+
+    test('should contain Center', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('Center('), isTrue);
+    });
+
+    test('should contain Scaffold', () {
+      final result = generateCustomPage(false);
+      expect('Scaffold('.allMatches(result), hasLength(2));
+    });
+
+    test('should contain SafeArea', () {
+      final result = generateCustomPage(false);
+      expect('SafeArea('.allMatches(result), hasLength(2));
     });
   });
 }
