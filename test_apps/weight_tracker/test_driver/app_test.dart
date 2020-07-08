@@ -346,6 +346,39 @@ void main() {
     });
   });
 
+  group('StatisticsPage', () {
+    test('should go to StatisticsPage and change freezed dependency', () async {
+      await closeDependenciesPanelAndGoToOtherPage(
+        'StatisticsPage',
+        openDependenciesPanel: true,
+      );
+      await driver.waitFor(find.byType('StatisticsPage'));
+      //confirm default first constructor
+      await driver.waitFor(find.text('loaded'));
+      //change to error
+      await driver
+          .tap(find.byValueKey('framy_dependency_state_constructor_dropdown'));
+      await driver.tap(find.text('error'));
+      await driver.tap(find.byValueKey('framy_dependency_message_input'));
+      await driver.enterText('Some Error Message');
+      await driver.waitFor(find.descendant(
+        of: find.byType('StatisticsPage'),
+        matching: find.text('Some Error Message'),
+      ));
+      //change to loading
+      await driver
+          .tap(find.byValueKey('framy_dependency_state_constructor_dropdown'));
+      await driver.tap(find.text('loading'));
+      await driver.runUnsynchronized(() async {
+        await driver.waitFor(find.byType('CircularProgressIndicator'));
+        //change back to error to proceed with other tests
+        await driver.tap(
+            find.byValueKey('framy_dependency_state_constructor_dropdown'));
+        await driver.tap(find.text('error'));
+      });
+    });
+  });
+
   group('DummyTestWidget', () {
     test('should go to DummyTestWidget page', () async {
       await closeDependenciesPanelAndGoToOtherPage(

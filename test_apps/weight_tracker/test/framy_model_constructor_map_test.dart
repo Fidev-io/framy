@@ -9,7 +9,6 @@ void main() {
         'weightEntry',
         'WeightEntry',
         defaultValue,
-        createSubDependencies('WeightEntry', constructor),
         constructor: constructor,
       );
 

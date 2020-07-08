@@ -27,6 +27,7 @@ class FramyConstructorDropdown extends StatelessWidget {
             dependency.constructor = conName;
             dependency.subDependencies =
                 createSubDependencies(dependency.type, dependency.constructor);
+            dependency.updateValue();
             onChanged(dependency);
           },
           items: framyAvailableConstructorNames[dependency.type]

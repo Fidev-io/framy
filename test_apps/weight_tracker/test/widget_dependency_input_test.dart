@@ -11,30 +11,25 @@ import 'test_utils.dart';
 
 void main() {
   FramyDependencyModel _getStringModel([String defaultValue]) =>
-      FramyDependencyModel<String>('name', 'String', defaultValue, []);
+      FramyDependencyModel<String>('name', 'String', defaultValue);
 
   FramyDependencyModel _getUserModel([User defaultValue]) =>
-      FramyDependencyModel<User>('user', 'User', defaultValue, [
-        FramyDependencyModel<String>('firstName', 'String', null, []),
-        FramyDependencyModel<String>('lastName', 'String', null, []),
-        FramyDependencyModel<int>('age', 'int', null, []),
-        FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
-      ]);
+      FramyDependencyModel<User>('user', 'User', defaultValue);
 
   FramyDependencyModel _getWeightEntryModel([WeightEntry defaultValue]) =>
-      FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry',
-          defaultValue, createSubDependencies('WeightEntry'));
+      FramyDependencyModel<WeightEntry>(
+          'weightEntry', 'WeightEntry', defaultValue);
 
   FramyDependencyModel _getStringListModel([List<String> defaultValue]) =>
       FramyDependencyModel<List<String>>(
-          'strings', 'List<String>', defaultValue, []);
+          'strings', 'List<String>', defaultValue);
 
   FramyDependencyModel _getEnumModel([WeightUnit defaultValue]) =>
       FramyDependencyModel<WeightUnit>(
-          'weightUnit', 'WeightUnit', defaultValue, []);
+          'weightUnit', 'WeightUnit', defaultValue);
 
   FramyDependencyModel _getDateTimeModel([DateTime defaultValue]) =>
-      FramyDependencyModel<DateTime>('dateTime', 'DateTime', defaultValue, []);
+      FramyDependencyModel<DateTime>('dateTime', 'DateTime', defaultValue);
 
   Future<void> _buildDependencyInput(
     WidgetTester tester,

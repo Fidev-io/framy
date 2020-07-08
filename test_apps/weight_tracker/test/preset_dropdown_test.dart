@@ -7,12 +7,7 @@ import 'test_utils.dart';
 void main() {
   group('PresetsDropdownTest', () {
     FramyDependencyModel getUserModel([User defaultValue]) {
-      return FramyDependencyModel<User>('user', 'User', defaultValue, [
-        FramyDependencyModel<String>('firstName', 'String', null, []),
-        FramyDependencyModel<String>('lastName', 'String', null, []),
-        FramyDependencyModel<int>('age', 'int', null, []),
-        FramyDependencyModel<List<String>>('emails', 'List<String>', null, []),
-      ]);
+      return FramyDependencyModel<User>('user', 'User', defaultValue);
     }
 
     testWidgets('should build', (tester) async {

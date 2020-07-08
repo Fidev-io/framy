@@ -20,8 +20,8 @@ void main() {
         (WidgetTester tester) async {
       //given
       final dependencies = [
-        FramyDependencyModel<String>('name1', 'String', null, []),
-        FramyDependencyModel<int>('name2', 'int', null, []),
+        FramyDependencyModel<String>('name1', 'String', null),
+        FramyDependencyModel<int>('name2', 'int', null),
       ];
       //when
       await tester.pumpWidget(FramyAppWrapperWithScaffold(
@@ -38,12 +38,12 @@ void main() {
     testWidgets('should change string dependency value when typed in input',
         (WidgetTester tester) async {
       //given
-      var model = FramyDependencyModel<String>('name1', 'String', null, []);
+      var model = FramyDependencyModel<String>('name1', 'String', null);
       await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: [model],
           onChanged: (dep) => model =
-              FramyDependencyModel<String>(dep.name, 'String', dep.value, []),
+              FramyDependencyModel<String>(dep.name, 'String', dep.value),
           presets: {},
         ),
       ));

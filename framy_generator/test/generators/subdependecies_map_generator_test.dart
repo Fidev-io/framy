@@ -39,7 +39,7 @@ void main() {
       //then
       expect(
           result.contains(
-              'FramyDependencyModel<String>(\'firstName\', \'String\', null, createSubDependencies(\'String\')),\n'),
+              'FramyDependencyModel<String>(\'firstName\', \'String\', null),\n'),
           isTrue);
     });
 

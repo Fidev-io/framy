@@ -13,6 +13,8 @@ import 'dart:core';
 import 'package:weight_tracker/pages/history_page.dart';
 import 'package:weight_tracker/widgets/weight_entry_list_item.dart';
 import 'package:weight_tracker/models/weight_entry.dart';
+import 'package:weight_tracker/pages/statistics_page.dart';
+import 'package:weight_tracker/models/statistics_page_state.dart';
 import 'package:weight_tracker/pages/profile_page.dart';
 import 'package:provider/provider.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
@@ -23,6 +25,7 @@ import 'package:weight_tracker/widgets/dummy_test_widget.dart';
 import 'package:weight_tracker/models/dummy_test_widget_model.dart';
 import 'package:weight_tracker/models/weight_unit.dart';
 import 'package:intl/intl.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:weight_tracker/models/weight_entry.framy.dart';
 import 'package:weight_tracker/models/user.framy.dart';
 
@@ -103,6 +106,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/toggle': FramyTogglePage(),
     '/textfield': FramyTextFieldPage(),
     '/HistoryPage': FramyHistoryPageCustomPage(),
+    '/StatisticsPage': FramyStatisticsPageCustomPage(),
     '/ProfilePage': FramyProfilePageCustomPage(),
     '/DummyTestWidget': FramyDummyTestWidgetCustomPage(),
     '/UserDataCard': FramyUserDataCardCustomPage(),
@@ -297,6 +301,12 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('HistoryPage'),
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/HistoryPage'),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('StatisticsPage'),
+                onTap: () => Navigator.of(context)
+                    .pushReplacementNamed('/StatisticsPage'),
               ),
               ListTile(
                 leading: SizedBox.shrink(),
@@ -1052,14 +1062,29 @@ class FramyHistoryPageCustomPage extends StatelessWidget {
       key: Key('Framy_HistoryPage_Page'),
       dependencies: [
         FramyDependencyModel<List<WeightEntry>>(
-            'weightEntries',
-            'List<WeightEntry>',
-            null,
-            createSubDependencies('List<WeightEntry>')),
+            'weightEntries', 'List<WeightEntry>', null),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return HistoryPage(
           weightEntries: valueGetter('weightEntries'),
+        );
+      },
+    );
+  }
+}
+
+class FramyStatisticsPageCustomPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FramyCustomPage(
+      key: Key('Framy_StatisticsPage_Page'),
+      dependencies: [
+        FramyDependencyModel<StatisticsPageState>(
+            'state', 'StatisticsPageState', null),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return StatisticsPage(
+          state: valueGetter('state'),
         );
       },
     );
@@ -1072,8 +1097,7 @@ class FramyProfilePageCustomPage extends StatelessWidget {
     return FramyCustomPage(
       key: Key('Framy_ProfilePage_Page'),
       dependencies: [
-        FramyDependencyModel<User>(
-            'User', 'User', null, createSubDependencies('User')),
+        FramyDependencyModel<User>('User', 'User', null),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return MultiProvider(
@@ -1094,10 +1118,7 @@ class FramyDummyTestWidgetCustomPage extends StatelessWidget {
       key: Key('Framy_DummyTestWidget_Page'),
       dependencies: [
         FramyDependencyModel<DummyTestWidgetModel>(
-            'model',
-            'DummyTestWidgetModel',
-            null,
-            createSubDependencies('DummyTestWidgetModel')),
+            'model', 'DummyTestWidgetModel', null),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return DummyTestWidget(
@@ -1114,8 +1135,7 @@ class FramyUserDataCardCustomPage extends StatelessWidget {
     return FramyCustomPage(
       key: Key('Framy_UserDataCard_Page'),
       dependencies: [
-        FramyDependencyModel<User>(
-            'user', 'User', null, createSubDependencies('User')),
+        FramyDependencyModel<User>('user', 'User', null),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return UserDataCard(
@@ -1132,8 +1152,7 @@ class FramyUserEmailsViewCustomPage extends StatelessWidget {
     return FramyCustomPage(
       key: Key('Framy_UserEmailsView_Page'),
       dependencies: [
-        FramyDependencyModel<User>(
-            'user', 'User', null, createSubDependencies('User')),
+        FramyDependencyModel<User>('user', 'User', null),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return UserEmailsView(
@@ -1150,8 +1169,8 @@ class FramyWeightUnitDisplayCustomPage extends StatelessWidget {
     return FramyCustomPage(
       key: Key('Framy_WeightUnitDisplay_Page'),
       dependencies: [
-        FramyDependencyModel<WeightUnit>('weightUnit', 'WeightUnit',
-            WeightUnit.kg, createSubDependencies('WeightUnit')),
+        FramyDependencyModel<WeightUnit>(
+            'weightUnit', 'WeightUnit', WeightUnit.kg),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return WeightUnitDisplay(
@@ -1168,10 +1187,8 @@ class FramyWeightEntryListItemCustomPage extends StatelessWidget {
     return FramyCustomPage(
       key: Key('Framy_WeightEntryListItem_Page'),
       dependencies: [
-        FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry', null,
-            createSubDependencies('WeightEntry')),
-        FramyDependencyModel<double>(
-            'weightDifference', 'double', 0, createSubDependencies('double')),
+        FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry', null),
+        FramyDependencyModel<double>('weightDifference', 'double', 0),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return WeightEntryListItem(
@@ -1191,8 +1208,14 @@ class FramyDependencyModel<T> {
   String constructor;
   List<FramyDependencyModel> subDependencies;
 
-  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies,
-      {this.constructor = ''}) {
+  FramyDependencyModel(this.name, this.type, this.value,
+      {this.subDependencies, this.constructor}) {
+    if (constructor == null) {
+      constructor = framyAvailableConstructorNames[type]?.first ?? '';
+    }
+    if (subDependencies == null) {
+      subDependencies = createSubDependencies(type, constructor);
+    }
     if (value == null) {
       updateValue();
     }
@@ -1423,6 +1446,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               onChanged: _onValueChanged,
             )
           else if (dependency.type == 'User' ||
+              dependency.type == 'StatisticsPageState' ||
               dependency.type == 'WeightEntry')
             FramyModelInput(
               key: inputKey,
@@ -1566,7 +1590,7 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                 'List element ${i + 1}',
                 dependency.listType,
                 dependency.value[i],
-                dependency.subDependencies[i].subDependencies,
+                subDependencies: dependency.subDependencies[i].subDependencies,
                 constructor: dependency.subDependencies[i].constructor,
               ),
               onChanged: (changedDep) {
@@ -1609,7 +1633,6 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
               '_',
               dependency.listType,
               null,
-              createSubDependencies(dependency.listType),
             );
             dependency.subDependencies.add(newModel);
             dependency.value.add(newModel.value);
@@ -1628,6 +1651,7 @@ dynamic initList(String listType) {
   if (listType == 'bool') return <bool>[];
   if (listType == 'WeightUnit') return <WeightUnit>[];
   if (listType == 'User') return <User>[];
+  if (listType == 'StatisticsPageState') return <StatisticsPageState>[];
   if (listType == 'WeightEntry')
     return <WeightEntry>[];
   else
@@ -1713,6 +1737,7 @@ class FramyConstructorDropdown extends StatelessWidget {
             dependency.constructor = conName;
             dependency.subDependencies =
                 createSubDependencies(dependency.type, dependency.constructor);
+            dependency.updateValue();
             onChanged(dependency);
           },
           items: framyAvailableConstructorNames[dependency.type]
@@ -1747,6 +1772,22 @@ final framyModelConstructorMap =
     } else
       return null;
   },
+  'StatisticsPageState': (dep) {
+    if (dep.constructor == '.loaded') {
+      return StatisticsPageState.loaded(
+        dep.subDependencies.singleWhere((d) => d.name == 'weightEntries').value,
+      );
+    }
+    if (dep.constructor == '.loading') {
+      return StatisticsPageState.loading();
+    }
+    if (dep.constructor == '.error') {
+      return StatisticsPageState.error(
+        dep.subDependencies.singleWhere((d) => d.name == 'message').value,
+      );
+    } else
+      return null;
+  },
   'WeightEntry': (dep) {
     if (dep.constructor == '') {
       return WeightEntry(
@@ -1777,29 +1818,33 @@ List<FramyDependencyModel> createSubDependencies(String type,
   switch (type + constructor) {
     case 'User':
       return [
-        FramyDependencyModel<String>(
-            'firstName', 'String', null, createSubDependencies('String')),
-        FramyDependencyModel<String>(
-            'lastName', 'String', null, createSubDependencies('String')),
-        FramyDependencyModel<int>(
-            'age', 'int', null, createSubDependencies('int')),
-        FramyDependencyModel<List<String>>('emails', 'List<String>', null,
-            createSubDependencies('List<String>')),
+        FramyDependencyModel<String>('firstName', 'String', null),
+        FramyDependencyModel<String>('lastName', 'String', null),
+        FramyDependencyModel<int>('age', 'int', null),
+        FramyDependencyModel<List<String>>('emails', 'List<String>', null),
+      ];
+
+    case 'StatisticsPageState.loaded':
+      return [
+        FramyDependencyModel<List<WeightEntry>>(
+            'weightEntries', 'List<WeightEntry>', null),
+      ];
+    case 'StatisticsPageState.loading':
+      return [];
+    case 'StatisticsPageState.error':
+      return [
+        FramyDependencyModel<String>('message', 'String', null),
       ];
 
     case 'WeightEntry':
       return [
-        FramyDependencyModel<DateTime>(
-            'dateTime', 'DateTime', null, createSubDependencies('DateTime')),
-        FramyDependencyModel<double>(
-            'weight', 'double', null, createSubDependencies('double')),
-        FramyDependencyModel<String>(
-            'note', 'String', null, createSubDependencies('String')),
+        FramyDependencyModel<DateTime>('dateTime', 'DateTime', null),
+        FramyDependencyModel<double>('weight', 'double', null),
+        FramyDependencyModel<String>('note', 'String', null),
       ];
     case 'WeightEntry.now':
       return [
-        FramyDependencyModel<double>(
-            'weight', 'double', null, createSubDependencies('double')),
+        FramyDependencyModel<double>('weight', 'double', null),
       ];
 
     default:
@@ -1809,6 +1854,7 @@ List<FramyDependencyModel> createSubDependencies(String type,
 
 Map<String, List<String>> framyAvailableConstructorNames = {
   'User': [''],
+  'StatisticsPageState': ['.loaded', '.loading', '.error'],
   'WeightEntry': ['', '.now'],
 };
 

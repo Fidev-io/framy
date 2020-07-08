@@ -68,7 +68,7 @@ void main() {
       final result = generateWidgetPages(widgetObjects, []);
       //then
       final expectedList =
-          '''FramyDependencyModel<String>('arg1', 'String', null, createSubDependencies('String')),''';
+          '''FramyDependencyModel<String>('arg1', 'String', null),''';
       expect(result.contains(expectedList), isTrue);
     });
 
@@ -84,7 +84,7 @@ void main() {
       final result = generateWidgetPages(widgetObjects, []);
       //then
       final expectedDependency =
-          'FramyDependencyModel<int>(\'arg1\', \'int\', 13, createSubDependencies(\'int\')),';
+          'FramyDependencyModel<int>(\'arg1\', \'int\', 13),';
       expect(result.contains(expectedDependency), isTrue);
     });
 
@@ -165,7 +165,7 @@ void main() {
         //then
         expect(
           result.contains(
-              'FramyDependencyModel<String>(\'String\', \'String\', null, createSubDependencies(\'String\'))'),
+              'FramyDependencyModel<String>(\'String\', \'String\', null)'),
           isTrue,
         );
       });

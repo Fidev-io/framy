@@ -10,15 +10,7 @@ void main() {
     List<FramyDependencyModel> dependencies;
 
     setUp(() {
-      dependencies = [
-        FramyDependencyModel<User>('user', 'User', null, [
-          FramyDependencyModel<String>('firstName', 'String', null, []),
-          FramyDependencyModel<String>('lastName', 'String', null, []),
-          FramyDependencyModel<int>('age', 'int', null, []),
-          FramyDependencyModel<List<String>>(
-              'emails', 'List<String>', null, []),
-        ]),
-      ];
+      dependencies = [FramyDependencyModel<User>('user', 'User', null)];
     });
 
     testWidgets('should build', (WidgetTester tester) async {

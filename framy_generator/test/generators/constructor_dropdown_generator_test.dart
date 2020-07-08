@@ -22,5 +22,10 @@ void main() {
       final result = generateConstructorDropdown();
       expect(result.contains('\'Default\''), isTrue);
     });
+
+    test('should contain updateValue call', () {
+      final result = generateConstructorDropdown();
+      expect(result.contains('dependency.updateValue();'), isTrue);
+    });
   });
 }
