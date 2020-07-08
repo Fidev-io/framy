@@ -43,7 +43,7 @@ void main() {
     Map<String, Map<String, dynamic>> presets = const {},
   }) async {
     await tester.pumpWidget(
-      TestMaterialAppWithScaffold(
+      FramyAppWrapperWithScaffold(
         FramyWidgetDependencyInput(
           dependency: dependency,
           onChanged: onChanged ?? (_) {},

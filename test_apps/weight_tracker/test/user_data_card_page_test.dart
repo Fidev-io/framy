@@ -10,7 +10,7 @@ void main() {
   group('UserDataCardPage', () {
     testWidgets('should build', (WidgetTester tester) async {
       await tester.pumpWidget(
-          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+          FramyAppWrapperWithScaffold(FramyUserDataCardCustomPage()));
       expect(find.byKey(Key('Framy_UserDataCard_Page')), findsOneWidget);
     });
 
@@ -29,7 +29,7 @@ void main() {
         (WidgetTester tester) async {
       //given
       await tester.pumpWidget(
-          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+          FramyAppWrapperWithScaffold(FramyUserDataCardCustomPage()));
       expect(
         find.descendant(
           of: find.byType(UserDataCard),
@@ -47,7 +47,7 @@ void main() {
         (WidgetTester tester) async {
       //given
       await tester.pumpWidget(
-          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+          FramyAppWrapperWithScaffold(FramyUserDataCardCustomPage()));
       expect(find.text('Age: 0'), findsOneWidget);
       //when
       await selectInDropdown(tester, 'Null', 'age');
@@ -59,7 +59,7 @@ void main() {
         (WidgetTester tester) async {
       //given
       await tester.pumpWidget(
-          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+          FramyAppWrapperWithScaffold(FramyUserDataCardCustomPage()));
       //when
       //enter text in age input
       await tester.enterText(
@@ -80,7 +80,7 @@ void main() {
         (WidgetTester tester) async {
       //given
       await tester.pumpWidget(
-          TestMaterialAppWithScaffold(FramyUserDataCardCustomPage()));
+          FramyAppWrapperWithScaffold(FramyUserDataCardCustomPage()));
       //when
       //enter text in age input
       await tester.enterText(

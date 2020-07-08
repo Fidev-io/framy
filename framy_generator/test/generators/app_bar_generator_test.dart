@@ -41,5 +41,16 @@ void main() {
         isTrue,
       );
     });
+
+    test('should contain key for Scaffold switch', () {
+      //when
+      final String result = generateAppBar();
+      //then
+      expect(
+        result.contains(
+            'key: ValueKey(\'FramyAppScaffoldSwitch\')'),
+        isTrue,
+      );
+    });
   });
 }

@@ -7,7 +7,7 @@ void main() {
   group('FramyProfilePageCustomPage', () {
     testWidgets('should build', (WidgetTester tester) async {
       await tester.pumpWidget(
-        TestMaterialAppWithScaffold(FramyProfilePageCustomPage()),
+        FramyAppWrapperWithScaffold(FramyProfilePageCustomPage()),
       );
       expect(find.byType(FramyProfilePageCustomPage), findsOneWidget);
     });

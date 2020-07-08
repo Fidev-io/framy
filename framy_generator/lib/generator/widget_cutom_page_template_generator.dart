@@ -58,7 +58,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
           );
           if (isSmallDevice) {
             return Scaffold(
-              body: body,
+               body: body,
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
@@ -76,6 +76,11 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 ''';
 
 String _generateWidgetBuilderUsage(bool useDevicePreview) {
+  String usage = '''
+FramyAppSettingsState.of(context).wrapWithScaffold ? Scaffold(
+  body: ${_widgetBuilderUsage}
+) : ${_widgetBuilderUsage}
+''';
   if (useDevicePreview) {
     return '''
 DevicePreview(
@@ -85,13 +90,11 @@ DevicePreview(
     ),
     background: BoxDecoration(),
   ),
-  builder: (context) => Scaffold(
-    body: ${_widgetBuilderUsage}
-  ),
+  builder: (context) => $usage
 ),
 ''';
   } else {
-    return _widgetBuilderUsage;
+    return usage;
   }
 }
 

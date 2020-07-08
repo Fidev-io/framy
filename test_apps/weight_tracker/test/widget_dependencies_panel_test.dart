@@ -22,7 +22,7 @@ void main() {
     });
 
     testWidgets('should build', (WidgetTester tester) async {
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: dependencies,
           presets: {},
@@ -35,7 +35,7 @@ void main() {
         (WidgetTester tester) async {
       //given
       User emitted;
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: dependencies,
           onChanged: (dependency) => emitted = dependency.value,

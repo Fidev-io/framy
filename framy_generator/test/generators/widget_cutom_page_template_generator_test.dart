@@ -61,5 +61,10 @@ void main() {
       final result = generateCustomPage(false);
       expect(result.contains('dependencies = widget.dependencies'), isTrue);
     });
+
+    test('should contain getting wrapWithScaffold value from FramyAppSettingsState', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('FramyAppSettingsState.of(context).wrapWithScaffold'), isTrue);
+    });
   });
 }

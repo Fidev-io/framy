@@ -7,7 +7,7 @@ void main() {
   group('FramyDummyTestWidgetCustomPage', () {
     testWidgets('should build', (WidgetTester tester) async {
       await tester.pumpWidget(
-        TestMaterialAppWithScaffold(FramyDummyTestWidgetCustomPage()),
+        FramyAppWrapperWithScaffold(FramyDummyTestWidgetCustomPage()),
       );
       expect(find.byType(FramyDummyTestWidgetCustomPage), findsOneWidget);
     });
@@ -15,7 +15,7 @@ void main() {
     testWidgets('should display \'Not supported type\' text',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        TestMaterialAppWithScaffold(FramyDummyTestWidgetCustomPage()),
+        FramyAppWrapperWithScaffold(FramyDummyTestWidgetCustomPage()),
       );
       expect(find.text('Not supported type'), findsOneWidget);
     });
