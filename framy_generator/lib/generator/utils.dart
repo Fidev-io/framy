@@ -5,5 +5,5 @@ String dependencyInitializationLine(FramyObjectDependency dependency) {
   final String name = dependency.name;
   final String defaultValue = dependency.defaultValueCode;
 
-  return 'FramyDependencyModel<$type>(\'$name\', \'$type\', $defaultValue, createSubDependencies(\'$type\')),\n';
+  return 'FramyDependencyModel<$type>(\'$name\', \'$type\', $defaultValue),\n';
 }

@@ -6,12 +6,11 @@ import 'test_utils.dart';
 
 void main() {
   FramyDependencyModel _createWeightEntryDependencyModel(
-          {String constructor = ''}) =>
+          {String constructor = '', WeightEntry defaultValue}) =>
       FramyDependencyModel<WeightEntry>(
         'weightEntry',
         'WeightEntry',
-        null,
-        createSubDependencies('WeightEntry'),
+        defaultValue,
         constructor: constructor,
       );
 
@@ -65,12 +64,15 @@ void main() {
     });
 
     testWidgets(
-        'should update dependencys constructor and subDependencies on change',
+        'should update dependencies constructor, subDependencies and value on change',
         (WidgetTester tester) async {
       //given
-      final model = _createWeightEntryDependencyModel();
+      final model = _createWeightEntryDependencyModel(
+        defaultValue: WeightEntry(DateTime.now(), 69, 'note'),
+      );
       expect(model.constructor, '');
       expect(model.subDependencies, hasLength(3));
+      expect(model.value.weight, 69);
       FramyDependencyModel onChangedModel;
       await tester.pumpWidget(TestMaterialAppWithScaffold(
         FramyConstructorDropdown(
@@ -85,6 +87,7 @@ void main() {
       //then
       expect(onChangedModel.constructor, '.now');
       expect(onChangedModel.subDependencies, hasLength(1));
+      expect(onChangedModel.value.weight, 0);
     });
   });
 }
