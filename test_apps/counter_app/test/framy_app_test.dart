@@ -61,8 +61,7 @@ void main() {
       await tester.pumpWidget(FramyApp());
       expect(find.byKey(Key('FramyTogglePage')), findsNothing);
       //when
-      await _goToMaterialComponentPage(
-          tester, find.text('Toggle'));
+      await _goToMaterialComponentPage(tester, find.text('Toggle'));
       //then
       expect(find.byKey(Key('FramyTogglePage')), findsOneWidget);
     });
@@ -72,8 +71,7 @@ void main() {
       await tester.pumpWidget(FramyApp());
       expect(find.byKey(Key('FramyTextFieldPage')), findsNothing);
       //when
-      await _goToMaterialComponentPage(
-          tester, find.text('TextField'));
+      await _goToMaterialComponentPage(tester, find.text('TextField'));
       //then
       expect(find.byKey(Key('FramyTextFieldPage')), findsOneWidget);
     });
@@ -88,6 +86,36 @@ void main() {
       await tester.pumpAndSettle();
       //then
       expect(find.byKey(Key('Framy_CounterFAB_Page')), findsOneWidget);
+    });
+
+    testWidgets(
+        'should wrap widget with Scaffold by default (when Scaffold switch in settings is on)',
+        (tester) async {
+      //given
+      await tester.pumpWidget(FramyApp(key: framyAppStateKey));
+      await _openDrawer(tester);
+      //when
+      await tester.tap(find.text('CounterFAB'));
+      await tester.pumpAndSettle();
+      //then
+      //one for Framy App, second for wrapping widget
+      expect(find.byType(Scaffold), findsNWidgets(2));
+    });
+
+    testWidgets(
+        'should not wrap widget with Scaffold when Scaffold switch in settings is off',
+        (tester) async {
+      //given
+      await tester.pumpWidget(FramyApp(key: framyAppStateKey));
+      await _openDrawer(tester);
+      await tester.tap(find.text('CounterFAB'));
+      await tester.pumpAndSettle();
+      //when
+      await tester.tap(find.byKey(ValueKey('FramyAppScaffoldSwitch')));
+      await tester.pumpAndSettle();
+      //then
+      //one for Framy App
+      expect(find.byType(Scaffold), findsOneWidget);
     });
   });
 }

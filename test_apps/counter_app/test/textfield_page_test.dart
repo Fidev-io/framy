@@ -7,12 +7,12 @@ import 'test_utils.dart';
 void main() {
   group('TextFieldPage', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyTextFieldPage()));
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyTextFieldPage()));
       expect(find.byType(FramyTextFieldPage), findsOneWidget);
     });
 
     testWidgets('have 8 textfields', (tester) async {
-      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyTextFieldPage()));
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyTextFieldPage()));
       expect(find.byType(TextField), findsNWidgets(8));
     });
   });

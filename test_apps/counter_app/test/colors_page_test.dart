@@ -7,12 +7,12 @@ import 'test_utils.dart';
 void main() {
   group('ColorsPage', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyColorsPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyColorsPage()));
       expect(find.byKey(Key('FramyColorsPage')), findsOneWidget);
     });
 
     testWidgets('should show color names', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyColorsPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyColorsPage()));
       await tester.dragFrom(Offset(0, 500), Offset(0, -100));
       await tester.pump();
       expect(find.text('Primary'), findsNWidgets(2));
@@ -51,7 +51,7 @@ void main() {
     });
 
     testWidgets('should show color values', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyColorsPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyColorsPage()));
       await tester.dragFrom(Offset(0, 500), Offset(0, -100));
       await tester.pump();
       expect(find.text('#FF2196F3'), findsNWidgets(5));

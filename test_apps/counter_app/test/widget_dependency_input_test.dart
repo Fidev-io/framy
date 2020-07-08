@@ -22,7 +22,7 @@ void main() {
       WidgetTester tester, FramyDependencyModel dependency,
       [ValueChanged<FramyDependencyModel> onChanged]) async {
     await tester.pumpWidget(
-      TestMaterialAppWithScaffold(
+      FramyAppWrapperWithScaffold(
         FramyWidgetDependencyInput(
           dependency: dependency,
           onChanged: onChanged ?? (_) {},

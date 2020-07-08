@@ -7,12 +7,12 @@ import 'test_utils.dart';
 void main() {
   group('FramyAppBarPage', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyAppBarPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyAppBarPage()));
       expect(find.byKey(Key('FramyAppBarPage')), findsOneWidget);
     });
 
     testWidgets('should have 4 AppBars', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyAppBarPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyAppBarPage()));
       expect(find.byType(AppBar), findsNWidgets(4));
     });
   });

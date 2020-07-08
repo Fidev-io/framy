@@ -49,7 +49,7 @@ void main() {
 class _TestLayoutTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return TestMaterialApp(
+    return FramyAppWrapper(
       FramyLayoutTemplate(
         child: Text('foo'),
       ),

@@ -8,12 +8,12 @@ import 'test_utils.dart';
 void main() {
   group('FramyFontsPage', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyFontsPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyFontsPage()));
       expect(find.byKey(Key('FramyFontsPage')), findsOneWidget);
     });
 
     testWidgets('should show all font names', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyFontsPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyFontsPage()));
       expect(find.text('Headline1'), findsOneWidget);
       expect(find.text('Headline2'), findsOneWidget);
       expect(find.text('Headline3'), findsOneWidget);
@@ -61,7 +61,7 @@ void main() {
 
     testWidgets('macOS should display styles descriptions', (tester) async {
       debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
-      await tester.pumpWidget(TestMaterialApp(FramyFontsPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyFontsPage()));
       expect(
           find.text(
               '.SF UI Display / size: 112.0 / weight: w100 / color: #8A000000'),

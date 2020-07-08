@@ -9,17 +9,17 @@ import 'test_utils.dart';
 void main() {
   group('FramyCounterTitleCustomPage', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterTitleCustomPage()));
       expect(find.byKey(Key('Framy_CounterTitle_Page')), findsOneWidget);
     });
 
     testWidgets('should have CounterTitle', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterTitleCustomPage()));
       expect(find.byType(CounterTitle), findsOneWidget);
     });
 
     testWidgets('should have DevicePreview', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterTitleCustomPage()));
       expect(
         find.descendant(
           of: find.byType(FramyCounterTitleCustomPage),
@@ -30,13 +30,13 @@ void main() {
     });
 
     testWidgets('should have default title', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterTitleCustomPage()));
       expect(find.text('You have pushed the button this many times:'),
           findsOneWidget);
     });
 
     testWidgets('should have FramyWidgetDependenciesPanel', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterTitleCustomPage()));
       expect(find.byType(FramyWidgetDependenciesPanel), findsOneWidget);
     });
 
@@ -46,7 +46,7 @@ void main() {
       //given
       tester.binding.window.physicalSizeTestValue = Size(500, 800);
       tester.binding.window.devicePixelRatioTestValue = 1.0;
-      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterTitleCustomPage()));
       expect(find.byType(FramyWidgetDependenciesPanel), findsNothing);
       //when
       await tester.tap(find.byKey(Key('FramyWidgetDependenciesButton')));
@@ -59,7 +59,7 @@ void main() {
     testWidgets('should change displayed text when typed in panel',
         (tester) async {
       //given
-      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterTitleCustomPage()));
       //when
       await tester.enterText(
           find.byKey(Key('framy_dependency_verb_input')), 'foo');
@@ -84,7 +84,7 @@ void main() {
         'should restore default value after setting to null and setting back to non-null',
         (tester) async {
       //given
-      await tester.pumpWidget(TestMaterialApp(FramyCounterTitleCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterTitleCustomPage()));
       expect(find.text('You have pushed the button this many times:'),
           findsOneWidget);
       //when

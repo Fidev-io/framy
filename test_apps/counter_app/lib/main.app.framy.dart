@@ -8,20 +8,55 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:counter_app/main.dart';
-import 'package:framy_annotation/framy_annotation.dart';
 import 'dart:core';
 
 void main() {
-  runApp(FramyApp());
+  runApp(FramyApp(key: framyAppStateKey));
 }
 
-class FramyApp extends StatelessWidget {
+final framyAppStateKey = GlobalKey<_FramyAppState>();
+
+class FramyAppSettingsState extends InheritedWidget {
+  final bool wrapWithScaffold;
+
+  const FramyAppSettingsState({
+    Key key,
+    @required Widget child,
+    @required this.wrapWithScaffold,
+  })  : assert(child != null),
+        super(key: key, child: child);
+
+  static FramyAppSettingsState of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FramyAppSettingsState>();
+  }
+
+  @override
+  bool updateShouldNotify(FramyAppSettingsState old) =>
+      old.wrapWithScaffold != wrapWithScaffold;
+}
+
+class FramyApp extends StatefulWidget {
+  FramyApp({Key key}) : super(key: key);
+
+  @override
+  _FramyAppState createState() => _FramyAppState();
+}
+
+class _FramyAppState extends State<FramyApp> {
+  bool _wrapWithScaffold = true;
+
+  void set wrapWithScaffold(bool value) =>
+      setState(() => _wrapWithScaffold = value);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      key: Key('FramyApp'),
-      theme: getThemeData(),
-      onGenerateRoute: onGenerateRoute,
+    return FramyAppSettingsState(
+      wrapWithScaffold: _wrapWithScaffold,
+      child: MaterialApp(
+        key: Key('FramyApp'),
+        theme: getThemeData(),
+        onGenerateRoute: onGenerateRoute,
+      ),
     );
   }
 }
@@ -78,6 +113,13 @@ class FramyAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       key: Key('FramyAppBar'),
       title: Text('Framy App'),
+      actions: [
+        Switch(
+          key: ValueKey('FramyAppScaffoldSwitch'),
+          onChanged: (b) => framyAppStateKey.currentState.wrapWithScaffold = b,
+          value: FramyAppSettingsState.of(context).wrapWithScaffold,
+        ),
+      ],
     );
   }
 
@@ -827,9 +869,13 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                     ),
                     background: BoxDecoration(),
                   ),
-                  builder: (context) => Scaffold(
-                    body: widget.builder(dependencyValue),
-                  ),
+                  builder: (context) {
+                    return (FramyAppSettingsState.of(context).wrapWithScaffold)
+                        ? Scaffold(
+                            body: widget.builder(dependencyValue),
+                          )
+                        : widget.builder(dependencyValue);
+                  },
                 ),
               ),
               if (!isSmallDevice)
@@ -1448,6 +1494,7 @@ final framyModelConstructorMap =
 final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
+
 List<FramyDependencyModel> createSubDependencies(String type,
     [String constructor = '']) {
   switch (type + constructor) {

@@ -19,6 +19,12 @@ void main() {
       await tester.pumpWidget(_TestAppBar(drawer: Container()));
       expect(find.byIcon(Icons.menu), findsOneWidget);
     });
+
+    testWidgets('should have Switch for wrapping with Scaffold',
+        (tester) async {
+      await tester.pumpWidget(_TestAppBar(drawer: Container()));
+      expect(find.byKey(ValueKey('FramyAppScaffoldSwitch')), findsOneWidget);
+    });
   });
 }
 
@@ -29,10 +35,13 @@ class _TestAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: FramyAppBar(),
-        drawer: drawer,
+    return FramyAppSettingsState(
+      wrapWithScaffold: true,
+      child: MaterialApp(
+        home: Scaffold(
+          appBar: FramyAppBar(),
+          drawer: drawer,
+        ),
       ),
     );
   }
