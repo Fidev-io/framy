@@ -81,13 +81,13 @@ String _generateWidgetBuilderUsage(bool useDevicePreview) {
 builder: (context) {   
   Widget widgetToDisplay = ${_widgetBuilderUsage};
   if (settings.wrapWithCenter) {
-    widgetToDisplay = Center(child: widgetToDisplay);
+    widgetToDisplay = Center(key: ValueKey('FramyGeneratedCenter'), child: widgetToDisplay,);
   }
   if (settings.wrapWithSafeArea) {
-    widgetToDisplay = SafeArea(child: widgetToDisplay);
+    widgetToDisplay = SafeArea(key: ValueKey('FramyGeneratedSafeArea'), child: widgetToDisplay,);
   }
   if (settings.wrapWithScaffold) {
-    widgetToDisplay = Scaffold(body: widgetToDisplay);
+    widgetToDisplay = Scaffold(key: ValueKey('FramyGeneratedScaffold'), body: widgetToDisplay,);
   }
   return widgetToDisplay;
 },

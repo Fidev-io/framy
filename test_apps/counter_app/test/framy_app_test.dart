@@ -97,14 +97,12 @@ void main() {
         await tester.pumpAndSettle();
       }
 
-      testWidgets(
-          'should wrap widget with Scaffold when Scaffold switch is on',
+      testWidgets('should wrap widget with Scaffold when Scaffold switch is on',
           (tester) async {
         //given
         await goToCounterFabPage(tester);
         //then
-        //one for Framy App, second for wrapping widget
-        expect(find.byType(Scaffold), findsNWidgets(2));
+        expect(find.byKey(Key('FramyGeneratedScaffold')), findsOneWidget);
       });
 
       testWidgets(
@@ -118,8 +116,7 @@ void main() {
         await tester.tap(find.byKey(ValueKey('FramyAppScaffoldSwitch')));
         await tester.pumpAndSettle();
         //then
-        //one for Framy App
-        expect(find.byType(Scaffold), findsOneWidget);
+        expect(find.byKey(Key('FramyGeneratedScaffold')), findsNothing);
       });
 
       testWidgets(
@@ -128,15 +125,10 @@ void main() {
         //given
         await goToCounterFabPage(tester);
         //then
-        expect(
-          find.ancestor(
-              of: find.byType(CounterFAB), matching: find.byType(Center)),
-          findsNothing,
-        );
+        expect(find.byKey(Key('FramyGeneratedCenter')), findsNothing);
       });
 
-      testWidgets(
-          'should wrap widget with Center when Center switch is on',
+      testWidgets('should wrap widget with Center when Center switch is on',
           (tester) async {
         //given
         await goToCounterFabPage(tester);
@@ -146,11 +138,7 @@ void main() {
         await tester.tap(find.byKey(ValueKey('FramyAppCenterSwitch')));
         await tester.pump();
         //then
-        expect(
-          find.ancestor(
-              of: find.byType(CounterFAB), matching: find.byType(Center)),
-          findsOneWidget,
-        );
+        expect(find.byKey(Key('FramyGeneratedCenter')), findsOneWidget);
       });
 
       testWidgets(
@@ -159,15 +147,10 @@ void main() {
         //given
         await goToCounterFabPage(tester);
         //then
-        expect(
-          find.descendant(
-              of: find.byType(DevicePreview), matching: find.byType(SafeArea)),
-          findsNothing,
-        );
+        expect(find.byKey(Key('FramyGeneratedSafeArea')), findsNothing);
       });
 
-      testWidgets(
-          'should wrap widget with SafeArea when SafeArea switch is on',
+      testWidgets('should wrap widget with SafeArea when SafeArea switch is on',
           (tester) async {
         //given
         await goToCounterFabPage(tester);
@@ -177,11 +160,7 @@ void main() {
         await tester.tap(find.byKey(ValueKey('FramyAppSafeAreaSwitch')));
         await tester.pump();
         //then
-        expect(
-          find.descendant(
-              of: find.byType(DevicePreview), matching: find.byType(SafeArea)),
-          findsOneWidget,
-        );
+        expect(find.byKey(Key('FramyGeneratedSafeArea')), findsOneWidget);
       });
     });
   });
