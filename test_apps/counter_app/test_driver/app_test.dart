@@ -32,6 +32,10 @@ void main() {
       await driver.waitFor(find.byValueKey('FramyAppBar'));
       await ozzie.takeScreenshot('${platform}_appbar_is_visible');
     });
+
+    test('should have settings button', () async {
+      await driver.waitFor(find.byValueKey('FramyAppBarSettingsButton'));
+    });
   });
 
   group('Fonts page', () {
@@ -273,6 +277,17 @@ void main() {
 
     test('should have counterFAB in CounterFAB page', () async {
       await driver.waitFor(find.byValueKey('MyCounterFAB'));
+    });
+
+    test('should wrap widget with Center when Center switch is on', () async {
+      await driver.waitForAbsent(find.byValueKey('FramyGeneratedCenter'));
+      //open settings dialog
+      await driver.tap(find.byValueKey('FramyAppBarSettingsButton'));
+      await driver.waitFor(find.byType('AlertDialog'));
+      // press switch to be on
+      await driver.tap(find.byValueKey('FramyAppCenterSwitch'));
+      await driver.tap(find.text('Close'));
+      await driver.waitFor(find.byValueKey('FramyGeneratedCenter'));
     });
   });
 

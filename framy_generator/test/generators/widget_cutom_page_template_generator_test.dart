@@ -61,5 +61,35 @@ void main() {
       final result = generateCustomPage(false);
       expect(result.contains('dependencies = widget.dependencies'), isTrue);
     });
+
+    test('should contain getting wrapWithScaffold value from FramyAppSettings', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('settings.wrapWithScaffold'), isTrue);
+    });
+
+    test('should contain getting wrapWithCenter value from FramyAppSettings', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('settings.wrapWithCenter'), isTrue);
+    });
+
+    test('should contain getting wrapWithSafeArea value from FramyAppSettings', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('settings.wrapWithSafeArea'), isTrue);
+    });
+
+    test('should contain Center', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('Center('), isTrue);
+    });
+
+    test('should contain Scaffold', () {
+      final result = generateCustomPage(false);
+      expect('Scaffold('.allMatches(result), hasLength(2));
+    });
+
+    test('should contain SafeArea', () {
+      final result = generateCustomPage(false);
+      expect('SafeArea('.allMatches(result), hasLength(2));
+    });
   });
 }

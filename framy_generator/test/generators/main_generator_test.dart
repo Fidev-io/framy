@@ -3,13 +3,13 @@ import 'package:test/test.dart';
 
 void main() {
   group('Main generator result', () {
-    test('should generate proper main', () {
+    test('should generate proper main with passed key', () {
       //when
       final String result = generateMain();
       //then
       final expectedResult = '''
 void main() {
-  runApp(FramyApp());
+  runApp(FramyApp(key: framyAppStateKey));
 }
 ''';
       expect(result, equals(expectedResult));

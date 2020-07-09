@@ -4,9 +4,9 @@ import 'package:test/test.dart';
 
 void main() {
   group('FramyApp Generator result', () {
-    test('should start with FramyApp class', () {
+    test('should contain FramyApp class', () {
       final result = generateFramyApp();
-      expect(result.startsWith('class FramyApp'), isTrue);
+      expect(result.contains('class FramyApp'), isTrue);
     });
 
     test('should contain MaterialApp', () {
@@ -105,6 +105,20 @@ void main() {
       final result = generateFramyApp([colorObject, themeObject]);
       //then
       expect(result.contains('theme: AppThemeWithGetter.themeData,'), isTrue);
+    });
+
+    test('should contain declaration of framyAppStateKey', () {
+      //when
+      final result = generateFramyApp([]);
+      //then
+      expect(result.contains('final framyAppStateKey = GlobalKey<_FramyAppState>();'), isTrue);
+    });
+
+    test('should contain class FramyAppSettings', () {
+      //when
+      final result = generateFramyApp([]);
+      //then
+      expect(result.contains('class FramyAppSettings'), isTrue);
     });
   });
 }

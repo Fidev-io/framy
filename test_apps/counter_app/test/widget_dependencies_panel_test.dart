@@ -7,7 +7,7 @@ import 'test_utils.dart';
 void main() {
   group('FramyWidgetDependenciesPanel', () {
     testWidgets('should build', (WidgetTester tester) async {
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: [],
           presets: {},
@@ -24,7 +24,7 @@ void main() {
         FramyDependencyModel<int>('name2', 'int', null),
       ];
       //when
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: dependencies,
           presets: {},
@@ -39,7 +39,7 @@ void main() {
         (WidgetTester tester) async {
       //given
       var model = FramyDependencyModel<String>('name1', 'String', null);
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyWidgetDependenciesPanel(
           dependencies: [model],
           onChanged: (dep) => model =

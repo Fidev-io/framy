@@ -19,6 +19,12 @@ void main() {
       await tester.pumpWidget(_TestAppBar(drawer: Container()));
       expect(find.byIcon(Icons.menu), findsOneWidget);
     });
+
+    testWidgets('should have Settings button',
+        (tester) async {
+      await tester.pumpWidget(_TestAppBar(drawer: Container()));
+      expect(find.byKey(ValueKey('FramyAppBarSettingsButton')), findsOneWidget);
+    });
   });
 }
 
@@ -29,10 +35,15 @@ class _TestAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: FramyAppBar(),
-        drawer: drawer,
+    return FramyAppSettings(
+      wrapWithScaffold: true,
+      wrapWithSafeArea: false,
+      wrapWithCenter: false,
+      child: MaterialApp(
+        home: Scaffold(
+          appBar: FramyAppBar(),
+          drawer: drawer,
+        ),
       ),
     );
   }

@@ -8,12 +8,12 @@ import 'test_utils.dart';
 void main() {
   group('FramyCounterFABCustomPage', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyCounterFABCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterFABCustomPage()));
       expect(find.byKey(Key('Framy_CounterFAB_Page')), findsOneWidget);
     });
 
     testWidgets('should have CounterFAB', (tester) async {
-      await tester.pumpWidget(TestMaterialApp(FramyCounterFABCustomPage()));
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterFABCustomPage()));
       expect(find.byType(CounterFAB), findsOneWidget);
     });
   });

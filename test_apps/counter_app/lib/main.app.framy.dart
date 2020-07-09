@@ -12,16 +12,69 @@ import 'package:framy_annotation/framy_annotation.dart';
 import 'dart:core';
 
 void main() {
-  runApp(FramyApp());
+  runApp(FramyApp(key: framyAppStateKey));
 }
 
-class FramyApp extends StatelessWidget {
+final framyAppStateKey = GlobalKey<_FramyAppState>();
+
+class FramyAppSettings extends InheritedWidget {
+  final bool wrapWithScaffold;
+  final bool wrapWithCenter;
+  final bool wrapWithSafeArea;
+
+  const FramyAppSettings({
+    Key key,
+    @required Widget child,
+    @required this.wrapWithScaffold,
+    @required this.wrapWithCenter,
+    @required this.wrapWithSafeArea,
+  })  : assert(child != null),
+        super(key: key, child: child);
+
+  static FramyAppSettings of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FramyAppSettings>();
+  }
+
+  @override
+  bool updateShouldNotify(FramyAppSettings old) =>
+      old.wrapWithScaffold != wrapWithScaffold ||
+      old.wrapWithCenter != wrapWithCenter ||
+      old.wrapWithSafeArea != wrapWithSafeArea;
+}
+
+class FramyApp extends StatefulWidget {
+  FramyApp({Key key}) : super(key: key);
+
+  @override
+  _FramyAppState createState() => _FramyAppState();
+}
+
+class _FramyAppState extends State<FramyApp> {
+  bool _wrapWithScaffold = true;
+  bool _wrapWithCenter = false;
+  bool _wrapWithSafeArea = false;
+
+  void set wrapWithScaffold(bool value) =>
+      setState(() => _wrapWithScaffold = value);
+
+  void set wrapWithCenter(bool value) =>
+      setState(() => _wrapWithCenter = value);
+
+  void set wrapWithSafeArea(bool value) =>
+      setState(() => _wrapWithSafeArea = value);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      key: Key('FramyApp'),
-      theme: getThemeData(),
-      onGenerateRoute: onGenerateRoute,
+    return FramyAppSettings(
+      wrapWithScaffold: _wrapWithScaffold,
+      wrapWithCenter: _wrapWithCenter,
+      wrapWithSafeArea: _wrapWithSafeArea,
+      child: MaterialApp(
+        key: Key('FramyApp'),
+        debugShowCheckedModeBanner: false,
+        theme: getThemeData(),
+        onGenerateRoute: onGenerateRoute,
+      ),
     );
   }
 }
@@ -78,11 +131,77 @@ class FramyAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       key: Key('FramyAppBar'),
       title: Text('Framy App'),
+      actions: [
+        IconButton(
+          key: ValueKey('FramyAppBarSettingsButton'),
+          icon: Icon(Icons.settings),
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => FramySettingsDialog(),
+          ),
+        )
+      ],
     );
   }
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class FramySettingsDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Preview settings'),
+      actions: [
+        FlatButton(
+          child: Text('Close'),
+          onPressed: () => Navigator.of(context).pop(),
+        )
+      ],
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Text('Wrap with Scaffold'),
+              Spacer(),
+              Switch(
+                key: ValueKey('FramyAppScaffoldSwitch'),
+                onChanged: (b) =>
+                    framyAppStateKey.currentState.wrapWithScaffold = b,
+                value: FramyAppSettings.of(context).wrapWithScaffold,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('Wrap with Center'),
+              Spacer(),
+              Switch(
+                key: ValueKey('FramyAppCenterSwitch'),
+                onChanged: (b) =>
+                    framyAppStateKey.currentState.wrapWithCenter = b,
+                value: FramyAppSettings.of(context).wrapWithCenter,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text('Wrap with SafeArea'),
+              Spacer(),
+              Switch(
+                key: ValueKey('FramyAppSafeAreaSwitch'),
+                onChanged: (b) =>
+                    framyAppStateKey.currentState.wrapWithSafeArea = b,
+                value: FramyAppSettings.of(context).wrapWithSafeArea,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class FramyDrawer extends StatelessWidget {
@@ -810,6 +929,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = FramyAppSettings.of(context);
     return SafeArea(
       bottom: false,
       child: LayoutBuilder(
@@ -827,9 +947,28 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                     ),
                     background: BoxDecoration(),
                   ),
-                  builder: (context) => Scaffold(
-                    body: widget.builder(dependencyValue),
-                  ),
+                  builder: (context) {
+                    Widget widgetToDisplay = widget.builder(dependencyValue);
+                    if (settings.wrapWithCenter) {
+                      widgetToDisplay = Center(
+                        key: ValueKey('FramyGeneratedCenter'),
+                        child: widgetToDisplay,
+                      );
+                    }
+                    if (settings.wrapWithSafeArea) {
+                      widgetToDisplay = SafeArea(
+                        key: ValueKey('FramyGeneratedSafeArea'),
+                        child: widgetToDisplay,
+                      );
+                    }
+                    if (settings.wrapWithScaffold) {
+                      widgetToDisplay = Scaffold(
+                        key: ValueKey('FramyGeneratedScaffold'),
+                        body: widgetToDisplay,
+                      );
+                    }
+                    return widgetToDisplay;
+                  },
                 ),
               ),
               if (!isSmallDevice)

@@ -2,13 +2,66 @@ import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/accessible_element_generator.dart';
 
 String generateFramyApp([List<FramyObject> themeObjects]) => '''
-class FramyApp extends StatelessWidget {
+final framyAppStateKey = GlobalKey<_FramyAppState>();
+
+class FramyAppSettings extends InheritedWidget {
+  final bool wrapWithScaffold;
+  final bool wrapWithCenter;
+  final bool wrapWithSafeArea;
+
+  const FramyAppSettings({
+    Key key,
+    @required Widget child,
+    @required this.wrapWithScaffold,
+    @required this.wrapWithCenter,
+    @required this.wrapWithSafeArea,
+  })  : assert(child != null),
+        super(key: key, child: child);
+
+  static FramyAppSettings of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FramyAppSettings>();
+  }
+
+  @override
+  bool updateShouldNotify(FramyAppSettings old) =>
+      old.wrapWithScaffold != wrapWithScaffold ||
+      old.wrapWithCenter != wrapWithCenter ||
+      old.wrapWithSafeArea != wrapWithSafeArea;
+}
+
+class FramyApp extends StatefulWidget {
+  FramyApp({Key key}) : super(key: key);
+
+  @override
+  _FramyAppState createState() => _FramyAppState();
+}
+
+class _FramyAppState extends State<FramyApp> {
+  bool _wrapWithScaffold = true;
+  bool _wrapWithCenter = false;
+  bool _wrapWithSafeArea = false;
+
+  void set wrapWithScaffold(bool value) =>
+      setState(() => _wrapWithScaffold = value);
+
+  void set wrapWithCenter(bool value) =>
+      setState(() => _wrapWithCenter = value);
+
+  void set wrapWithSafeArea(bool value) =>
+      setState(() => _wrapWithSafeArea = value);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      key: Key('FramyApp'),
-      ${_generateThemeDataLine(themeObjects)}
-      onGenerateRoute: onGenerateRoute,
+    return FramyAppSettings(
+      wrapWithScaffold: _wrapWithScaffold,
+      wrapWithCenter: _wrapWithCenter,
+      wrapWithSafeArea: _wrapWithSafeArea,
+      child: MaterialApp(
+        key: Key('FramyApp'),
+        debugShowCheckedModeBanner: false,
+        ${_generateThemeDataLine(themeObjects)}
+        onGenerateRoute: onGenerateRoute,
+      ),
     );
   }
 }

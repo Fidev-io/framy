@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/app_theme.dart';
+import 'package:weight_tracker/main.app.framy.dart';
 
-class TestMaterialApp extends StatelessWidget {
+class FramyAppWrapper extends StatelessWidget {
   final Widget child;
 
-  const TestMaterialApp(this.child);
+  const FramyAppWrapper(this.child);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppTheme.themeData,
-      home: child,
+    return FramyAppSettings(
+      wrapWithScaffold: true,
+      wrapWithSafeArea: false,
+      wrapWithCenter: false,
+      child: MaterialApp(
+        theme: AppTheme.themeData,
+        home: child,
+      ),
     );
   }
 }
 
-class TestMaterialAppWithScaffold extends StatelessWidget {
+class FramyAppWrapperWithScaffold extends StatelessWidget {
   final Widget child;
 
-  const TestMaterialAppWithScaffold(this.child);
+  const FramyAppWrapperWithScaffold(this.child);
 
   @override
   Widget build(BuildContext context) {
-    return TestMaterialApp(
+    return FramyAppWrapper(
       Scaffold(
         body: child,
       ),

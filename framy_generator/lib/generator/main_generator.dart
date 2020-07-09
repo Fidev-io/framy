@@ -1,5 +1,5 @@
 String generateMain() => '''
 void main() {
-  runApp(FramyApp());
+  runApp(FramyApp(key: framyAppStateKey));
 }
 ''';

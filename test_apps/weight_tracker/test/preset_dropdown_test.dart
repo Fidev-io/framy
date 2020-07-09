@@ -11,7 +11,7 @@ void main() {
     }
 
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyPresetDropdown(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyPresetDropdown(
         dependency: getUserModel(),
         presets: {},
       )));
@@ -24,7 +24,7 @@ void main() {
       final model = getUserModel();
       model.value = null;
       //when
-      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyPresetDropdown(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyPresetDropdown(
         dependency: model,
         presets: {},
       )));
@@ -35,7 +35,7 @@ void main() {
 
     testWidgets('should display Custom when dependency.value is not null',
         (tester) async {
-      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyPresetDropdown(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyPresetDropdown(
         dependency: getUserModel(User('', '', 1)),
         presets: {},
       )));
@@ -48,7 +48,7 @@ void main() {
       //given
       final initialValue = User(null, null, null);
       dynamic emittedValue = User(null, null, 1);
-      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyPresetDropdown(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyPresetDropdown(
         dependency: getUserModel(initialValue),
         presets: {},
         onChanged: (newValue) => emittedValue = newValue,
@@ -65,7 +65,7 @@ void main() {
         (tester) async {
       //given
       dynamic emittedValue;
-      await tester.pumpWidget(TestMaterialAppWithScaffold(FramyPresetDropdown(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyPresetDropdown(
         dependency: getUserModel(),
         presets: {},
         onChanged: (newValue) => emittedValue = newValue,

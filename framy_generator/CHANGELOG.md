@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.5]
+
+* Added option to wrap widgets with Scaffold, Center and SafeArea
+
 ## [0.1.4]
 
 * Fixed bug with losing state on hot reload #96

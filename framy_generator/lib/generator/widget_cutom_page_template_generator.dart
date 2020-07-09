@@ -33,6 +33,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = FramyAppSettings.of(context);
     return SafeArea(
       bottom: false,
       child: LayoutBuilder(
@@ -58,7 +59,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
           );
           if (isSmallDevice) {
             return Scaffold(
-              body: body,
+               body: body,
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
@@ -76,6 +77,21 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 ''';
 
 String _generateWidgetBuilderUsage(bool useDevicePreview) {
+  String builder = '''
+builder: (context) {   
+  Widget widgetToDisplay = ${_widgetBuilderUsage};
+  if (settings.wrapWithCenter) {
+    widgetToDisplay = Center(key: ValueKey('FramyGeneratedCenter'), child: widgetToDisplay,);
+  }
+  if (settings.wrapWithSafeArea) {
+    widgetToDisplay = SafeArea(key: ValueKey('FramyGeneratedSafeArea'), child: widgetToDisplay,);
+  }
+  if (settings.wrapWithScaffold) {
+    widgetToDisplay = Scaffold(key: ValueKey('FramyGeneratedScaffold'), body: widgetToDisplay,);
+  }
+  return widgetToDisplay;
+},
+''';
   if (useDevicePreview) {
     return '''
 DevicePreview(
@@ -85,14 +101,16 @@ DevicePreview(
     ),
     background: BoxDecoration(),
   ),
-  builder: (context) => Scaffold(
-    body: ${_widgetBuilderUsage}
-  ),
+  $builder
 ),
 ''';
   } else {
-    return _widgetBuilderUsage;
+    return '''
+Builder(
+  $builder 
+),    
+''';
   }
 }
 
-String _widgetBuilderUsage = 'widget.builder(dependencyValue),';
+String _widgetBuilderUsage = 'widget.builder(dependencyValue)';

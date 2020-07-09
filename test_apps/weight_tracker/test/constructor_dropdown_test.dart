@@ -19,7 +19,7 @@ void main() {
       //given
       final model = _createWeightEntryDependencyModel();
       //when
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyConstructorDropdown(dependency: model),
       ));
       //then
@@ -31,7 +31,7 @@ void main() {
       //given
       final model = _createWeightEntryDependencyModel();
       //when
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyConstructorDropdown(dependency: model),
       ));
       //then
@@ -43,7 +43,7 @@ void main() {
       //given
       final model = _createWeightEntryDependencyModel();
       //when
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyConstructorDropdown(dependency: model),
       ));
       //then
@@ -56,7 +56,7 @@ void main() {
       //given
       final model = _createWeightEntryDependencyModel(constructor: '.now');
       //when
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyConstructorDropdown(dependency: model),
       ));
       //then
@@ -74,7 +74,7 @@ void main() {
       expect(model.subDependencies, hasLength(3));
       expect(model.value.weight, 69);
       FramyDependencyModel onChangedModel;
-      await tester.pumpWidget(TestMaterialAppWithScaffold(
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
         FramyConstructorDropdown(
           dependency: model,
           onChanged: (changed) => onChangedModel = changed,

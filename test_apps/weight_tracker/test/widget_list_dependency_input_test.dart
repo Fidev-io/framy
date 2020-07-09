@@ -37,7 +37,7 @@ void main() {
     Map<String, Map<String, dynamic>> presets = const {},
   }) async {
     await tester.pumpWidget(
-      TestMaterialAppWithScaffold(
+      FramyAppWrapperWithScaffold(
         SingleChildScrollView(
           child: FramyWidgetListDependencyInput(
             dependency: dependency,
@@ -109,7 +109,7 @@ void main() {
       //given
       final dependency = _getStringListModel();
       await tester.pumpWidget(
-        TestMaterialAppWithScaffold(
+        FramyAppWrapperWithScaffold(
           StatefulBuilder(
             builder: (context, setState) => FramyWidgetListDependencyInput(
               dependency: dependency,
@@ -154,7 +154,7 @@ void main() {
       //given
       final dependency = _getStringListModel(['value1', 'value2']);
       await tester.pumpWidget(
-        TestMaterialAppWithScaffold(
+        FramyAppWrapperWithScaffold(
           StatefulBuilder(
             builder: (context, setState) => FramyWidgetListDependencyInput(
               dependency: dependency,
