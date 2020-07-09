@@ -4,12 +4,12 @@ import 'package:framy_generator/generator/accessible_element_generator.dart';
 String generateFramyApp([List<FramyObject> themeObjects]) => '''
 final framyAppStateKey = GlobalKey<_FramyAppState>();
 
-class FramyAppSettingsState extends InheritedWidget {
+class FramyAppSettings extends InheritedWidget {
   final bool wrapWithScaffold;
   final bool wrapWithCenter;
   final bool wrapWithSafeArea;
 
-  const FramyAppSettingsState({
+  const FramyAppSettings({
     Key key,
     @required Widget child,
     @required this.wrapWithScaffold,
@@ -18,12 +18,12 @@ class FramyAppSettingsState extends InheritedWidget {
   })  : assert(child != null),
         super(key: key, child: child);
 
-  static FramyAppSettingsState of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FramyAppSettingsState>();
+  static FramyAppSettings of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FramyAppSettings>();
   }
 
   @override
-  bool updateShouldNotify(FramyAppSettingsState old) =>
+  bool updateShouldNotify(FramyAppSettings old) =>
       old.wrapWithScaffold != wrapWithScaffold ||
       old.wrapWithCenter != wrapWithCenter ||
       old.wrapWithSafeArea != wrapWithSafeArea;
@@ -52,7 +52,7 @@ class _FramyAppState extends State<FramyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return FramyAppSettingsState(
+    return FramyAppSettings(
       wrapWithScaffold: _wrapWithScaffold,
       wrapWithCenter: _wrapWithCenter,
       wrapWithSafeArea: _wrapWithSafeArea,

@@ -17,12 +17,12 @@ void main() {
 
 final framyAppStateKey = GlobalKey<_FramyAppState>();
 
-class FramyAppSettingsState extends InheritedWidget {
+class FramyAppSettings extends InheritedWidget {
   final bool wrapWithScaffold;
   final bool wrapWithCenter;
   final bool wrapWithSafeArea;
 
-  const FramyAppSettingsState({
+  const FramyAppSettings({
     Key key,
     @required Widget child,
     @required this.wrapWithScaffold,
@@ -31,12 +31,12 @@ class FramyAppSettingsState extends InheritedWidget {
   })  : assert(child != null),
         super(key: key, child: child);
 
-  static FramyAppSettingsState of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FramyAppSettingsState>();
+  static FramyAppSettings of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FramyAppSettings>();
   }
 
   @override
-  bool updateShouldNotify(FramyAppSettingsState old) =>
+  bool updateShouldNotify(FramyAppSettings old) =>
       old.wrapWithScaffold != wrapWithScaffold ||
       old.wrapWithCenter != wrapWithCenter ||
       old.wrapWithSafeArea != wrapWithSafeArea;
@@ -65,7 +65,7 @@ class _FramyAppState extends State<FramyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return FramyAppSettingsState(
+    return FramyAppSettings(
       wrapWithScaffold: _wrapWithScaffold,
       wrapWithCenter: _wrapWithCenter,
       wrapWithSafeArea: _wrapWithSafeArea,
@@ -170,7 +170,7 @@ class FramySettingsDialog extends StatelessWidget {
                 key: ValueKey('FramyAppScaffoldSwitch'),
                 onChanged: (b) =>
                     framyAppStateKey.currentState.wrapWithScaffold = b,
-                value: FramyAppSettingsState.of(context).wrapWithScaffold,
+                value: FramyAppSettings.of(context).wrapWithScaffold,
               ),
             ],
           ),
@@ -182,7 +182,7 @@ class FramySettingsDialog extends StatelessWidget {
                 key: ValueKey('FramyAppCenterSwitch'),
                 onChanged: (b) =>
                     framyAppStateKey.currentState.wrapWithCenter = b,
-                value: FramyAppSettingsState.of(context).wrapWithCenter,
+                value: FramyAppSettings.of(context).wrapWithCenter,
               ),
             ],
           ),
@@ -194,7 +194,7 @@ class FramySettingsDialog extends StatelessWidget {
                 key: ValueKey('FramyAppSafeAreaSwitch'),
                 onChanged: (b) =>
                     framyAppStateKey.currentState.wrapWithSafeArea = b,
-                value: FramyAppSettingsState.of(context).wrapWithSafeArea,
+                value: FramyAppSettings.of(context).wrapWithSafeArea,
               ),
             ],
           ),
@@ -929,7 +929,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = FramyAppSettingsState.of(context);
+    final settings = FramyAppSettings.of(context);
     return SafeArea(
       bottom: false,
       child: LayoutBuilder(
@@ -949,13 +949,13 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                   ),
                   builder: (context) {
                     Widget widgetToDisplay = widget.builder(dependencyValue);
-                    if (state.wrapWithCenter) {
+                    if (settings.wrapWithCenter) {
                       widgetToDisplay = Center(child: widgetToDisplay);
                     }
-                    if (state.wrapWithSafeArea) {
+                    if (settings.wrapWithSafeArea) {
                       widgetToDisplay = SafeArea(child: widgetToDisplay);
                     }
-                    if (state.wrapWithScaffold) {
+                    if (settings.wrapWithScaffold) {
                       widgetToDisplay = Scaffold(body: widgetToDisplay);
                     }
                     return widgetToDisplay;

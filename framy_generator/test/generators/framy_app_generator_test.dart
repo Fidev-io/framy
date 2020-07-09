@@ -114,11 +114,11 @@ void main() {
       expect(result.contains('final framyAppStateKey = GlobalKey<_FramyAppState>();'), isTrue);
     });
 
-    test('should contain class FramyAppSettingsState', () {
+    test('should contain class FramyAppSettings', () {
       //when
       final result = generateFramyApp([]);
       //then
-      expect(result.contains('class FramyAppSettingsState'), isTrue);
+      expect(result.contains('class FramyAppSettings'), isTrue);
     });
   });
 }

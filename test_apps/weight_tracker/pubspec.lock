@@ -244,7 +244,7 @@ packages:
       path: "../../framy_generator"
       relative: true
     source: path
-    version: "0.1.4"
+    version: "0.1.5"
   freezed:
     dependency: "direct dev"
     description:

@@ -43,12 +43,8 @@ class FramySettingsDialog extends StatelessWidget {
               Spacer(),
               Switch(
                 key: ValueKey('FramyAppScaffoldSwitch'),
-                onChanged: (b) =>
-                framyAppStateKey.currentState.wrapWithScaffold = b,
-                value:
-                FramyAppSettingsState
-                    .of(context)
-                    .wrapWithScaffold,
+                onChanged: (b) => framyAppStateKey.currentState.wrapWithScaffold = b,
+                value: FramyAppSettings.of(context).wrapWithScaffold,
               ),
             ],
           ),
@@ -58,11 +54,8 @@ class FramySettingsDialog extends StatelessWidget {
               Spacer(),
               Switch(
                 key: ValueKey('FramyAppCenterSwitch'),
-                onChanged: (b) =>
-                framyAppStateKey.currentState.wrapWithCenter = b,
-                value: FramyAppSettingsState
-                    .of(context)
-                    .wrapWithCenter,
+                onChanged: (b) => framyAppStateKey.currentState.wrapWithCenter = b,
+                value: FramyAppSettings.of(context).wrapWithCenter,
               ),
             ],
           ),
@@ -72,11 +65,8 @@ class FramySettingsDialog extends StatelessWidget {
               Spacer(),
               Switch(
                 key: ValueKey('FramyAppSafeAreaSwitch'),
-                onChanged: (b) =>
-                framyAppStateKey.currentState.wrapWithSafeArea = b,
-                value: FramyAppSettingsState
-                    .of(context)
-                    .wrapWithSafeArea,
+                onChanged: (b) => framyAppStateKey.currentState.wrapWithSafeArea = b,
+                value: FramyAppSettings.of(context).wrapWithSafeArea,
               ),
             ],
           ),

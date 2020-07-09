@@ -62,19 +62,19 @@ void main() {
       expect(result.contains('dependencies = widget.dependencies'), isTrue);
     });
 
-    test('should contain getting wrapWithScaffold value from FramyAppSettingsState', () {
+    test('should contain getting wrapWithScaffold value from FramyAppSettings', () {
       final result = generateCustomPage(false);
-      expect(result.contains('state.wrapWithScaffold'), isTrue);
+      expect(result.contains('settings.wrapWithScaffold'), isTrue);
     });
 
-    test('should contain getting wrapWithCenter value from FramyAppSettingsState', () {
+    test('should contain getting wrapWithCenter value from FramyAppSettings', () {
       final result = generateCustomPage(false);
-      expect(result.contains('state.wrapWithCenter'), isTrue);
+      expect(result.contains('settings.wrapWithCenter'), isTrue);
     });
 
-    test('should contain getting wrapWithSafeArea value from FramyAppSettingsState', () {
+    test('should contain getting wrapWithSafeArea value from FramyAppSettings', () {
       final result = generateCustomPage(false);
-      expect(result.contains('state.wrapWithSafeArea'), isTrue);
+      expect(result.contains('settings.wrapWithSafeArea'), isTrue);
     });
 
     test('should contain Center', () {

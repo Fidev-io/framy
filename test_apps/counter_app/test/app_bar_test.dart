@@ -35,7 +35,7 @@ class _TestAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FramyAppSettingsState(
+    return FramyAppSettings(
       wrapWithScaffold: true,
       wrapWithSafeArea: false,
       wrapWithCenter: false,

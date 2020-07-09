@@ -8,7 +8,7 @@ void main() {
   group('StatisticsPageCustomPage', () {
     testWidgets('should build', (WidgetTester tester) async {
       await tester.pumpWidget(
-          TestMaterialAppWithScaffold(FramyStatisticsPageCustomPage()));
+          FramyAppWrapperWithScaffold(FramyStatisticsPageCustomPage()));
       expect(find.byType(FramyStatisticsPageCustomPage), findsOneWidget);
     });
 
@@ -17,7 +17,7 @@ void main() {
         (WidgetTester tester) async {
       //given
       await tester.pumpWidget(
-          TestMaterialAppWithScaffold(FramyStatisticsPageCustomPage()));
+          FramyAppWrapperWithScaffold(FramyStatisticsPageCustomPage()));
       //when
       await tester.tap(find.text('loaded'));
       await tester.pump();
