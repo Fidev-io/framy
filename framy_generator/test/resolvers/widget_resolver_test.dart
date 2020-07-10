@@ -235,6 +235,4 @@ class WidgetWithUserProviderDependency {
 ''', contains: true)
 @FramyUseRiverpod("someProvider")
 @FramyWidget()
-class WidgetWithUserRiverpodDependency {
-  WidgetWithUserProviderDependency() {}
-}
+class WidgetWithRiverpodDependency {}
