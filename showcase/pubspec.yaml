@@ -17,6 +17,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+dependency_overrides:
+  freezed_annotation: ^0.11.0 #device preview uses old version
+  freezed: ^0.11.2 #device preview uses old version
+
 flutter:
   uses-material-design: true
   assets:
