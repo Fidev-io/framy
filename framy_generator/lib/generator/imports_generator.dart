@@ -1,6 +1,7 @@
 import 'package:framy_generator/framy_object.dart';
 
-String generateImports(List<FramyObject> framyObjects, {bool useDevicePreview = false}) {
+String generateImports(List<FramyObject> framyObjects,
+    {bool useDevicePreview = false}) {
   Set<String> imports = {};
   imports.add('package:flutter/foundation.dart');
   imports.add('package:flutter/material.dart');
@@ -17,5 +18,11 @@ String generateImports(List<FramyObject> framyObjects, {bool useDevicePreview = 
     }
   });
   String importsStr = '';
+  final hasProviderDependency =
+      imports.contains('package:provider/provider.dart');
+  if (hasProviderDependency) {
+    imports.remove('package:provider/provider.dart');
+    importsStr = 'import \'package:provider/provider.dart\' as provider;\n';
+  }
   return imports.fold(importsStr, (s, import) => '${s}import \'$import\';\n');
 }

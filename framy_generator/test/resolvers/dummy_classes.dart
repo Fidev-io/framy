@@ -22,3 +22,9 @@ class Key {}
 class User {
   String firstName;
 }
+
+class Provider<T> {
+  final T Function(dynamic x) create;
+
+  Provider(this.create);
+}

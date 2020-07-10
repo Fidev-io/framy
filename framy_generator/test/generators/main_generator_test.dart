@@ -5,7 +5,7 @@ void main() {
   group('Main generator result', () {
     test('should generate proper main with passed key', () {
       //when
-      final String result = generateMain();
+      final result = generateMain(false);
       //then
       final expectedResult = '''
 void main() {
@@ -13,6 +13,13 @@ void main() {
 }
 ''';
       expect(result, equals(expectedResult));
+    });
+
+    test('should add a ProviderScope when there are riverpod dependencies', () {
+      //when
+      final result = generateMain(true);
+      //then
+      expect(result.contains('ProviderScope'), isTrue);
     });
   });
 }

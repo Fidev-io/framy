@@ -237,14 +237,14 @@ packages:
       name: framy_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
   framy_generator:
     dependency: "direct dev"
     description:
       path: "../../framy_generator"
       relative: true
     source: path
-    version: "0.1.5"
+    version: "0.1.6"
   freezed_annotation:
     dependency: transitive
     description:

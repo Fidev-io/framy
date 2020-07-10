@@ -24,20 +24,22 @@ class WeightEntryListItem extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      DateFormat.MMMEd().format(dateTime),
-                      textScaleFactor: 0.9,
-                    ),
-                    Text(
-                      TimeOfDay.fromDateTime(dateTime).format(context),
-                      textScaleFactor: 0.8,
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ],
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        DateFormat.MMMEd().format(dateTime),
+                        textScaleFactor: 0.9,
+                      ),
+                      Text(
+                        TimeOfDay.fromDateTime(dateTime).format(context),
+                        textScaleFactor: 0.8,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
                 ),
                 if (weightEntry?.note?.isNotEmpty ?? false)
                   Padding(

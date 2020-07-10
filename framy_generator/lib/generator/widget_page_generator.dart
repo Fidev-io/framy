@@ -1,8 +1,7 @@
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/utils.dart';
 
-String generateWidgetPages(
-    List<FramyObject> widgetFramyObjects, List<FramyObject> modelFramyObjects) {
+String generateWidgetPages(List<FramyObject> widgetFramyObjects) {
   return widgetFramyObjects.fold(
     '',
     (previousValue, element) => previousValue + _generateWidgetPage(element),
@@ -15,6 +14,9 @@ String _generateWidgetPage(FramyObject framyObject) {
       .toList();
   final providerDependencies = framyObject.constructors.first.dependencies
       .where((dep) => dep.dependencyType == FramyDependencyType.provider)
+      .toList();
+  final riverpodDependencies = framyObject.constructors.first.dependencies
+      .where((dep) => dep.dependencyType == FramyDependencyType.riverpod)
       .toList();
 
   final constructor = '''${framyObject.name}(
@@ -34,12 +36,37 @@ class $className extends StatelessWidget {
         ${framyObject.constructors.first.dependencies.fold('', (s, dep) => s + dependencyInitializationLine(dep))}
       ],
       builder: (DependencyValueGetter valueGetter) {
-        return ${_wrapConstructorWithProvider(constructor, providerDependencies)};
+        return ${_wrapConstructor(constructor, providerDependencies, riverpodDependencies)};
       },
     );
   }
 }
 ''';
+}
+
+String _wrapConstructor(
+  String constructor,
+  List<FramyObjectDependency> providerDependencies,
+  List<FramyObjectDependency> riverpodDependencies,
+) {
+  constructor = _wrapConstructorWithProvider(constructor, providerDependencies);
+  constructor = _wrapConstructorWithRiverpod(constructor, riverpodDependencies);
+  return constructor;
+}
+
+String _wrapConstructorWithRiverpod(
+    String constructor, List<FramyObjectDependency> riverpodDependencies) {
+  if (riverpodDependencies.isEmpty) {
+    return constructor;
+  } else {
+    return '''
+      ProviderScope(
+        overrides: [
+          ${riverpodDependencies.fold('', (prev, dep) => prev + _riverpodDependencyToProviderWidget(dep))}
+        ],
+        child: $constructor,
+      )''';
+  }
 }
 
 String _wrapConstructorWithProvider(
@@ -48,7 +75,7 @@ String _wrapConstructorWithProvider(
     return constructor;
   } else {
     return '''
-      MultiProvider(
+      provider.MultiProvider(
         providers: [
           ${providerDependencies.fold('', (prev, dep) => prev + _providerDependencyToProviderWidget(dep))}
         ],
@@ -57,8 +84,11 @@ String _wrapConstructorWithProvider(
   }
 }
 
+String _riverpodDependencyToProviderWidget(FramyObjectDependency dependency) =>
+    '${dependency.name}.overrideAs(Provider((_) => valueGetter(\'${dependency.name}\'))),\n';
+
 String _providerDependencyToProviderWidget(FramyObjectDependency dependency) =>
-    'Provider<${dependency.type}>.value(value: valueGetter(\'${dependency.name}\')),\n';
+    'provider.Provider<${dependency.type}>.value(value: valueGetter(\'${dependency.name}\')),\n';
 
 String _generateParamUsageInConstructor(FramyObjectDependency dependency) {
   final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';
