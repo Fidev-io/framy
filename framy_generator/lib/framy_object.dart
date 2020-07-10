@@ -122,6 +122,7 @@ enum FramyObjectType {
   model,
   preset,
   enumModel,
+  riverpod,
 }
 
-enum FramyDependencyType { constructor, provider }
+enum FramyDependencyType { constructor, provider, riverpod }

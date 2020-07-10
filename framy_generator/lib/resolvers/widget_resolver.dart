@@ -1,17 +1,23 @@
+import 'dart:async';
+
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:framy_annotation/framy_annotation.dart';
+import 'package:framy_generator/framy_generator.dart';
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/json_formatter.dart';
 import 'package:source_gen/source_gen.dart';
 
 const providerChecker = TypeChecker.fromRuntime(FramyUseProvider);
+const riverpodChecker = TypeChecker.fromRuntime(FramyUseRiverpod);
 
 class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
+  List<FramyObject> riverpodFramyObjects;
+
   @override
-  String generateForAnnotatedElement(
-      Element element, ConstantReader annotation, BuildStep buildStep) {
+  FutureOr<String> generateForAnnotatedElement(
+      Element element, ConstantReader annotation, BuildStep buildStep) async {
     List<FramyObject> framyObjectsToReturn = [];
     final framyObject = _widgetObjectFromElement(element);
     if (element is ClassElement) {
@@ -45,6 +51,32 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
             null,
             false,
             dependencyType: FramyDependencyType.provider,
+          ),
+        );
+      }
+
+      //get riverpod dependencies
+      if (riverpodChecker.hasAnnotationOf(element)) {
+        riverpodFramyObjects ??=
+            await loadFramyObjects(buildStep, '**.riverpod.framy.json');
+
+        final providerAnnotation = riverpodChecker.firstAnnotationOf(element);
+        final riverpodReader = ConstantReader(providerAnnotation);
+        final riverpodName = riverpodReader.read('providerName').stringValue;
+        final riverpodType = riverpodFramyObjects
+                .singleWhere(
+                  (riverpodObj) => riverpodObj.name == riverpodName,
+                  orElse: () => null,
+                )
+                ?.returnType ??
+            "Null";
+        framyObject.constructors.first.dependencies.add(
+          FramyObjectDependency(
+            riverpodName,
+            riverpodType,
+            null,
+            false,
+            dependencyType: FramyDependencyType.riverpod,
           ),
         );
       }

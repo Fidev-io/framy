@@ -1,6 +1,6 @@
 name: framy_generator
 description: A convenient code generator for app styleguide, gallery, storyboard and more.
-version: 0.1.5
+version: 0.1.6
 repository: https://github.com/Fidev-io/framy
 homepage: https://framy.dev
 
@@ -12,7 +12,7 @@ dependencies:
   source_gen: ^0.9.5
   glob: ^1.2.0
   analyzer: ">=0.39.11 <0.40.0"
-  framy_annotation: ^0.1.1
+  framy_annotation: ^0.1.2
 #    path: ../framy_annotation
 
 dev_dependencies:

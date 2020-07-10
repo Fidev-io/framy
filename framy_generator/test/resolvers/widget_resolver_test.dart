@@ -225,3 +225,14 @@ class WidgetWithStringProviderDependency {
 class WidgetWithUserProviderDependency {
   WidgetWithUserProviderDependency() {}
 }
+
+@ShouldGenerate('''
+            "name": "someProvider",
+            "type": "Null",
+            "defaultValue": null,
+            "isNamed": false,
+            "dependencyType": "FramyDependencyType.riverpod"
+''', contains: true)
+@FramyUseRiverpod("someProvider")
+@FramyWidget()
+class WidgetWithRiverpodDependency {}

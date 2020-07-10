@@ -40,14 +40,16 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
   Future<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
     final themeFramyObjects =
-        await _loadFramyObjects(buildStep, '**.theme.framy.json');
+        await loadFramyObjects(buildStep, '**.theme.framy.json');
     final widgetFramyObjects =
-        await _loadFramyObjects(buildStep, '**.widget.framy.json');
+        await loadFramyObjects(buildStep, '**.widget.framy.json');
     //it contains both data classes and enums
     final modelFramyObjects =
-        await _loadFramyObjects(buildStep, '**.model.framy.json');
+        await loadFramyObjects(buildStep, '**.model.framy.json');
     final presetFramyObjects =
-        await _loadFramyObjects(buildStep, '**.preset.framy.json');
+        await loadFramyObjects(buildStep, '**.preset.framy.json');
+    final riverpodFramyObjects =
+        await loadFramyObjects(buildStep, '**.riverpod.framy.json');
     final useDevicePreview = annotation.read('useDevicePreview').boolValue;
 
     final buffer = StringBuffer();
@@ -56,8 +58,9 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
       ...widgetFramyObjects,
       ...modelFramyObjects,
       ...presetFramyObjects,
+      ...riverpodFramyObjects,
     ], useDevicePreview: useDevicePreview));
-    buffer.writeln(generateMain());
+    buffer.writeln(generateMain(riverpodFramyObjects.isNotEmpty));
     buffer.writeln(generateFramyApp(themeFramyObjects));
     buffer.writeln(generateRouting(widgetFramyObjects));
     buffer.writeln(generateLayoutTemplate());
@@ -75,7 +78,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(
         '\n// ======================== CUSTOM PAGES ===========================\n');
     buffer.writeln(generateCustomPage(useDevicePreview));
-    buffer.writeln(generateWidgetPages(widgetFramyObjects, modelFramyObjects));
+    buffer.writeln(generateWidgetPages(widgetFramyObjects));
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
     buffer.writeln(
@@ -94,18 +97,22 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generatePresets(presetFramyObjects));
     return buffer.toString();
   }
+}
 
-  Future<List<FramyObject>> _loadFramyObjects(
-    BuildStep buildStep,
-    String extension,
-  ) async {
-    final glob = Glob(extension);
-    List<FramyObject> framyObjects = [];
-    await for (final id in buildStep.findAssets(glob)) {
-      List jsons = jsonDecode(await buildStep.readAsString(id));
-      framyObjects
-          .addAll(jsons.map((json) => FramyObject.fromJson(json)).toList());
-    }
-    return framyObjects;
+Future<List<FramyObject>> loadFramyObjects(
+  BuildStep buildStep,
+  String extension,
+) async {
+  //workaround for tests:
+  if (buildStep == null) {
+    return [];
   }
+  final glob = Glob(extension);
+  List<FramyObject> framyObjects = [];
+  await for (final id in buildStep.findAssets(glob)) {
+    List jsons = jsonDecode(await buildStep.readAsString(id));
+    framyObjects
+        .addAll(jsons.map((json) => FramyObject.fromJson(json)).toList());
+  }
+  return framyObjects;
 }

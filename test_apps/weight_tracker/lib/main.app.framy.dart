@@ -4,6 +4,7 @@
 // FramyGenerator
 // **************************************************************************
 
+import 'package:provider/provider.dart' as provider;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
@@ -13,10 +14,10 @@ import 'dart:core';
 import 'package:weight_tracker/pages/history_page.dart';
 import 'package:weight_tracker/widgets/weight_entry_list_item.dart';
 import 'package:weight_tracker/models/weight_entry.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weight_tracker/pages/statistics_page.dart';
 import 'package:weight_tracker/models/statistics_page_state.dart';
 import 'package:weight_tracker/pages/profile_page.dart';
-import 'package:provider/provider.dart';
 import 'package:weight_tracker/widgets/user_emails_view.dart';
 import 'package:weight_tracker/widgets/user_data_card.dart';
 import 'package:weight_tracker/models/user.dart';
@@ -30,7 +31,7 @@ import 'package:weight_tracker/models/weight_entry.framy.dart';
 import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
-  runApp(FramyApp(key: framyAppStateKey));
+  runApp(ProviderScope(child: FramyApp(key: framyAppStateKey)));
 }
 
 final framyAppStateKey = GlobalKey<_FramyAppState>();
@@ -1074,8 +1075,12 @@ class FramyHistoryPageCustomPage extends StatelessWidget {
             'weightEntries', 'List<WeightEntry>', null),
       ],
       builder: (DependencyValueGetter valueGetter) {
-        return HistoryPage(
-          weightEntries: valueGetter('weightEntries'),
+        return ProviderScope(
+          overrides: [
+            weightEntries
+                .overrideAs(Provider((_) => valueGetter('weightEntries'))),
+          ],
+          child: HistoryPage(),
         );
       },
     );
@@ -1109,9 +1114,9 @@ class FramyProfilePageCustomPage extends StatelessWidget {
         FramyDependencyModel<User>('User', 'User', null),
       ],
       builder: (DependencyValueGetter valueGetter) {
-        return MultiProvider(
+        return provider.MultiProvider(
           providers: [
-            Provider<User>.value(value: valueGetter('User')),
+            provider.Provider<User>.value(value: valueGetter('User')),
           ],
           child: ProfilePage(),
         );
