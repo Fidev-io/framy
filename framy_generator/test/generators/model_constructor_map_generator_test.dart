@@ -85,5 +85,36 @@ void main() {
       //then
       expect(result.contains('else return null;'), isTrue);
     });
+
+    test('should generate builder method for builtValue constructors', () {
+      //given
+      final framyModelObjects = [
+        FramyObject()
+          ..name = 'BuiltUser'
+          ..type = FramyObjectType.model
+          ..constructors = [
+            FramyObjectConstructor(
+              '',
+              [
+                FramyObjectDependency('firstName', 'String', 'null', false),
+                FramyObjectDependency('lastName', 'String', 'null', false),
+              ],
+              isBuiltValue: true,
+            )
+          ]
+      ];
+      //when
+      final result = generateModelConstructorMap(framyModelObjects);
+      //then
+      expect(result.contains("BuiltUser(\n    (b) => b"), isTrue);
+      expect(
+          result.contains(
+              "..firstName = dep.subDependencies.singleWhere((d) => d.name == 'firstName').value"),
+          isTrue);
+      expect(
+          result.contains(
+              "..lastName = dep.subDependencies.singleWhere((d) => d.name == 'lastName').value"),
+          isTrue);
+    });
   });
 }

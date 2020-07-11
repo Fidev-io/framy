@@ -93,9 +93,16 @@ packages:
     source: hosted
     version: "4.3.2"
   built_value:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: built_value
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "7.1.0"
+  built_value_generator:
+    dependency: "direct dev"
+    description:
+      name: built_value_generator
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.1.0"
@@ -251,7 +258,7 @@ packages:
       path: "../../framy_generator"
       relative: true
     source: path
-    version: "0.1.6"
+    version: "0.1.7"
   freezed:
     dependency: "direct dev"
     description:

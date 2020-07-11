@@ -16,6 +16,7 @@ dependencies:
   intl: ^0.16.1
   freezed_annotation: ^0.11.0
   flutter_riverpod: ^0.3.0
+  built_value: ^7.1.0
 
 dev_dependencies:
   build_runner: any
@@ -28,6 +29,7 @@ dev_dependencies:
   test: any
   ozzie: ^2.2.3
   freezed: ^0.11.2
+  built_value_generator: ^7.1.0
 
 dependency_overrides:
   freezed_annotation: ^0.11.0 #device preview uses old version

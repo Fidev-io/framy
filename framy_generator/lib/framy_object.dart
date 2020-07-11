@@ -97,8 +97,10 @@ class FramyObjectDependency {
 class FramyObjectConstructor {
   final String name;
   final List<FramyObjectDependency> dependencies;
+  final bool isBuiltValue;
 
-  FramyObjectConstructor(this.name, this.dependencies);
+  FramyObjectConstructor(this.name, this.dependencies,
+      {this.isBuiltValue = false});
 
   FramyObjectConstructor.fromJson(Map<String, dynamic> json)
       : name = json['name'],
@@ -106,12 +108,15 @@ class FramyObjectConstructor {
             ? null
             : (json['dependencies'] as List)
                 .map((map) => FramyObjectDependency.fromJson(map))
-                .toList();
+                .toList(),
+        isBuiltValue = json['isBuiltValue'] ?? false;
 
   Map<String, dynamic> toMap() => {
         'name': name,
         if (dependencies != null)
           'dependencies': dependencies?.map((dep) => dep.toMap())?.toList(),
+        if (isBuiltValue != null && isBuiltValue == true)
+          'isBuiltValue': isBuiltValue,
       };
 }
 
