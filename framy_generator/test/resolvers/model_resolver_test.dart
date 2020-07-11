@@ -150,6 +150,7 @@ class ClassWithTwoConstructorsWithDependencies {
 class ClassWithPrivateConstructor {
   ClassWithPrivateConstructor();
 
+  // ignore: unused_element
   ClassWithPrivateConstructor._thisIsPrivate();
 }
 
@@ -198,6 +199,7 @@ abstract class BuiltUser implements Built<BuiltUser, BuiltUserBuilder> {
 
   String get lastName;
 
+  // ignore: unused_element
   BuiltUser._();
 
   factory BuiltUser([updates(BuiltUserBuilder b)]) => null;
