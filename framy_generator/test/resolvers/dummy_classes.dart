@@ -1,5 +1,6 @@
 class Color {
   final int value;
+
   const Color(int value) : value = value & 0xFFFFFFFF;
 }
 
@@ -28,3 +29,11 @@ class Provider<T> {
 
   Provider(this.create);
 }
+
+abstract class Built<V extends Built<V, B>, B> {
+  V rebuild(Function(B) updates);
+
+  B toBuilder();
+}
+
+class BuiltUserBuilder {}

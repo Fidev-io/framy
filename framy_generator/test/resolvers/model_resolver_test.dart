@@ -2,6 +2,8 @@ import 'package:framy_annotation/framy_annotation.dart';
 import 'package:framy_generator/resolvers/model_resolver.dart';
 import 'package:source_gen_test/source_gen_test.dart';
 
+import 'dummy_classes.dart';
+
 Future<void> main() async {
   final reader = await initializeLibraryReaderForDirectory(
     'test/resolvers',
@@ -23,6 +25,7 @@ Future<void> main() async {
     "import": "package:__test__/model_resolver_test.dart",
     "imports": [
       "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
       "package:framy_annotation/framy_annotation.dart",
       "package:framy_generator/resolvers/model_resolver.dart",
       "dart:core"
@@ -43,6 +46,7 @@ enum SimpleEnum { val1, val2 }
     "import": "package:__test__/model_resolver_test.dart",
     "imports": [
       "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
       "package:framy_annotation/framy_annotation.dart",
       "package:framy_generator/resolvers/model_resolver.dart",
       "dart:core"
@@ -65,6 +69,7 @@ enum SimpleEnum { val1, val2 }
 @FramyModel()
 class ClassWithTwoConstructors {
   ClassWithTwoConstructors();
+
   ClassWithTwoConstructors.secondConstructor();
 }
 
@@ -75,6 +80,7 @@ class ClassWithTwoConstructors {
     "import": "package:__test__/model_resolver_test.dart",
     "imports": [
       "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
       "package:framy_annotation/framy_annotation.dart",
       "package:framy_generator/resolvers/model_resolver.dart",
       "dart:core"
@@ -113,5 +119,86 @@ class ClassWithTwoConstructors {
 @FramyModel()
 class ClassWithTwoConstructorsWithDependencies {
   ClassWithTwoConstructorsWithDependencies.first(int a);
+
   ClassWithTwoConstructorsWithDependencies.second(String b);
+}
+
+@ShouldGenerate('''
+[
+  {
+    "type": "FramyObjectType.model",
+    "import": "package:__test__/model_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/model_resolver.dart",
+      "dart:core"
+    ],
+    "name": "ClassWithPrivateConstructor",
+    "isStatic": false,
+    "kind": "CLASS",
+    "constructors": [
+      {
+        "name": "",
+        "dependencies": []
+      }
+    ]
+  }
+]''')
+@FramyModel()
+class ClassWithPrivateConstructor {
+  ClassWithPrivateConstructor();
+
+  ClassWithPrivateConstructor._thisIsPrivate();
+}
+
+@ShouldGenerate('''
+[
+  {
+    "type": "FramyObjectType.model",
+    "import": "package:__test__/model_resolver_test.dart",
+    "imports": [
+      "package:source_gen_test/source_gen_test.dart",
+      "package:__test__/dummy_classes.dart",
+      "package:framy_annotation/framy_annotation.dart",
+      "package:framy_generator/resolvers/model_resolver.dart",
+      "dart:core"
+    ],
+    "name": "BuiltUser",
+    "isStatic": false,
+    "kind": "CLASS",
+    "constructors": [
+      {
+        "name": "",
+        "dependencies": [
+          {
+            "name": "firstName",
+            "type": "String",
+            "defaultValue": null,
+            "isNamed": false,
+            "dependencyType": "FramyDependencyType.constructor"
+          },
+          {
+            "name": "lastName",
+            "type": "String",
+            "defaultValue": null,
+            "isNamed": false,
+            "dependencyType": "FramyDependencyType.constructor"
+          }
+        ],
+        "isBuiltValue": true
+      }
+    ]
+  }
+]''')
+@FramyModel()
+abstract class BuiltUser implements Built<BuiltUser, BuiltUserBuilder> {
+  String get firstName;
+
+  String get lastName;
+
+  BuiltUser._();
+
+  factory BuiltUser([updates(BuiltUserBuilder b)]) => null;
 }

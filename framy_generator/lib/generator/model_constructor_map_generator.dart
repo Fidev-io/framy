@@ -29,12 +29,25 @@ String _generateModelConstructor(
     FramyObject model, FramyObjectConstructor constructor) {
   return '''if (dep.constructor == \'${constructor.name}\') {
   return ${model.name + constructor.name}(
-    ${constructor.dependencies.fold('', (s, dep) => s + _generateParamUsageInConstructor(dep))});
+    ${_generateConstructorBody(model, constructor)}
   }
 ''';
 }
 
+String _generateConstructorBody(
+    FramyObject model, FramyObjectConstructor constructor) {
+  if (constructor.isBuiltValue) {
+    return "(b) => b${constructor.dependencies.fold('', (s, dep) => s + "..${dep.name} = ${_dependencyValue(dep.name)}\n")});";
+  } else {
+    return "${constructor.dependencies.fold('', (s, dep) => s + _generateParamUsageInConstructor(dep))});";
+  }
+}
+
 String _generateParamUsageInConstructor(FramyObjectDependency dependency) {
   final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';
-  return '${nameInConstructor}dep.subDependencies.singleWhere((d) => d.name == \'${dependency.name}\').value,\n';
+  return '${nameInConstructor}${_dependencyValue(dependency.name)},\n';
+}
+
+String _dependencyValue(String name) {
+  return 'dep.subDependencies.singleWhere((d) => d.name == \'$name\').value';
 }
