@@ -36,8 +36,8 @@ void main() {
 
     testWidgets('should use proper font styles for font names', (tester) async {
       TextTheme textTheme;
-      await tester.pumpWidget(MaterialApp(
-        home: Builder(
+      await tester.pumpWidget(FramyAppWrapper(
+        Builder(
           builder: (context) {
             textTheme = Theme.of(context).textTheme;
             return FramyFontsPage();
