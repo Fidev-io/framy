@@ -7,7 +7,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  framy_annotation: ^0.1.1
+  framy_annotation: ^0.1.4
 #    path: ../../framy_annotation
   device_preview: ^0.4.5
 
@@ -21,6 +21,10 @@ dev_dependencies:
     sdk: flutter
   test: any
   ozzie: ^2.2.3
+
+#dependency_overrides:
+#  framy_annotation:
+#    path: ../../framy_annotation
 
 flutter:
   uses-material-design: true

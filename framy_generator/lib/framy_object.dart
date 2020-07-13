@@ -13,6 +13,7 @@ class FramyObject {
   List<FramyObjectConstructor> constructors;
   String returnType;
   List<String> imports;
+  String widgetGroupName;
 
   FramyObject();
 
@@ -38,6 +39,7 @@ class FramyObject {
       if (constructors != null)
         'constructors': constructors.map((con) => con.toMap()).toList(),
       if (returnType != null) 'returnType': returnType,
+      if (widgetGroupName != null) 'widgetGroupName': widgetGroupName,
     };
   }
 
@@ -61,6 +63,7 @@ class FramyObject {
             .toList();
     returnType = json['returnType'];
     imports = List.from(json['imports'] ?? []);
+    widgetGroupName = json['widgetGroupName'];
   }
 }
 

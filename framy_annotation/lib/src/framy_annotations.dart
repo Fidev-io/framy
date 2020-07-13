@@ -47,8 +47,27 @@ class FramyTheme extends FramyAnnotation {
 const framyTheme = FramyTheme();
 
 /// Used to annotate a Widget to be included as a component
+/// [groupName] - Used for creating a directory in the navigation drawer in which widget will be placed.
+///   It can help organize widgets by domain or size.
+///
+/// ## Example:
+///
+/// @framyWidget
+/// class MyButton extends StatelessWidget {
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return RaisedButton(
+///       child: Text('Press me'),
+///       onPressed: (){},
+///     );
+///   }
+/// }
+///
 class FramyWidget extends FramyAnnotation {
-  const FramyWidget();
+  final String groupName;
+
+  const FramyWidget({this.groupName});
 }
 
 const framyWidget = FramyWidget();

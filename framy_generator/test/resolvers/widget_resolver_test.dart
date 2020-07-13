@@ -236,3 +236,7 @@ class WidgetWithUserProviderDependency {
 @FramyUseRiverpod("someProvider")
 @FramyWidget()
 class WidgetWithRiverpodDependency {}
+
+@ShouldGenerate('"widgetGroupName": "Some group"', contains: true)
+@FramyWidget(groupName: 'Some group')
+class WidgetWithGroupName {}

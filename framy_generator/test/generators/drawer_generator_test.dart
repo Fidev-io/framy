@@ -115,5 +115,40 @@ void main() {
         );
       });
     });
+
+    test('should generate group when there is a widget with groupName', () {
+      //given
+      final widgetsFramyObjects = [
+        FramyObject()
+          ..type = FramyObjectType.widget
+          ..name = 'MyCustomWidget'
+          ..widgetGroupName = 'Some group'
+      ];
+      //when
+      final result = generateDrawer(widgetsFramyObjects);
+      //then
+      expect(result.contains(RegExp('Text\\(\n *\'Some group\'')), isTrue);
+    });
+
+    test(
+        'should generate only one group when there are widget with same groupName',
+        () {
+      //given
+      final widgetsFramyObjects = [
+        FramyObject()
+          ..type = FramyObjectType.widget
+          ..name = 'MyCustomWidget'
+          ..widgetGroupName = 'Some group',
+        FramyObject()
+          ..type = FramyObjectType.widget
+          ..name = 'Other Widget'
+          ..widgetGroupName = 'Some group',
+      ];
+      //when
+      final result = generateDrawer(widgetsFramyObjects);
+      //then
+      expect(
+          RegExp('Text\\(\n *\'Some group\'').allMatches(result), hasLength(1));
+    });
   });
 }

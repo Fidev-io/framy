@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  framy_annotation: ^0.1.2
+  framy_annotation: ^0.1.4
   device_preview: ^0.4.5
   provider: ^4.3.0
   intl: ^0.16.1
@@ -34,6 +34,8 @@ dev_dependencies:
 dependency_overrides:
   freezed_annotation: ^0.11.0 #device preview uses old version
   freezed: ^0.11.2 #device preview uses old version
+#  framy_annotation:
+#    path: ../../framy_annotation
 
 flutter:
   uses-material-design: true

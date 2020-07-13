@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.8]
+
+* Added support for grouping widgets in navigation drawer #110
+
 ## [0.1.7]
 
 * Added support for models generated with [BuiltValue](https://pub.dev/packages/built_value) library #117

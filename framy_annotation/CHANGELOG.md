@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.4]
+
+- Added `groupName` parameter to group widgets in directories
+
 ## [0.1.2]
 
 - Added `FramyRegisterRiverpod` and `FramyUseRiverpod` annotations

@@ -248,9 +248,9 @@ packages:
   framy_annotation:
     dependency: "direct main"
     description:
-      name: framy_annotation
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../framy_annotation"
+      relative: true
+    source: path
     version: "0.1.2"
   framy_generator:
     dependency: "direct dev"
