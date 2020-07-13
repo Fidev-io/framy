@@ -63,5 +63,10 @@ void main() {
         isTrue,
       );
     });
+
+    test('should contain leading icon', () {
+      final String result = generateAppBar();
+      expect(result.contains('leading: leading,'), isTrue);
+    });
   });
 }

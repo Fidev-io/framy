@@ -33,5 +33,10 @@ void main() {
       final String result = generateLayoutTemplate();
       expect("FramyDrawer".allMatches(result), hasLength(2));
     });
+
+    test('should contain IconButton for leading icon', () {
+      final String result = generateLayoutTemplate();
+      expect(result.contains('IconButton'), isTrue);
+    });
   });
 }

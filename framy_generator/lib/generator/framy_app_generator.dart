@@ -16,15 +16,19 @@ class _FramyAppState extends State<FramyApp> {
   bool _wrapWithScaffold = true;
   bool _wrapWithCenter = false;
   bool _wrapWithSafeArea = false;
+  bool _showNavigationMenu = true;
 
-  void set wrapWithScaffold(bool value) =>
+  set wrapWithScaffold(bool value) =>
       setState(() => _wrapWithScaffold = value);
 
-  void set wrapWithCenter(bool value) =>
+  set wrapWithCenter(bool value) =>
       setState(() => _wrapWithCenter = value);
 
-  void set wrapWithSafeArea(bool value) =>
+  set wrapWithSafeArea(bool value) =>
       setState(() => _wrapWithSafeArea = value);
+      
+  void toggleNavigationMenu() => setState(() =>
+      _showNavigationMenu = !_showNavigationMenu);
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +40,7 @@ class FramyAppSettings extends InheritedWidget {
   final bool wrapWithScaffold;
   final bool wrapWithCenter;
   final bool wrapWithSafeArea;
+  final bool showNavigationMenu;
 
   const FramyAppSettings({
     Key key,
@@ -43,6 +48,7 @@ class FramyAppSettings extends InheritedWidget {
     @required this.wrapWithScaffold,
     @required this.wrapWithCenter,
     @required this.wrapWithSafeArea,
+    @required this.showNavigationMenu,
   })  : assert(child != null),
         super(key: key, child: child);
 
@@ -54,7 +60,8 @@ class FramyAppSettings extends InheritedWidget {
   bool updateShouldNotify(FramyAppSettings old) =>
       old.wrapWithScaffold != wrapWithScaffold ||
       old.wrapWithCenter != wrapWithCenter ||
-      old.wrapWithSafeArea != wrapWithSafeArea;
+      old.wrapWithSafeArea != wrapWithSafeArea ||
+      old.showNavigationMenu != showNavigationMenu;
 }
 ''';
 
@@ -64,6 +71,7 @@ String _generateFramyAppBuildMethod(
       wrapWithScaffold: _wrapWithScaffold,
       wrapWithCenter: _wrapWithCenter,
       wrapWithSafeArea: _wrapWithSafeArea,
+      showNavigationMenu: _showNavigationMenu,
       child: MaterialApp(
         key: Key('FramyApp'),
         debugShowCheckedModeBanner: false,

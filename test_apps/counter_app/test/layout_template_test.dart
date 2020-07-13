@@ -32,8 +32,7 @@ void main() {
       expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
     });
 
-    testWidgets('should have an always opened drawer on big devices',
-        (tester) async {
+    testWidgets('should have an opened drawer on big devices', (tester) async {
       //given
       tester.binding.window.physicalSizeTestValue = Size(1000, 800);
       tester.binding.window.devicePixelRatioTestValue = 1.0;
@@ -41,6 +40,24 @@ void main() {
       await tester.pumpWidget(_TestLayoutTemplate());
       //then
       expect(find.byTooltip('Open navigation menu'), findsNothing);
+      expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
+    });
+
+    testWidgets('should have a close/open drawer button on big devices',
+        (tester) async {
+      //given
+      tester.binding.window.physicalSizeTestValue = Size(1000, 800);
+      tester.binding.window.devicePixelRatioTestValue = 1.0;
+      await tester.pumpWidget(FramyApp());
+      //when close
+      await tester.tap(find.byTooltip('Close navigation menu'));
+      await tester.pump();
+      //then
+      expect(find.byKey(Key('FramyDrawer')), findsNothing);
+      //when open
+      await tester.tap(find.byTooltip('Open navigation menu'));
+      await tester.pump();
+      //then
       expect(find.byKey(Key('FramyDrawer')), findsOneWidget);
     });
   });
