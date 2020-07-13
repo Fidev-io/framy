@@ -90,7 +90,7 @@ void main() {
 
     group('Settings dialog', () {
       Future<void> goToCounterFabPage(WidgetTester tester) async {
-        await tester.pumpWidget(FramyApp(key: framyAppStateKey));
+        await tester.pumpWidget(FramyApp());
         await _openDrawer(tester);
         await tester.tap(find.text('CounterFAB'));
         await tester.pumpAndSettle();

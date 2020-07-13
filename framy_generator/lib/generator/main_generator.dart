@@ -1,12 +1,5 @@
-String generateMain(bool usesRiverpod) {
-  String framyApp = 'FramyApp(key: framyAppStateKey)';
-  if (usesRiverpod) {
-    framyApp = 'ProviderScope(child: $framyApp)';
-  }
-
-  return '''
+String generateMain() => '''
 void main() {
-  runApp($framyApp);
+  runApp(FramyApp());
 }
 ''';
-}

@@ -5,27 +5,27 @@ import 'package:test/test.dart';
 void main() {
   group('FramyApp Generator result', () {
     test('should contain FramyApp class', () {
-      final result = generateFramyApp();
+      final result = generateFramyApp([], false);
       expect(result.contains('class FramyApp'), isTrue);
     });
 
     test('should contain MaterialApp', () {
-      final result = generateFramyApp();
+      final result = generateFramyApp([], false);
       expect(result.contains('MaterialApp'), isTrue);
     });
 
     test('should contain FramyApp Key', () {
-      final result = generateFramyApp();
+      final result = generateFramyApp([], false);
       expect(result.contains('Key(\'FramyApp\')'), isTrue);
     });
 
     test('should contain onGenerateRoute', () {
-      final result = generateFramyApp();
+      final result = generateFramyApp([], false);
       expect(result.contains('onGenerateRoute'), isTrue);
     });
 
     test('should not contain theme when empty list passed', () {
-      final result = generateFramyApp([]);
+      final result = generateFramyApp([], false);
       expect(result.contains('theme'), isFalse);
     });
 
@@ -37,7 +37,7 @@ void main() {
         ..kind = ElementKind.FUNCTION
         ..isStatic = true;
       //when
-      final result = generateFramyApp([themeDataObject]);
+      final result = generateFramyApp([themeDataObject], false);
       //then
       expect(result.contains('theme: getThemeData(),'), isTrue);
     });
@@ -51,7 +51,7 @@ void main() {
         ..kind = ElementKind.METHOD
         ..parentObject = (FramyObject()..name = 'CustomAppTheme');
       //when
-      final result = generateFramyApp([themeDataObject]);
+      final result = generateFramyApp([themeDataObject], false);
       //then
       expect(
           result.contains('theme: CustomAppTheme().getThemeData(),'), isTrue);
@@ -67,7 +67,7 @@ void main() {
         ..kind = ElementKind.METHOD
         ..parentObject = (FramyObject()..name = 'CustomAppTheme');
       //when
-      final result = generateFramyApp([themeDataObject]);
+      final result = generateFramyApp([themeDataObject], false);
       //then
       expect(result.contains('theme: CustomAppTheme.getThemeData(),'), isTrue);
     });
@@ -81,7 +81,7 @@ void main() {
         ..kind = ElementKind.GETTER
         ..parentObject = (FramyObject()..name = 'CustomAppTheme');
       //when
-      final result = generateFramyApp([themeDataObject]);
+      final result = generateFramyApp([themeDataObject], false);
       //then
       expect(result.contains('theme: CustomAppTheme().theme,'), isTrue);
     });
@@ -102,23 +102,33 @@ void main() {
         ..kind = ElementKind.GETTER
         ..parentObject = parentObject;
       //when
-      final result = generateFramyApp([colorObject, themeObject]);
+      final result = generateFramyApp([colorObject, themeObject], false);
       //then
       expect(result.contains('theme: AppThemeWithGetter.themeData,'), isTrue);
     });
 
     test('should contain declaration of framyAppStateKey', () {
       //when
-      final result = generateFramyApp([]);
+      final result = generateFramyApp([], false);
       //then
-      expect(result.contains('final framyAppStateKey = GlobalKey<_FramyAppState>();'), isTrue);
+      expect(
+          result.contains(
+              'final framyAppStateKey = GlobalKey<_FramyAppState>();'),
+          isTrue);
     });
 
     test('should contain class FramyAppSettings', () {
       //when
-      final result = generateFramyApp([]);
+      final result = generateFramyApp([], false);
       //then
       expect(result.contains('class FramyAppSettings'), isTrue);
+    });
+
+    test('should add a ProviderScope when there are riverpod dependencies', () {
+      //when
+      final result = generateFramyApp([], true);
+      //then
+      expect(result.contains('ProviderScope'), isTrue);
     });
   });
 }

@@ -12,38 +12,13 @@ import 'package:framy_annotation/framy_annotation.dart';
 import 'dart:core';
 
 void main() {
-  runApp(FramyApp(key: framyAppStateKey));
+  runApp(FramyApp());
 }
 
 final framyAppStateKey = GlobalKey<_FramyAppState>();
 
-class FramyAppSettings extends InheritedWidget {
-  final bool wrapWithScaffold;
-  final bool wrapWithCenter;
-  final bool wrapWithSafeArea;
-
-  const FramyAppSettings({
-    Key key,
-    @required Widget child,
-    @required this.wrapWithScaffold,
-    @required this.wrapWithCenter,
-    @required this.wrapWithSafeArea,
-  })  : assert(child != null),
-        super(key: key, child: child);
-
-  static FramyAppSettings of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<FramyAppSettings>();
-  }
-
-  @override
-  bool updateShouldNotify(FramyAppSettings old) =>
-      old.wrapWithScaffold != wrapWithScaffold ||
-      old.wrapWithCenter != wrapWithCenter ||
-      old.wrapWithSafeArea != wrapWithSafeArea;
-}
-
 class FramyApp extends StatefulWidget {
-  FramyApp({Key key}) : super(key: key);
+  FramyApp() : super(key: framyAppStateKey);
 
   @override
   _FramyAppState createState() => _FramyAppState();
@@ -77,6 +52,31 @@ class _FramyAppState extends State<FramyApp> {
       ),
     );
   }
+}
+
+class FramyAppSettings extends InheritedWidget {
+  final bool wrapWithScaffold;
+  final bool wrapWithCenter;
+  final bool wrapWithSafeArea;
+
+  const FramyAppSettings({
+    Key key,
+    @required Widget child,
+    @required this.wrapWithScaffold,
+    @required this.wrapWithCenter,
+    @required this.wrapWithSafeArea,
+  })  : assert(child != null),
+        super(key: key, child: child);
+
+  static FramyAppSettings of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FramyAppSettings>();
+  }
+
+  @override
+  bool updateShouldNotify(FramyAppSettings old) =>
+      old.wrapWithScaffold != wrapWithScaffold ||
+      old.wrapWithCenter != wrapWithCenter ||
+      old.wrapWithSafeArea != wrapWithSafeArea;
 }
 
 Route onGenerateRoute(RouteSettings settings) {
@@ -138,6 +138,7 @@ class FramyAppBar extends StatelessWidget with PreferredSizeWidget {
           icon: Icon(Icons.settings),
           onPressed: () => showDialog(
             context: context,
+            useRootNavigator: false,
             builder: (context) => FramySettingsDialog(),
           ),
         )

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.10]
+
+* Changed showing settings dialog to work for showcase app #116
+
 ## [0.1.9]
 
 * Added support for grouping widgets in navigation drawer #110

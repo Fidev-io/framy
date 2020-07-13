@@ -12,6 +12,7 @@ class FramyAppBar extends StatelessWidget with PreferredSizeWidget {
           onPressed: () =>
               showDialog(
                 context: context,
+                useRootNavigator: false,
                 builder: (context) => FramySettingsDialog(),
               ),
         )

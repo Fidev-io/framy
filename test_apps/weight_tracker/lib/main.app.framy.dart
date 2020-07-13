@@ -34,10 +34,49 @@ import 'package:weight_tracker/models/weight_entry.framy.dart';
 import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
-  runApp(ProviderScope(child: FramyApp(key: framyAppStateKey)));
+  runApp(FramyApp());
 }
 
 final framyAppStateKey = GlobalKey<_FramyAppState>();
+
+class FramyApp extends StatefulWidget {
+  FramyApp() : super(key: framyAppStateKey);
+
+  @override
+  _FramyAppState createState() => _FramyAppState();
+}
+
+class _FramyAppState extends State<FramyApp> {
+  bool _wrapWithScaffold = true;
+  bool _wrapWithCenter = false;
+  bool _wrapWithSafeArea = false;
+
+  void set wrapWithScaffold(bool value) =>
+      setState(() => _wrapWithScaffold = value);
+
+  void set wrapWithCenter(bool value) =>
+      setState(() => _wrapWithCenter = value);
+
+  void set wrapWithSafeArea(bool value) =>
+      setState(() => _wrapWithSafeArea = value);
+
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
+      child: FramyAppSettings(
+        wrapWithScaffold: _wrapWithScaffold,
+        wrapWithCenter: _wrapWithCenter,
+        wrapWithSafeArea: _wrapWithSafeArea,
+        child: MaterialApp(
+          key: Key('FramyApp'),
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.themeData,
+          onGenerateRoute: onGenerateRoute,
+        ),
+      ),
+    );
+  }
+}
 
 class FramyAppSettings extends InheritedWidget {
   final bool wrapWithScaffold;
@@ -62,43 +101,6 @@ class FramyAppSettings extends InheritedWidget {
       old.wrapWithScaffold != wrapWithScaffold ||
       old.wrapWithCenter != wrapWithCenter ||
       old.wrapWithSafeArea != wrapWithSafeArea;
-}
-
-class FramyApp extends StatefulWidget {
-  FramyApp({Key key}) : super(key: key);
-
-  @override
-  _FramyAppState createState() => _FramyAppState();
-}
-
-class _FramyAppState extends State<FramyApp> {
-  bool _wrapWithScaffold = true;
-  bool _wrapWithCenter = false;
-  bool _wrapWithSafeArea = false;
-
-  void set wrapWithScaffold(bool value) =>
-      setState(() => _wrapWithScaffold = value);
-
-  void set wrapWithCenter(bool value) =>
-      setState(() => _wrapWithCenter = value);
-
-  void set wrapWithSafeArea(bool value) =>
-      setState(() => _wrapWithSafeArea = value);
-
-  @override
-  Widget build(BuildContext context) {
-    return FramyAppSettings(
-      wrapWithScaffold: _wrapWithScaffold,
-      wrapWithCenter: _wrapWithCenter,
-      wrapWithSafeArea: _wrapWithSafeArea,
-      child: MaterialApp(
-        key: Key('FramyApp'),
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.themeData,
-        onGenerateRoute: onGenerateRoute,
-      ),
-    );
-  }
 }
 
 Route onGenerateRoute(RouteSettings settings) {
@@ -167,6 +169,7 @@ class FramyAppBar extends StatelessWidget with PreferredSizeWidget {
           icon: Icon(Icons.settings),
           onPressed: () => showDialog(
             context: context,
+            useRootNavigator: false,
             builder: (context) => FramySettingsDialog(),
           ),
         )
