@@ -237,6 +237,12 @@ class WidgetWithUserProviderDependency {
 @FramyWidget()
 class WidgetWithRiverpodDependency {}
 
+@ShouldGenerate('"type": "FramyObjectType.page"', contains: true)
+@FramyWidget(isPage: true)
+class PageWidget {
+  PageWidget() {}
+}
+
 @ShouldGenerate('"widgetGroupName": "Some group"', contains: true)
 @FramyWidget(groupName: 'Some group')
 class WidgetWithGroupName {}

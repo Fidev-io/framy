@@ -118,6 +118,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/UserEmailsView': FramyUserEmailsViewCustomPage(),
     '/WeightUnitDisplay': FramyWeightUnitDisplayCustomPage(),
     '/WeightEntryListItem': FramyWeightEntryListItemCustomPage(),
+    '/storyboard': FramyStoryboardPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -366,6 +367,26 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('WeightEntryListItem'),
                 onTap: () => Navigator.of(context)
                     .pushReplacementNamed('/WeightEntryListItem'),
+              ),
+              ListTile(
+                leading: Icon(Icons.view_carousel),
+                title: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    Text('Storyboard'),
+                    Chip(
+                      label: Text(
+                        'Preview',
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ],
+                ),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/storyboard'),
               ),
             ],
           ),
@@ -1365,6 +1386,99 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
         ),
       ),
       mini: true,
+    );
+  }
+}
+
+class FramyStoryboardPage extends StatelessWidget {
+  const FramyStoryboardPage() : super(key: const Key('FramyStoryboardPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.extent(
+      padding: const EdgeInsets.all(16),
+      maxCrossAxisExtent: 300,
+      crossAxisSpacing: 16,
+      mainAxisSpacing: 16,
+      childAspectRatio: 1 / 2,
+      children: [
+        FramyStoryboardCustomPageWithDependencies(
+          name: 'HistoryPage',
+          dependencies: [
+            FramyDependencyModel<List<WeightEntry>>(
+                'weightEntries', 'List<WeightEntry>', null),
+          ],
+          builder: (DependencyValueGetter valueGetter) {
+            return ProviderScope(
+              overrides: [
+                weightEntries
+                    .overrideAs(Provider((_) => valueGetter('weightEntries'))),
+              ],
+              child: HistoryPage(),
+            );
+          },
+        ),
+        FramyStoryboardCustomPageWithDependencies(
+          name: 'StatisticsPage',
+          dependencies: [
+            FramyDependencyModel<StatisticsPageState>(
+                'state', 'StatisticsPageState', null),
+          ],
+          builder: (DependencyValueGetter valueGetter) {
+            return StatisticsPage(
+              state: valueGetter('state'),
+            );
+          },
+        ),
+        FramyStoryboardCustomPageWithDependencies(
+          name: 'ProfilePage',
+          dependencies: [
+            FramyDependencyModel<User>('User', 'User', null),
+          ],
+          builder: (DependencyValueGetter valueGetter) {
+            return provider.MultiProvider(
+              providers: [
+                provider.Provider<User>.value(value: valueGetter('User')),
+              ],
+              child: ProfilePage(),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class FramyStoryboardCustomPageWithDependencies extends StatelessWidget {
+  final List<FramyDependencyModel> dependencies;
+  final Widget Function(DependencyValueGetter dependencyValueGetter) builder;
+  final String name;
+
+  const FramyStoryboardCustomPageWithDependencies(
+      {Key key, this.dependencies, this.builder, this.name})
+      : super(key: key);
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  dynamic dependencyValue(String name) => dependency(name).value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: builder(dependencyValue),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(name, style: Theme.of(context).textTheme.caption),
+      ],
     );
   }
 }

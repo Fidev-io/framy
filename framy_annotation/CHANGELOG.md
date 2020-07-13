@@ -4,6 +4,10 @@
 
 - Added `groupName` parameter to group widgets in directories
 
+## [0.1.3]
+
+- Added isPage param to FramyWidget annotation
+
 ## [0.1.2]
 
 - Added `FramyRegisterRiverpod` and `FramyUseRiverpod` annotations

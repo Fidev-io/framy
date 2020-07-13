@@ -416,4 +416,19 @@ void main() {
       });
     });
   });
+
+  group('Storyboard page', () {
+    test('should open', () async {
+      await closeDependenciesPanelAndGoToOtherPage(
+        'Storyboard',
+        openDependenciesPanel: false,
+      );
+    });
+
+    test('should contain 3 pages', () async {
+      await driver.waitFor(find.byType('StatisticsPage'));
+      await driver.waitFor(find.byType('ProfilePage'));
+      await driver.waitFor(find.byType('HistoryPage'));
+    });
+  });
 }

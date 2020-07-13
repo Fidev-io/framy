@@ -19,7 +19,8 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
   FutureOr<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
     List<FramyObject> framyObjectsToReturn = [];
-    final framyObject = _widgetObjectFromElement(element);
+    final isPage = annotation.read('isPage').boolValue;
+    final framyObject = _widgetObjectFromElement(element, isPage: isPage);
     if (element is ClassElement) {
       framyObject.constructors = [];
       //get constructor dependencies
@@ -98,6 +99,8 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
     return stringType;
   }
 
-  FramyObject _widgetObjectFromElement(Element element) =>
-      FramyObject.fromElement(element)..type = FramyObjectType.widget;
+  FramyObject _widgetObjectFromElement(Element element,
+          {bool isPage = false}) =>
+      FramyObject.fromElement(element)
+        ..type = isPage ? FramyObjectType.page : FramyObjectType.widget;
 }

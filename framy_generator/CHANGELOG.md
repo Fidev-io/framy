@@ -1,8 +1,12 @@
 # Changelog
 
-## [0.1.8]
+## [0.1.9]
 
 * Added support for grouping widgets in navigation drawer #110
+
+## [0.1.8]
+
+* Added basic Storyboard generation #10
 
 ## [0.1.7]
 

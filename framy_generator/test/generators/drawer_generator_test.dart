@@ -85,6 +85,11 @@ void main() {
         final String result = generateDrawer([]);
         expect(result.contains('\'/textfield\''), isTrue);
       });
+
+      test('should contain /storyboard route name', () {
+        final String result = generateDrawer([]);
+        expect(result.contains('\'/storyboard\''), isTrue);
+      });
     });
 
     group('when custom widget is given', () {
@@ -149,6 +154,35 @@ void main() {
       //then
       expect(
           RegExp('Text\\(\n *\'Some group\'').allMatches(result), hasLength(1));
+    });
+
+    group('when custom page is given', () {
+      //given
+      final pageFramyObjects = [
+        FramyObject()
+          ..type = FramyObjectType.page
+          ..name = 'MyHomePage'
+      ];
+
+      test('should contain page name', () {
+        //when
+        final result = generateDrawer(pageFramyObjects);
+        //then
+        expect(
+          result.contains('Text(\'MyHomePage\''),
+          isTrue,
+        );
+      });
+
+      test('should contain /pageName route name', () {
+        //when
+        final result = generateDrawer(pageFramyObjects);
+        //then
+        expect(
+          result.contains('\'/MyHomePage\''),
+          isTrue,
+        );
+      });
     });
   });
 }

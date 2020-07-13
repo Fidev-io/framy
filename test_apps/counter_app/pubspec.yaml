@@ -8,7 +8,6 @@ dependencies:
   flutter:
     sdk: flutter
   framy_annotation: ^0.1.4
-#    path: ../../framy_annotation
   device_preview: ^0.4.5
 
 dev_dependencies:

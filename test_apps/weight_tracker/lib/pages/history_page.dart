@@ -12,7 +12,7 @@ final weightEntries = Provider((ref) => [
     ]);
 
 @FramyUseRiverpod('weightEntries')
-@framyWidget
+@FramyWidget(isPage: true)
 class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

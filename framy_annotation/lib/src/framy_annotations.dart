@@ -47,6 +47,7 @@ class FramyTheme extends FramyAnnotation {
 const framyTheme = FramyTheme();
 
 /// Used to annotate a Widget to be included as a component
+/// [isPage] - indicates if the widget will be considered as a page (will be displayed in Storyboard page)
 /// [groupName] - Used for creating a directory in the navigation drawer in which widget will be placed.
 ///   It can help organize widgets by domain or size.
 ///
@@ -66,8 +67,9 @@ const framyTheme = FramyTheme();
 ///
 class FramyWidget extends FramyAnnotation {
   final String groupName;
+  final bool isPage;
 
-  const FramyWidget({this.groupName});
+  const FramyWidget({this.isPage = false, this.groupName});
 }
 
 const framyWidget = FramyWidget();
