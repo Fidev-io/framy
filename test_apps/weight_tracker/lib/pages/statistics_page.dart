@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:framy_annotation/framy_annotation.dart';
 import 'package:weight_tracker/models/statistics_page_state.dart';
 
-@framyWidget
+@FramyWidget(isPage: true)
 class StatisticsPage extends StatelessWidget {
   final StatisticsPageState state;
 

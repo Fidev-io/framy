@@ -7,7 +7,7 @@ import 'package:weight_tracker/widgets/user_emails_view.dart';
 import 'package:weight_tracker/widgets/weight_unit_display.dart';
 
 @FramyUseProvider(User)
-@framyWidget
+@FramyWidget(isPage: true)
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

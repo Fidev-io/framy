@@ -47,8 +47,11 @@ class FramyTheme extends FramyAnnotation {
 const framyTheme = FramyTheme();
 
 /// Used to annotate a Widget to be included as a component
+/// [isPage] - indicates if the widget will be considered as a page (will be displayed in Storyboard page)
 class FramyWidget extends FramyAnnotation {
-  const FramyWidget();
+  final bool isPage;
+
+  const FramyWidget({this.isPage = false});
 }
 
 const framyWidget = FramyWidget();

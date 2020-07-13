@@ -70,6 +70,26 @@ class FramyDrawer extends StatelessWidget {
                 ),
               ),
               ${_generateCustomWidgetTiles(widgetFramyObjects)}
+              ListTile(
+                leading: Icon(Icons.view_carousel),
+                title: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    Text('Storyboard'),
+                    Chip(
+                      label: Text(
+                        'Preview',
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ],
+                ),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/storyboard'),
+              ),
             ],
           ),
         ),
@@ -78,10 +98,13 @@ class FramyDrawer extends StatelessWidget {
   }
 }
 ''';
+
 String _generateCustomWidgetTiles(List<FramyObject> widgetObjects) {
   String result = '';
   widgetObjects
-      .where((framyObject) => framyObject.type == FramyObjectType.widget)
+      .where((framyObject) =>
+          framyObject.type == FramyObjectType.widget ||
+          framyObject.type == FramyObjectType.page)
       .forEach(
     (widgetFramyObject) {
       final className = widgetFramyObject.name;
