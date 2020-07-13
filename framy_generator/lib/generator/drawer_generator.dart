@@ -102,25 +102,24 @@ class FramyDrawer extends StatelessWidget {
 String _generateCustomWidgetTiles(List<FramyObject> objects) {
   final widgetObjects = objects
       .where((framyObject) =>
-  framyObject.type == FramyObjectType.widget ||
-      framyObject.type == FramyObjectType.page)
+          framyObject.type == FramyObjectType.widget ||
+          framyObject.type == FramyObjectType.page)
       .toList();
 
   final groupNames = widgetObjects.map((o) => o.widgetGroupName).toSet();
 
   String result = groupNames.fold(
     '',
-        (prev, groupName) =>
-    prev + _generateGroupTiles(groupName, widgetObjects),
+    (prev, groupName) => prev + _generateGroupTiles(groupName, widgetObjects),
   );
 
   result = widgetObjects
       .where((element) => element.widgetGroupName == null)
       .toList()
       .fold(
-    result,
+        result,
         (prev, framyObject) => prev + _generateTile(framyObject.name),
-  );
+      );
   return result;
 }
 
