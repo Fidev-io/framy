@@ -410,10 +410,10 @@ void main() {
   });
 
   group('Storyboard page', () {
-    test('should go Storyboard page', () async {
+    test('should open', () async {
       await closeDependenciesPanelAndGoToOtherPage(
         'Storyboard',
-        openDependenciesPanel: true,
+        openDependenciesPanel: false,
       );
     });
 

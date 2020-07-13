@@ -1397,8 +1397,12 @@ class FramyStoryboardPage extends StatelessWidget {
                 'weightEntries', 'List<WeightEntry>', null),
           ],
           builder: (DependencyValueGetter valueGetter) {
-            return HistoryPage(
-              weightEntries: valueGetter('weightEntries'),
+            return ProviderScope(
+              overrides: [
+                weightEntries
+                    .overrideAs(Provider((_) => valueGetter('weightEntries'))),
+              ],
+              child: HistoryPage(),
             );
           },
         ),
@@ -1420,9 +1424,9 @@ class FramyStoryboardPage extends StatelessWidget {
             FramyDependencyModel<User>('User', 'User', null),
           ],
           builder: (DependencyValueGetter valueGetter) {
-            return MultiProvider(
+            return provider.MultiProvider(
               providers: [
-                Provider<User>.value(value: valueGetter('User')),
+                provider.Provider<User>.value(value: valueGetter('User')),
               ],
               child: ProfilePage(),
             );

@@ -72,7 +72,7 @@ FramyStoryboardCustomPageWithDependencies(
     ${initializeFramyObjectDependencies(framyObject)}
   ],
   builder: (DependencyValueGetter valueGetter) {
-    return ${wrapConstructorWithProvider(framyObject)};
+    return ${wrapConstructor(framyObject)};
   },
 ),
 ''';

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.8]
+
+* Added basic Storyboard generation #10
+
 ## [0.1.7]
 
 * Added support for models generated with [BuiltValue](https://pub.dev/packages/built_value) library #117
