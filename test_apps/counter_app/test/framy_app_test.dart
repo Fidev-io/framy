@@ -1,6 +1,5 @@
 import 'package:counter_app/main.app.framy.dart';
 import 'package:counter_app/main.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

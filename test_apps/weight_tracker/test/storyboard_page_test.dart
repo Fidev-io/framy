@@ -7,17 +7,17 @@ import 'package:weight_tracker/pages/statistics_page.dart';
 import 'test_utils.dart';
 
 void main() {
-  group('StoryBoardPage', () {
+  group('StoryboardPage', () {
     testWidgets('should build', (WidgetTester tester) async {
       await tester.pumpWidget(
-        FramyAppWrapperWithScaffold(FramyStoryBoardPage()),
+        FramyAppWrapperWithScaffold(FramyStoryboardPage()),
       );
-      expect(find.byType(FramyStoryBoardPage), findsOneWidget);
+      expect(find.byType(FramyStoryboardPage), findsOneWidget);
     });
 
     testWidgets('should have proper pages', (WidgetTester tester) async {
       await tester.pumpWidget(
-        FramyAppWrapperWithScaffold(FramyStoryBoardPage()),
+        FramyAppWrapperWithScaffold(FramyStoryboardPage()),
       );
       expect(find.byType(StatisticsPage), findsOneWidget);
       expect(find.byType(ProfilePage), findsOneWidget);

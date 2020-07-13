@@ -392,10 +392,10 @@ void main() {
     });
   });
 
-  group('StoryBoard page', () {
-    test('should go StoryBoard page', () async {
+  group('Storyboard page', () {
+    test('should go Storyboard page', () async {
       await closeDependenciesPanelAndGoToOtherPage(
-        'Story board',
+        'Storyboard',
         openDependenciesPanel: true,
       );
     });

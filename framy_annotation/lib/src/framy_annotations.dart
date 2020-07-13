@@ -11,6 +11,7 @@ abstract class FramyAnnotation {
 /// **IMPORTANT**: when it's set to true then it is required to add device_preview package as dependency in pubspec.yaml!
 class FramyApp extends FramyAnnotation {
   final bool useDevicePreview;
+
   const FramyApp({this.useDevicePreview = false});
 }
 
@@ -46,8 +47,10 @@ class FramyTheme extends FramyAnnotation {
 const framyTheme = FramyTheme();
 
 /// Used to annotate a Widget to be included as a component
+/// [isPage] - indicates if the widget will be considered as a page (will be displayed in Storyboard page)
 class FramyWidget extends FramyAnnotation {
   final bool isPage;
+
   const FramyWidget({this.isPage = false});
 }
 
@@ -68,5 +71,6 @@ const framyPreset = FramyPreset();
 
 class FramyUseProvider extends FramyAnnotation {
   final Type providerType;
+
   const FramyUseProvider(this.providerType);
 }

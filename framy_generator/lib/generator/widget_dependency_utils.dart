@@ -1,7 +1,18 @@
 import 'package:framy_generator/framy_object.dart';
+import 'package:framy_generator/generator/utils.dart';
 
-String wrapConstructorWithProvider(
-    String constructor, List<FramyObjectDependency> providerDependencies) {
+String wrapConstructorWithProvider(FramyObject framyObject) {
+  final constructorDependencies = framyObject.constructors.first.dependencies
+      .where((dep) => dep.dependencyType == FramyDependencyType.constructor)
+      .toList();
+  final providerDependencies = framyObject.constructors.first.dependencies
+      .where((dep) => dep.dependencyType == FramyDependencyType.provider)
+      .toList();
+
+  final constructor = '''${framyObject.name}(
+  ${constructorDependencies.fold('', (s, dep) => s + generateParamUsageInConstructor(dep))}
+  )''';
+
   if (providerDependencies.isEmpty) {
     return constructor;
   } else {
@@ -21,4 +32,8 @@ String providerDependencyToProviderWidget(FramyObjectDependency dependency) =>
 String generateParamUsageInConstructor(FramyObjectDependency dependency) {
   final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';
   return '${nameInConstructor}valueGetter(\'${dependency.name}\'),\n';
+}
+
+String initializeFramyObjectDependencies (FramyObject framyObject) {
+  return framyObject.constructors.first.dependencies.fold('', (s, dep) => s + dependencyInitializationLine(dep));
 }

@@ -10,7 +10,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/toggle': FramyTogglePage(),
     '/textfield': FramyTextFieldPage(),
     ${_generateCustomWidgetPages(widgetFramyObjects)}
-    '/storyBoard': FramyStoryBoardPage(),
+    '/storyboard': FramyStoryboardPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(

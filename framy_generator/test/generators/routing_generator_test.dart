@@ -74,9 +74,9 @@ void main() {
       expect(result.contains('FramyMyHomePageCustomPage'), isTrue);
     });
 
-    test('should contain StoryBoardPage', () {
+    test('should contain FramyStoryboardPage', () {
       final result = generateRouting([]);
-      expect(result.contains('StoryBoardPage'), isTrue);
+      expect(result.contains('FramyStoryboardPage'), isTrue);
     });
   });
 }

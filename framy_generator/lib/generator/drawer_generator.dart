@@ -71,10 +71,24 @@ class FramyDrawer extends StatelessWidget {
               ),
               ${_generateCustomWidgetTiles(widgetFramyObjects)}
               ListTile(
-                leading: SizedBox.shrink(),
-                title: Text('Story board'),
+                leading: Icon(Icons.view_carousel),
+                title: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    Text('Storyboard'),
+                    Chip(
+                      label: Text(
+                        'Preview',
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ],
+                ),
                 onTap: () =>
-                    Navigator.of(context).pushReplacementNamed('/storyBoard'),
+                    Navigator.of(context).pushReplacementNamed('/storyboard'),
               ),
             ],
           ),

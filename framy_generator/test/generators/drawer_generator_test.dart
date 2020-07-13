@@ -86,9 +86,9 @@ void main() {
         expect(result.contains('\'/textfield\''), isTrue);
       });
 
-      test('should contain /storyBoard route name', () {
+      test('should contain /storyboard route name', () {
         final String result = generateDrawer([]);
-        expect(result.contains('\'/storyBoard\''), isTrue);
+        expect(result.contains('\'/storyboard\''), isTrue);
       });
     });
 
@@ -123,7 +123,7 @@ void main() {
 
     group('when custom page is given', () {
       //given
-      final widgetsFramyObjects = [
+      final pageFramyObjects = [
         FramyObject()
           ..type = FramyObjectType.page
           ..name = 'MyHomePage'
@@ -131,7 +131,7 @@ void main() {
 
       test('should contain page name', () {
         //when
-        final result = generateDrawer(widgetsFramyObjects);
+        final result = generateDrawer(pageFramyObjects);
         //then
         expect(
           result.contains('Text(\'MyHomePage\''),
@@ -141,7 +141,7 @@ void main() {
 
       test('should contain /pageName route name', () {
         //when
-        final result = generateDrawer(widgetsFramyObjects);
+        final result = generateDrawer(pageFramyObjects);
         //then
         expect(
           result.contains('\'/MyHomePage\''),

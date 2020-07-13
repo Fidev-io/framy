@@ -1,15 +1,17 @@
 import 'package:framy_generator/framy_object.dart';
-import 'package:framy_generator/generator/utils.dart';
 import 'package:framy_generator/generator/widget_dependency_utils.dart';
 
-String generateStoryBoardPage(List<FramyObject> widgetFramyObjects, List<FramyObject> modelFramyObjects) {
-  String gridViewChildren = widgetFramyObjects.fold(
+String generateStoryboardPage(List<FramyObject> widgetFramyObjects, List<FramyObject> modelFramyObjects) {
+  final pageFramyObjects = widgetFramyObjects
+      .where((element) => element.type == FramyObjectType.page)
+      .toList();
+  String gridViewChildren = pageFramyObjects.fold(
     '',
         (previousValue, element) => previousValue + _generateStoryboardWidgetPage(element),
   );
   return '''
-class FramyStoryBoardPage extends StatelessWidget {
-  const FramyStoryBoardPage() : super(key: const Key('FramyStoryBoardPage'));
+class FramyStoryboardPage extends StatelessWidget {
+  const FramyStoryboardPage() : super(key: const Key('FramyStoryboardPage'));
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +31,10 @@ class FramyStoryBoardPage extends StatelessWidget {
 class FramyStoryboardCustomPageWithDependencies extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
   final Widget Function(DependencyValueGetter dependencyValueGetter) builder;
-
+  final String name;
+  
   const FramyStoryboardCustomPageWithDependencies(
-      {Key key, this.dependencies, this.builder})
+      {Key key, this.dependencies, this.builder, this.name})
       : super(key: key);
 
   FramyDependencyModel dependency(String name) =>
@@ -41,12 +44,20 @@ class FramyStoryboardCustomPageWithDependencies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black54),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: builder(dependencyValue),
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: builder(dependencyValue),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(name, style: Theme.of(context).textTheme.caption),
+      ],
     );
   }
 }
@@ -54,24 +65,14 @@ class FramyStoryboardCustomPageWithDependencies extends StatelessWidget {
 }
 
 String _generateStoryboardWidgetPage(FramyObject framyObject) {
-  final constructorDependencies = framyObject.constructors.first.dependencies
-      .where((dep) => dep.dependencyType == FramyDependencyType.constructor)
-      .toList();
-  final providerDependencies = framyObject.constructors.first.dependencies
-      .where((dep) => dep.dependencyType == FramyDependencyType.provider)
-      .toList();
-
-  final constructor = '''${framyObject.name}(
-  ${constructorDependencies.fold('', (s, dep) => s + generateParamUsageInConstructor(dep))}
-  )''';
-
   return '''
 FramyStoryboardCustomPageWithDependencies(
+  name: '${framyObject.name}',
   dependencies: [
-    ${framyObject.constructors.first.dependencies.fold('', (s, dep) => s + dependencyInitializationLine(dep))}
+    ${initializeFramyObjectDependencies(framyObject)}
   ],
   builder: (DependencyValueGetter valueGetter) {
-    return ${wrapConstructorWithProvider(constructor, providerDependencies)};
+    return ${wrapConstructorWithProvider(framyObject)};
   },
 ),
 ''';

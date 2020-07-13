@@ -113,7 +113,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/UserEmailsView': FramyUserEmailsViewCustomPage(),
     '/WeightUnitDisplay': FramyWeightUnitDisplayCustomPage(),
     '/WeightEntryListItem': FramyWeightEntryListItemCustomPage(),
-    '/storyBoard': FramyStoryBoardPage(),
+    '/storyboard': FramyStoryboardPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -346,10 +346,24 @@ class FramyDrawer extends StatelessWidget {
                     .pushReplacementNamed('/WeightEntryListItem'),
               ),
               ListTile(
-                leading: SizedBox.shrink(),
-                title: Text('Story board'),
+                leading: Icon(Icons.view_carousel),
+                title: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    Text('Storyboard'),
+                    Chip(
+                      label: Text(
+                        'Preview',
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ],
+                ),
                 onTap: () =>
-                    Navigator.of(context).pushReplacementNamed('/storyBoard'),
+                    Navigator.of(context).pushReplacementNamed('/storyboard'),
               ),
             ],
           ),
@@ -1332,8 +1346,8 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
   }
 }
 
-class FramyStoryBoardPage extends StatelessWidget {
-  const FramyStoryBoardPage() : super(key: const Key('FramyStoryBoardPage'));
+class FramyStoryboardPage extends StatelessWidget {
+  const FramyStoryboardPage() : super(key: const Key('FramyStoryboardPage'));
 
   @override
   Widget build(BuildContext context) {
@@ -1345,6 +1359,7 @@ class FramyStoryBoardPage extends StatelessWidget {
       childAspectRatio: 1 / 2,
       children: [
         FramyStoryboardCustomPageWithDependencies(
+          name: 'HistoryPage',
           dependencies: [
             FramyDependencyModel<List<WeightEntry>>(
                 'weightEntries', 'List<WeightEntry>', null),
@@ -1356,6 +1371,7 @@ class FramyStoryBoardPage extends StatelessWidget {
           },
         ),
         FramyStoryboardCustomPageWithDependencies(
+          name: 'StatisticsPage',
           dependencies: [
             FramyDependencyModel<StatisticsPageState>(
                 'state', 'StatisticsPageState', null),
@@ -1367,6 +1383,7 @@ class FramyStoryBoardPage extends StatelessWidget {
           },
         ),
         FramyStoryboardCustomPageWithDependencies(
+          name: 'ProfilePage',
           dependencies: [
             FramyDependencyModel<User>('User', 'User', null),
           ],
@@ -1379,17 +1396,6 @@ class FramyStoryBoardPage extends StatelessWidget {
             );
           },
         ),
-        FramyStoryboardCustomPageWithDependencies(
-          dependencies: [
-            FramyDependencyModel<List<WeightEntry>>(
-                'weightEntries', 'List<WeightEntry>', null),
-          ],
-          builder: (DependencyValueGetter valueGetter) {
-            return HistoryPage(
-              weightEntries: valueGetter('weightEntries'),
-            );
-          },
-        ),
       ],
     );
   }
@@ -1398,9 +1404,10 @@ class FramyStoryBoardPage extends StatelessWidget {
 class FramyStoryboardCustomPageWithDependencies extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
   final Widget Function(DependencyValueGetter dependencyValueGetter) builder;
+  final String name;
 
   const FramyStoryboardCustomPageWithDependencies(
-      {Key key, this.dependencies, this.builder})
+      {Key key, this.dependencies, this.builder, this.name})
       : super(key: key);
 
   FramyDependencyModel dependency(String name) =>
@@ -1410,12 +1417,20 @@ class FramyStoryboardCustomPageWithDependencies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black54),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: builder(dependencyValue),
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: builder(dependencyValue),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(name, style: Theme.of(context).textTheme.caption),
+      ],
     );
   }
 }

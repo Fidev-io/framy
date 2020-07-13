@@ -23,7 +23,7 @@ import 'package:framy_generator/generator/model_constructor_map_generator.dart';
 import 'package:framy_generator/generator/preset_dropdown_generator.dart';
 import 'package:framy_generator/generator/presets_map_generator.dart';
 import 'package:framy_generator/generator/routing_generator.dart';
-import 'package:framy_generator/generator/story_board_generator.dart';
+import 'package:framy_generator/generator/storyboard_generator.dart';
 import 'package:framy_generator/generator/subdependencies_map_generator.dart';
 import 'package:framy_generator/generator/text_field_generator.dart';
 import 'package:framy_generator/generator/toggle_page_generator.dart';
@@ -50,9 +50,6 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     final presetFramyObjects =
         await _loadFramyObjects(buildStep, '**.preset.framy.json');
     final useDevicePreview = annotation.read('useDevicePreview').boolValue;
-    final pageFramyObjects = widgetFramyObjects
-        .where((element) => element.type == FramyObjectType.page)
-        .toList();
 
     final buffer = StringBuffer();
     buffer.writeln(generateImports([
@@ -82,7 +79,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateWidgetPages(widgetFramyObjects, modelFramyObjects));
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
-    buffer.writeln(generateStoryBoardPage(pageFramyObjects, modelFramyObjects));
+    buffer.writeln(generateStoryboardPage(widgetFramyObjects, modelFramyObjects));
     buffer.writeln(
         '\n// ======================== DEPENDENCY INPUTS ===========================\n');
     buffer.writeln(generateWidgetDependencyInput(modelFramyObjects));
