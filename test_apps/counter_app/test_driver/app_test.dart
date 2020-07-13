@@ -370,4 +370,14 @@ void main() {
       },
     );
   });
+
+  test('A drawer should be optionally hidden on bigger devices', () async {
+    if (await isDeviceBig()) {
+      await driver.waitFor(find.text('Typography'));
+      await driver.tap(find.byTooltip('Close navigation menu'));
+      await driver.waitForAbsent(find.text('Typography'));
+      await driver.tap(find.byTooltip('Open navigation menu'));
+      await driver.waitFor(find.text('Typography'));
+    }
+  });
 }

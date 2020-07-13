@@ -13,6 +13,7 @@ class FramyAppWrapper extends StatelessWidget {
       wrapWithScaffold: true,
       wrapWithSafeArea: false,
       wrapWithCenter: false,
+      showNavigationMenu: true,
       child: MaterialApp(
         theme: AppTheme.themeData,
         home: child,

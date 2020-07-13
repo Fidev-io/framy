@@ -85,11 +85,11 @@ void main() {
         final String result = generateDrawer([]);
         expect(result.contains('\'/textfield\''), isTrue);
       });
+    });
 
-      test('should contain /storyboard route name', () {
-        final String result = generateDrawer([]);
-        expect(result.contains('\'/storyboard\''), isTrue);
-      });
+    test('should contain /storyboard route name', () {
+      final String result = generateDrawer([]);
+      expect(result.contains('\'/storyboard\''), isTrue);
     });
 
     group('when custom widget is given', () {
