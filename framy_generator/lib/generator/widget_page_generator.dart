@@ -1,5 +1,6 @@
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/utils.dart';
+import 'package:framy_generator/generator/widget_dependency_utils.dart';
 
 String generateWidgetPages(
     List<FramyObject> widgetFramyObjects, List<FramyObject> modelFramyObjects) {
@@ -18,7 +19,7 @@ String _generateWidgetPage(FramyObject framyObject) {
       .toList();
 
   final constructor = '''${framyObject.name}(
-  ${constructorDependencies.fold('', (s, dep) => s + _generateParamUsageInConstructor(dep))}
+  ${constructorDependencies.fold('', (s, dep) => s + generateParamUsageInConstructor(dep))}
   )''';
 
   final className = 'Framy${framyObject.name}CustomPage';
@@ -34,33 +35,10 @@ class $className extends StatelessWidget {
         ${framyObject.constructors.first.dependencies.fold('', (s, dep) => s + dependencyInitializationLine(dep))}
       ],
       builder: (DependencyValueGetter valueGetter) {
-        return ${_wrapConstructorWithProvider(constructor, providerDependencies)};
+        return ${wrapConstructorWithProvider(constructor, providerDependencies)};
       },
     );
   }
 }
 ''';
-}
-
-String _wrapConstructorWithProvider(
-    String constructor, List<FramyObjectDependency> providerDependencies) {
-  if (providerDependencies.isEmpty) {
-    return constructor;
-  } else {
-    return '''
-      MultiProvider(
-        providers: [
-          ${providerDependencies.fold('', (prev, dep) => prev + _providerDependencyToProviderWidget(dep))}
-        ],
-        child: $constructor,
-      )''';
-  }
-}
-
-String _providerDependencyToProviderWidget(FramyObjectDependency dependency) =>
-    'Provider<${dependency.type}>.value(value: valueGetter(\'${dependency.name}\')),\n';
-
-String _generateParamUsageInConstructor(FramyObjectDependency dependency) {
-  final nameInConstructor = dependency.isNamed ? '${dependency.name}: ' : '';
-  return '${nameInConstructor}valueGetter(\'${dependency.name}\'),\n';
 }

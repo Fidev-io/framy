@@ -58,5 +58,25 @@ void main() {
       //then
       expect(result.contains('FramyMyCustomWidgetCustomPage'), isTrue);
     });
+
+    test(
+        'should contain dynamically generated page name when page object is passed',
+        () {
+      //given
+      final framyObjects = [
+        FramyObject()
+          ..name = 'MyHomePage'
+          ..type = FramyObjectType.page
+      ];
+      //when
+      final result = generateRouting(framyObjects);
+      //then
+      expect(result.contains('FramyMyHomePageCustomPage'), isTrue);
+    });
+
+    test('should contain StoryBoardPage', () {
+      final result = generateRouting([]);
+      expect(result.contains('StoryBoardPage'), isTrue);
+    });
   });
 }

@@ -10,6 +10,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/toggle': FramyTogglePage(),
     '/textfield': FramyTextFieldPage(),
     ${_generateCustomWidgetPages(widgetFramyObjects)}
+    '/storyBoard': FramyStoryBoardPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -18,10 +19,13 @@ Route onGenerateRoute(RouteSettings settings) {
   );
 }
 ''';
+
 String _generateCustomWidgetPages(List<FramyObject> widgetObjects) {
   String result = '';
   widgetObjects
-      .where((framyObject) => framyObject.type == FramyObjectType.widget)
+      .where((framyObject) =>
+          framyObject.type == FramyObjectType.widget ||
+          framyObject.type == FramyObjectType.page)
       .forEach(
     (widgetFramyObject) {
       final className = widgetFramyObject.name;

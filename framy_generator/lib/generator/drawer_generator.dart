@@ -70,6 +70,12 @@ class FramyDrawer extends StatelessWidget {
                 ),
               ),
               ${_generateCustomWidgetTiles(widgetFramyObjects)}
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('Story board'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/storyBoard'),
+              ),
             ],
           ),
         ),
@@ -78,10 +84,13 @@ class FramyDrawer extends StatelessWidget {
   }
 }
 ''';
+
 String _generateCustomWidgetTiles(List<FramyObject> widgetObjects) {
   String result = '';
   widgetObjects
-      .where((framyObject) => framyObject.type == FramyObjectType.widget)
+      .where((framyObject) =>
+          framyObject.type == FramyObjectType.widget ||
+          framyObject.type == FramyObjectType.page)
       .forEach(
     (widgetFramyObject) {
       final className = widgetFramyObject.name;

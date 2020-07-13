@@ -47,7 +47,8 @@ const framyTheme = FramyTheme();
 
 /// Used to annotate a Widget to be included as a component
 class FramyWidget extends FramyAnnotation {
-  const FramyWidget();
+  final bool isPage;
+  const FramyWidget({this.isPage = false});
 }
 
 const framyWidget = FramyWidget();

@@ -391,4 +391,19 @@ void main() {
       await driver.waitFor(find.text('Not supported type'));
     });
   });
+
+  group('StoryBoard page', () {
+    test('should go StoryBoard page', () async {
+      await closeDependenciesPanelAndGoToOtherPage(
+        'Story board',
+        openDependenciesPanel: true,
+      );
+    });
+
+    test('should contain 3 pages', () async {
+      await driver.waitFor(find.byType('StatisticsPage'));
+      await driver.waitFor(find.byType('ProfilePage'));
+      await driver.waitFor(find.byType('HistoryPage'));
+    });
+  });
 }

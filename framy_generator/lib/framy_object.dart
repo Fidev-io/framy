@@ -122,6 +122,7 @@ enum FramyObjectType {
   model,
   preset,
   enumModel,
+  page,
 }
 
 enum FramyDependencyType { constructor, provider }

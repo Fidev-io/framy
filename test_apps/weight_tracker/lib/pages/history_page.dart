@@ -3,7 +3,7 @@ import 'package:framy_annotation/framy_annotation.dart';
 import 'package:weight_tracker/models/weight_entry.dart';
 import 'package:weight_tracker/widgets/weight_entry_list_item.dart';
 
-@framyWidget
+@FramyWidget(isPage: true)
 class HistoryPage extends StatelessWidget {
   final List<WeightEntry> weightEntries;
 
@@ -11,7 +11,7 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (weightEntries?.isEmpty ?? true) {
+    if (weightEntries.isEmpty) {
       return Center(
         child: Text('No entries'),
       );

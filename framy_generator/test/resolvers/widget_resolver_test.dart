@@ -225,3 +225,9 @@ class WidgetWithStringProviderDependency {
 class WidgetWithUserProviderDependency {
   WidgetWithUserProviderDependency() {}
 }
+
+@ShouldGenerate('"type": "FramyObjectType.page"', contains: true)
+@FramyWidget(isPage: true)
+class PageWidget {
+  PageWidget() {}
+}

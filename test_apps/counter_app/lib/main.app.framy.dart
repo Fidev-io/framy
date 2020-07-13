@@ -87,6 +87,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/button': FramyButtonPage(),
     '/toggle': FramyTogglePage(),
     '/textfield': FramyTextFieldPage(),
+    '/MyHomePage': FramyMyHomePageCustomPage(),
     '/CounterFAB': FramyCounterFABCustomPage(),
     '/CounterTitle': FramyCounterTitleCustomPage(),
   };
@@ -271,6 +272,12 @@ class FramyDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('MyHomePage'),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/MyHomePage'),
               ),
               ListTile(
                 leading: SizedBox.shrink(),
@@ -996,6 +1003,23 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
           }
         },
       ),
+    );
+  }
+}
+
+class FramyMyHomePageCustomPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FramyCustomPage(
+      key: Key('Framy_MyHomePage_Page'),
+      dependencies: [
+        FramyDependencyModel<String>('title', 'String', null),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return MyHomePage(
+          title: valueGetter('title'),
+        );
+      },
     );
   }
 }
