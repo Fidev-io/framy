@@ -99,23 +99,58 @@ class FramyDrawer extends StatelessWidget {
 }
 ''';
 
-String _generateCustomWidgetTiles(List<FramyObject> widgetObjects) {
-  String result = '';
-  widgetObjects
+String _generateCustomWidgetTiles(List<FramyObject> objects) {
+  final widgetObjects = objects
       .where((framyObject) =>
           framyObject.type == FramyObjectType.widget ||
           framyObject.type == FramyObjectType.page)
-      .forEach(
-    (widgetFramyObject) {
-      final className = widgetFramyObject.name;
-      result += '''
+      .toList();
+
+  final groupNames = widgetObjects.map((o) => o.widgetGroupName).toSet();
+
+  String result = groupNames.fold(
+    '',
+    (prev, groupName) => prev + _generateGroupTiles(groupName, widgetObjects),
+  );
+
+  result = widgetObjects
+      .where((element) => element.widgetGroupName == null)
+      .toList()
+      .fold(
+        result,
+        (prev, framyObject) => prev + _generateTile(framyObject.name),
+      );
+  return result;
+}
+
+String _generateGroupTiles(String groupName, List<FramyObject> widgetObjects) {
+  if (groupName == null) {
+    return '';
+  }
+  String result = '''
+Theme(
+  data: Theme.of(context).copyWith(accentColor: Colors.black54),
+  child: ExpansionTile(
+    leading: Icon(Icons.folder_open),
+    title: Text(
+      '$groupName',
+      style: TextStyle(color: Colors.black),
+    ),
+    children: [
+''';
+  result = widgetObjects
+      .where((obj) => obj.widgetGroupName == groupName)
+      .toList()
+      .fold(result,
+          (prev, widgetObject) => prev + _generateTile(widgetObject.name));
+  result += '],),),';
+  return result;
+}
+
+String _generateTile(String className) => '''
 ListTile(
   leading: SizedBox.shrink(),
   title: Text('$className'),
   onTap: () => Navigator.of(context).pushReplacementNamed('/$className'),
 ),
 ''';
-    },
-  );
-  return result;
-}

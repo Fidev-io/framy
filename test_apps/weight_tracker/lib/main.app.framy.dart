@@ -302,6 +302,30 @@ class FramyDrawer extends StatelessWidget {
                   ],
                 ),
               ),
+              Theme(
+                data: Theme.of(context).copyWith(accentColor: Colors.black54),
+                child: ExpansionTile(
+                  leading: Icon(Icons.folder_open),
+                  title: Text(
+                    'Dummy Widgets',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  children: [
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('BuiltValueExampleWidget'),
+                      onTap: () => Navigator.of(context)
+                          .pushReplacementNamed('/BuiltValueExampleWidget'),
+                    ),
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('DummyTestWidget'),
+                      onTap: () => Navigator.of(context)
+                          .pushReplacementNamed('/DummyTestWidget'),
+                    ),
+                  ],
+                ),
+              ),
               ListTile(
                 leading: SizedBox.shrink(),
                 title: Text('HistoryPage'),
@@ -319,18 +343,6 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('ProfilePage'),
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/ProfilePage'),
-              ),
-              ListTile(
-                leading: SizedBox.shrink(),
-                title: Text('BuiltValueExampleWidget'),
-                onTap: () => Navigator.of(context)
-                    .pushReplacementNamed('/BuiltValueExampleWidget'),
-              ),
-              ListTile(
-                leading: SizedBox.shrink(),
-                title: Text('DummyTestWidget'),
-                onTap: () => Navigator.of(context)
-                    .pushReplacementNamed('/DummyTestWidget'),
               ),
               ListTile(
                 leading: SizedBox.shrink(),

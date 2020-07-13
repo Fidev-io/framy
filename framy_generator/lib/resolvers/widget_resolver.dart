@@ -81,6 +81,9 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
           ),
         );
       }
+
+      //add groupName
+      framyObject.widgetGroupName = annotation.peek('groupName')?.stringValue;
     }
 
     framyObjectsToReturn.add(framyObject);

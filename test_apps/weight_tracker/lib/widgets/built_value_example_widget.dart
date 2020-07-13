@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:framy_annotation/framy_annotation.dart';
 import 'package:weight_tracker/models/built_value_user.dart';
 
-@framyWidget
+@FramyWidget(groupName: 'Dummy Widgets')
 class BuiltValueExampleWidget extends StatelessWidget {
   final BuiltUser user;
 

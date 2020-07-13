@@ -242,3 +242,7 @@ class WidgetWithRiverpodDependency {}
 class PageWidget {
   PageWidget() {}
 }
+
+@ShouldGenerate('"widgetGroupName": "Some group"', contains: true)
+@FramyWidget(groupName: 'Some group')
+class WidgetWithGroupName {}
