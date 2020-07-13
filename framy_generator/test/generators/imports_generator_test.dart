@@ -52,7 +52,9 @@ void main() {
       //when
       final result = generateImports([framyObject]);
       //then
-      expect(result.contains('import \'package:provider/provider.dart\';\n'),
+      expect(
+          result.contains(
+              'import \'package:provider/provider.dart\' as provider;\n'),
           isTrue);
     });
   });

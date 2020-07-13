@@ -17,25 +17,32 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
       if (element.isEnum) {
         framyObject.type = FramyObjectType.enumModel;
       } else {
-        for (ConstructorElement constructorElement in element.constructors) {
-          String constructorName = constructorElement.name;
-          if (constructorName.isNotEmpty) {
-            constructorName = '.$constructorName';
-          }
-          final constructorObject = FramyObjectConstructor(constructorName, []);
+        if (element.isBuiltValue) {
+          _generateForBuiltValueModel(element, framyObject);
+        } else {
+          for (ConstructorElement constructorElement in element.constructors) {
+            if (constructorElement.isPrivate) continue;
 
-          for (ParameterElement param in constructorElement.parameters) {
-            constructorObject.dependencies.add(
-              FramyObjectDependency(
-                param.name,
-                parseDartType(param.type),
-                param.defaultValueCode,
-                param.isNamed,
-              ),
-            );
-          }
+            String constructorName = constructorElement.name;
+            if (constructorName.isNotEmpty) {
+              constructorName = '.$constructorName';
+            }
+            final constructorObject =
+                FramyObjectConstructor(constructorName, []);
 
-          framyObject.constructors.add(constructorObject);
+            for (ParameterElement param in constructorElement.parameters) {
+              constructorObject.dependencies.add(
+                FramyObjectDependency(
+                  param.name,
+                  parseDartType(param.type),
+                  param.defaultValueCode,
+                  param.isNamed,
+                ),
+              );
+            }
+
+            framyObject.constructors.add(constructorObject);
+          }
         }
       }
     }
@@ -43,6 +50,24 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
     framyObjectsToReturn.add(framyObject);
 
     return framyObjectsToReturn.toJson();
+  }
+
+  void _generateForBuiltValueModel(
+      ClassElement element, FramyObject framyObject) {
+    final constructorObject =
+        FramyObjectConstructor('', [], isBuiltValue: true);
+
+    for (PropertyAccessorElement param in element.accessors) {
+      constructorObject.dependencies.add(
+        FramyObjectDependency(
+          param.name,
+          parseDartType(param.returnType),
+          null,
+          false,
+        ),
+      );
+    }
+    framyObject.constructors.add(constructorObject);
   }
 
   String parseDartType(DartType type) {
@@ -55,4 +80,10 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
 
   FramyObject _modelObjectFromElement(Element element) =>
       FramyObject.fromElement(element)..type = FramyObjectType.model;
+}
+
+extension on ClassElement {
+  bool get isBuiltValue => this
+      .allSupertypes
+      .any((interfaceType) => interfaceType.element.name == 'Built');
 }

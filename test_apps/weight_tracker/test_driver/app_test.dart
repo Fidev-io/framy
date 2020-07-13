@@ -392,6 +392,23 @@ void main() {
     });
   });
 
+  group('BuiltValueExampleWidget', () {
+    test('should go to BuiltValueExampleWidget page', () async {
+      await closeDependenciesPanelAndGoToOtherPage(
+        'BuiltValueExampleWidget',
+        openDependenciesPanel: true,
+      );
+    });
+
+    test('should allow to change built value dependencies', () async {
+      await driver.tap(find.byValueKey('framy_dependency_firstName_input'));
+      await driver.enterText('Juliusz');
+      await driver.tap(find.byValueKey('framy_dependency_lastName_input'));
+      await driver.enterText('Słowacki');
+      await driver.waitFor(find.text('Juliusz\nSłowacki'));
+    });
+  });
+
   group('Storyboard page', () {
     test('should go Storyboard page', () async {
       await closeDependenciesPanelAndGoToOtherPage(

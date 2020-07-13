@@ -6,6 +6,13 @@ builders:
     auto_apply: dependents
     runs_before: [":framy_builder"]
     build_to: cache
+  register_riverpod_builder:
+    import: "package:framy_generator/builder.dart"
+    builder_factories: ["registerRiverpodBuilder"]
+    build_extensions: { ".dart": [".riverpod.framy.json"] }
+    auto_apply: dependents
+    runs_before: [":widget_builder"]
+    build_to: cache
   widget_builder:
     import: "package:framy_generator/builder.dart"
     builder_factories: ["widgetBuilder"]

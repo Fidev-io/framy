@@ -63,14 +63,77 @@ class FramyModel extends FramyAnnotation {
 
 const framyModel = FramyModel();
 
+/// Used to annotate methods returning objects that are meant to be preset dependencies for widgets
+///
+/// Example:
+///
+/// @framyPreset
+/// User teenageJohn() => User('John', 'Doe', age: 13);
+///
 class FramyPreset extends FramyAnnotation {
   const FramyPreset();
 }
 
 const framyPreset = FramyPreset();
 
+/// Used to widgets that require Provider with a specified [type] to work
+///
+/// Example:
+///
+/// @FramyUseProvider(User)
+/// @framyWidget
+/// class ProfilePage extends StatelessWidget {
+///
+///   @override
+///   Widget build(BuildContext context) {
+///     return Consumer<User>( //<-- Framy will take care of this
+///       builder: (context, user, child) {
+///         return ...;
+///       },
+///     );
+///   }
+/// }
+///
 class FramyUseProvider extends FramyAnnotation {
   final Type providerType;
 
   const FramyUseProvider(this.providerType);
 }
+
+/// Used to widgets that want to override riverpod dependency and change it in generated app.
+/// A [providerName] is the name of Provider object that needs to overridden
+///
+/// Using [FramyUseRiverpod] also requires using [FramyRegisterRiverpod]!
+///
+/// Example:
+///
+/// @FramyRegisterRiverpod()
+/// final userProvider = Provider((ref) => User('Adam', 'Smith'));
+///
+/// @FramyUseRiverpod('userProvider')
+/// @framyWidget
+/// class UserPage extends StatelessWidget {
+///   @override
+///   Widget build(BuildContext context) {
+///     return Consumer((context, read) {
+///       final user = read(userProvider);
+///       ...
+///     });
+///   }
+/// }
+///
+class FramyUseRiverpod extends FramyAnnotation {
+  final String providerName;
+
+  const FramyUseRiverpod(this.providerName);
+}
+
+/// Used to annotate providers that are meant to be overridden for widgets
+///
+/// See example for annotation: [FramyUseRiverpod]
+///
+class FramyRegisterRiverpod extends FramyAnnotation {
+  const FramyRegisterRiverpod();
+}
+
+const framyRegisterRiverpod = const FramyRegisterRiverpod();

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.7]
+
+* Added support for models generated with [BuiltValue](https://pub.dev/packages/built_value) library #117
+
+## [0.1.6]
+
+* Added support for `Riverpod` dependencies #79
+
 ## [0.1.5]
 
 * Added option to wrap widgets with Scaffold, Center and SafeArea

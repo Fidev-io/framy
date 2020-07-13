@@ -226,6 +226,17 @@ class WidgetWithUserProviderDependency {
   WidgetWithUserProviderDependency() {}
 }
 
+@ShouldGenerate('''
+            "name": "someProvider",
+            "type": "Null",
+            "defaultValue": null,
+            "isNamed": false,
+            "dependencyType": "FramyDependencyType.riverpod"
+''', contains: true)
+@FramyUseRiverpod("someProvider")
+@FramyWidget()
+class WidgetWithRiverpodDependency {}
+
 @ShouldGenerate('"type": "FramyObjectType.page"', contains: true)
 @FramyWidget(isPage: true)
 class PageWidget {

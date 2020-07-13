@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weight_tracker/models/statistics_page_state.dart';
 import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/pages/history_page.dart';
 import 'package:weight_tracker/pages/profile_page.dart';
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
           title: Text('Weight Tracker'),
         ),
         body: _page == 0
-            ? StatisticsPage()
+            ? StatisticsPage(state: StatisticsPageState.loading())
             : (_page == 1 ? HistoryPage() : ProfilePage()),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _page,
