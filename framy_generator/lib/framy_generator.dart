@@ -70,7 +70,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateRouting(widgetFramyObjects));
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());
-    buffer.writeln(generateSettingsDialog());
+    buffer.writeln(generateSettingsDialog(useDevicePreview));
     buffer.writeln(generateDrawer(widgetFramyObjects));
     buffer.writeln(
         '\n// ======================== MATERIAL PAGES ===========================\n');

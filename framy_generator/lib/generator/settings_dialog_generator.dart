@@ -1,4 +1,4 @@
-String generateSettingsDialog() => '''
+String generateSettingsDialog(bool useDevicePreview) => '''
 class FramySettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,17 +14,7 @@ class FramySettingsDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              children: [
-                Expanded(child: Text('Wrap with Device Preview')),
-                Switch(
-                  key: ValueKey('FramyAppDevicePreviewSwitch'),
-                  onChanged: (b) =>
-                      framyAppStateKey.currentState.wrapWithDevicePreview = b,
-                  value: FramyAppSettings.of(context).wrapWithDevicePreview,
-                ),
-              ],
-            ),
+            ${_devicePreviewSwitch(useDevicePreview)}
             Row(
               children: [
                 Expanded(child: Text('Wrap with Scaffold')),
@@ -64,4 +54,45 @@ class FramySettingsDialog extends StatelessWidget {
     );
   }
 }
+''';
+
+String _devicePreviewSwitch(bool usesDevicePreview) => usesDevicePreview
+    ? _enabledDevicePreviewSwitch()
+    : _disabledDevicePreviewSwitch();
+
+String _disabledDevicePreviewSwitch() => '''
+Row(
+  children: [
+    Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Device Preview disabled'),
+          SelectableText(
+            'framy.dev/#/device_preview',
+            style: Theme.of(context).textTheme.caption,
+          ),
+        ],
+      ),
+    ),
+    Switch(
+      key: ValueKey('FramyAppDevicePreviewSwitch'),
+      onChanged: null,
+      value: false,
+    ),
+  ],
+),
+''';
+
+String _enabledDevicePreviewSwitch() => '''
+Row(
+  children: [
+    Expanded(child: Text('Wrap with Device Preview')),
+    Switch(
+      key: ValueKey('FramyAppDevicePreviewSwitch'),
+      onChanged: (b) => framyAppStateKey.currentState.wrapWithDevicePreview = b,
+      value: FramyAppSettings.of(context).wrapWithDevicePreview,
+    ),
+  ],
+),
 ''';
