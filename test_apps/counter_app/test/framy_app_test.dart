@@ -1,5 +1,6 @@
 import 'package:counter_app/main.app.framy.dart';
 import 'package:counter_app/main.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -104,16 +105,21 @@ void main() {
         expect(find.byKey(Key('FramyGeneratedScaffold')), findsOneWidget);
       });
 
+      Future<void> tapSettingsSwitch(
+          WidgetTester tester, String keyValue) async {
+        await tester.tap(find.byKey(Key('FramyAppBarSettingsButton')));
+        await tester.pump();
+        await tester.tap(find.byKey(Key(keyValue)));
+        await tester.pump();
+      }
+
       testWidgets(
           'should not wrap widget with Scaffold when Scaffold switch is off',
           (tester) async {
         //given
         await goToCounterFabPage(tester);
         //when
-        await tester.tap(find.byKey(ValueKey('FramyAppBarSettingsButton')));
-        await tester.pump();
-        await tester.tap(find.byKey(ValueKey('FramyAppScaffoldSwitch')));
-        await tester.pumpAndSettle();
+        await tapSettingsSwitch(tester, 'FramyAppScaffoldSwitch');
         //then
         expect(find.byKey(Key('FramyGeneratedScaffold')), findsNothing);
       });
@@ -132,10 +138,7 @@ void main() {
         //given
         await goToCounterFabPage(tester);
         //when
-        await tester.tap(find.byKey(ValueKey('FramyAppBarSettingsButton')));
-        await tester.pump();
-        await tester.tap(find.byKey(ValueKey('FramyAppCenterSwitch')));
-        await tester.pump();
+        await tapSettingsSwitch(tester, 'FramyAppCenterSwitch');
         //then
         expect(find.byKey(Key('FramyGeneratedCenter')), findsOneWidget);
       });
@@ -154,12 +157,20 @@ void main() {
         //given
         await goToCounterFabPage(tester);
         //when
-        await tester.tap(find.byKey(ValueKey('FramyAppBarSettingsButton')));
-        await tester.pump();
-        await tester.tap(find.byKey(ValueKey('FramyAppSafeAreaSwitch')));
-        await tester.pump();
+        await tapSettingsSwitch(tester, 'FramyAppSafeAreaSwitch');
         //then
         expect(find.byKey(Key('FramyGeneratedSafeArea')), findsOneWidget);
+      });
+
+      testWidgets('should hide DevicePreview when DevicePreview switch is off',
+          (tester) async {
+        //given
+        await goToCounterFabPage(tester);
+        expect(find.byType(DevicePreviewTheme), findsOneWidget);
+        //when
+        await tapSettingsSwitch(tester, 'FramyAppDevicePreviewSwitch');
+        //then
+        expect(find.byType(DevicePreviewTheme), findsNothing);
       });
     });
   });

@@ -62,17 +62,20 @@ void main() {
       expect(result.contains('dependencies = widget.dependencies'), isTrue);
     });
 
-    test('should contain getting wrapWithScaffold value from FramyAppSettings', () {
+    test('should contain getting wrapWithScaffold value from FramyAppSettings',
+        () {
       final result = generateCustomPage(false);
       expect(result.contains('settings.wrapWithScaffold'), isTrue);
     });
 
-    test('should contain getting wrapWithCenter value from FramyAppSettings', () {
+    test('should contain getting wrapWithCenter value from FramyAppSettings',
+        () {
       final result = generateCustomPage(false);
       expect(result.contains('settings.wrapWithCenter'), isTrue);
     });
 
-    test('should contain getting wrapWithSafeArea value from FramyAppSettings', () {
+    test('should contain getting wrapWithSafeArea value from FramyAppSettings',
+        () {
       final result = generateCustomPage(false);
       expect(result.contains('settings.wrapWithSafeArea'), isTrue);
     });
@@ -90,6 +93,15 @@ void main() {
     test('should contain SafeArea', () {
       final result = generateCustomPage(false);
       expect('SafeArea('.allMatches(result), hasLength(2));
+    });
+
+    test('should contain enabled parameter for DevicePreview', () {
+      final result = generateCustomPage(true);
+      expect(
+        result.contains(
+            'enabled: FramyAppSettings.of(context).wrapWithDevicePreview,'),
+        isTrue,
+      );
     });
   });
 }

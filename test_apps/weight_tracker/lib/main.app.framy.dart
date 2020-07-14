@@ -51,6 +51,7 @@ class _FramyAppState extends State<FramyApp> {
   bool _wrapWithCenter = false;
   bool _wrapWithSafeArea = false;
   bool _showNavigationMenu = true;
+  bool _wrapWithDevicePreview = true;
 
   set wrapWithScaffold(bool value) => setState(() => _wrapWithScaffold = value);
 
@@ -61,6 +62,9 @@ class _FramyAppState extends State<FramyApp> {
   void toggleNavigationMenu() =>
       setState(() => _showNavigationMenu = !_showNavigationMenu);
 
+  set wrapWithDevicePreview(bool value) =>
+      setState(() => _wrapWithDevicePreview = value);
+
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
@@ -69,6 +73,7 @@ class _FramyAppState extends State<FramyApp> {
         wrapWithCenter: _wrapWithCenter,
         wrapWithSafeArea: _wrapWithSafeArea,
         showNavigationMenu: _showNavigationMenu,
+        wrapWithDevicePreview: _wrapWithDevicePreview,
         child: MaterialApp(
           key: Key('FramyApp'),
           debugShowCheckedModeBanner: false,
@@ -85,6 +90,7 @@ class FramyAppSettings extends InheritedWidget {
   final bool wrapWithCenter;
   final bool wrapWithSafeArea;
   final bool showNavigationMenu;
+  final bool wrapWithDevicePreview;
 
   const FramyAppSettings({
     Key key,
@@ -93,6 +99,7 @@ class FramyAppSettings extends InheritedWidget {
     @required this.wrapWithCenter,
     @required this.wrapWithSafeArea,
     @required this.showNavigationMenu,
+    @required this.wrapWithDevicePreview,
   })  : assert(child != null),
         super(key: key, child: child);
 
@@ -105,7 +112,8 @@ class FramyAppSettings extends InheritedWidget {
       old.wrapWithScaffold != wrapWithScaffold ||
       old.wrapWithCenter != wrapWithCenter ||
       old.wrapWithSafeArea != wrapWithSafeArea ||
-      old.showNavigationMenu != showNavigationMenu;
+      old.showNavigationMenu != showNavigationMenu ||
+      old.wrapWithDevicePreview != wrapWithDevicePreview;
 }
 
 Route onGenerateRoute(RouteSettings settings) {
@@ -214,46 +222,56 @@ class FramySettingsDialog extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         )
       ],
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Text('Wrap with Scaffold'),
-              Spacer(),
-              Switch(
-                key: ValueKey('FramyAppScaffoldSwitch'),
-                onChanged: (b) =>
-                    framyAppStateKey.currentState.wrapWithScaffold = b,
-                value: FramyAppSettings.of(context).wrapWithScaffold,
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text('Wrap with Center'),
-              Spacer(),
-              Switch(
-                key: ValueKey('FramyAppCenterSwitch'),
-                onChanged: (b) =>
-                    framyAppStateKey.currentState.wrapWithCenter = b,
-                value: FramyAppSettings.of(context).wrapWithCenter,
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text('Wrap with SafeArea'),
-              Spacer(),
-              Switch(
-                key: ValueKey('FramyAppSafeAreaSwitch'),
-                onChanged: (b) =>
-                    framyAppStateKey.currentState.wrapWithSafeArea = b,
-                value: FramyAppSettings.of(context).wrapWithSafeArea,
-              ),
-            ],
-          ),
-        ],
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(child: Text('Wrap with Device Preview')),
+                Switch(
+                  key: ValueKey('FramyAppDevicePreviewSwitch'),
+                  onChanged: (b) =>
+                      framyAppStateKey.currentState.wrapWithDevicePreview = b,
+                  value: FramyAppSettings.of(context).wrapWithDevicePreview,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: Text('Wrap with Scaffold')),
+                Switch(
+                  key: ValueKey('FramyAppScaffoldSwitch'),
+                  onChanged: (b) =>
+                      framyAppStateKey.currentState.wrapWithScaffold = b,
+                  value: FramyAppSettings.of(context).wrapWithScaffold,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: Text('Wrap with Center')),
+                Switch(
+                  key: ValueKey('FramyAppCenterSwitch'),
+                  onChanged: (b) =>
+                      framyAppStateKey.currentState.wrapWithCenter = b,
+                  value: FramyAppSettings.of(context).wrapWithCenter,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: Text('Wrap with SafeArea')),
+                Switch(
+                  key: ValueKey('FramyAppSafeAreaSwitch'),
+                  onChanged: (b) =>
+                      framyAppStateKey.currentState.wrapWithSafeArea = b,
+                  value: FramyAppSettings.of(context).wrapWithSafeArea,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1074,6 +1092,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
             children: [
               Expanded(
                 child: DevicePreview(
+                  enabled: FramyAppSettings.of(context).wrapWithDevicePreview,
                   style: DevicePreviewStyle(
                     toolBar: DevicePreviewToolBarStyle.light(
                       position: DevicePreviewToolBarPosition.right,

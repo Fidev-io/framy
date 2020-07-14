@@ -257,6 +257,15 @@ void main() {
     });
   });
 
+  Future<void> pressSettingsSwitch(String key) async {
+    //open settings dialog
+    await driver.tap(find.byValueKey('FramyAppBarSettingsButton'));
+    await driver.waitFor(find.byType('AlertDialog'));
+    // press switch
+    await driver.tap(find.byValueKey(key));
+    await driver.tap(find.text('Close'));
+  }
+
   group('CounterFAB', () {
     setUpAll(() async {
       if (!await isDeviceBig()) {
@@ -281,14 +290,17 @@ void main() {
 
     test('should wrap widget with Center when Center switch is on', () async {
       await driver.waitForAbsent(find.byValueKey('FramyGeneratedCenter'));
-      //open settings dialog
-      await driver.tap(find.byValueKey('FramyAppBarSettingsButton'));
-      await driver.waitFor(find.byType('AlertDialog'));
-      // press switch to be on
-      await driver.tap(find.byValueKey('FramyAppCenterSwitch'));
-      await driver.tap(find.text('Close'));
+      await pressSettingsSwitch('FramyAppCenterSwitch');
       await driver.waitFor(find.byValueKey('FramyGeneratedCenter'));
     });
+  });
+
+  test('should hide DevicePreview if DevicePreview switch is off', () async {
+    await driver.waitFor(find.byType('DevicePreviewTheme'));
+    await pressSettingsSwitch('FramyAppDevicePreviewSwitch');
+    await driver.waitForAbsent(find.byType('DevicePreviewTheme'));
+    await pressSettingsSwitch('FramyAppDevicePreviewSwitch');
+    await driver.waitFor(find.byType('DevicePreviewTheme'));
   });
 
   group('CounterTitle', () {

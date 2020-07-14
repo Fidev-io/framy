@@ -95,6 +95,7 @@ builder: (context) {
   if (useDevicePreview) {
     return '''
 DevicePreview(
+  enabled: FramyAppSettings.of(context).wrapWithDevicePreview,
   style: DevicePreviewStyle(
     toolBar: DevicePreviewToolBarStyle.light(
       position: DevicePreviewToolBarPosition.right,

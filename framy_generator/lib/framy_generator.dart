@@ -23,6 +23,7 @@ import 'package:framy_generator/generator/model_constructor_map_generator.dart';
 import 'package:framy_generator/generator/preset_dropdown_generator.dart';
 import 'package:framy_generator/generator/presets_map_generator.dart';
 import 'package:framy_generator/generator/routing_generator.dart';
+import 'package:framy_generator/generator/settings_dialog_generator.dart';
 import 'package:framy_generator/generator/storyboard_generator.dart';
 import 'package:framy_generator/generator/subdependencies_map_generator.dart';
 import 'package:framy_generator/generator/text_field_generator.dart';
@@ -69,6 +70,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateRouting(widgetFramyObjects));
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());
+    buffer.writeln(generateSettingsDialog());
     buffer.writeln(generateDrawer(widgetFramyObjects));
     buffer.writeln(
         '\n// ======================== MATERIAL PAGES ===========================\n');
