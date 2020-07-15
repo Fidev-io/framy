@@ -430,5 +430,9 @@ void main() {
       await driver.waitFor(find.byType('ProfilePage'));
       await driver.waitFor(find.byType('HistoryPage'));
     });
+
+    test('should contain DevicePreview widgets', () async {
+      await driver.waitFor(find.byType('DevicePreview'));
+    });
   });
 }

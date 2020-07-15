@@ -1005,6 +1005,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                 child: DevicePreview(
                   enabled: FramyAppSettings.of(context).wrapWithDevicePreview,
                   style: DevicePreviewStyle(
+                    hasFrameShadow: false,
                     toolBar: DevicePreviewToolBarStyle.light(
                       position: DevicePreviewToolBarPosition.right,
                     ),
@@ -1251,13 +1252,24 @@ class FramyStoryboardCustomPageWithDependencies extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black54),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: builder(dependencyValue),
-          ),
+          child: FramyAppSettings.of(context).wrapWithDevicePreview
+              ? DevicePreview(
+                  style: DevicePreviewStyle(
+                    hasFrameShadow: false,
+                    toolBar: DevicePreviewToolBarStyle.light(),
+                    background: BoxDecoration(),
+                  ),
+                  isToolBarVisible: false,
+                  areSettingsEnabled: false,
+                  builder: (_) => builder(dependencyValue),
+                )
+              : Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black54),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: builder(dependencyValue),
+                ),
         ),
         const SizedBox(height: 8),
         Text(name, style: Theme.of(context).textTheme.caption),

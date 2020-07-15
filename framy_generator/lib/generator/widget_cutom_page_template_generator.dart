@@ -97,6 +97,7 @@ builder: (context) {
 DevicePreview(
   enabled: FramyAppSettings.of(context).wrapWithDevicePreview,
   style: DevicePreviewStyle(
+    hasFrameShadow: false,
     toolBar: DevicePreviewToolBarStyle.light(
       position: DevicePreviewToolBarPosition.right,
     ),

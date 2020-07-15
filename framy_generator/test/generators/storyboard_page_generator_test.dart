@@ -5,24 +5,24 @@ import 'package:test/test.dart';
 void main() {
   group('Storyboard generator result', () {
     test('should contain class FramyStoryboardPage', () {
-      String result = generateStoryboardPage([], []);
+      String result = generateStoryboardPage([], [], false);
       expect(result.contains('class FramyStoryboardPage'), isTrue);
     });
 
     test('should contain proper key', () {
-      String result = generateStoryboardPage([], []);
+      String result = generateStoryboardPage([], [], false);
       expect(result.contains('Key(\'FramyStoryboardPage\')'), isTrue);
     });
 
     test('should contain FramyStoryboardCustomPageWithDependencies definition',
         () {
-      String result = generateStoryboardPage([], []);
+      String result = generateStoryboardPage([], [], false);
       expect(result.contains('class FramyStoryboardCustomPageWithDependencies'),
           isTrue);
     });
 
     test('should contain builder(dependencyValue)', () {
-      String result = generateStoryboardPage([], []);
+      String result = generateStoryboardPage([], [], false);
       expect(result.contains('builder(dependencyValue)'), isTrue);
     });
 
@@ -41,7 +41,7 @@ void main() {
           ..constructors = [FramyObjectConstructor('', [])],
       ];
       //when
-      final result = generateStoryboardPage(widgetObjects, []);
+      final result = generateStoryboardPage(widgetObjects, [], false);
       // then
       // 2 for creating widgets for 2 passed objects and 1 for constructor in class definition
       expect('FramyStoryboardCustomPageWithDependencies('.allMatches(result),
@@ -52,14 +52,15 @@ void main() {
         'should contain initialized dependencies list when widget has dependency',
         () {
       //given
-      final widgetObjects = getFramyPageObjectWithDependency(FramyObjectDependency(
+      final widgetObjects =
+          getFramyPageObjectWithDependency(FramyObjectDependency(
         'arg1',
         'String',
         null,
         false,
       ));
       //when
-      final result = generateStoryboardPage(widgetObjects, []);
+      final result = generateStoryboardPage(widgetObjects, [], false);
       //then
       final expectedList =
           '''FramyDependencyModel<String>('arg1', 'String', null),''';
@@ -68,14 +69,15 @@ void main() {
 
     test('should properly handle int dependency', () {
       //given
-      final widgetObjects = getFramyPageObjectWithDependency(FramyObjectDependency(
+      final widgetObjects =
+          getFramyPageObjectWithDependency(FramyObjectDependency(
         'arg1',
         'int',
         '13',
         false,
       ));
       //when
-      final result = generateStoryboardPage(widgetObjects, []);
+      final result = generateStoryboardPage(widgetObjects, [], false);
       //then
       final expectedDependency =
           'FramyDependencyModel<int>(\'arg1\', \'int\', 13),';
@@ -86,14 +88,15 @@ void main() {
         'should use dependency in widget constructor when the non-named dependency is passed',
         () {
       //given
-      final widgetObjects = getFramyPageObjectWithDependency(FramyObjectDependency(
+      final widgetObjects =
+          getFramyPageObjectWithDependency(FramyObjectDependency(
         'arg1',
         'String',
         null,
         false,
       ));
       //when
-      final result = generateStoryboardPage(widgetObjects, []);
+      final result = generateStoryboardPage(widgetObjects, [], false);
       //then
       expect(
         result.contains(RegExp('Widget1\\(\n *valueGetter\\(\'arg1\'\\)')),
@@ -105,14 +108,15 @@ void main() {
         'should use dependency in widget constructor when the named dependency is passed',
         () {
       //given
-      final widgetObjects = getFramyPageObjectWithDependency(FramyObjectDependency(
+      final widgetObjects =
+          getFramyPageObjectWithDependency(FramyObjectDependency(
         'arg1',
         'String',
         null,
         true,
       ));
       //when
-      final result = generateStoryboardPage(widgetObjects, []);
+      final result = generateStoryboardPage(widgetObjects, [], false);
       //then
       expect(
         result
@@ -125,14 +129,15 @@ void main() {
         'should use default value in dependency initialization when default value is present',
         () {
       //given
-      final widgetObjects = getFramyPageObjectWithDependency(FramyObjectDependency(
+      final widgetObjects =
+          getFramyPageObjectWithDependency(FramyObjectDependency(
         'arg1',
         'String',
         "'fooDefaultValue'",
         false,
       ));
       //when
-      final result = generateStoryboardPage(widgetObjects, []);
+      final result = generateStoryboardPage(widgetObjects, [], false);
       //then
       expect(
         result.contains(RegExp('FramyDependencyModel.*\'fooDefaultValue\'')),
@@ -155,7 +160,7 @@ void main() {
 
       test('it should contain the generation of the dependency model', () {
         //when
-        final result = generateStoryboardPage(widgetObjects, []);
+        final result = generateStoryboardPage(widgetObjects, [], false);
         //then
         expect(
           result.contains(
@@ -166,7 +171,7 @@ void main() {
 
       test('it should contain MultiProvider', () {
         //when
-        final result = generateStoryboardPage(widgetObjects, []);
+        final result = generateStoryboardPage(widgetObjects, [], false);
         //then
         expect(result.contains('MultiProvider'), isTrue);
       });
@@ -175,7 +180,7 @@ void main() {
           'it should contain a Provider with the proper type using proper dependency',
           () {
         //when
-        final result = generateStoryboardPage(widgetObjects, []);
+        final result = generateStoryboardPage(widgetObjects, [], false);
         //then
         expect(
           result.contains(
@@ -184,9 +189,18 @@ void main() {
         );
       });
     });
+
+    test('should contain DevicePreview when useDevicePreview is true', () {
+      final result = generateStoryboardPage([], [], true);
+      expect(result.contains('DevicePreview'), isTrue);
+    });
+
+    test('should not contain DevicePreview when useDevicePreview is false', () {
+      final result = generateStoryboardPage([], [], false);
+      expect(result.contains('DevicePreview'), isFalse);
+    });
   });
 }
-
 
 List<FramyObject> getFramyPageObjectWithDependency(
     FramyObjectDependency dependency) {
