@@ -5,6 +5,7 @@
 * Changed showing settings dialog to work for showcase app #116
 * Added hiding navigation drawer on big screens #113
 * Added option to disable Device Preview #128
+* Added device preview to Storyboard page #129
 
 ## [0.1.9]
 

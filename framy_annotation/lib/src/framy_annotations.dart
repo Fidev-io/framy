@@ -8,7 +8,7 @@ abstract class FramyAnnotation {
 /// Typically annotates main app widget (e.g. MyApp, MainApp, etc)
 /// [useDevicePreview] - setting this to true will cause wrapping widgets in DevicePreview in generated Framy app
 /// we highly recommend using this feature,
-/// **IMPORTANT**: when it's set to true then it is required to add device_preview package as dependency in pubspec.yaml!
+/// **IMPORTANT**: when it's set to true then it is required to add device_preview package as dependency in pubspec.yaml in version at least ^0.4.7!
 class FramyApp extends FramyAnnotation {
   final bool useDevicePreview;
 

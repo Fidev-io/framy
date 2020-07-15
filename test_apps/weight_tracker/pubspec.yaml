@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   framy_annotation: ^0.1.4
-  device_preview: ^0.4.5
+  device_preview: ^0.4.7
   provider: ^4.3.0
   intl: ^0.16.1
   freezed_annotation: ^0.11.0

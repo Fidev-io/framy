@@ -1,13 +1,15 @@
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/widget_dependency_utils.dart';
 
-String generateStoryboardPage(List<FramyObject> widgetFramyObjects, List<FramyObject> modelFramyObjects) {
+String generateStoryboardPage(List<FramyObject> widgetFramyObjects,
+    List<FramyObject> modelFramyObjects, bool useDevicePreview) {
   final pageFramyObjects = widgetFramyObjects
       .where((element) => element.type == FramyObjectType.page)
       .toList();
   String gridViewChildren = pageFramyObjects.fold(
     '',
-        (previousValue, element) => previousValue + _generateStoryboardWidgetPage(element),
+    (previousValue, element) =>
+        previousValue + _generateStoryboardWidgetPage(element),
   );
   return '''
 class FramyStoryboardPage extends StatelessWidget {
@@ -47,13 +49,7 @@ class FramyStoryboardCustomPageWithDependencies extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black54),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: builder(dependencyValue),
-          ),
+          child: ${_generateSingleFrame(useDevicePreview)},
         ),
         const SizedBox(height: 8),
         Text(name, style: Theme.of(context).textTheme.caption),
@@ -78,4 +74,26 @@ FramyStoryboardCustomPageWithDependencies(
 ''';
 }
 
-
+String _generateSingleFrame(bool useDevicePreview) {
+  final simpleFrame = '''Container(
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.black54),
+    borderRadius: BorderRadius.circular(16),
+  ),
+  child: builder(dependencyValue),
+)''';
+  if (useDevicePreview) {
+    return '''FramyAppSettings.of(context).wrapWithDevicePreview ? DevicePreview(
+  style: DevicePreviewStyle(
+    hasFrameShadow: false,
+    toolBar: DevicePreviewToolBarStyle.light(),
+    background: BoxDecoration(),
+  ),
+  isToolBarVisible: false,
+  areSettingsEnabled: false,
+  builder: (_) => builder(dependencyValue),
+) : $simpleFrame''';
+  } else {
+    return simpleFrame;
+  }
+}

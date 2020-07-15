@@ -87,8 +87,8 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateWidgetPages(widgetFramyObjects));
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
-    buffer
-        .writeln(generateStoryboardPage(widgetFramyObjects, modelFramyObjects));
+    buffer.writeln(generateStoryboardPage(
+        widgetFramyObjects, modelFramyObjects, useDevicePreview));
     buffer.writeln(
         '\n// ======================== DEPENDENCY INPUTS ===========================\n');
     buffer.writeln(generateWidgetDependencyInput(modelFramyObjects));
