@@ -386,6 +386,12 @@ void main() {
         ));
       },
     );
+
+    //because there are no functions, there is no need for the bottom bar to be shown
+    test('should not have a Callbacks and Dependencies tabs', () async {
+      await driver.waitForAbsent(find.text('Callbacks'));
+      await driver.waitForAbsent(find.text('Dependencies'));
+    });
   });
 
   test('A drawer should be optionally hidden on bigger devices', () async {

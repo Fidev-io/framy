@@ -1172,19 +1172,20 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
                 ),
               ),
             ),
-            BottomNavigationBar(
-              backgroundColor: Colors.white,
-              items: [
-                BottomNavigationBarItem(
-                  title: Text('Dependencies'),
-                  icon: Icon(Icons.settings_applications),
-                ),
-                BottomNavigationBarItem(
-                  title: Text('Callbacks'),
-                  icon: Icon(Icons.list),
-                ),
-              ],
-            ),
+            if (dependencies.any((model) => model.type.contains('Function(')))
+              BottomNavigationBar(
+                backgroundColor: Colors.white,
+                items: [
+                  BottomNavigationBarItem(
+                    title: Text('Dependencies'),
+                    icon: Icon(Icons.settings_applications),
+                  ),
+                  BottomNavigationBarItem(
+                    title: Text('Callbacks'),
+                    icon: Icon(Icons.list),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
