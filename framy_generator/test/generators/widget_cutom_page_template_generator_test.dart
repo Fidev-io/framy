@@ -103,5 +103,10 @@ void main() {
         isTrue,
       );
     });
+
+    test('should contain currentTabIndex field', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('int currentTabIndex = 0;'), isTrue);
+    });
   });
 }

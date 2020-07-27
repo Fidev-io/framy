@@ -1062,6 +1062,7 @@ class FramyCustomPage extends StatefulWidget {
 class _FramyCustomPageState extends State<FramyCustomPage> {
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
   List<FramyDependencyModel> dependencies;
+  int currentTabIndex = 0;
 
   @override
   void initState() {
@@ -1131,6 +1132,9 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                     dependencies: dependencies,
                     presets: presets,
                     onChanged: onChanged,
+                    tabIndex: currentTabIndex,
+                    onTabIndexChanged: (index) =>
+                        setState(() => currentTabIndex = index),
                   ),
                 ),
             ],
@@ -1142,6 +1146,9 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                 dependencies: dependencies,
                 presets: presets,
                 onChanged: onChanged,
+                tabIndex: currentTabIndex,
+                onTabIndexChanged: (index) =>
+                    setState(() => currentTabIndex = index),
               ),
             );
           } else {
@@ -1360,9 +1367,16 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
   final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
+  final int tabIndex;
+  final ValueChanged<int> onTabIndexChanged;
 
   const FramyWidgetDependenciesPanel(
-      {Key key, this.dependencies, this.onChanged, this.presets})
+      {Key key,
+      this.dependencies,
+      this.onChanged,
+      this.presets,
+      this.tabIndex = 0,
+      this.onTabIndexChanged})
       : super(key: const Key('FramyWidgetDependenciesPanel'));
 
   @override
@@ -1375,35 +1389,68 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: dependencies
-                        .map((dep) => FramyWidgetDependencyInput(
-                              dependency: dep,
-                              onChanged: onChanged,
-                              presets: presets,
-                            ))
-                        .toList(),
+              child: tabIndex == 0
+                  ? FramyDependenciesTab(
+                      dependencies: dependencies,
+                      onChanged: onChanged,
+                      presets: presets,
+                    )
+                  : FramyCallbacksTab(),
+            ),
+            if (dependencies.any((model) => model.type.contains('Function(')))
+              BottomNavigationBar(
+                backgroundColor: Colors.white,
+                currentIndex: tabIndex,
+                onTap: onTabIndexChanged,
+                items: [
+                  BottomNavigationBarItem(
+                    title: Text('Dependencies'),
+                    icon: Icon(Icons.settings_applications),
                   ),
-                ),
+                  BottomNavigationBarItem(
+                    title: Text('Callbacks'),
+                    icon: Icon(Icons.list),
+                  ),
+                ],
               ),
-            ),
-            BottomNavigationBar(
-              backgroundColor: Colors.white,
-              items: [
-                BottomNavigationBarItem(
-                  title: Text('Dependencies'),
-                  icon: Icon(Icons.settings_applications),
-                ),
-                BottomNavigationBarItem(
-                  title: Text('Callbacks'),
-                  icon: Icon(Icons.list),
-                ),
-              ],
-            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class FramyCallbacksTab extends StatelessWidget {
+  const FramyCallbacksTab({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class FramyDependenciesTab extends StatelessWidget {
+  final List<FramyDependencyModel> dependencies;
+  final ValueChanged<FramyDependencyModel> onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+
+  const FramyDependenciesTab(
+      {Key key, this.dependencies, this.onChanged, this.presets})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: dependencies
+              .map((dep) => FramyWidgetDependencyInput(
+                    dependency: dep,
+                    onChanged: onChanged,
+                    presets: presets,
+                  ))
+              .toList(),
         ),
       ),
     );
@@ -1414,9 +1461,16 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
   final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
+  final int tabIndex;
+  final ValueChanged<int> onTabIndexChanged;
 
   const FramyWidgetDependenciesFAB(
-      {Key key, this.onChanged, this.dependencies, this.presets})
+      {Key key,
+      this.onChanged,
+      this.dependencies,
+      this.presets,
+      this.tabIndex = 0,
+      this.onTabIndexChanged})
       : super(key: key);
 
   @override
@@ -1428,26 +1482,36 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
       onPressed: () => showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         context: context,
-        builder: (context) => StatefulBuilder(
-          builder: (context, setState) => Column(
-            children: [
-              SizedBox(
-                height: 2,
-                key: Key('framySheetDragHandle'),
-              ),
-              Expanded(
-                child: FramyWidgetDependenciesPanel(
-                  dependencies: dependencies,
-                  presets: presets,
-                  onChanged: (dep) {
-                    setState(() {});
-                    onChanged(dep);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+        builder: (context) {
+          int _tabIndex;
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 2,
+                    key: Key('framySheetDragHandle'),
+                  ),
+                  Expanded(
+                    child: FramyWidgetDependenciesPanel(
+                      dependencies: dependencies,
+                      presets: presets,
+                      onChanged: (dep) {
+                        setState(() {});
+                        onChanged(dep);
+                      },
+                      tabIndex: _tabIndex ?? tabIndex,
+                      onTabIndexChanged: (index) {
+                        setState(() => _tabIndex = index);
+                        onTabIndexChanged(index);
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
       mini: true,
     );

@@ -16,5 +16,16 @@ void main() {
       await tester.pumpWidget(FramyAppWrapper(FramyCounterFABCustomPage()));
       expect(find.byType(CounterFAB), findsOneWidget);
     });
+
+    testWidgets('should show Callbacks page on tap',
+        (WidgetTester tester) async {
+      //given
+      await tester.pumpWidget(FramyAppWrapper(FramyCounterFABCustomPage()));
+      //when
+      await tester.tap(find.text('Callbacks'));
+      await tester.pump();
+      //then
+      expect(find.byType(FramyCallbacksTab), findsOneWidget);
+    });
   });
 }

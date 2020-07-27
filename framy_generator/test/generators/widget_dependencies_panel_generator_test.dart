@@ -68,11 +68,32 @@ void main() {
       });
     });
 
-    test('should have BottomNavigationBar with proper labels', () {
+    test('should contain BottomNavigationBar with proper labels', () {
       final result = generateWidgetDependenciesPanel();
       expect(result.contains('BottomNavigationBar'), isTrue);
       expect(result.contains('\'Dependencies\''), isTrue);
       expect(result.contains('\'Callbacks\''), isTrue);
+    });
+
+    test('should contain onTabIndexChanged callback', () {
+      final result = generateWidgetDependenciesPanel();
+      expect(result.contains('final ValueChanged<int> onTabIndexChanged;'),
+          isTrue);
+    });
+
+    test('should contain tabIndex field', () {
+      final result = generateWidgetDependenciesPanel();
+      expect(result.contains('final int tabIndex;'), isTrue);
+    });
+
+    test('should contain class FramyDependenciesTab', () {
+      final result = generateWidgetDependenciesPanel();
+      expect(result.contains('class FramyDependenciesTab'), isTrue);
+    });
+
+    test('should contain class FramyCallbacksTab', () {
+      final result = generateWidgetDependenciesPanel();
+      expect(result.contains('class FramyCallbacksTab'), isTrue);
     });
   });
 }

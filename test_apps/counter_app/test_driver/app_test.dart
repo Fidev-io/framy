@@ -298,6 +298,14 @@ void main() {
       await driver.waitFor(find.text('Callbacks'));
       await driver.waitFor(find.text('Dependencies'));
     });
+
+    test('should show callbacks page on tap on Callbacks', () async {
+      await driver.waitFor(find.text('onPressed'));
+      await driver.waitFor(find.byType('FramyDependenciesTab'));
+      await driver.tap(find.text('Callbacks'));
+      await driver.waitForAbsent(find.text('onPressed'));
+      await driver.waitFor(find.byType('FramyCallbacksTab'));
+    });
   });
 
   test('should hide DevicePreview if DevicePreview switch is off', () async {
