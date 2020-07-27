@@ -67,5 +67,12 @@ void main() {
         expect(result.contains('Key(\'framySheetDragHandle\')'), isTrue);
       });
     });
+
+    test('should have BottomNavigationBar with proper labels', () {
+      final result = generateWidgetDependenciesPanel();
+      expect(result.contains('BottomNavigationBar'), isTrue);
+      expect(result.contains('\'Dependencies\''), isTrue);
+      expect(result.contains('\'Callbacks\''), isTrue);
+    });
   });
 }

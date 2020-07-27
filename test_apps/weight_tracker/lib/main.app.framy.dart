@@ -1372,19 +1372,38 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
         color: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: dependencies
-                  .map((dep) => FramyWidgetDependencyInput(
-                        dependency: dep,
-                        onChanged: onChanged,
-                        presets: presets,
-                      ))
-                  .toList(),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: dependencies
+                        .map((dep) => FramyWidgetDependencyInput(
+                              dependency: dep,
+                              onChanged: onChanged,
+                              presets: presets,
+                            ))
+                        .toList(),
+                  ),
+                ),
+              ),
             ),
-          ),
+            BottomNavigationBar(
+              backgroundColor: Colors.white,
+              items: [
+                BottomNavigationBarItem(
+                  title: Text('Dependencies'),
+                  icon: Icon(Icons.settings_applications),
+                ),
+                BottomNavigationBarItem(
+                  title: Text('Callbacks'),
+                  icon: Icon(Icons.list),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

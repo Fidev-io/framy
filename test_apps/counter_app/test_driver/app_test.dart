@@ -293,6 +293,11 @@ void main() {
       await pressSettingsSwitch('FramyAppCenterSwitch');
       await driver.waitFor(find.byValueKey('FramyGeneratedCenter'));
     });
+
+    test('should have a Callbacks and Dependencies tabs', () async {
+      await driver.waitFor(find.text('Callbacks'));
+      await driver.waitFor(find.text('Dependencies'));
+    });
   });
 
   test('should hide DevicePreview if DevicePreview switch is off', () async {

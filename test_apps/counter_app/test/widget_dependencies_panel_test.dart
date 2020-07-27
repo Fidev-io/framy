@@ -54,5 +54,24 @@ void main() {
       expect(model.name, 'name1');
       expect(model.value, 'foo foo');
     });
+
+    group('when there is a Function dependency', () {
+      testWidgets('should have Tabs with Dependencies and Callbacks names',
+          (WidgetTester tester) async {
+        //given
+        final model =
+            FramyDependencyModel<Function()>('onPressed', 'Function()', null);
+        //when
+        await tester.pumpWidget(FramyAppWrapperWithScaffold(
+          FramyWidgetDependenciesPanel(
+            dependencies: [model],
+            presets: {},
+          ),
+        ));
+        //then
+        expect(find.text('Dependencies'), findsOneWidget);
+        expect(find.text('Callbacks'), findsOneWidget);
+      });
+    });
   });
 }
