@@ -4,32 +4,34 @@
 // FramyGenerator
 // **************************************************************************
 
-import 'dart:core';
-
-import 'package:device_preview/device_preview.dart';
+import 'package:provider/provider.dart' as provider;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:provider/provider.dart' as provider;
+import 'package:device_preview/device_preview.dart';
 import 'package:weight_tracker/app_theme.dart';
-import 'package:weight_tracker/models/built_value_user.dart';
-import 'package:weight_tracker/models/dummy_test_widget_model.dart';
-import 'package:weight_tracker/models/statistics_page_state.dart';
-import 'package:weight_tracker/models/user.dart';
-import 'package:weight_tracker/models/user.framy.dart';
-import 'package:weight_tracker/models/weight_entry.dart';
-import 'package:weight_tracker/models/weight_entry.framy.dart';
-import 'package:weight_tracker/models/weight_unit.dart';
+import 'package:framy_annotation/framy_annotation.dart';
+import 'dart:core';
 import 'package:weight_tracker/pages/history_page.dart';
-import 'package:weight_tracker/pages/profile_page.dart';
-import 'package:weight_tracker/pages/statistics_page.dart';
-import 'package:weight_tracker/widgets/built_value_example_widget.dart';
-import 'package:weight_tracker/widgets/dummy_test_widget.dart';
-import 'package:weight_tracker/widgets/user_data_card.dart';
-import 'package:weight_tracker/widgets/user_emails_view.dart';
 import 'package:weight_tracker/widgets/weight_entry_list_item.dart';
+import 'package:weight_tracker/models/weight_entry.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weight_tracker/pages/statistics_page.dart';
+import 'package:weight_tracker/models/statistics_page_state.dart';
+import 'package:weight_tracker/pages/profile_page.dart';
+import 'package:weight_tracker/widgets/user_emails_view.dart';
+import 'package:weight_tracker/widgets/user_data_card.dart';
+import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/widgets/weight_unit_display.dart';
+import 'package:weight_tracker/widgets/built_value_example_widget.dart';
+import 'package:weight_tracker/models/built_value_user.dart';
+import 'package:weight_tracker/widgets/dummy_test_widget.dart';
+import 'package:weight_tracker/models/dummy_test_widget_model.dart';
+import 'package:weight_tracker/models/weight_unit.dart';
+import 'package:intl/intl.dart';
+import 'package:built_value/built_value.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:weight_tracker/models/weight_entry.framy.dart';
+import 'package:weight_tracker/models/user.framy.dart';
 
 void main() {
   runApp(FramyApp());
