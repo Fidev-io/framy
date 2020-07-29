@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "6.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.39.13"
+    version: "0.39.14"
   archive:
     dependency: transitive
     description:
@@ -120,6 +120,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  cli_util:
+    dependency: transitive
+    description:
+      name: cli_util
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   clock:
     dependency: transitive
     description:
@@ -168,7 +175,7 @@ packages:
       name: csslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.1"
+    version: "0.16.2"
   dart_style:
     dependency: transitive
     description:
@@ -244,7 +251,7 @@ packages:
       path: "../../framy_generator"
       relative: true
     source: path
-    version: "0.1.10"
+    version: "0.2.0"
   freezed_annotation:
     dependency: transitive
     description:
@@ -284,7 +291,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   http_multi_server:
     dependency: transitive
     description:
@@ -424,7 +431,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.0"
+    version: "1.9.2"
   platform:
     dependency: transitive
     description:
