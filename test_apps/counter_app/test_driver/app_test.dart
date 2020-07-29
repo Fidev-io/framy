@@ -14,6 +14,19 @@ void main() {
       .getBottomRight(find.byValueKey('FramyApp'))
       .then((offset) => offset.dx >= 1000);
 
+  Future<void> closeDependenciesPanel() async {
+    await driver.scroll(
+      find.byValueKey('framySheetDragHandle'),
+      0,
+      500,
+      Duration(milliseconds: 100),
+    );
+  }
+
+  Future<void> openDependenciesPanel() async {
+    await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+  }
+
   setUpAll(() async {
     driver = await FlutterDriver.connect();
     ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
@@ -295,6 +308,7 @@ void main() {
     });
 
     test('should have a Callbacks and Dependencies tabs', () async {
+      if (!await isDeviceBig()) await openDependenciesPanel();
       await driver.waitFor(find.text('Callbacks'));
       await driver.waitFor(find.text('Dependencies'));
     });
@@ -305,6 +319,21 @@ void main() {
       await driver.tap(find.text('Callbacks'));
       await driver.waitForAbsent(find.text('onPressed'));
       await driver.waitFor(find.byType('FramyCallbacksTab'));
+      await driver.tap(find.text('Dependencies'));
+    });
+
+    test('should support functions type', () async {
+      await driver.waitForAbsent(find.text('Not supported type'));
+      await driver.waitFor(find.text('See call history in Callbacks tab'));
+    });
+
+    test('should show logs in Callbacks tab after presses', () async {
+      if (!await isDeviceBig()) await closeDependenciesPanel();
+      await driver.tap(find.byTooltip('Increment'));
+      if (!await isDeviceBig()) await openDependenciesPanel();
+      await driver.tap(find.text('Callbacks'));
+      await driver.waitFor(find.text('onPressed'));
+      if (!await isDeviceBig()) await closeDependenciesPanel();
     });
   });
 

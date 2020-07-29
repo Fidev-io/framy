@@ -31,7 +31,7 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
                       onChanged: onChanged,
                       presets: presets,
                     )
-                  : FramyCallbacksTab(),
+                  : FramyCallbacksTab(dependencies: dependencies),
             ),
             if (dependencies.any((model) => model.type.contains('Function(')))
               BottomNavigationBar(
@@ -56,12 +56,55 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
   }
 }
 
-class FramyCallbacksTab extends StatelessWidget {
-  const FramyCallbacksTab({Key key}) : super(key: key);
+class FramyCallbacksTab extends StatefulWidget {
+  final List<FramyDependencyModel> dependencies;
+
+  const FramyCallbacksTab({Key key, this.dependencies}) : super(key: key);
+
+  @override
+  _FramyCallbacksTabState createState() => _FramyCallbacksTabState();
+}
+
+class _FramyCallbacksTabState extends State<FramyCallbacksTab> {
+  @override
+  void initState() {
+    super.initState();
+    widget.dependencies.forEach((element) {
+      element.functionCalls.addListener(_onCallsChanged);
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.dependencies.forEach((element) {
+      element.functionCalls.removeListener(_onCallsChanged);
+    });
+    super.dispose();
+  }
+
+  void _onCallsChanged() {
+    if (mounted) setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    final callbacks = widget.dependencies
+        .fold<List<FramyDependencyFunctionCall>>(
+            <FramyDependencyFunctionCall>[],
+            (prev, dep) => prev..addAll(dep.functionCalls.calls))
+          ..sort((a, b) => b.time.compareTo(a.time));
+    return ListView.builder(
+      itemCount: callbacks.length,
+      itemBuilder: (context, index) {
+        final callback = callbacks[index];
+        return ListTile(
+          dense: true,
+          title: Text(callback.functionName),
+          trailing: Text(
+              '\${callback.time.hour}:\${callback.time.minute}:\${callback.time.millisecond}'),
+        );
+      },
+    );
   }
 }
 

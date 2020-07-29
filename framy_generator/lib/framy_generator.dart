@@ -16,6 +16,7 @@ import 'package:framy_generator/generator/drawer_generator.dart';
 import 'package:framy_generator/generator/enum_map_generator.dart';
 import 'package:framy_generator/generator/fonts_page_generator.dart';
 import 'package:framy_generator/generator/framy_app_generator.dart';
+import 'package:framy_generator/generator/function_callbacks_generator.dart';
 import 'package:framy_generator/generator/imports_generator.dart';
 import 'package:framy_generator/generator/layout_template_generator.dart';
 import 'package:framy_generator/generator/main_generator.dart';
@@ -102,6 +103,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateEnumMap(modelFramyObjects));
     buffer.writeln(generateSubDependenciesMap(modelFramyObjects));
     buffer.writeln(generateAvailableConstructorNames(modelFramyObjects));
+    buffer.writeln(generateFunctionCallbacks());
     buffer.writeln(generatePresets(presetFramyObjects));
     return buffer.toString();
   }

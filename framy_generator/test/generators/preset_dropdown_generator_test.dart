@@ -7,9 +7,20 @@ void main() {
       final result = generatePresetDropdown();
       expect(result.startsWith('class FramyPresetDropdown'), isTrue);
     });
+
     test('should contain DropdownButton', () {
       final result = generatePresetDropdown();
       expect(result.contains('DropdownButton'), isTrue);
+    });
+
+    test('should contain check for isFunction', () {
+      final result = generatePresetDropdown();
+      expect(result.contains('dependency.isFunction'), isTrue);
+    });
+
+    test('should contain Logger label', () {
+      final result = generatePresetDropdown();
+      expect(result.contains('\'Logger\''), isTrue);
     });
   });
 }

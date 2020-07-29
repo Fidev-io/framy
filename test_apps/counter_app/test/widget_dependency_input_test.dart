@@ -158,5 +158,16 @@ void main() {
         expect(emittedValue, equals(true));
       });
     });
+
+    testWidgets('should show explanation label when type is function',
+        (WidgetTester tester) async {
+      //when
+      await _buildDependencyInput(
+        tester,
+        FramyDependencyModel<Function>('foo', 'void Function()', null),
+      );
+      //then
+      expect(find.text('See call history in Callbacks tab'), findsOneWidget);
+    });
   });
 }

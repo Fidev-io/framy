@@ -12,7 +12,11 @@ class FramyPresetDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     var customValue = dependency.value;
     if (customValue == null || isDependencyAPreset(presets, dependency)) {
-      customValue = framyModelConstructorMap[dependency.type]?.call(dependency);
+      if (dependency.isFunction) {
+        customValue = getFunctionCallback(dependency);
+      } else {
+        customValue = framyModelConstructorMap[dependency.type]?.call(dependency);
+      }
     }
     return DropdownButton(
       key: Key('framy_\${dependency.name}_preset_dropdown'),
@@ -36,7 +40,7 @@ class FramyPresetDropdown extends StatelessWidget {
         ),
         DropdownMenuItem(
           value: customValue,
-          child: Text('Custom'),
+          child: Text(dependency.isFunction ? 'Logger' : 'Custom'),
         ),
         if (presets.containsKey(dependency.type))
           ...presets[dependency.type].entries.map(

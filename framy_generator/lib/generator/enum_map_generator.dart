@@ -8,7 +8,8 @@ String generateEnumMap(List<FramyObject> modelObjects) {
 
   return '''final framyEnumMap = <String, List<dynamic>>{
   ${enumNames.fold('', (prev, enumName) => prev + _enumNameToMapEntry(enumName))}
-};''';
+};
+''';
 }
 
 String _enumNameToMapEntry(String enumName) =>

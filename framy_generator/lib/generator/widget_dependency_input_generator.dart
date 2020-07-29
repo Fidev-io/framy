@@ -155,6 +155,8 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 ),
               ),
             )
+          else if (dependency.isFunction)
+            Text('See call history in Callbacks tab')
           else
             Text('Not supported type'),
       ],

@@ -6,6 +6,7 @@ class FramyDependencyModel<T> {
   T lastCustomValue;
   String constructor;
   List<FramyDependencyModel> subDependencies;
+  final functionCalls = FramyDependencyFunctionCallsList();
 
   FramyDependencyModel(this.name, this.type, this.value,
       {this.subDependencies, this.constructor}) {
@@ -21,6 +22,8 @@ class FramyDependencyModel<T> {
     lastCustomValue = value;
   }
 
+  bool get isFunction => type.contains('Function(');
+
   String get listType => type.substring(
         type.indexOf('<') + 1,
         type.lastIndexOf('>'),
@@ -29,10 +32,30 @@ class FramyDependencyModel<T> {
   void updateValue() {
     if (type.startsWith('List<')) {
       value = initList(listType);
+    } else if (isFunction) {
+      value = getFunctionCallback(this);
     } else {
       value = framyModelConstructorMap[type]?.call(this);
     }
     lastCustomValue = value;
   }
+}
+
+class FramyDependencyFunctionCallsList with ChangeNotifier {
+  final List<FramyDependencyFunctionCall> calls = [];
+
+  void addCall(functionName, params) {
+    calls.add(FramyDependencyFunctionCall(functionName, params));
+    notifyListeners();
+  }
+}
+
+class FramyDependencyFunctionCall {
+  final DateTime time;
+  final List<dynamic> params;
+  final String functionName;
+
+  FramyDependencyFunctionCall(this.functionName, this.params)
+      : time = DateTime.now();
 }
 ''';
