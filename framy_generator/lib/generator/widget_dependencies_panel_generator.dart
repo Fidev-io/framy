@@ -99,9 +99,18 @@ class _FramyCallbacksTabState extends State<FramyCallbacksTab> {
         final callback = callbacks[index];
         return ListTile(
           dense: true,
-          title: Text(callback.functionName),
-          trailing: Text(
-              '\${callback.time.hour}:\${callback.time.minute}:\${callback.time.millisecond}'),
+          title: Row(
+            children: [
+              Text(callback.functionName),
+              Spacer(),
+              Text(
+                  '\${callback.time.hour.toString().padLeft(2, '0')}:\${callback.time.minute.toString().padLeft(2, '0')}:\${callback.time.millisecond.toString().padLeft(3, '0')}')
+            ],
+          ),
+          subtitle: Column(
+            children: callback.params.map((param) => Text('• \$param')).toList(),
+            crossAxisAlignment: CrossAxisAlignment.start,
+          ),
         );
       },
     );

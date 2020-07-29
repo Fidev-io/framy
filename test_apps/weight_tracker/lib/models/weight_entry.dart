@@ -11,4 +11,9 @@ class WeightEntry {
   WeightEntry.now(this.weight)
       : note = '',
         dateTime = DateTime.now();
+
+  @override
+  String toString() {
+    return 'WeightEntry(weight: $weight, date: $dateTime, note: $note)';
+  }
 }
