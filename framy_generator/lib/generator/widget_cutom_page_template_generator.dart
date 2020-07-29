@@ -15,6 +15,7 @@ class FramyCustomPage extends StatefulWidget {
 class _FramyCustomPageState extends State<FramyCustomPage> {
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
   List<FramyDependencyModel> dependencies;
+  int currentTabIndex = 0;
   
   @override
   void initState() {
@@ -53,17 +54,21 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                     dependencies: dependencies,
                     presets: presets,
                     onChanged: onChanged,
+                    tabIndex: currentTabIndex,
+                    onTabIndexChanged: (index) => setState(() => currentTabIndex = index),
                   ),
                 ),
             ],
           );
           if (isSmallDevice) {
             return Scaffold(
-               body: body,
+              body: body,
               floatingActionButton: FramyWidgetDependenciesFAB(
                 dependencies: dependencies,
                 presets: presets,
                 onChanged: onChanged,
+                tabIndex: currentTabIndex,
+                onTabIndexChanged: (index) => setState(() => currentTabIndex = index),
               ),
             );
           } else {

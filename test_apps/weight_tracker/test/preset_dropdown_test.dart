@@ -10,6 +10,10 @@ void main() {
       return FramyDependencyModel<User>('user', 'User', defaultValue);
     }
 
+    FramyDependencyModel getFunctionModel() {
+      return FramyDependencyModel<Function()>('foo', 'void Function()', null);
+    }
+
     testWidgets('should build', (tester) async {
       await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyPresetDropdown(
         dependency: getUserModel(),
@@ -76,6 +80,19 @@ void main() {
       await tester.tap(find.text('Custom').last);
       //then
       expect(emittedValue, isNotNull);
+    });
+
+    testWidgets('should have Logger label for functions', (tester) async {
+      //given
+      final model = getFunctionModel();
+      //when
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyPresetDropdown(
+        dependency: model,
+        presets: {},
+      )));
+      //then
+      expect(find.text('Logger').hitTestable(), findsOneWidget);
+      expect(find.text('Null').hitTestable(), findsNothing);
     });
   });
 }

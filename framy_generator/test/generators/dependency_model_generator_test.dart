@@ -28,5 +28,33 @@ void main() {
       final result = generateDependencyModel();
       expect(result.contains('framyAvailableConstructorNames'), isTrue);
     });
+
+    test('should contain isFunction getter', () {
+      final result = generateDependencyModel();
+      expect(
+        result.contains('bool get isFunction => type.contains(\'Function(\');'),
+        isTrue,
+      );
+    });
+
+    test('should contain functionCalls field', () {
+      final result = generateDependencyModel();
+      expect(result.contains('final functionCalls ='), isTrue);
+    });
+
+    test('should contain assignment from function callbacks', () {
+      final result = generateDependencyModel();
+      expect(result.contains('value = getFunctionCallback(this);'), isTrue);
+    });
+
+    test('should contain FramyDependencyFunctionCallsList class', () {
+      final result = generateDependencyModel();
+      expect(result.contains('class FramyDependencyFunctionCallsList'), isTrue);
+    });
+
+    test('should contain FramyDependencyFunctionCall class', () {
+      final result = generateDependencyModel();
+      expect(result.contains('class FramyDependencyFunctionCall'), isTrue);
+    });
   });
 }

@@ -2,6 +2,7 @@ import 'package:test/test.dart';
 import 'package:weight_tracker/main.app.framy.dart';
 import 'package:weight_tracker/models/user.dart';
 
+///Some of dependency model tests are in Counter App as well
 void main() {
   group('FramyDependencyModel', () {
     test('uses default empty value for String', () {

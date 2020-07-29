@@ -14,6 +14,19 @@ void main() {
       .getBottomRight(find.byValueKey('FramyApp'))
       .then((offset) => offset.dx >= 1000);
 
+  Future<void> closeDependenciesPanel() async {
+    await driver.scroll(
+      find.byValueKey('framySheetDragHandle'),
+      0,
+      500,
+      Duration(milliseconds: 100),
+    );
+  }
+
+  Future<void> openDependenciesPanel() async {
+    await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+  }
+
   setUpAll(() async {
     driver = await FlutterDriver.connect();
     ozzie = GithubFriendlyOzzie.initWith(driver, groupName: 'counter-app');
@@ -293,6 +306,35 @@ void main() {
       await pressSettingsSwitch('FramyAppCenterSwitch');
       await driver.waitFor(find.byValueKey('FramyGeneratedCenter'));
     });
+
+    test('should have a Callbacks and Dependencies tabs', () async {
+      if (!await isDeviceBig()) await openDependenciesPanel();
+      await driver.waitFor(find.text('Callbacks'));
+      await driver.waitFor(find.text('Dependencies'));
+    });
+
+    test('should show callbacks page on tap on Callbacks', () async {
+      await driver.waitFor(find.text('onPressed'));
+      await driver.waitFor(find.byType('FramyDependenciesTab'));
+      await driver.tap(find.text('Callbacks'));
+      await driver.waitForAbsent(find.text('onPressed'));
+      await driver.waitFor(find.byType('FramyCallbacksTab'));
+      await driver.tap(find.text('Dependencies'));
+    });
+
+    test('should support functions type', () async {
+      await driver.waitForAbsent(find.text('Not supported type'));
+      await driver.waitFor(find.text('See call history in Callbacks tab'));
+    });
+
+    test('should show logs in Callbacks tab after presses', () async {
+      if (!await isDeviceBig()) await closeDependenciesPanel();
+      await driver.tap(find.byTooltip('Increment'));
+      if (!await isDeviceBig()) await openDependenciesPanel();
+      await driver.tap(find.text('Callbacks'));
+      await driver.waitFor(find.text('onPressed'));
+      if (!await isDeviceBig()) await closeDependenciesPanel();
+    });
   });
 
   test('should hide DevicePreview if DevicePreview switch is off', () async {
@@ -381,6 +423,12 @@ void main() {
         ));
       },
     );
+
+    //because there are no functions, there is no need for the bottom bar to be shown
+    test('should not have a Callbacks and Dependencies tabs', () async {
+      await driver.waitForAbsent(find.text('Callbacks'));
+      await driver.waitForAbsent(find.text('Dependencies'));
+    });
   });
 
   test('A drawer should be optionally hidden on bigger devices', () async {

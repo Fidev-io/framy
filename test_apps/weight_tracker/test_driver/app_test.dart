@@ -9,16 +9,23 @@ void main() {
       .getBottomRight(find.byValueKey('FramyApp'))
       .then((offset) => offset.dx >= 1000);
 
+  Future<void> closeDependenciesPanel() async {
+    await driver.scroll(
+      find.byValueKey('framySheetDragHandle'),
+      0,
+      500,
+      Duration(milliseconds: 100),
+    );
+  }
+
+  Future<void> openDependenciesPanel() async {
+    await driver.tap(find.byValueKey('FramyWidgetDependenciesButton'));
+  }
+
   Future<void> closeDependenciesPanelAndGoToOtherPage(String name,
       {String groupName, bool openDependenciesPanel = false}) async {
     if (!await isDeviceBig()) {
-      //hide modal bottom sheet
-      await driver.scroll(
-        find.byValueKey('framySheetDragHandle'),
-        0,
-        500,
-        Duration(milliseconds: 100),
-      );
+      await closeDependenciesPanel();
       await driver.tap(find.byTooltip('Open navigation menu'));
     }
     if (groupName != null) {
@@ -280,6 +287,14 @@ void main() {
       await driver.tap(find.byValueKey('framy_dependency_weight_input'));
       await driver.enterText('33');
       await driver.waitFor(find.text('33.0'));
+    });
+
+    test('should show taps in Callbacks tab', () async {
+      if (!await isDeviceBig()) closeDependenciesPanel();
+      await driver.tap(find.byType('WeightEntryListItem'));
+      if (!await isDeviceBig()) openDependenciesPanel();
+      await driver.tap(find.text('Callbacks'));
+      await driver.waitFor(find.text('onTap'));
     });
   });
 

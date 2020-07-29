@@ -1062,6 +1062,7 @@ class FramyCustomPage extends StatefulWidget {
 class _FramyCustomPageState extends State<FramyCustomPage> {
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
   List<FramyDependencyModel> dependencies;
+  int currentTabIndex = 0;
 
   @override
   void initState() {
@@ -1131,6 +1132,9 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                     dependencies: dependencies,
                     presets: presets,
                     onChanged: onChanged,
+                    tabIndex: currentTabIndex,
+                    onTabIndexChanged: (index) =>
+                        setState(() => currentTabIndex = index),
                   ),
                 ),
             ],
@@ -1142,6 +1146,9 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                 dependencies: dependencies,
                 presets: presets,
                 onChanged: onChanged,
+                tabIndex: currentTabIndex,
+                onTabIndexChanged: (index) =>
+                    setState(() => currentTabIndex = index),
               ),
             );
           } else {
@@ -1308,11 +1315,14 @@ class FramyWeightEntryListItemCustomPage extends StatelessWidget {
       dependencies: [
         FramyDependencyModel<WeightEntry>('weightEntry', 'WeightEntry', null),
         FramyDependencyModel<double>('weightDifference', 'double', 0),
+        FramyDependencyModel<void Function(WeightEntry)>(
+            'onTap', 'void Function(WeightEntry)', null),
       ],
       builder: (DependencyValueGetter valueGetter) {
         return WeightEntryListItem(
           weightEntry: valueGetter('weightEntry'),
           weightDifference: valueGetter('weightDifference'),
+          onTap: valueGetter('onTap'),
         );
       },
     );
@@ -1326,6 +1336,7 @@ class FramyDependencyModel<T> {
   T lastCustomValue;
   String constructor;
   List<FramyDependencyModel> subDependencies;
+  final functionCalls = FramyDependencyFunctionCallsList();
 
   FramyDependencyModel(this.name, this.type, this.value,
       {this.subDependencies, this.constructor}) {
@@ -1341,6 +1352,8 @@ class FramyDependencyModel<T> {
     lastCustomValue = value;
   }
 
+  bool get isFunction => type.contains('Function(');
+
   String get listType => type.substring(
         type.indexOf('<') + 1,
         type.lastIndexOf('>'),
@@ -1349,6 +1362,8 @@ class FramyDependencyModel<T> {
   void updateValue() {
     if (type.startsWith('List<')) {
       value = initList(listType);
+    } else if (isFunction) {
+      value = getFunctionCallback(this);
     } else {
       value = framyModelConstructorMap[type]?.call(this);
     }
@@ -1356,13 +1371,38 @@ class FramyDependencyModel<T> {
   }
 }
 
+class FramyDependencyFunctionCallsList with ChangeNotifier {
+  final List<FramyDependencyFunctionCall> calls = [];
+
+  void addCall(functionName, params) {
+    calls.add(FramyDependencyFunctionCall(functionName, params));
+    notifyListeners();
+  }
+}
+
+class FramyDependencyFunctionCall {
+  final DateTime time;
+  final List<dynamic> params;
+  final String functionName;
+
+  FramyDependencyFunctionCall(this.functionName, this.params)
+      : time = DateTime.now();
+}
+
 class FramyWidgetDependenciesPanel extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
   final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
+  final int tabIndex;
+  final ValueChanged<int> onTabIndexChanged;
 
   const FramyWidgetDependenciesPanel(
-      {Key key, this.dependencies, this.onChanged, this.presets})
+      {Key key,
+      this.dependencies,
+      this.onChanged,
+      this.presets,
+      this.tabIndex = 0,
+      this.onTabIndexChanged})
       : super(key: const Key('FramyWidgetDependenciesPanel'));
 
   @override
@@ -1372,19 +1412,123 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
         color: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: dependencies
-                  .map((dep) => FramyWidgetDependencyInput(
-                        dependency: dep,
-                        onChanged: onChanged,
-                        presets: presets,
-                      ))
-                  .toList(),
+        child: Column(
+          children: [
+            Expanded(
+              child: tabIndex == 0
+                  ? FramyDependenciesTab(
+                      dependencies: dependencies,
+                      onChanged: onChanged,
+                      presets: presets,
+                    )
+                  : FramyCallbacksTab(dependencies: dependencies),
             ),
+            if (dependencies.any((model) => model.type.contains('Function(')))
+              BottomNavigationBar(
+                backgroundColor: Colors.white,
+                currentIndex: tabIndex,
+                onTap: onTabIndexChanged,
+                items: [
+                  BottomNavigationBarItem(
+                    title: Text('Dependencies'),
+                    icon: Icon(Icons.settings_applications),
+                  ),
+                  BottomNavigationBarItem(
+                    title: Text('Callbacks'),
+                    icon: Icon(Icons.list),
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FramyCallbacksTab extends StatefulWidget {
+  final List<FramyDependencyModel> dependencies;
+
+  const FramyCallbacksTab({Key key, this.dependencies}) : super(key: key);
+
+  @override
+  _FramyCallbacksTabState createState() => _FramyCallbacksTabState();
+}
+
+class _FramyCallbacksTabState extends State<FramyCallbacksTab> {
+  @override
+  void initState() {
+    super.initState();
+    widget.dependencies.forEach((element) {
+      element.functionCalls.addListener(_onCallsChanged);
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.dependencies.forEach((element) {
+      element.functionCalls.removeListener(_onCallsChanged);
+    });
+    super.dispose();
+  }
+
+  void _onCallsChanged() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final callbacks = widget.dependencies
+        .fold<List<FramyDependencyFunctionCall>>(
+            <FramyDependencyFunctionCall>[],
+            (prev, dep) => prev..addAll(dep.functionCalls.calls))
+          ..sort((a, b) => b.time.compareTo(a.time));
+    return ListView.builder(
+      itemCount: callbacks.length,
+      itemBuilder: (context, index) {
+        final callback = callbacks[index];
+        return ListTile(
+          dense: true,
+          title: Row(
+            children: [
+              Text(callback.functionName),
+              Spacer(),
+              Text(
+                  '${callback.time.hour.toString().padLeft(2, '0')}:${callback.time.minute.toString().padLeft(2, '0')}:${callback.time.millisecond.toString().padLeft(3, '0')}')
+            ],
           ),
+          subtitle: Column(
+            children: callback.params.map((param) => Text('• $param')).toList(),
+            crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class FramyDependenciesTab extends StatelessWidget {
+  final List<FramyDependencyModel> dependencies;
+  final ValueChanged<FramyDependencyModel> onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+
+  const FramyDependenciesTab(
+      {Key key, this.dependencies, this.onChanged, this.presets})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: dependencies
+              .map((dep) => FramyWidgetDependencyInput(
+                    dependency: dep,
+                    onChanged: onChanged,
+                    presets: presets,
+                  ))
+              .toList(),
         ),
       ),
     );
@@ -1395,9 +1539,16 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
   final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
+  final int tabIndex;
+  final ValueChanged<int> onTabIndexChanged;
 
   const FramyWidgetDependenciesFAB(
-      {Key key, this.onChanged, this.dependencies, this.presets})
+      {Key key,
+      this.onChanged,
+      this.dependencies,
+      this.presets,
+      this.tabIndex = 0,
+      this.onTabIndexChanged})
       : super(key: key);
 
   @override
@@ -1409,26 +1560,36 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
       onPressed: () => showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         context: context,
-        builder: (context) => StatefulBuilder(
-          builder: (context, setState) => Column(
-            children: [
-              SizedBox(
-                height: 2,
-                key: Key('framySheetDragHandle'),
-              ),
-              Expanded(
-                child: FramyWidgetDependenciesPanel(
-                  dependencies: dependencies,
-                  presets: presets,
-                  onChanged: (dep) {
-                    setState(() {});
-                    onChanged(dep);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+        builder: (context) {
+          int _tabIndex;
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 2,
+                    key: Key('framySheetDragHandle'),
+                  ),
+                  Expanded(
+                    child: FramyWidgetDependenciesPanel(
+                      dependencies: dependencies,
+                      presets: presets,
+                      onChanged: (dep) {
+                        setState(() {});
+                        onChanged(dep);
+                      },
+                      tabIndex: _tabIndex ?? tabIndex,
+                      onTabIndexChanged: (index) {
+                        setState(() => _tabIndex = index);
+                        onTabIndexChanged(index);
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
       mini: true,
     );
@@ -1705,6 +1866,8 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 ),
               ),
             )
+          else if (dependency.isFunction)
+            Text('See call history in Callbacks tab')
           else
             Text('Not supported type'),
       ],
@@ -1896,7 +2059,12 @@ class FramyPresetDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     var customValue = dependency.value;
     if (customValue == null || isDependencyAPreset(presets, dependency)) {
-      customValue = framyModelConstructorMap[dependency.type]?.call(dependency);
+      if (dependency.isFunction) {
+        customValue = getFunctionCallback(dependency);
+      } else {
+        customValue =
+            framyModelConstructorMap[dependency.type]?.call(dependency);
+      }
     }
     return DropdownButton(
       key: Key('framy_${dependency.name}_preset_dropdown'),
@@ -1920,7 +2088,7 @@ class FramyPresetDropdown extends StatelessWidget {
         ),
         DropdownMenuItem(
           value: customValue,
-          child: Text('Custom'),
+          child: Text(dependency.isFunction ? 'Logger' : 'Custom'),
         ),
         if (presets.containsKey(dependency.type))
           ...presets[dependency.type].entries.map(
@@ -2048,6 +2216,7 @@ final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
   'WeightUnit': WeightUnit.values,
 };
+
 List<FramyDependencyModel> createSubDependencies(String type,
     [String constructor = '']) {
   switch (type + constructor) {
@@ -2099,6 +2268,26 @@ Map<String, List<String>> framyAvailableConstructorNames = {
   'StatisticsPageState': ['.loaded', '.loading', '.error'],
   'WeightEntry': ['', '.now'],
 };
+
+dynamic getFunctionCallback(FramyDependencyModel dependency) {
+  final callbacks = [
+    () => dependency.functionCalls.addCall(dependency.name, []),
+    (a) => dependency.functionCalls.addCall(dependency.name, [a]),
+    (a, b) => dependency.functionCalls.addCall(dependency.name, [a, b]),
+    (a, b, c) => dependency.functionCalls.addCall(dependency.name, [a, b, c]),
+    (a, b, c, d) =>
+        dependency.functionCalls.addCall(dependency.name, [a, b, c, d]),
+    (a, b, c, d, e) =>
+        dependency.functionCalls.addCall(dependency.name, [a, b, c, d, e]),
+    (a, b, c, d, e, f) =>
+        dependency.functionCalls.addCall(dependency.name, [a, b, c, d, e, f]),
+  ];
+  if (dependency.type.contains('()')) {
+    return callbacks[0];
+  } else {
+    return callbacks[','.allMatches(dependency.type).length + 1];
+  }
+}
 
 Map<String, Map<String, dynamic>> createFramyPresets() => {
       'WeightEntry': {

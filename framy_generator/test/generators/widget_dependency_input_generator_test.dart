@@ -195,5 +195,10 @@ void main() {
       final result = generateWidgetDependencyInput([]);
       expect(result.contains('FramyConstructorDropdown'), isTrue);
     });
+
+    test('should contain check for isFunction', () {
+      final result = generateWidgetDependencyInput([]);
+      expect(result.contains('else if (dependency.isFunction)'), isTrue);
+    });
   });
 }
