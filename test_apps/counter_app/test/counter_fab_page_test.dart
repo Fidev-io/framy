@@ -8,19 +8,22 @@ import 'test_utils.dart';
 void main() {
   group('FramyCounterFABCustomPage', () {
     testWidgets('should build', (tester) async {
-      await tester.pumpWidget(FramyAppWrapper(FramyCounterFABCustomPage()));
+      await tester
+          .pumpWidget(FramyAppWrapperWithScaffold(FramyCounterFABCustomPage()));
       expect(find.byKey(Key('Framy_CounterFAB_Page')), findsOneWidget);
     });
 
     testWidgets('should have CounterFAB', (tester) async {
-      await tester.pumpWidget(FramyAppWrapper(FramyCounterFABCustomPage()));
+      await tester
+          .pumpWidget(FramyAppWrapperWithScaffold(FramyCounterFABCustomPage()));
       expect(find.byType(CounterFAB), findsOneWidget);
     });
 
     testWidgets('should show Callbacks page on tap',
         (WidgetTester tester) async {
       //given
-      await tester.pumpWidget(FramyAppWrapper(FramyCounterFABCustomPage()));
+      await tester
+          .pumpWidget(FramyAppWrapperWithScaffold(FramyCounterFABCustomPage()));
       //when
       await tester.tap(find.text('Callbacks'));
       await tester.pump();

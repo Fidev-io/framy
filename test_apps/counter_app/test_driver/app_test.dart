@@ -337,6 +337,23 @@ void main() {
     });
   });
 
+  test('Dependencies panel should be draggable on bigger devices', () async {
+    if (await isDeviceBig()) {
+      //given
+      final panelLeftX =
+          (await driver.getTopLeft(find.byType('FramyWidgetDependenciesPanel')))
+              .dx;
+      //when
+      await driver.scroll(find.byValueKey('FramyDependenciesPanelDragHandle'),
+          -100, 0, Duration(milliseconds: 100));
+      //then
+      final newPanelLeftX =
+          (await driver.getTopLeft(find.byType('FramyWidgetDependenciesPanel')))
+              .dx;
+      expect(newPanelLeftX.round(), panelLeftX.round() - 100);
+    }
+  });
+
   test('should hide DevicePreview if DevicePreview switch is off', () async {
     await driver.waitFor(find.byType('DevicePreviewTheme'));
     await pressSettingsSwitch('FramyAppDevicePreviewSwitch');

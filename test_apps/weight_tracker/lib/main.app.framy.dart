@@ -1080,6 +1080,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
   List<FramyDependencyModel> dependencies;
   int currentTabIndex = 0;
+  double dependenciesPanelWidth = 300;
 
   @override
   void initState() {
@@ -1144,14 +1145,23 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
               ),
               if (!isSmallDevice)
                 SizedBox(
-                  width: 300,
-                  child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
-                    presets: presets,
-                    onChanged: onChanged,
-                    tabIndex: currentTabIndex,
-                    onTabIndexChanged: (index) =>
-                        setState(() => currentTabIndex = index),
+                  width: dependenciesPanelWidth,
+                  height: double.infinity,
+                  child: Stack(
+                    alignment: Alignment.centerLeft,
+                    children: [
+                      Positioned.fill(
+                        child: FramyWidgetDependenciesPanel(
+                          dependencies: dependencies,
+                          presets: presets,
+                          onChanged: onChanged,
+                          tabIndex: currentTabIndex,
+                          onTabIndexChanged: (index) =>
+                              setState(() => currentTabIndex = index),
+                        ),
+                      ),
+                      _buildResizeDragHandle(constraints),
+                    ],
                   ),
                 ),
             ],
@@ -1172,6 +1182,33 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
             return body;
           }
         },
+      ),
+    );
+  }
+
+  Widget _buildResizeDragHandle(BoxConstraints constraints) {
+    return GestureDetector(
+      key: Key('FramyDependenciesPanelDragHandle'),
+      onHorizontalDragUpdate: (det) {
+        setState(() {
+          dependenciesPanelWidth -= det.delta.dx;
+          dependenciesPanelWidth =
+              dependenciesPanelWidth.clamp(200.0, constraints.maxWidth * 0.7);
+        });
+      },
+      child: InkWell(
+        child: Material(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.horizontal(
+              right: Radius.circular(4),
+            ),
+          ),
+          color: Theme.of(context).accentColor.withOpacity(0.5),
+          child: Container(
+            width: 8,
+            height: 50,
+          ),
+        ),
       ),
     );
   }

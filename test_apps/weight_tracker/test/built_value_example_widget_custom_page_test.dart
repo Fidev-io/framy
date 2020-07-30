@@ -7,8 +7,8 @@ import 'test_utils.dart';
 void main() {
   group('BuiltValueExampleWidget', () {
     testWidgets('should build', (WidgetTester tester) async {
-      await tester.pumpWidget(
-          FramyAppWrapper(FramyBuiltValueExampleWidgetCustomPage()));
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
+          FramyBuiltValueExampleWidgetCustomPage()));
       expect(
           find.byType(FramyBuiltValueExampleWidgetCustomPage), findsOneWidget);
     });
@@ -16,8 +16,8 @@ void main() {
     testWidgets('should allow to change fields from model',
         (WidgetTester tester) async {
       //given
-      await tester.pumpWidget(
-          FramyAppWrapper(FramyBuiltValueExampleWidgetCustomPage()));
+      await tester.pumpWidget(FramyAppWrapperWithScaffold(
+          FramyBuiltValueExampleWidgetCustomPage()));
       //when
       await tester.enterText(
           find.byKey(Key('framy_dependency_firstName_input')), 'Adam');
