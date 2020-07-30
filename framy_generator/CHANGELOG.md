@@ -2,6 +2,7 @@
 
 ## [0.2.1]
 
+* Added option to resize dependencies panel [#70](https://github.com/Fidev-io/framy/issues/70)
 * Added lint ignores for generated file [#139](https://github.com/Fidev-io/framy/issues/139)
 
 ## [0.2.0]

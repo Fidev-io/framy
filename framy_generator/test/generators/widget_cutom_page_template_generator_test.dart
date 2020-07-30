@@ -108,5 +108,15 @@ void main() {
       final result = generateCustomPage(false);
       expect(result.contains('int currentTabIndex = 0;'), isTrue);
     });
+
+    test('should contain default dependenciesPanelWidth', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('double dependenciesPanelWidth = 300;'), isTrue);
+    });
+
+    test('should contain onHorizontalDragUpdate', () {
+      final result = generateCustomPage(false);
+      expect(result.contains('onHorizontalDragUpdate'), isTrue);
+    });
   });
 }
