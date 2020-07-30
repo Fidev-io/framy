@@ -19,6 +19,7 @@ import 'package:framy_generator/generator/framy_app_generator.dart';
 import 'package:framy_generator/generator/function_callbacks_generator.dart';
 import 'package:framy_generator/generator/imports_generator.dart';
 import 'package:framy_generator/generator/layout_template_generator.dart';
+import 'package:framy_generator/generator/lint_ignores_generator.dart';
 import 'package:framy_generator/generator/main_generator.dart';
 import 'package:framy_generator/generator/model_constructor_map_generator.dart';
 import 'package:framy_generator/generator/preset_dropdown_generator.dart';
@@ -56,6 +57,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     final useDevicePreview = annotation.read('useDevicePreview').boolValue;
 
     final buffer = StringBuffer();
+    buffer.writeln(generateLintIgnores());
     buffer.writeln(generateImports([
       ...themeFramyObjects,
       ...widgetFramyObjects,
