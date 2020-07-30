@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.1]
+
+* Added lint ignores for generated file [#139](https://github.com/Fidev-io/framy/issues/139)
+
 ## [0.2.0]
 
 * Added function callbacks! #107
