@@ -350,7 +350,7 @@ void main() {
       final newPanelLeftX =
           (await driver.getTopLeft(find.byType('FramyWidgetDependenciesPanel')))
               .dx;
-      expect(newPanelLeftX.round(), panelLeftX.round() - 100);
+      expect(newPanelLeftX < panelLeftX, isTrue);
     }
   });
 
