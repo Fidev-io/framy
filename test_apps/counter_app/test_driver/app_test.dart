@@ -301,7 +301,16 @@ void main() {
       await driver.waitFor(find.byValueKey('MyCounterFAB'));
     });
 
+    group('yaml config', () {
+      //specified in pubspec.yaml
+      test('should have center and safe area enabled by default', () async {
+        await driver.waitFor(find.byValueKey('FramyGeneratedCenter'));
+        await driver.waitFor(find.byValueKey('FramyGeneratedSafeArea'));
+      });
+    });
+
     test('should wrap widget with Center when Center switch is on', () async {
+      await pressSettingsSwitch('FramyAppCenterSwitch');
       await driver.waitForAbsent(find.byValueKey('FramyGeneratedCenter'));
       await pressSettingsSwitch('FramyAppCenterSwitch');
       await driver.waitFor(find.byValueKey('FramyGeneratedCenter'));

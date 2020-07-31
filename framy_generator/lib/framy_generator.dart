@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:framy_annotation/framy_annotation.dart';
+import 'package:framy_generator/config/yaml_config_loader.dart';
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/app_bar_generator.dart';
 import 'package:framy_generator/generator/app_bar_page_generator.dart';
@@ -55,6 +56,8 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     final riverpodFramyObjects =
         await loadFramyObjects(buildStep, '**.riverpod.framy.json');
     final useDevicePreview = annotation.read('useDevicePreview').boolValue;
+    final framyConfig = await loadFramyConfig()
+      ..useDevicePreview = useDevicePreview;
 
     final buffer = StringBuffer();
     buffer.writeln(generateLintIgnores());
@@ -69,6 +72,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateFramyApp(
       themeFramyObjects,
       riverpodFramyObjects.isNotEmpty,
+      framyConfig,
     ));
     buffer.writeln(generateRouting(widgetFramyObjects));
     buffer.writeln(generateLayoutTemplate());

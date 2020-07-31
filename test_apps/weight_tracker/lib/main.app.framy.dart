@@ -66,7 +66,7 @@ class FramyApp extends StatefulWidget {
 class _FramyAppState extends State<FramyApp> {
   bool _wrapWithScaffold = true;
   bool _wrapWithCenter = false;
-  bool _wrapWithSafeArea = false;
+  bool _wrapWithSafeArea = true;
   bool _showNavigationMenu = true;
   bool _wrapWithDevicePreview = true;
 

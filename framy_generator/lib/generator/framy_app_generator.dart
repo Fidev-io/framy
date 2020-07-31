@@ -1,7 +1,9 @@
+import 'package:framy_generator/config/framy_config.dart';
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/accessible_element_generator.dart';
 
-String generateFramyApp(List<FramyObject> themeObjects, bool usesRiverpod) =>
+String generateFramyApp(List<FramyObject> themeObjects, bool usesRiverpod,
+        FramyConfig framyConfig) =>
     '''
 final framyAppStateKey = GlobalKey<_FramyAppState>();
 
@@ -13,11 +15,11 @@ class FramyApp extends StatefulWidget {
 }
 
 class _FramyAppState extends State<FramyApp> {
-  bool _wrapWithScaffold = true;
-  bool _wrapWithCenter = false;
-  bool _wrapWithSafeArea = false;
+  bool _wrapWithScaffold = ${framyConfig.wrapWithScaffold};
+  bool _wrapWithCenter = ${framyConfig.wrapWithCenter};
+  bool _wrapWithSafeArea = ${framyConfig.wrapWithSafeArea};
   bool _showNavigationMenu = true;
-  bool _wrapWithDevicePreview = true;
+  bool _wrapWithDevicePreview = ${framyConfig.wrapWithDevicePreview};
 
   set wrapWithScaffold(bool value) =>
       setState(() => _wrapWithScaffold = value);
