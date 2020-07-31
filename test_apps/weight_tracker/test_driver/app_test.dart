@@ -131,6 +131,13 @@ void main() {
     });
   });
 
+  group('yaml config', () {
+    //because of config in framy.yaml
+    test('should wrap with safe area by default', () async {
+      await driver.waitFor(find.byValueKey('FramyGeneratedSafeArea'));
+    });
+  });
+
   group('UserEmailsView', () {
     setUpAll(() async {
       await closeDependenciesPanelAndGoToOtherPage('UserEmailsView');

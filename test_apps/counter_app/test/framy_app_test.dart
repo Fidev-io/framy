@@ -124,23 +124,33 @@ void main() {
         expect(find.byKey(Key('FramyGeneratedScaffold')), findsNothing);
       });
 
-      testWidgets(
-          'should not wrap widget with Center when Center switch is off',
+      testWidgets('should wrap widget with Center when Center switch is on',
           (tester) async {
         //given
+        //in pubspec.yaml it's specified to be true by default
         await goToCounterFabPage(tester);
         //then
-        expect(find.byKey(Key('FramyGeneratedCenter')), findsNothing);
+        expect(find.byKey(Key('FramyGeneratedCenter')), findsOneWidget);
       });
 
-      testWidgets('should wrap widget with Center when Center switch is on',
+      testWidgets(
+          'should not wrap widget with Center when Center switch is off',
           (tester) async {
         //given
         await goToCounterFabPage(tester);
         //when
         await tapSettingsSwitch(tester, 'FramyAppCenterSwitch');
         //then
-        expect(find.byKey(Key('FramyGeneratedCenter')), findsOneWidget);
+        expect(find.byKey(Key('FramyGeneratedCenter')), findsNothing);
+      });
+
+      testWidgets('should wrap widget with SafeArea when SafeArea switch is on',
+          (tester) async {
+        //in pubspec.yaml it's specified to be true by default
+        //given
+        await goToCounterFabPage(tester);
+        //then
+        expect(find.byKey(Key('FramyGeneratedSafeArea')), findsOneWidget);
       });
 
       testWidgets(
@@ -148,18 +158,10 @@ void main() {
           (tester) async {
         //given
         await goToCounterFabPage(tester);
-        //then
-        expect(find.byKey(Key('FramyGeneratedSafeArea')), findsNothing);
-      });
-
-      testWidgets('should wrap widget with SafeArea when SafeArea switch is on',
-          (tester) async {
-        //given
-        await goToCounterFabPage(tester);
         //when
         await tapSettingsSwitch(tester, 'FramyAppSafeAreaSwitch');
         //then
-        expect(find.byKey(Key('FramyGeneratedSafeArea')), findsOneWidget);
+        expect(find.byKey(Key('FramyGeneratedSafeArea')), findsNothing);
       });
 
       testWidgets('should hide DevicePreview when DevicePreview switch is off',

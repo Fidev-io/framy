@@ -21,6 +21,10 @@ dev_dependencies:
   test: any
   ozzie: ^2.2.3
 
+framy:
+  wrap-with-center: true
+  wrap-with-safearea: true
+
 #dependency_overrides:
 #  framy_annotation:
 #    path: ../../framy_annotation
