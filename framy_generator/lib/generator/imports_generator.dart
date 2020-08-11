@@ -2,7 +2,7 @@ import 'package:framy_generator/framy_object.dart';
 
 String generateImports(List<FramyObject> framyObjects,
     {bool useDevicePreview = false, List<String> extraImports = const []}) {
-  Set<String> imports = {};
+  final imports = <String>{};
   imports.addAll(extraImports);
   imports.add('package:flutter/foundation.dart');
   imports.add('package:flutter/material.dart');
@@ -18,7 +18,7 @@ String generateImports(List<FramyObject> framyObjects,
       imports.add('package:provider/provider.dart');
     }
   });
-  String importsStr = '';
+  var importsStr = '';
   final hasProviderDependency =
       imports.contains('package:provider/provider.dart');
   if (hasProviderDependency) {

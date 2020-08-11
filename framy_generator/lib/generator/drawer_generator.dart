@@ -108,7 +108,7 @@ String _generateCustomWidgetTiles(List<FramyObject> objects) {
 
   final groupNames = widgetObjects.map((o) => o.widgetGroupName).toSet();
 
-  String result = groupNames.fold(
+  var result = groupNames.fold(
     '',
     (prev, groupName) => prev + _generateGroupTiles(groupName, widgetObjects),
   );
@@ -127,7 +127,7 @@ String _generateGroupTiles(String groupName, List<FramyObject> widgetObjects) {
   if (groupName == null) {
     return '';
   }
-  String result = '''
+  var result = '''
 Theme(
   data: Theme.of(context).copyWith(accentColor: Colors.black54),
   child: ExpansionTile(

@@ -1031,7 +1031,7 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
                     background: BoxDecoration(),
                   ),
                   builder: (context) {
-                    Widget widgetToDisplay = widget.builder(dependencyValue);
+                    var widgetToDisplay = widget.builder(dependencyValue);
                     if (settings.wrapWithCenter) {
                       widgetToDisplay = Center(
                         key: ValueKey('FramyGeneratedCenter'),

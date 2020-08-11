@@ -213,7 +213,7 @@ String _generateModelInputs(List<FramyObject> modelObjects) {
   if (models.isEmpty) {
     return '';
   } else {
-    String modelElse =
+    var modelElse =
         "else if (${models.fold('', (prev, model) => prev + 'dependency.type == \'${model.name}\' || ')})";
     //remove || from last check
     modelElse = modelElse.substring(0, modelElse.length - 5);

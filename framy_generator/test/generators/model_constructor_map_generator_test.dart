@@ -106,7 +106,7 @@ void main() {
       //when
       final result = generateModelConstructorMap(framyModelObjects);
       //then
-      expect(result.contains("BuiltUser(\n    (b) => b"), isTrue);
+      expect(result.contains('BuiltUser(\n    (b) => b'), isTrue);
       expect(
           result.contains(
               "..firstName = dep.subDependencies.singleWhere((d) => d.name == 'firstName').value"),

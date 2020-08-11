@@ -92,27 +92,6 @@ extension on WidgetTester {
       );
 }
 
-class _FakeWindowPadding implements WindowPadding {
-  const _FakeWindowPadding({
-    this.bottom = 0,
-    this.left = 0,
-    this.right = 0,
-    this.top = 0,
-  });
-
-  @override
-  final double bottom;
-
-  @override
-  final double left;
-
-  @override
-  final double right;
-
-  @override
-  final double top;
-}
-
 /// This is hacky as hell, but it seems to work :)
 /// It gets the Roboto font from package directory.
 /// If it causes problem for you, please let us know at https://github.com/fidev-io/framy/issues

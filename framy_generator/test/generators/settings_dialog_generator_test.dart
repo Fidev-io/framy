@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('should contain key for Scaffold switch', () {
-    final String result = generateSettingsDialog(false);
+    final result = generateSettingsDialog(false);
     expect(
       result.contains('key: ValueKey(\'FramyAppScaffoldSwitch\')'),
       isTrue,
@@ -11,7 +11,7 @@ void main() {
   });
 
   test('should contain key for Center switch', () {
-    final String result = generateSettingsDialog(false);
+    final result = generateSettingsDialog(false);
     expect(
       result.contains('key: ValueKey(\'FramyAppCenterSwitch\')'),
       isTrue,
@@ -19,7 +19,7 @@ void main() {
   });
 
   test('should contain key for SafeArea switch', () {
-    final String result = generateSettingsDialog(false);
+    final result = generateSettingsDialog(false);
     expect(
       result.contains('key: ValueKey(\'FramyAppSafeAreaSwitch\')'),
       isTrue,
@@ -27,7 +27,7 @@ void main() {
   });
 
   test('should contain key for DevicePreview switch', () {
-    final String result = generateSettingsDialog(false);
+    final result = generateSettingsDialog(false);
     expect(
       result.contains('key: ValueKey(\'FramyAppDevicePreviewSwitch\')'),
       isTrue,
@@ -35,7 +35,7 @@ void main() {
   });
 
   test('should contain onChanged: null when devicePreview is disabled', () {
-    final String result = generateSettingsDialog(false);
+    final result = generateSettingsDialog(false);
     expect(result.contains('onChanged: null,'), isTrue);
     expect(
       result.contains(
@@ -46,7 +46,7 @@ void main() {
 
   test('should contain devicePreview callback when devicePreview is enabled',
       () {
-    final String result = generateSettingsDialog(true);
+    final result = generateSettingsDialog(true);
     expect(result.contains('onChanged: null,'), isFalse);
     expect(
       result.contains(

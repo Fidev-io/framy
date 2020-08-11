@@ -5,24 +5,24 @@ import 'package:test/test.dart';
 void main() {
   group('Storyboard generator result', () {
     test('should contain class FramyStoryboardPage', () {
-      String result = generateStoryboardPage([], [], false);
+      final result = generateStoryboardPage([], [], false);
       expect(result.contains('class FramyStoryboardPage'), isTrue);
     });
 
     test('should contain proper key', () {
-      String result = generateStoryboardPage([], [], false);
+      final result = generateStoryboardPage([], [], false);
       expect(result.contains('Key(\'FramyStoryboardPage\')'), isTrue);
     });
 
     test('should contain FramyStoryboardCustomPageWithDependencies definition',
         () {
-      String result = generateStoryboardPage([], [], false);
+      final result = generateStoryboardPage([], [], false);
       expect(result.contains('class FramyStoryboardCustomPageWithDependencies'),
           isTrue);
     });
 
     test('should contain builder(dependencyValue)', () {
-      String result = generateStoryboardPage([], [], false);
+      final result = generateStoryboardPage([], [], false);
       expect(result.contains('builder(dependencyValue)'), isTrue);
     });
 
