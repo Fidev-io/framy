@@ -1,8 +1,9 @@
 import 'package:framy_generator/framy_object.dart';
 
 String generateImports(List<FramyObject> framyObjects,
-    {bool useDevicePreview = false}) {
+    {bool useDevicePreview = false, List<String> extraImports = const []}) {
   Set<String> imports = {};
+  imports.addAll(extraImports);
   imports.add('package:flutter/foundation.dart');
   imports.add('package:flutter/material.dart');
   if (useDevicePreview) {

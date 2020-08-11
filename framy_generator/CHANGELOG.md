@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.0]
+
+* Added generating golden tests for `@FramyWidgets` [#145](https://github.com/Fidev-io/framy/issues/145)
+
 ## [0.2.2]
 
 * Added option to configure default values in `framy.yaml` or `pubspec.yaml` [#13](https://github.com/Fidev-io/framy/issues/13)

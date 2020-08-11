@@ -7,7 +7,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  framy_annotation: ^0.1.4
+  framy_annotation: ^0.1.5
   device_preview: ^0.4.7
 
 dev_dependencies:

@@ -39,4 +39,11 @@ builders:
     builder_factories: ["framyAppBuilder"]
     build_extensions: { ".dart": ["app.framy.dart"] }
     auto_apply: dependents
+    runs_before: [":test_builder"]
+    build_to: source
+  test_builder:
+    import: "package:framy_generator/builder.dart"
+    builder_factories: ["testBuilder"]
+    build_extensions: { ".dart": ["test.framy.dart"] }
+    auto_apply: dependents
     build_to: source
