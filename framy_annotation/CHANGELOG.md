@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.5]
+
+- Added `FramyGoldenTests` annotation for generating golden tests [#145](https://github.com/Fidev-io/framy/issues/145)
+
 ## [0.1.4]
 
 - Added `groupName` parameter to group widgets in directories

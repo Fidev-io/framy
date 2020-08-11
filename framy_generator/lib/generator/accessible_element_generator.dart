@@ -1,7 +1,7 @@
 import 'package:framy_generator/framy_object.dart';
 
 String generateAccessibleElement(FramyObject object) {
-  String text = '';
+  var text = '';
 
   if (object.parentObject != null) {
     text += object.parentObject.name;

@@ -85,7 +85,7 @@ String _generateFramyAppBuildMethod(
       child: MaterialApp(
         key: Key('FramyApp'),
         debugShowCheckedModeBanner: false,
-        ${_generateThemeDataLine(themeObjects)}
+        ${generateThemeDataLine(themeObjects)}
         onGenerateRoute: onGenerateRoute,
       ),
     )
@@ -96,7 +96,7 @@ String _generateFramyAppBuildMethod(
   return framyAppBuild;
 }
 
-String _generateThemeDataLine(List<FramyObject> themeObjects) {
+String generateThemeDataLine(List<FramyObject> themeObjects) {
   if (themeObjects == null || themeObjects.isEmpty) {
     return '';
   } else {

@@ -154,4 +154,20 @@ class FramyRegisterRiverpod extends FramyAnnotation {
   const FramyRegisterRiverpod();
 }
 
-const framyRegisterRiverpod = const FramyRegisterRiverpod();
+const framyRegisterRiverpod = FramyRegisterRiverpod();
+
+/// Use it in a test directory to generate golden tests for your widgets
+///
+/// Example:
+///
+/// import 'package:framy_annotation/framy_annotation.dart';
+/// import 'golden_test.test.framy.dart' as golden_tests;
+///
+/// @FramyGoldenTests()
+/// void main() => golden_tests.main();
+///
+class FramyGoldenTests extends FramyAnnotation {
+  const FramyGoldenTests();
+}
+
+const framyGoldenTests = FramyGoldenTests();

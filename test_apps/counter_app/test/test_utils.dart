@@ -17,6 +17,7 @@ class FramyAppWrapper extends StatelessWidget {
       wrapWithDevicePreview: true,
       child: MaterialApp(
         theme: getThemeData(),
+        debugShowCheckedModeBanner: false,
         home: child,
       ),
     );

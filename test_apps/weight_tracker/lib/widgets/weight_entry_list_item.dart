@@ -18,7 +18,7 @@ class WeightEntryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateTime = weightEntry?.dateTime ?? DateTime.now();
+    final dateTime = weightEntry?.dateTime;
     return InkWell(
       onTap: () => onTap(weightEntry),
       child: Padding(
@@ -36,11 +36,15 @@ class WeightEntryListItem extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          DateFormat.MMMEd().format(dateTime),
+                          dateTime != null
+                              ? DateFormat.MMMEd().format(dateTime)
+                              : '',
                           textScaleFactor: 0.9,
                         ),
                         Text(
-                          TimeOfDay.fromDateTime(dateTime).format(context),
+                          dateTime != null
+                              ? TimeOfDay.fromDateTime(dateTime).format(context)
+                              : '',
                           textScaleFactor: 0.8,
                           style: TextStyle(color: Colors.grey),
                         ),

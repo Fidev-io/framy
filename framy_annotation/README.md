@@ -8,7 +8,7 @@
 
 A convenient code generator for app styleguide, gallery, wireframes and/or storyboard.
 
-👉 [Official documentation](https://framy.dev) 👈  
+👉 [Official updated documentation](https://framy.dev) 👈  
 
 
 ## Packages
