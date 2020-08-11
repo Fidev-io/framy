@@ -16,7 +16,7 @@ class ThemeResolver extends GeneratorForAnnotation<FramyTheme> {
       );
     }
 
-    List<FramyObject> framyObjectsToReturn = [];
+    final framyObjectsToReturn = <FramyObject>[];
 
     if (element is ClassElement) {
       final parentObject = FramyObject.fromElement(element);

@@ -8,5 +8,5 @@ String fixJson(String generatedJson) {
 
 extension JsonListExtension on List<FramyObject> {
   String toJson() => JsonEncoder.withIndent('  ')
-      .convert(this.map((framyObj) => framyObj.toMap()).toList());
+      .convert(map((framyObj) => framyObj.toMap()).toList());
 }

@@ -20,8 +20,7 @@ void main() {
       expect(find.byIcon(Icons.menu), findsOneWidget);
     });
 
-    testWidgets('should have Settings button',
-        (tester) async {
+    testWidgets('should have Settings button', (tester) async {
       await tester.pumpWidget(_TestAppBar(drawer: Container()));
       expect(find.byKey(ValueKey('FramyAppBarSettingsButton')), findsOneWidget);
     });
@@ -39,9 +38,11 @@ class _TestAppBar extends StatelessWidget {
       wrapWithScaffold: true,
       wrapWithSafeArea: false,
       wrapWithCenter: false,
+      showNavigationMenu: true,
+      wrapWithDevicePreview: false,
       child: MaterialApp(
         home: Scaffold(
-          appBar: FramyAppBar(),
+          appBar: FramyAppBar(leading: null),
           drawer: drawer,
         ),
       ),

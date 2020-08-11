@@ -119,9 +119,9 @@ class _FramyCustomPageState extends State<FramyCustomPage> {
 ''';
 
 String _generateWidgetBuilderUsage(bool useDevicePreview) {
-  String builder = '''
+  final builder = '''
 builder: (context) {   
-  Widget widgetToDisplay = ${_widgetBuilderUsage};
+  var widgetToDisplay = ${_widgetBuilderUsage};
   if (settings.wrapWithCenter) {
     widgetToDisplay = Center(key: ValueKey('FramyGeneratedCenter'), child: widgetToDisplay,);
   }

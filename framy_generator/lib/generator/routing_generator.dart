@@ -21,7 +21,7 @@ Route onGenerateRoute(RouteSettings settings) {
 ''';
 
 String _generateCustomWidgetPages(List<FramyObject> widgetObjects) {
-  String result = '';
+  var result = '';
   widgetObjects
       .where((framyObject) =>
           framyObject.type == FramyObjectType.widget ||

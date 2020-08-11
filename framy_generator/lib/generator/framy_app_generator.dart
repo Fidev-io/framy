@@ -76,7 +76,7 @@ class FramyAppSettings extends InheritedWidget {
 
 String _generateFramyAppBuildMethod(
     List<FramyObject> themeObjects, bool usesRiverpod) {
-  String framyAppBuild = ''' FramyAppSettings(
+  var framyAppBuild = ''' FramyAppSettings(
       wrapWithScaffold: _wrapWithScaffold,
       wrapWithCenter: _wrapWithCenter,
       wrapWithSafeArea: _wrapWithSafeArea,

@@ -6,7 +6,7 @@ String generateStoryboardPage(List<FramyObject> widgetFramyObjects,
   final pageFramyObjects = widgetFramyObjects
       .where((element) => element.type == FramyObjectType.page)
       .toList();
-  String gridViewChildren = pageFramyObjects.fold(
+  final gridViewChildren = pageFramyObjects.fold(
     '',
     (previousValue, element) =>
         previousValue + _generateStoryboardWidgetPage(element),

@@ -64,6 +64,7 @@ void main() {
 
     testWidgets('should have Dropdown button', (tester) async {
       await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyButtonPage()));
+      // ignore: missing_required_param
       expect(find.byType(DropdownButton<String>().runtimeType), findsOneWidget);
     });
   });

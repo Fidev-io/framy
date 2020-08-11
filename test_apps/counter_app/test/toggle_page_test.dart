@@ -1,6 +1,6 @@
+import 'package:counter_app/main.app.framy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:counter_app/main.app.framy.dart';
 
 import 'test_utils.dart';
 
@@ -28,6 +28,7 @@ void main() {
 
     testWidgets('should have Radio buttons', (tester) async {
       await tester.pumpWidget(FramyAppWrapperWithScaffold(FramyTogglePage()));
+      // ignore: missing_required_param
       expect(find.byType(Radio<String>().runtimeType), findsNWidgets(2));
     });
   });

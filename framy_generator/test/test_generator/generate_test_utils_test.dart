@@ -8,11 +8,6 @@ void main() {
       expect(result.contains('extension on WidgetTester {'), isTrue);
     });
 
-    test('should contain _FakeWindowPadding', () {
-      final result = generateTestUtils([]);
-      expect(result.contains('_FakeWindowPadding'), isTrue);
-    });
-
     test('should contain loadRobotoFont method', () {
       final result = generateTestUtils([]);
       expect(result.contains('loadRobotoFont'), isTrue);

@@ -2,7 +2,7 @@ import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/accessible_element_generator.dart';
 
 String generatePresets(List<FramyObject> presets) {
-  final Map<String, List<FramyObject>> presetsByType = {};
+  final presetsByType = <String, List<FramyObject>>{};
   presets.forEach((element) {
     if (presetsByType.containsKey(element.returnType)) {
       presetsByType[element.returnType].add(element);

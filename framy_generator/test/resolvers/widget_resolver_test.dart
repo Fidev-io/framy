@@ -77,7 +77,7 @@ class CounterFloatingActionButton {}
 ]''')
 @FramyWidget()
 class WidgetWithConstructor {
-  WidgetWithConstructor(String arg1) {}
+  WidgetWithConstructor(String arg1);
 }
 
 @ShouldGenerate('''
@@ -113,7 +113,7 @@ class WidgetWithConstructor {
 ]''')
 @FramyWidget()
 class WidgetWithConstructorAndKey {
-  WidgetWithConstructorAndKey({Key key, String arg1}) {}
+  WidgetWithConstructorAndKey({Key key, String arg1});
 }
 
 @ShouldGenerate('''
@@ -149,31 +149,31 @@ class WidgetWithConstructorAndKey {
 ]''')
 @FramyWidget()
 class WidgetWithConstructorWithDefaultParamValue {
-  WidgetWithConstructorWithDefaultParamValue({String arg1 = 'test1'}) {}
+  WidgetWithConstructorWithDefaultParamValue({String arg1 = 'test1'});
 }
 
 @ShouldGenerate('"type": "int"', contains: true)
 @FramyWidget()
 class WidgetWithIntParam {
-  WidgetWithIntParam(int arg1) {}
+  WidgetWithIntParam(int arg1);
 }
 
 @ShouldGenerate('"type": "double"', contains: true)
 @FramyWidget()
 class WidgetWithDoubleParam {
-  WidgetWithDoubleParam(double arg1) {}
+  WidgetWithDoubleParam(double arg1);
 }
 
 @ShouldGenerate('"type": "double"', contains: true)
 @FramyWidget()
 class WidgetWithNumParam {
-  WidgetWithNumParam(num arg1) {}
+  WidgetWithNumParam(num arg1);
 }
 
 @ShouldGenerate('"type": "bool"', contains: true)
 @FramyWidget()
 class WidgetWithBoolParam {
-  WidgetWithBoolParam(bool arg1) {}
+  WidgetWithBoolParam(bool arg1);
 }
 
 @ShouldGenerate('''
@@ -210,7 +210,7 @@ class WidgetWithBoolParam {
 @FramyUseProvider(String)
 @FramyWidget()
 class WidgetWithStringProviderDependency {
-  WidgetWithStringProviderDependency() {}
+  WidgetWithStringProviderDependency();
 }
 
 @ShouldGenerate('''
@@ -223,7 +223,7 @@ class WidgetWithStringProviderDependency {
 @FramyUseProvider(User)
 @FramyWidget()
 class WidgetWithUserProviderDependency {
-  WidgetWithUserProviderDependency() {}
+  WidgetWithUserProviderDependency();
 }
 
 @ShouldGenerate('''
@@ -233,14 +233,14 @@ class WidgetWithUserProviderDependency {
             "isNamed": false,
             "dependencyType": "FramyDependencyType.riverpod"
 ''', contains: true)
-@FramyUseRiverpod("someProvider")
+@FramyUseRiverpod('someProvider')
 @FramyWidget()
 class WidgetWithRiverpodDependency {}
 
 @ShouldGenerate('"type": "FramyObjectType.page"', contains: true)
 @FramyWidget(isPage: true)
 class PageWidget {
-  PageWidget() {}
+  PageWidget();
 }
 
 @ShouldGenerate('"widgetGroupName": "Some group"', contains: true)

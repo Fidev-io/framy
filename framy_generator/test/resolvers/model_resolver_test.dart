@@ -202,5 +202,5 @@ abstract class BuiltUser implements Built<BuiltUser, BuiltUserBuilder> {
   // ignore: unused_element
   BuiltUser._();
 
-  factory BuiltUser([updates(BuiltUserBuilder b)]) => null;
+  factory BuiltUser([Function(BuiltUserBuilder b) updates]) => null;
 }

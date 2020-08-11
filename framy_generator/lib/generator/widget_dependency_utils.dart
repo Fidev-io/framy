@@ -12,7 +12,7 @@ String wrapConstructor(FramyObject framyObject) {
       .where((dep) => dep.dependencyType == FramyDependencyType.riverpod)
       .toList();
 
-  String constructor = '''${framyObject.name}(
+  var constructor = '''${framyObject.name}(
   ${constructorDependencies.fold('', (s, dep) => s + generateParamUsageInConstructor(dep))}
   )''';
 

@@ -30,12 +30,12 @@ void main() {
 
     // one for small screens, one for big screens
     test('should contain two FramyDrawers', () {
-      final String result = generateLayoutTemplate();
-      expect("FramyDrawer".allMatches(result), hasLength(2));
+      final result = generateLayoutTemplate();
+      expect('FramyDrawer'.allMatches(result), hasLength(2));
     });
 
     test('should contain IconButton for leading icon', () {
-      final String result = generateLayoutTemplate();
+      final result = generateLayoutTemplate();
       expect(result.contains('IconButton'), isTrue);
     });
   });

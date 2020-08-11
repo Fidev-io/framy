@@ -4,23 +4,108 @@
 // FramyGenerator
 // **************************************************************************
 
-import 'package:counter_app/main.dart';
+// ignore_for_file: unused_import
+// ignore_for_file: directives_ordering
+// ignore_for_file: type_annotate_public_apis
+// ignore_for_file: prefer_const_constructors
+// ignore_for_file: invalid_assignment
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: prefer_const_constructors_in_immutables
+// ignore_for_file: avoid_return_types_on_setters
+// ignore_for_file: avoid_setters_without_getters
+// ignore_for_file: sort_child_properties_last
+// ignore_for_file: prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_generic_function_type_aliases
+// ignore_for_file: prefer_conditional_assignment
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:counter_app/main.dart';
+import 'package:framy_annotation/framy_annotation.dart';
+import 'dart:core';
 
 void main() {
   runApp(FramyApp());
 }
 
-class FramyApp extends StatelessWidget {
+final framyAppStateKey = GlobalKey<_FramyAppState>();
+
+class FramyApp extends StatefulWidget {
+  FramyApp() : super(key: framyAppStateKey);
+
+  @override
+  _FramyAppState createState() => _FramyAppState();
+}
+
+class _FramyAppState extends State<FramyApp> {
+  bool _wrapWithScaffold = true;
+  bool _wrapWithCenter = false;
+  bool _wrapWithSafeArea = false;
+  bool _showNavigationMenu = true;
+  bool _wrapWithDevicePreview = true;
+
+  set wrapWithScaffold(bool value) => setState(() => _wrapWithScaffold = value);
+
+  set wrapWithCenter(bool value) => setState(() => _wrapWithCenter = value);
+
+  set wrapWithSafeArea(bool value) => setState(() => _wrapWithSafeArea = value);
+
+  void toggleNavigationMenu() =>
+      setState(() => _showNavigationMenu = !_showNavigationMenu);
+
+  set wrapWithDevicePreview(bool value) =>
+      setState(() => _wrapWithDevicePreview = value);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      key: Key('FramyApp'),
-      theme: getThemeData(),
-      onGenerateRoute: onGenerateRoute,
+    return FramyAppSettings(
+      wrapWithScaffold: _wrapWithScaffold,
+      wrapWithCenter: _wrapWithCenter,
+      wrapWithSafeArea: _wrapWithSafeArea,
+      showNavigationMenu: _showNavigationMenu,
+      wrapWithDevicePreview: _wrapWithDevicePreview,
+      child: MaterialApp(
+        key: Key('FramyApp'),
+        debugShowCheckedModeBanner: false,
+        theme: getThemeData(),
+        onGenerateRoute: onGenerateRoute,
+      ),
     );
   }
+}
+
+class FramyAppSettings extends InheritedWidget {
+  final bool wrapWithScaffold;
+  final bool wrapWithCenter;
+  final bool wrapWithSafeArea;
+  final bool showNavigationMenu;
+  final bool wrapWithDevicePreview;
+
+  const FramyAppSettings({
+    Key key,
+    @required Widget child,
+    @required this.wrapWithScaffold,
+    @required this.wrapWithCenter,
+    @required this.wrapWithSafeArea,
+    @required this.showNavigationMenu,
+    @required this.wrapWithDevicePreview,
+  })  : assert(child != null),
+        super(key: key, child: child);
+
+  static FramyAppSettings of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<FramyAppSettings>();
+  }
+
+  @override
+  bool updateShouldNotify(FramyAppSettings old) =>
+      old.wrapWithScaffold != wrapWithScaffold ||
+      old.wrapWithCenter != wrapWithCenter ||
+      old.wrapWithSafeArea != wrapWithSafeArea ||
+      old.showNavigationMenu != showNavigationMenu ||
+      old.wrapWithDevicePreview != wrapWithDevicePreview;
 }
 
 Route onGenerateRoute(RouteSettings settings) {
@@ -29,8 +114,11 @@ Route onGenerateRoute(RouteSettings settings) {
     '/colors': FramyColorsPage(),
     '/appbar': FramyAppBarPage(),
     '/button': FramyButtonPage(),
+    '/toggle': FramyTogglePage(),
+    '/textfield': FramyTextFieldPage(),
     '/CounterFAB': FramyCounterFABCustomPage(),
     '/CounterTitle': FramyCounterTitleCustomPage(),
+    '/storyboard': FramyStoryboardPage(),
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -49,12 +137,24 @@ class FramyLayoutTemplate extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isSmallDevice = constraints.maxWidth < 1000;
+        final leading = isSmallDevice
+            ? null
+            : IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () =>
+                    framyAppStateKey.currentState.toggleNavigationMenu(),
+                tooltip: FramyAppSettings.of(context).showNavigationMenu
+                    ? 'Close navigation menu'
+                    : 'Open navigation menu',
+              );
         return Scaffold(
-          appBar: FramyAppBar(),
+          appBar: FramyAppBar(leading: leading),
           body: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (!isSmallDevice) FramyDrawer(),
+              if (!isSmallDevice &&
+                  FramyAppSettings.of(context).showNavigationMenu)
+                FramyDrawer(),
               Expanded(
                 child: child,
               ),
@@ -68,16 +168,108 @@ class FramyLayoutTemplate extends StatelessWidget {
 }
 
 class FramyAppBar extends StatelessWidget with PreferredSizeWidget {
+  final Widget leading;
+
+  const FramyAppBar({Key key, @required this.leading}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
       key: Key('FramyAppBar'),
       title: Text('Framy App'),
+      leading: leading,
+      actions: [
+        IconButton(
+          key: ValueKey('FramyAppBarSettingsButton'),
+          icon: Icon(Icons.settings),
+          onPressed: () => showDialog(
+            context: context,
+            useRootNavigator: false,
+            builder: (context) => FramySettingsDialog(),
+          ),
+        )
+      ],
     );
   }
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class FramySettingsDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Preview settings'),
+      actions: [
+        FlatButton(
+          child: Text('Close'),
+          onPressed: () => Navigator.of(context).pop(),
+        )
+      ],
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Device Preview disabled'),
+                      SelectableText(
+                        'framy.dev/#/device_preview',
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ],
+                  ),
+                ),
+                Switch(
+                  key: ValueKey('FramyAppDevicePreviewSwitch'),
+                  onChanged: null,
+                  value: false,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: Text('Wrap with Scaffold')),
+                Switch(
+                  key: ValueKey('FramyAppScaffoldSwitch'),
+                  onChanged: (b) =>
+                      framyAppStateKey.currentState.wrapWithScaffold = b,
+                  value: FramyAppSettings.of(context).wrapWithScaffold,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: Text('Wrap with Center')),
+                Switch(
+                  key: ValueKey('FramyAppCenterSwitch'),
+                  onChanged: (b) =>
+                      framyAppStateKey.currentState.wrapWithCenter = b,
+                  value: FramyAppSettings.of(context).wrapWithCenter,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: Text('Wrap with SafeArea')),
+                Switch(
+                  key: ValueKey('FramyAppSafeAreaSwitch'),
+                  onChanged: (b) =>
+                      framyAppStateKey.currentState.wrapWithSafeArea = b,
+                  value: FramyAppSettings.of(context).wrapWithSafeArea,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class FramyDrawer extends StatelessWidget {
@@ -133,6 +325,18 @@ class FramyDrawer extends StatelessWidget {
                       onTap: () =>
                           Navigator.of(context).pushReplacementNamed('/button'),
                     ),
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('Toggle'),
+                      onTap: () =>
+                          Navigator.of(context).pushReplacementNamed('/toggle'),
+                    ),
+                    ListTile(
+                      leading: SizedBox.shrink(),
+                      title: Text('TextField'),
+                      onTap: () => Navigator.of(context)
+                          .pushReplacementNamed('/textfield'),
+                    ),
                   ],
                 ),
               ),
@@ -148,6 +352,26 @@ class FramyDrawer extends StatelessWidget {
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/CounterTitle'),
               ),
+              ListTile(
+                leading: Icon(Icons.view_carousel),
+                title: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    Text('Storyboard'),
+                    Chip(
+                      label: Text(
+                        'Preview',
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ],
+                ),
+                onTap: () =>
+                    Navigator.of(context).pushReplacementNamed('/storyboard'),
+              ),
             ],
           ),
         ),
@@ -155,6 +379,8 @@ class FramyDrawer extends StatelessWidget {
     );
   }
 }
+
+// ======================== MATERIAL PAGES ===========================
 
 class FramyFontsPage extends StatelessWidget {
   const FramyFontsPage() : super(key: const Key('FramyFontsPage'));
@@ -500,8 +726,15 @@ class FramyAppBarPage extends StatelessWidget {
   }
 }
 
-class FramyButtonPage extends StatelessWidget {
+class FramyButtonPage extends StatefulWidget {
   const FramyButtonPage() : super(key: const Key('FramyButtonPage'));
+
+  @override
+  _FramyButtonPageState createState() => _FramyButtonPageState();
+}
+
+class _FramyButtonPageState extends State<FramyButtonPage> {
+  String selectedOptionInDropdown;
 
   @override
   Widget build(BuildContext context) {
@@ -579,7 +812,28 @@ class FramyButtonPage extends StatelessWidget {
                 children: [
                   IconButton(icon: Icon(Icons.favorite), onPressed: () {}),
                   IconButton(
-                      icon: Icon(Icons.favorite_border), onPressed: null),
+                    icon: Icon(Icons.favorite_border),
+                    onPressed: null,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const FramyHeaderText('Dropdown button'),
+              const SizedBox(height: 4),
+              DropdownButton(
+                hint: Text('Select option'),
+                value: selectedOptionInDropdown,
+                onChanged: (option) =>
+                    setState(() => selectedOptionInDropdown = option),
+                items: [
+                  DropdownMenuItem(
+                    child: Text('Option A'),
+                    value: 'Option A',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('Option B'),
+                    value: 'Option B',
+                  ),
                 ],
               ),
             ],
@@ -590,31 +844,182 @@ class FramyButtonPage extends StatelessWidget {
   }
 }
 
-class FramyCounterFABCustomPage extends StatefulWidget {
-  const FramyCounterFABCustomPage()
-      : super(key: const Key('Framy_CounterFAB_Page'));
+class FramyTogglePage extends StatefulWidget {
+  const FramyTogglePage() : super(key: const Key('FramyTogglePage'));
 
   @override
-  _FramyCounterFABCustomPageState createState() =>
-      _FramyCounterFABCustomPageState();
+  _FramyTogglePageState createState() => _FramyTogglePageState();
 }
 
-class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<void Function()>(
-        'onPressed', 'void Function()', null, []),
-  ];
+class _FramyTogglePageState extends State<FramyTogglePage> {
+  bool switchState = false;
+  List<bool> toggleState = [false, true, false];
+  bool checkboxState = false;
+  String radioState = 'Option A';
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const FramyHeaderText('Switch'),
+            Switch(
+              value: switchState,
+              onChanged: (bool value) => setState(() => switchState = value),
+            ),
+            const FramyHeaderText('Toggle buttons'),
+            const SizedBox(height: 8),
+            ToggleButtons(
+              onPressed: (index) =>
+                  setState(() => toggleState[index] = !toggleState[index]),
+              isSelected: toggleState,
+              children: [
+                Icon(Icons.format_bold),
+                Icon(Icons.format_italic),
+                Icon(Icons.format_align_center),
+              ],
+            ),
+            const SizedBox(height: 8),
+            const FramyHeaderText('Checkbox'),
+            CheckboxListTile(
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: (bool value) => setState(() => checkboxState = value),
+              value: checkboxState,
+              title: Text('Option'),
+            ),
+            const FramyHeaderText('Radio'),
+            RadioListTile(
+              value: 'Option A',
+              onChanged: (system) => setState(() => radioState = system),
+              groupValue: radioState,
+              title: Text('Option A'),
+            ),
+            RadioListTile(
+              value: 'Option B',
+              onChanged: (system) => setState(() => radioState = system),
+              groupValue: radioState,
+              title: Text('Option B'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FramyTextFieldPage extends StatelessWidget {
+  const FramyTextFieldPage() : super(key: const Key('FramyTextFieldPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const FramyHeaderText('TextField'),
+            const SizedBox(height: 16),
+            TextField(),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'TextField with label',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                filled: true,
+                labelText: 'Filled TextField with label',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Outline TextField',
+                focusedBorder: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.email),
+                labelText: 'TextField with prefixIcon',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                suffixIcon: Icon(Icons.remove_red_eye),
+                labelText: 'TextField with suffixIcon',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'TextField with error message',
+                errorText: 'Invalid value',
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              enabled: false,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.email),
+                hintText: 'Disabled TextField',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ======================== CUSTOM PAGES ===========================
+
+typedef dynamic DependencyValueGetter(String name);
+
+class FramyCustomPage extends StatefulWidget {
+  final List<FramyDependencyModel> dependencies;
+  final Widget Function(DependencyValueGetter dependencyValueGetter) builder;
+
+  const FramyCustomPage({Key key, this.dependencies, this.builder})
+      : super(key: key);
+
+  @override
+  _FramyCustomPageState createState() => _FramyCustomPageState();
+}
+
+class _FramyCustomPageState extends State<FramyCustomPage> {
   final Map<String, Map<String, dynamic>> presets = createFramyPresets();
+  List<FramyDependencyModel> dependencies;
+  int currentTabIndex = 0;
+  double dependenciesPanelWidth = 300;
+
+  @override
+  void initState() {
+    super.initState();
+    dependencies = widget.dependencies;
+  }
 
   FramyDependencyModel dependency(String name) =>
       dependencies.singleWhere((d) => d.name == name);
 
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
+  dynamic dependencyValue(String name) => dependency(name).value;
+
+  void onChanged(FramyDependencyModel dependencyModel) {
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final settings = FramyAppSettings.of(context);
     return SafeArea(
       bottom: false,
       child: LayoutBuilder(
@@ -625,17 +1030,50 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: CounterFAB(
-                  onPressed: dependency('onPressed').value,
+                child: Builder(
+                  builder: (context) {
+                    var widgetToDisplay = widget.builder(dependencyValue);
+                    if (settings.wrapWithCenter) {
+                      widgetToDisplay = Center(
+                        key: ValueKey('FramyGeneratedCenter'),
+                        child: widgetToDisplay,
+                      );
+                    }
+                    if (settings.wrapWithSafeArea) {
+                      widgetToDisplay = SafeArea(
+                        key: ValueKey('FramyGeneratedSafeArea'),
+                        child: widgetToDisplay,
+                      );
+                    }
+                    if (settings.wrapWithScaffold) {
+                      widgetToDisplay = Scaffold(
+                        key: ValueKey('FramyGeneratedScaffold'),
+                        body: widgetToDisplay,
+                      );
+                    }
+                    return widgetToDisplay;
+                  },
                 ),
               ),
               if (!isSmallDevice)
                 SizedBox(
-                  width: 300,
-                  child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
-                    presets: presets,
-                    onChanged: onChanged,
+                  width: dependenciesPanelWidth,
+                  height: double.infinity,
+                  child: Stack(
+                    alignment: Alignment.centerLeft,
+                    children: [
+                      Positioned.fill(
+                        child: FramyWidgetDependenciesPanel(
+                          dependencies: dependencies,
+                          presets: presets,
+                          onChanged: onChanged,
+                          tabIndex: currentTabIndex,
+                          onTabIndexChanged: (index) =>
+                              setState(() => currentTabIndex = index),
+                        ),
+                      ),
+                      _buildResizeDragHandle(constraints),
+                    ],
                   ),
                 ),
             ],
@@ -647,6 +1085,9 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
                 dependencies: dependencies,
                 presets: presets,
                 onChanged: onChanged,
+                tabIndex: currentTabIndex,
+                onTabIndexChanged: (index) =>
+                    setState(() => currentTabIndex = index),
               ),
             );
           } else {
@@ -656,74 +1097,68 @@ class _FramyCounterFABCustomPageState extends State<FramyCounterFABCustomPage> {
       ),
     );
   }
-}
 
-class FramyCounterTitleCustomPage extends StatefulWidget {
-  const FramyCounterTitleCustomPage()
-      : super(key: const Key('Framy_CounterTitle_Page'));
-
-  @override
-  _FramyCounterTitleCustomPageState createState() =>
-      _FramyCounterTitleCustomPageState();
-}
-
-class _FramyCounterTitleCustomPageState
-    extends State<FramyCounterTitleCustomPage> {
-  List<FramyDependencyModel> dependencies = [
-    FramyDependencyModel<String>('verb', 'String', 'pushed', []),
-    FramyDependencyModel<int>('counter', 'int', 0, []),
-  ];
-  final Map<String, Map<String, dynamic>> presets = createFramyPresets();
-
-  FramyDependencyModel dependency(String name) =>
-      dependencies.singleWhere((d) => d.name == name);
-
-  void onChanged(String name, dynamic dependencyValue) {
-    setState(() => dependency(name).value = dependencyValue);
+  Widget _buildResizeDragHandle(BoxConstraints constraints) {
+    return GestureDetector(
+      key: Key('FramyDependenciesPanelDragHandle'),
+      onHorizontalDragUpdate: (det) {
+        setState(() {
+          dependenciesPanelWidth -= det.delta.dx;
+          dependenciesPanelWidth =
+              dependenciesPanelWidth.clamp(200.0, constraints.maxWidth * 0.7);
+        });
+      },
+      child: InkWell(
+        child: Material(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.horizontal(
+              right: Radius.circular(4),
+            ),
+          ),
+          color: Theme.of(context).accentColor.withOpacity(0.5),
+          child: Container(
+            width: 8,
+            height: 50,
+          ),
+        ),
+      ),
+    );
   }
+}
 
+class FramyCounterFABCustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isSmallDevice =
-              constraints.maxWidth < 1000 - 304 || constraints.maxHeight < 500;
-          final body = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: CounterTitle(
-                  verb: dependency('verb').value,
-                  counter: dependency('counter').value,
-                ),
-              ),
-              if (!isSmallDevice)
-                SizedBox(
-                  width: 300,
-                  child: FramyWidgetDependenciesPanel(
-                    dependencies: dependencies,
-                    presets: presets,
-                    onChanged: onChanged,
-                  ),
-                ),
-            ],
-          );
-          if (isSmallDevice) {
-            return Scaffold(
-              body: body,
-              floatingActionButton: FramyWidgetDependenciesFAB(
-                dependencies: dependencies,
-                presets: presets,
-                onChanged: onChanged,
-              ),
-            );
-          } else {
-            return body;
-          }
-        },
-      ),
+    return FramyCustomPage(
+      key: Key('Framy_CounterFAB_Page'),
+      dependencies: [
+        FramyDependencyModel<void Function()>(
+            'onPressed', 'void Function()', null),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return CounterFAB(
+          onPressed: valueGetter('onPressed'),
+        );
+      },
+    );
+  }
+}
+
+class FramyCounterTitleCustomPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FramyCustomPage(
+      key: Key('Framy_CounterTitle_Page'),
+      dependencies: [
+        FramyDependencyModel<String>('verb', 'String', 'pushed'),
+        FramyDependencyModel<int>('counter', 'int', 0),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return CounterTitle(
+          verb: valueGetter('verb'),
+          counter: valueGetter('counter'),
+        );
+      },
     );
   }
 }
@@ -732,20 +1167,76 @@ class FramyDependencyModel<T> {
   final String name;
   final String type;
   T value;
-  final List<FramyDependencyModel> subDependencies;
   T lastCustomValue;
+  String constructor;
+  List<FramyDependencyModel> subDependencies;
+  final functionCalls = FramyDependencyFunctionCallsList();
 
-  FramyDependencyModel(this.name, this.type, this.value, this.subDependencies)
-      : lastCustomValue = value;
+  FramyDependencyModel(this.name, this.type, this.value,
+      {this.subDependencies, this.constructor}) {
+    if (constructor == null) {
+      constructor = framyAvailableConstructorNames[type]?.first ?? '';
+    }
+    if (subDependencies == null) {
+      subDependencies = createSubDependencies(type, constructor);
+    }
+    if (value == null) {
+      updateValue();
+    }
+    lastCustomValue = value;
+  }
+
+  bool get isFunction => type.contains('Function(');
+
+  String get listType => type.substring(
+        type.indexOf('<') + 1,
+        type.lastIndexOf('>'),
+      );
+
+  void updateValue() {
+    if (type.startsWith('List<')) {
+      value = initList(listType);
+    } else if (isFunction) {
+      value = getFunctionCallback(this);
+    } else {
+      value = framyModelConstructorMap[type]?.call(this);
+    }
+    lastCustomValue = value;
+  }
+}
+
+class FramyDependencyFunctionCallsList with ChangeNotifier {
+  final List<FramyDependencyFunctionCall> calls = [];
+
+  void addCall(functionName, params) {
+    calls.add(FramyDependencyFunctionCall(functionName, params));
+    notifyListeners();
+  }
+}
+
+class FramyDependencyFunctionCall {
+  final DateTime time;
+  final List<dynamic> params;
+  final String functionName;
+
+  FramyDependencyFunctionCall(this.functionName, this.params)
+      : time = DateTime.now();
 }
 
 class FramyWidgetDependenciesPanel extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
+  final int tabIndex;
+  final ValueChanged<int> onTabIndexChanged;
 
   const FramyWidgetDependenciesPanel(
-      {Key key, this.dependencies, this.onChanged, this.presets})
+      {Key key,
+      this.dependencies,
+      this.onChanged,
+      this.presets,
+      this.tabIndex = 0,
+      this.onTabIndexChanged})
       : super(key: const Key('FramyWidgetDependenciesPanel'));
 
   @override
@@ -755,19 +1246,123 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
         color: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: dependencies
-                  .map((dep) => FramyWidgetDependencyInput(
-                        dependency: dep,
-                        onChanged: onChanged,
-                        presets: presets,
-                      ))
-                  .toList(),
+        child: Column(
+          children: [
+            Expanded(
+              child: tabIndex == 0
+                  ? FramyDependenciesTab(
+                      dependencies: dependencies,
+                      onChanged: onChanged,
+                      presets: presets,
+                    )
+                  : FramyCallbacksTab(dependencies: dependencies),
             ),
+            if (dependencies.any((model) => model.type.contains('Function(')))
+              BottomNavigationBar(
+                backgroundColor: Colors.white,
+                currentIndex: tabIndex,
+                onTap: onTabIndexChanged,
+                items: [
+                  BottomNavigationBarItem(
+                    title: Text('Dependencies'),
+                    icon: Icon(Icons.settings_applications),
+                  ),
+                  BottomNavigationBarItem(
+                    title: Text('Callbacks'),
+                    icon: Icon(Icons.list),
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FramyCallbacksTab extends StatefulWidget {
+  final List<FramyDependencyModel> dependencies;
+
+  const FramyCallbacksTab({Key key, this.dependencies}) : super(key: key);
+
+  @override
+  _FramyCallbacksTabState createState() => _FramyCallbacksTabState();
+}
+
+class _FramyCallbacksTabState extends State<FramyCallbacksTab> {
+  @override
+  void initState() {
+    super.initState();
+    widget.dependencies.forEach((element) {
+      element.functionCalls.addListener(_onCallsChanged);
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.dependencies.forEach((element) {
+      element.functionCalls.removeListener(_onCallsChanged);
+    });
+    super.dispose();
+  }
+
+  void _onCallsChanged() {
+    if (mounted) setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final callbacks = widget.dependencies
+        .fold<List<FramyDependencyFunctionCall>>(
+            <FramyDependencyFunctionCall>[],
+            (prev, dep) => prev..addAll(dep.functionCalls.calls))
+          ..sort((a, b) => b.time.compareTo(a.time));
+    return ListView.builder(
+      itemCount: callbacks.length,
+      itemBuilder: (context, index) {
+        final callback = callbacks[index];
+        return ListTile(
+          dense: true,
+          title: Row(
+            children: [
+              Text(callback.functionName),
+              Spacer(),
+              Text(
+                  '${callback.time.hour.toString().padLeft(2, '0')}:${callback.time.minute.toString().padLeft(2, '0')}:${callback.time.millisecond.toString().padLeft(3, '0')}')
+            ],
           ),
+          subtitle: Column(
+            children: callback.params.map((param) => Text('• $param')).toList(),
+            crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class FramyDependenciesTab extends StatelessWidget {
+  final List<FramyDependencyModel> dependencies;
+  final ValueChanged<FramyDependencyModel> onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+
+  const FramyDependenciesTab(
+      {Key key, this.dependencies, this.onChanged, this.presets})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: dependencies
+              .map((dep) => FramyWidgetDependencyInput(
+                    dependency: dep,
+                    onChanged: onChanged,
+                    presets: presets,
+                  ))
+              .toList(),
         ),
       ),
     );
@@ -776,11 +1371,18 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
 
 class FramyWidgetDependenciesFAB extends StatelessWidget {
   final List<FramyDependencyModel> dependencies;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
+  final int tabIndex;
+  final ValueChanged<int> onTabIndexChanged;
 
   const FramyWidgetDependenciesFAB(
-      {Key key, this.onChanged, this.dependencies, this.presets})
+      {Key key,
+      this.onChanged,
+      this.dependencies,
+      this.presets,
+      this.tabIndex = 0,
+      this.onTabIndexChanged})
       : super(key: key);
 
   @override
@@ -792,35 +1394,105 @@ class FramyWidgetDependenciesFAB extends StatelessWidget {
       onPressed: () => showModalBottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         context: context,
-        builder: (context) => StatefulBuilder(
-          builder: (context, setState) => Column(
-            children: [
-              SizedBox(
-                height: 2,
-                key: Key('framySheetDragHandle'),
-              ),
-              Expanded(
-                child: FramyWidgetDependenciesPanel(
-                  dependencies: dependencies,
-                  presets: presets,
-                  onChanged: (s, v) {
-                    setState(() {});
-                    onChanged(s, v);
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+        builder: (context) {
+          int _tabIndex;
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 2,
+                    key: Key('framySheetDragHandle'),
+                  ),
+                  Expanded(
+                    child: FramyWidgetDependenciesPanel(
+                      dependencies: dependencies,
+                      presets: presets,
+                      onChanged: (dep) {
+                        setState(() {});
+                        onChanged(dep);
+                      },
+                      tabIndex: _tabIndex ?? tabIndex,
+                      onTabIndexChanged: (index) {
+                        setState(() => _tabIndex = index);
+                        onTabIndexChanged(index);
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
       mini: true,
     );
   }
 }
 
+class FramyStoryboardPage extends StatelessWidget {
+  const FramyStoryboardPage() : super(key: const Key('FramyStoryboardPage'));
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.extent(
+      padding: const EdgeInsets.all(16),
+      maxCrossAxisExtent: 300,
+      crossAxisSpacing: 16,
+      mainAxisSpacing: 16,
+      childAspectRatio: 1 / 2,
+      children: [],
+    );
+  }
+}
+
+class FramyStoryboardCustomPageWithDependencies extends StatelessWidget {
+  final List<FramyDependencyModel> dependencies;
+  final Widget Function(DependencyValueGetter dependencyValueGetter) builder;
+  final String name;
+
+  const FramyStoryboardCustomPageWithDependencies(
+      {Key key, this.dependencies, this.builder, this.name})
+      : super(key: key);
+
+  FramyDependencyModel dependency(String name) =>
+      dependencies.singleWhere((d) => d.name == name);
+
+  dynamic dependencyValue(String name) => dependency(name).value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black54),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: builder(dependencyValue),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(name, style: Theme.of(context).textTheme.caption),
+      ],
+    );
+  }
+}
+
+// ======================== DEPENDENCY INPUTS ===========================
+
+InputDecoration get _framyInputDecoration => InputDecoration(
+      filled: true,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide.none,
+      ),
+    );
+
 class FramyWidgetDependencyInput extends StatelessWidget {
   final FramyDependencyModel dependency;
-  final void Function(String name, dynamic value) onChanged;
+  final ValueChanged<FramyDependencyModel> onChanged;
   final Map<String, Map<String, dynamic>> presets;
   final Widget trailing;
 
@@ -832,16 +1504,9 @@ class FramyWidgetDependencyInput extends StatelessWidget {
     if (value != null && !isValueAPreset(presets, dependency.type, value)) {
       dependency.lastCustomValue = value;
     }
-    onChanged(dependency.name, value);
+    dependency.value = value;
+    onChanged(dependency);
   }
-
-  InputDecoration get _inputDecoration => InputDecoration(
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
-        ),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -872,29 +1537,42 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             ],
           ),
         ),
+        if (!isDependencyAPreset(presets, dependency) &&
+            framyAvailableConstructorNames.containsKey(dependency.type) &&
+            framyAvailableConstructorNames[dependency.type].length > 1)
+          FramyConstructorDropdown(
+            dependency: dependency,
+            onChanged: onChanged,
+          ),
         if (!isDependencyAPreset(presets, dependency))
           if (dependency.type == 'bool')
-            DropdownButton<bool>(
-              key: inputKey,
-              value: dependency.value,
-              onChanged: _onValueChanged,
-              items: [
-                DropdownMenuItem(
-                  value: true,
-                  child: Text('True'),
+            InputDecorator(
+              decoration: _framyInputDecoration,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<bool>(
+                  isDense: true,
+                  key: inputKey,
+                  value: dependency.value,
+                  onChanged: _onValueChanged,
+                  items: [
+                    DropdownMenuItem(
+                      value: true,
+                      child: Text('True'),
+                    ),
+                    DropdownMenuItem(
+                      value: false,
+                      child: Text('False'),
+                    )
+                  ],
                 ),
-                DropdownMenuItem(
-                  value: false,
-                  child: Text('False'),
-                )
-              ],
+              ),
             )
           else if (dependency.type == 'String' ||
               dependency.type == 'int' ||
               dependency.type == 'double')
             TextFormField(
               key: inputKey,
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               initialValue: dependency.value?.toString(),
               autovalidate: true,
               validator: (value) {
@@ -924,6 +1602,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 }
               },
             )
+          else if (dependency.type == 'DateTime')
+            FramyDateTimeDependencyInput(
+              key: inputKey,
+              dependency: dependency,
+              presets: presets,
+              onChanged: _onValueChanged,
+            )
           else if (dependency.type.startsWith('List<'))
             FramyWidgetListDependencyInput(
               dependency: dependency,
@@ -932,7 +1617,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
             )
           else if (framyEnumMap.containsKey(dependency.type))
             InputDecorator(
-              decoration: _inputDecoration,
+              decoration: _framyInputDecoration,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   isDense: true,
@@ -949,6 +1634,8 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                 ),
               ),
             )
+          else if (dependency.isFunction)
+            Text('See call history in Callbacks tab')
           else
             Text('Not supported type'),
       ],
@@ -984,8 +1671,7 @@ class FramyModelInput extends StatelessWidget {
                       child: FramyWidgetDependencyInput(
                         dependency: dep,
                         presets: presets,
-                        onChanged: (name, value) {
-                          dependency(name).value = value;
+                        onChanged: (changedDep) {
                           onChanged(dependencies);
                         },
                       ),
@@ -993,6 +1679,46 @@ class FramyModelInput extends StatelessWidget {
                   ],
                 ))
             .toList(),
+      ),
+    );
+  }
+}
+
+class FramyDateTimeDependencyInput extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final ValueChanged<dynamic> onChanged;
+  final Map<String, Map<String, dynamic>> presets;
+
+  const FramyDateTimeDependencyInput(
+      {Key key, this.dependency, this.onChanged, this.presets})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final text = dependency.value == null
+        ? '-'
+        : (dependency.value as DateTime)
+            .toIso8601String()
+            .replaceFirst('T', ' ')
+            .replaceFirst(RegExp('\\..*'), '');
+    return InkWell(
+      onTap: () {
+        showDatePicker(
+          context: context,
+          initialDate: dependency.value ?? DateTime.now(),
+          firstDate: DateTime(1000),
+          lastDate: DateTime(3000),
+        ).then((value) {
+          if (value != null) {
+            onChanged(value);
+          }
+        });
+      },
+      child: InputDecorator(
+        decoration: _framyInputDecoration.copyWith(
+          suffixIcon: Icon(Icons.calendar_today),
+        ),
+        child: Text(text),
       ),
     );
   }
@@ -1009,10 +1735,6 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String listType = dependency.type.substring(
-      dependency.type.indexOf('<') + 1,
-      dependency.type.lastIndexOf('>'),
-    );
     return Column(
       key: Key(dependency.value?.length?.toString()),
       children: [
@@ -1021,12 +1743,17 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
             FramyWidgetDependencyInput(
               dependency: FramyDependencyModel(
                 'List element ${i + 1}',
-                listType,
+                dependency.listType,
                 dependency.value[i],
-                [],
+                subDependencies: dependency.subDependencies[i].subDependencies,
+                constructor: dependency.subDependencies[i].constructor,
               ),
-              onChanged: (name, val) {
-                dependency.value[i] = val;
+              onChanged: (changedDep) {
+                dependency.value[i] = changedDep.value;
+                dependency.subDependencies[i].constructor =
+                    changedDep.constructor;
+                dependency.subDependencies[i].subDependencies =
+                    changedDep.subDependencies;
                 onChanged(dependency);
               },
               presets: presets,
@@ -1039,8 +1766,10 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
                   iconSize: 16,
                   onPressed: () {
                     dependency.value.removeAt(i);
+                    dependency.subDependencies.removeAt(i);
                     onChanged(dependency);
                   },
+                  // splashRadius: 16, //--not in Stable channel yet
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints.tightFor(
                     height: 20,
@@ -1053,18 +1782,31 @@ class FramyWidgetListDependencyInput extends StatelessWidget {
           child: Text('+ Add ${dependency.name} element'),
           onPressed: () {
             if (dependency.value == null) {
-              if (listType == 'String') dependency.value = <String>[];
-              if (listType == 'int') dependency.value = <int>[];
-              if (listType == 'double') dependency.value = <double>[];
-              if (listType == 'bool') dependency.value = <bool>[];
+              dependency.value = initList(dependency.listType);
             }
-            dependency.value.add(null);
+            final newModel = FramyDependencyModel<dynamic>(
+              '_',
+              dependency.listType,
+              null,
+            );
+            dependency.subDependencies.add(newModel);
+            dependency.value.add(newModel.value);
             onChanged(dependency);
           },
         ),
       ],
     );
   }
+}
+
+dynamic initList(String listType) {
+  if (listType == 'String') return <String>[];
+  if (listType == 'int') return <int>[];
+  if (listType == 'double') return <double>[];
+  if (listType == 'bool')
+    return <bool>[];
+  else
+    return [];
 }
 
 class FramyPresetDropdown extends StatelessWidget {
@@ -1080,7 +1822,12 @@ class FramyPresetDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     var customValue = dependency.value;
     if (customValue == null || isDependencyAPreset(presets, dependency)) {
-      customValue = framyModelConstructorMap[dependency.type]?.call(dependency);
+      if (dependency.isFunction) {
+        customValue = getFunctionCallback(dependency);
+      } else {
+        customValue =
+            framyModelConstructorMap[dependency.type]?.call(dependency);
+      }
     }
     return DropdownButton(
       key: Key('framy_${dependency.name}_preset_dropdown'),
@@ -1104,7 +1851,7 @@ class FramyPresetDropdown extends StatelessWidget {
         ),
         DropdownMenuItem(
           value: customValue,
-          child: Text('Custom'),
+          child: Text(dependency.isFunction ? 'Logger' : 'Custom'),
         ),
         if (presets.containsKey(dependency.type))
           ...presets[dependency.type].entries.map(
@@ -1117,6 +1864,53 @@ class FramyPresetDropdown extends StatelessWidget {
     );
   }
 }
+
+class FramyConstructorDropdown extends StatelessWidget {
+  final FramyDependencyModel dependency;
+  final ValueChanged<FramyDependencyModel> onChanged;
+
+  FramyConstructorDropdown({this.dependency, this.onChanged})
+      : super(
+          key: Key('framy_dependency_${dependency.name}_constructor_dropdown'),
+        );
+
+  @override
+  Widget build(BuildContext context) {
+    return InputDecorator(
+      decoration: InputDecoration(
+        labelText: 'Constructor',
+        isDense: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(),
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isDense: true,
+          value: dependency.constructor,
+          onChanged: (conName) {
+            dependency.constructor = conName;
+            dependency.subDependencies =
+                createSubDependencies(dependency.type, dependency.constructor);
+            dependency.updateValue();
+            onChanged(dependency);
+          },
+          items: framyAvailableConstructorNames[dependency.type]
+              .map((constructorName) => DropdownMenuItem<String>(
+                    value: constructorName,
+                    child: Text(constructorName.isEmpty
+                        ? 'Default'
+                        : constructorName.replaceAll('.', '')),
+                  ))
+              .toList(),
+        ),
+      ),
+    );
+  }
+}
+
+// ======================== MAPS etc ===========================
 
 final framyModelConstructorMap =
     <String, dynamic Function(FramyDependencyModel)>{
@@ -1131,4 +1925,35 @@ final framyModelConstructorMap =
 final framyEnumMap = <String, List<dynamic>>{
   'MaterialTapTargetSize': MaterialTapTargetSize.values,
 };
+
+List<FramyDependencyModel> createSubDependencies(String type,
+    [String constructor = '']) {
+  switch (type + constructor) {
+    default:
+      return [];
+  }
+}
+
+Map<String, List<String>> framyAvailableConstructorNames = {};
+
+dynamic getFunctionCallback(FramyDependencyModel dependency) {
+  final callbacks = [
+    () => dependency.functionCalls.addCall(dependency.name, []),
+    (a) => dependency.functionCalls.addCall(dependency.name, [a]),
+    (a, b) => dependency.functionCalls.addCall(dependency.name, [a, b]),
+    (a, b, c) => dependency.functionCalls.addCall(dependency.name, [a, b, c]),
+    (a, b, c, d) =>
+        dependency.functionCalls.addCall(dependency.name, [a, b, c, d]),
+    (a, b, c, d, e) =>
+        dependency.functionCalls.addCall(dependency.name, [a, b, c, d, e]),
+    (a, b, c, d, e, f) =>
+        dependency.functionCalls.addCall(dependency.name, [a, b, c, d, e, f]),
+  ];
+  if (dependency.type.contains('()')) {
+    return callbacks[0];
+  } else {
+    return callbacks[','.allMatches(dependency.type).length + 1];
+  }
+}
+
 Map<String, Map<String, dynamic>> createFramyPresets() => {};

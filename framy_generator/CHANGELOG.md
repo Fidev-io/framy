@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.1]
+
+* Make analyzer happy
+
 ## [0.3.0]
 
 * Added generating golden tests for `@FramyWidgets` [#145](https://github.com/Fidev-io/framy/issues/145)

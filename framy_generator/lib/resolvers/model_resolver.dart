@@ -10,7 +10,7 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
   @override
   String generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
-    List<FramyObject> framyObjectsToReturn = [];
+    final framyObjectsToReturn = <FramyObject>[];
     final framyObject = _modelObjectFromElement(element);
     if (element is ClassElement) {
       framyObject.constructors = [];
@@ -20,17 +20,17 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
         if (element.isBuiltValue) {
           _generateForBuiltValueModel(element, framyObject);
         } else {
-          for (ConstructorElement constructorElement in element.constructors) {
+          for (final constructorElement in element.constructors) {
             if (constructorElement.isPrivate) continue;
 
-            String constructorName = constructorElement.name;
+            var constructorName = constructorElement.name;
             if (constructorName.isNotEmpty) {
               constructorName = '.$constructorName';
             }
             final constructorObject =
                 FramyObjectConstructor(constructorName, []);
 
-            for (ParameterElement param in constructorElement.parameters) {
+            for (final param in constructorElement.parameters) {
               constructorObject.dependencies.add(
                 FramyObjectDependency(
                   param.name,
@@ -57,7 +57,7 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
     final constructorObject =
         FramyObjectConstructor('', [], isBuiltValue: true);
 
-    for (PropertyAccessorElement param in element.accessors) {
+    for (final param in element.accessors) {
       constructorObject.dependencies.add(
         FramyObjectDependency(
           param.name,
@@ -83,7 +83,6 @@ class ModelResolver extends GeneratorForAnnotation<FramyModel> {
 }
 
 extension on ClassElement {
-  bool get isBuiltValue => this
-      .allSupertypes
+  bool get isBuiltValue => allSupertypes
       .any((interfaceType) => interfaceType.element.name == 'Built');
 }

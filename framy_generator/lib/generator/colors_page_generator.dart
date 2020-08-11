@@ -183,7 +183,7 @@ class _FramyColorItem extends StatelessWidget {
 ''';
 
 String _generateCustomColorItems(List<FramyObject> themeObjects) {
-  String result = '';
+  var result = '';
   themeObjects
       .where((framyObject) => framyObject.type == FramyObjectType.color)
       .forEach(

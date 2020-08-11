@@ -7,6 +7,7 @@ import 'dart:convert';
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:source_gen/source_gen.dart';
 
 /// A [Builder] wrapping on one or more [Generator]s.
@@ -109,7 +110,7 @@ class _Builder extends Builder {
     }
 
     print('writing...');
-    buildStep.writeAsString(outputId, genPartContent);
+    unawaited(buildStep.writeAsString(outputId, genPartContent));
   }
 
   @override

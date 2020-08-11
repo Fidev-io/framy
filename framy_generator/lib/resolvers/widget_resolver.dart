@@ -18,7 +18,7 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
   @override
   FutureOr<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
-    List<FramyObject> framyObjectsToReturn = [];
+    final framyObjectsToReturn = <FramyObject>[];
     final isPage = annotation.read('isPage').boolValue;
     final framyObject = _widgetObjectFromElement(element, isPage: isPage);
     if (element is ClassElement) {
@@ -26,7 +26,7 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
       //get constructor dependencies
       framyObject.constructors.add(FramyObjectConstructor('', []));
       final constructor = element.unnamedConstructor;
-      for (ParameterElement param in constructor.parameters) {
+      for (final param in constructor.parameters) {
         if (param.type.toString() == 'Key') {
           continue;
         }
@@ -70,7 +70,7 @@ class WidgetResolver extends GeneratorForAnnotation<FramyWidget> {
                   orElse: () => null,
                 )
                 ?.returnType ??
-            "Null";
+            'Null';
         framyObject.constructors.first.dependencies.add(
           FramyObjectDependency(
             riverpodName,

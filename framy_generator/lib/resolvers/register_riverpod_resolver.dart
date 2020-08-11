@@ -10,7 +10,7 @@ class RegisterRiverpodResolver
   @override
   String generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) {
-    List<FramyObject> framyObjectsToReturn = [];
+    final framyObjectsToReturn = <FramyObject>[];
     if (element is TopLevelVariableElement) {
       final framyObject = _riverpodObjectFromElement(element);
       final type = element.type.getDisplayString();
