@@ -48,10 +48,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   if (trailing != null) trailing,
                 ],
               ),
-              FramyPresetDropdown(
-                dependency: dependency,
-                onChanged: _onValueChanged,
-                presets: presets,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: FramyPresetDropdown(
+                  dependency: dependency,
+                  onChanged: _onValueChanged,
+                  presets: presets,
+                ),
               ),
             ],
           ),
