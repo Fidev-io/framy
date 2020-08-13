@@ -31,6 +31,12 @@ jobs:
         working-directory: test_apps/counter_app
       - run: flutter test
         working-directory: test_apps/counter_app
+      - name: Upload failure images
+        if: ${{ always() }}
+        uses: actions/upload-artifact@master
+        with:
+          name: failure-images
+          path: ./test_apps/counter_app/test/failures
   weight-tracker-widget-tests:
     runs-on: macos-latest
     steps:
@@ -42,3 +48,9 @@ jobs:
         working-directory: test_apps/weight_tracker
       - run: flutter test
         working-directory: test_apps/weight_tracker
+      - name: Upload failure images
+        if: ${{ always() }}
+        uses: actions/upload-artifact@master
+        with:
+          name: failure-images
+          path: ./test_apps/weight_tracker/test/failures

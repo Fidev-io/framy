@@ -20,12 +20,12 @@ List<WeightEntry> prepareEntryList(
 
 DateTime getStartDateOfChart(DateTime now, int daysToShow) {
   DateTime beginningOfChart = now.subtract(
-      new Duration(days: daysToShow - 1, hours: now.hour, minutes: now.minute));
+      Duration(days: daysToShow - 1, hours: now.hour, minutes: now.minute));
   return beginningOfChart;
 }
 
 DateTime copyDateWithoutTime(DateTime dateTime) {
-  return new DateTime.utc(dateTime.year, dateTime.month, dateTime.day);
+  return DateTime(dateTime.year, dateTime.month, dateTime.day);
 }
 
 /// Adds missing entry at the start of a chart.
