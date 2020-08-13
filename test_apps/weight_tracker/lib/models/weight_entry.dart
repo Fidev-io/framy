@@ -1,5 +1,7 @@
 import 'package:framy_annotation/framy_annotation.dart';
 
+import 'utils.dart';
+
 @framyModel
 class WeightEntry {
   final double weight;
@@ -10,7 +12,7 @@ class WeightEntry {
 
   WeightEntry.now(this.weight)
       : note = '',
-        dateTime = DateTime.now();
+        dateTime = DateTime.now().current;
 
   @override
   String toString() {

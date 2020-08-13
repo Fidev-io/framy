@@ -41,10 +41,15 @@ import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/widgets/weight_unit_display.dart';
 import 'package:weight_tracker/widgets/built_value_example_widget.dart';
 import 'package:weight_tracker/models/built_value_user.dart';
-import 'package:weight_tracker/widgets/dummy_test_widget.dart';
-import 'package:weight_tracker/models/dummy_test_widget_model.dart';
+import 'package:weight_tracker/widgets/progress_chart.dart';
 import 'package:weight_tracker/models/weight_unit.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
+import 'dart:ui';
+import 'package:weight_tracker/models/utils.dart';
+import 'package:weight_tracker/widgets/progress_chart_utils.dart';
+import 'package:weight_tracker/widgets/dummy_test_widget.dart';
+import 'package:weight_tracker/models/dummy_test_widget_model.dart';
 import 'package:built_value/built_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:weight_tracker/models/weight_entry.framy.dart';
@@ -145,6 +150,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/StatisticsPage': FramyStatisticsPageCustomPage(),
     '/ProfilePage': FramyProfilePageCustomPage(),
     '/BuiltValueExampleWidget': FramyBuiltValueExampleWidgetCustomPage(),
+    '/ProgressChart': FramyProgressChartCustomPage(),
     '/DummyTestWidget': FramyDummyTestWidgetCustomPage(),
     '/UserDataCard': FramyUserDataCardCustomPage(),
     '/UserEmailsView': FramyUserEmailsViewCustomPage(),
@@ -403,6 +409,12 @@ class FramyDrawer extends StatelessWidget {
                 title: Text('ProfilePage'),
                 onTap: () =>
                     Navigator.of(context).pushReplacementNamed('/ProfilePage'),
+              ),
+              ListTile(
+                leading: SizedBox.shrink(),
+                title: Text('ProgressChart'),
+                onTap: () => Navigator.of(context)
+                    .pushReplacementNamed('/ProgressChart'),
               ),
               ListTile(
                 leading: SizedBox.shrink(),
@@ -1291,6 +1303,24 @@ class FramyBuiltValueExampleWidgetCustomPage extends StatelessWidget {
   }
 }
 
+class FramyProgressChartCustomPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FramyCustomPage(
+      key: Key('Framy_ProgressChart_Page'),
+      dependencies: [
+        FramyDependencyModel<List<WeightEntry>>(
+            'weightEntries', 'List<WeightEntry>', null),
+      ],
+      builder: (DependencyValueGetter valueGetter) {
+        return ProgressChart(
+          weightEntries: valueGetter('weightEntries'),
+        );
+      },
+    );
+  }
+}
+
 class FramyDummyTestWidgetCustomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -1803,10 +1833,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   if (trailing != null) trailing,
                 ],
               ),
-              FramyPresetDropdown(
-                dependency: dependency,
-                onChanged: _onValueChanged,
-                presets: presets,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: FramyPresetDropdown(
+                  dependency: dependency,
+                  onChanged: _onValueChanged,
+                  presets: presets,
+                ),
               ),
             ],
           ),
@@ -2346,6 +2379,14 @@ dynamic getFunctionCallback(FramyDependencyModel dependency) {
 Map<String, Map<String, dynamic>> createFramyPresets() => {
       'WeightEntry': {
         'presetEntry': presetEntry(),
+      },
+      'List<WeightEntry>': {
+        'emptyList': emptyList(),
+        'singleElementToday': singleElementToday(),
+        'fewElementsSameDay': fewElementsSameDay(),
+        'monthFullOfEntries': monthFullOfEntries(),
+        'oneEntryTwoMonthsAgo': oneEntryTwoMonthsAgo(),
+        'oneNowOneTwoMonthsAgo': oneNowOneTwoMonthsAgo(),
       },
       'User': {
         'teenageJohn': teenageJohn(),

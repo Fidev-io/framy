@@ -45,10 +45,14 @@ import 'package:weight_tracker/models/user.dart';
 import 'package:weight_tracker/widgets/weight_unit_display.dart';
 import 'package:weight_tracker/widgets/built_value_example_widget.dart';
 import 'package:weight_tracker/models/built_value_user.dart';
-import 'package:weight_tracker/widgets/dummy_test_widget.dart';
-import 'package:weight_tracker/models/dummy_test_widget_model.dart';
+import 'package:weight_tracker/widgets/progress_chart.dart';
 import 'package:weight_tracker/models/weight_unit.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
+import 'package:weight_tracker/models/utils.dart';
+import 'package:weight_tracker/widgets/progress_chart_utils.dart';
+import 'package:weight_tracker/widgets/dummy_test_widget.dart';
+import 'package:weight_tracker/models/dummy_test_widget_model.dart';
 import 'package:built_value/built_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:weight_tracker/models/weight_entry.framy.dart';
@@ -82,6 +86,33 @@ void main() async {
         find.byType(HistoryPage),
         matchesGoldenFile('goldens/HistoryPage_default.png'),
       );
+    });
+
+    createFramyPresets()['List<WeightEntry>']
+        ?.forEach((presetName, presetValue) {
+      testWidgets(presetName, (tester) async {
+        final dependencies = [
+          FramyDependencyModel<List<WeightEntry>>(
+              'weightEntries', 'List<WeightEntry>', null),
+        ];
+        dependencies
+            .where((dep) => dep.type == 'List<WeightEntry>')
+            .forEach((dep) => dep.value = presetValue);
+        final valueGetter = (String name) =>
+            dependencies.singleWhere((d) => d.name == name).value;
+        final widget = ProviderScope(
+          overrides: [
+            weightEntries
+                .overrideAs(Provider((_) => valueGetter('weightEntries'))),
+          ],
+          child: HistoryPage(),
+        );
+        await tester.pumpWrappedWidget(widget);
+        await expectLater(
+          find.byType(HistoryPage),
+          matchesGoldenFile('goldens/HistoryPage_$presetName.png'),
+        );
+      });
     });
   });
 
@@ -164,6 +195,48 @@ void main() async {
         find.byType(BuiltValueExampleWidget),
         matchesGoldenFile('goldens/BuiltValueExampleWidget_default.png'),
       );
+    });
+  });
+
+  group('ProgressChart', () {
+    testWidgets('default', (tester) async {
+      final dependencies = [
+        FramyDependencyModel<List<WeightEntry>>(
+            'weightEntries', 'List<WeightEntry>', null),
+      ];
+      final valueGetter = (String name) =>
+          dependencies.singleWhere((d) => d.name == name).value;
+      final widget = ProgressChart(
+        weightEntries: valueGetter('weightEntries'),
+      );
+      await tester.pumpWrappedWidget(widget);
+      await expectLater(
+        find.byType(ProgressChart),
+        matchesGoldenFile('goldens/ProgressChart_default.png'),
+      );
+    });
+
+    createFramyPresets()['List<WeightEntry>']
+        ?.forEach((presetName, presetValue) {
+      testWidgets(presetName, (tester) async {
+        final dependencies = [
+          FramyDependencyModel<List<WeightEntry>>(
+              'weightEntries', 'List<WeightEntry>', null),
+        ];
+        dependencies
+            .where((dep) => dep.type == 'List<WeightEntry>')
+            .forEach((dep) => dep.value = presetValue);
+        final valueGetter = (String name) =>
+            dependencies.singleWhere((d) => d.name == name).value;
+        final widget = ProgressChart(
+          weightEntries: valueGetter('weightEntries'),
+        );
+        await tester.pumpWrappedWidget(widget);
+        await expectLater(
+          find.byType(ProgressChart),
+          matchesGoldenFile('goldens/ProgressChart_$presetName.png'),
+        );
+      });
     });
   });
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.2]
+
+* Wrapped preset dropdown in FittedBox for better scaling with long presets
+
 ## [0.3.1]
 
 * Make analyzer happy
