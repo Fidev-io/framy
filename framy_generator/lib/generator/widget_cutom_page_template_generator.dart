@@ -138,6 +138,7 @@ builder: (context) {
     return '''
 DevicePreview(
   enabled: FramyAppSettings.of(context).wrapWithDevicePreview,
+  devices: kIsWeb ? [iPhoneXs, iPhoneX, iPhoneXsMax, iPhoneXr] : Devices.all,
   style: DevicePreviewStyle(
     hasFrameShadow: false,
     toolBar: DevicePreviewToolBarStyle.light(

@@ -18,7 +18,7 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
         working-directory: showcase
-      - run: flutter build web --release
+      - run: flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true
         working-directory: showcase
       - run: |
           cd showcase/build/web
