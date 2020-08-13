@@ -47,8 +47,8 @@ jobs:
         working-directory: test_apps/weight_tracker
       - run: flutter test
         working-directory: test_apps/weight_tracker
-        continue-on-error: true
       - name: Upload failure images
+        if: ${{ always() }}
         uses: actions/upload-artifact@master
         with:
           name: failure-images

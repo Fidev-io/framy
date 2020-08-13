@@ -107,6 +107,8 @@ class ChartPainter extends CustomPainter {
           canvas, size, "Add your current weight to see history");
     } else {
       MinMax borderLineValues = _getMinAndMaxValues(entries, isLbs);
+      print(borderLineValues.min);
+      print(borderLineValues.max);
       _drawHorizontalLinesAndLabels(
           canvas, size, borderLineValues.min, borderLineValues.max);
       _drawBottomLabels(canvas, size);
@@ -236,8 +238,12 @@ class ChartPainter extends CustomPainter {
 
   ///Produces minimal and maximal value of horizontal line that will be displayed
   MinMax _getMinAndMaxValues(List<WeightEntry> entries, bool isLbs) {
+    print(entries);
     double maxWeight = entries.map((entry) => entry.weight).reduce(math.max);
     double minWeight = entries.map((entry) => entry.weight).reduce(math.min);
+
+    print(minWeight);
+    print(maxWeight);
 
     if (isLbs) {
       maxWeight *= KG_LBS_RATIO;
@@ -249,6 +255,9 @@ class ChartPainter extends CustomPainter {
     if (maxWeight == minWeight) {
       maxLineValue = maxWeight.ceil() + 1;
       minLineValue = maxLineValue - 4;
+      print('equal');
+      print(minLineValue);
+      print(maxLineValue);
     } else {
       maxLineValue = maxWeight.ceil();
       int difference = maxLineValue - minWeight.floor();
@@ -258,6 +267,9 @@ class ChartPainter extends CustomPainter {
         toSubtract = 0;
       }
       minLineValue = minWeight.floor() - toSubtract;
+      print('not equal');
+      print(minLineValue);
+      print(maxLineValue);
     }
     return MinMax(minLineValue, maxLineValue);
   }
