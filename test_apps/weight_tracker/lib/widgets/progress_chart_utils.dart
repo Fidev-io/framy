@@ -4,17 +4,20 @@ import 'package:weight_tracker/models/weight_entry.dart';
 /// Adds an entry at the beginning of list if there is one before and after beginningDate
 List<WeightEntry> prepareEntryList(
     List<WeightEntry> initialEntries, DateTime beginningDate) {
+  print(initialEntries);
   List<WeightEntry> entries = initialEntries
       .where((entry) =>
           entry.dateTime.isAfter(beginningDate) ||
           copyDateWithoutTime(entry.dateTime)
               .isAtSameMomentAs(copyDateWithoutTime(beginningDate)))
       .toList();
+  print(entries);
   if (entries.isNotEmpty &&
       _isMissingEntryFromBeginningDate(beginningDate, entries) &&
       _isAnyEntryBeforeBeginningDate(beginningDate, initialEntries)) {
     _addFakeEntryOnTheChartBeginning(initialEntries, entries, beginningDate);
   }
+  print(entries);
   return entries;
 }
 
@@ -44,6 +47,9 @@ void _addFakeEntryOnTheChartBeginning(List<WeightEntry> initialEntries,
       _calculateWeightOnBeginningDate(
           lastEntryBeforeBeginning, firstEntryAfterBeginning, beginningDate),
       null);
+  print(firstEntryAfterBeginning);
+  print(lastEntryBeforeBeginning);
+  print(fakeEntry);
   entries.add(fakeEntry);
 }
 
