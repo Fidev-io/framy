@@ -593,11 +593,14 @@ class FramyColorsPage extends StatelessWidget {
         _FramyColorItem(name: 'Button', color: Theme.of(context).buttonColor),
         _FramyColorItem(
           name: 'Text selection',
+          // ignore: deprecated_member_use
           color: Theme.of(context).textSelectionColor,
         ),
+        // ignore: deprecated_member_use
         _FramyColorItem(name: 'Cursor', color: Theme.of(context).cursorColor),
         _FramyColorItem(
           name: 'Text selection handle',
+          // ignore: deprecated_member_use
           color: Theme.of(context).textSelectionHandleColor,
         ),
         _FramyColorItem(
@@ -1517,11 +1520,11 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
                 onTap: onTabIndexChanged,
                 items: [
                   BottomNavigationBarItem(
-                    title: Text('Dependencies'),
+                    label: 'Dependencies',
                     icon: Icon(Icons.settings_applications),
                   ),
                   BottomNavigationBarItem(
-                    title: Text('Callbacks'),
+                    label: 'Callbacks',
                     icon: Icon(Icons.list),
                   ),
                 ],
@@ -1884,7 +1887,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               key: inputKey,
               decoration: _framyInputDecoration,
               initialValue: dependency.value?.toString(),
-              autovalidate: true,
+              autovalidateMode: AutovalidateMode.always,
               validator: (value) {
                 String error;
                 if (dependency.type == 'int') {

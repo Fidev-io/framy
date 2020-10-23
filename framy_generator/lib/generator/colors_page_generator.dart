@@ -52,11 +52,14 @@ class FramyColorsPage extends StatelessWidget {
         _FramyColorItem(name: 'Button', color: Theme.of(context).buttonColor),
         _FramyColorItem(
           name: 'Text selection',
+          // ignore: deprecated_member_use
           color: Theme.of(context).textSelectionColor,
         ),
+        // ignore: deprecated_member_use
         _FramyColorItem(name: 'Cursor', color: Theme.of(context).cursorColor),
         _FramyColorItem(
           name: 'Text selection handle',
+          // ignore: deprecated_member_use
           color: Theme.of(context).textSelectionHandleColor,
         ),
         _FramyColorItem(

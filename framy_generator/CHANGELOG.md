@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.3]
+
+* Fixed "import null" bug in generated tests
+
 ## [0.3.2]
 
 * Wrapped preset dropdown in FittedBox for better scaling with long presets

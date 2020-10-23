@@ -40,11 +40,11 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
                 onTap: onTabIndexChanged,
                 items: [
                   BottomNavigationBarItem(
-                    title: Text('Dependencies'),
+                    label: 'Dependencies',
                     icon: Icon(Icons.settings_applications),
                   ),
                   BottomNavigationBarItem(
-                    title: Text('Callbacks'),
+                    label: 'Callbacks',
                     icon: Icon(Icons.list),
                   ),
                 ],

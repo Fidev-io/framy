@@ -3,14 +3,13 @@ import 'package:framy_generator/framy_generator.dart';
 import 'package:framy_generator/framy_test_generator.dart';
 import 'package:framy_generator/json_builder.dart';
 import 'package:framy_generator/json_formatter.dart';
+import 'package:framy_generator/resolvers/metadata_resolver.dart';
 import 'package:framy_generator/resolvers/model_resolver.dart';
 import 'package:framy_generator/resolvers/preset_resolver.dart';
 import 'package:framy_generator/resolvers/register_riverpod_resolver.dart';
 import 'package:framy_generator/resolvers/theme_resolver.dart';
 import 'package:framy_generator/resolvers/widget_resolver.dart';
 import 'package:source_gen/source_gen.dart';
-
-String pathToFramyApp;
 
 Builder themeBuilder(BuilderOptions options) {
   return JsonLibraryBuilder(
@@ -53,6 +52,15 @@ Builder registerRiverpodBuilder(BuilderOptions options) {
     RegisterRiverpodResolver(),
     formatOutput: fixJson,
     generatedExtension: '.riverpod.framy.json',
+    header: '',
+  );
+}
+
+Builder metadataBuilder(BuilderOptions options) {
+  return JsonLibraryBuilder(
+    MetadataResolver(),
+    formatOutput: fixJson,
+    generatedExtension: '.meta.framy.json',
     header: '',
   );
 }

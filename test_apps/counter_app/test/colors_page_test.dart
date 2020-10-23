@@ -68,7 +68,7 @@ void main() {
       expect(find.text('#FF64B5F6'), findsOneWidget);
       expect(find.text('#FF4285F4'), findsOneWidget);
       expect(find.text('#FF90CAF9'), findsNWidgets(3));
-      expect(find.text('#8A000000'), findsOneWidget);
+      expect(find.text('#99000000'), findsOneWidget);
       expect(find.text('#FFFF5252'), findsNWidgets(2));
       expect(find.text('#FF1E88E5'), findsOneWidget);
       expect(find.text('#FF000000'), findsOneWidget);
