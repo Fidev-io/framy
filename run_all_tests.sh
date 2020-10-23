@@ -23,14 +23,14 @@ run_app_tests () {
       xcrun instruments -s |
       awk \
         -F ' *[][]' \
-        -v 'device=iPhone 11 Pro (13.6)' \
+        -v 'device=iPhone 12 Pro (14.1)' \
         '$1 == device { print $2 }'
     )
     xcrun simctl boot "${UDID:?No Simulator with this name found}"
 
     PLATFORM="macos" ./fvm driver --target=test_driver/app.dart -d macos
 
-    PLATFORM="ios" ./fvm driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
+    PLATFORM="ios" ./fvm driver --target=test_driver/app.dart -d 'iPhone 12 Pro'
   fi
 }
 

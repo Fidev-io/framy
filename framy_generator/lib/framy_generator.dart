@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:framy_annotation/framy_annotation.dart';
-import 'package:framy_generator/builder.dart';
 import 'package:framy_generator/config/yaml_config_loader.dart';
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/app_bar_generator.dart';
@@ -38,7 +37,6 @@ import 'package:framy_generator/generator/widget_dependencies_panel_generator.da
 import 'package:framy_generator/generator/widget_dependency_input_generator.dart';
 import 'package:framy_generator/generator/widget_list_dependency_input_generator.dart';
 import 'package:framy_generator/generator/widget_page_generator.dart';
-import 'package:framy_generator/utils.dart';
 import 'package:glob/glob.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -46,8 +44,6 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
   @override
   Future<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
-    pathToFramyApp =
-        getImport(element).replaceFirst('\.dart', '\.app\.framy\.dart');
     final themeFramyObjects =
         await loadFramyObjects(buildStep, '**.theme.framy.json');
     final widgetFramyObjects =

@@ -34,6 +34,13 @@ builders:
     auto_apply: dependents
     runs_before: [":framy_builder"]
     build_to: cache
+  metadata_builder:
+    import: "package:framy_generator/builder.dart"
+    builder_factories: ["metadataBuilder"]
+    build_extensions: { ".dart": [".meta.framy.json"] }
+    auto_apply: dependents
+    runs_before: [":framy_builder"]
+    build_to: cache
   framy_builder:
     import: "package:framy_generator/builder.dart"
     builder_factories: ["framyAppBuilder"]

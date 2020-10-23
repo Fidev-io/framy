@@ -5,13 +5,13 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <2.10.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   framy_annotation: ^0.1.5
-  device_preview: ^0.4.7
+  device_preview: ^0.4.8
   provider: ^4.3.1
   intl: ^0.16.1
   freezed_annotation: ^0.11.0
@@ -28,12 +28,12 @@ dev_dependencies:
     sdk: flutter
   test: any
   ozzie: ^2.2.3
-  freezed: ^0.11.4
+  freezed: ^0.11.0
   built_value_generator: ^7.1.0
 
-dependency_overrides:
-  freezed_annotation: ^0.11.0 #device preview uses old version
-  freezed: ^0.11.2 #device preview uses old version
+#dependency_overrides:
+#  freezed_annotation: ^0.11.0 #device preview uses old version
+#  freezed: ^0.11.2 #device preview uses old version
 #  framy_annotation:
 #    path: ../../framy_annotation
 
