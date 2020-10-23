@@ -34,7 +34,7 @@ jobs:
         run: PLATFORM=macos flutter driver --target=test_driver/app.dart -d macos
         working-directory: test_apps/counter_app
       - name: Acceptance tests on iPhone 11 Pro
-        run: PLATFORM=ios flutter driver --target=test_driver/app.dart -d 'iPhone 12 Pro'
+        run: PLATFORM=ios flutter driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
         working-directory: test_apps/counter_app
       - name: Upload screenshots
         uses: actions/upload-artifact@master
@@ -68,5 +68,5 @@ jobs:
         run: PLATFORM=macos flutter driver --target=test_driver/app.dart -d macos
         working-directory: test_apps/weight_tracker
       - name: Acceptance tests on iPhone 11 Pro
-        run: PLATFORM=ios flutter driver --target=test_driver/app.dart -d 'iPhone 12 Pro'
+        run: PLATFORM=ios flutter driver --target=test_driver/app.dart -d 'iPhone 11 Pro'
         working-directory: test_apps/weight_tracker
