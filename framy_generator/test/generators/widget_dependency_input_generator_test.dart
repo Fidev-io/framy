@@ -58,9 +58,10 @@ void main() {
       expect(result.contains('validator'), isTrue);
     });
 
-    test('should contain autovalidate: true', () {
+    test('should contain autovalidateMode', () {
       final result = generateWidgetDependencyInput([]);
-      expect(result.contains('autovalidate: true'), isTrue);
+      expect(
+          result.contains('autovalidateMode: AutovalidateMode.always'), isTrue);
     });
 
     test('should contain error message Invalid integer value', () {

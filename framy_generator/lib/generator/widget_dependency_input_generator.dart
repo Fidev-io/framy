@@ -96,7 +96,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               key: inputKey,
               decoration: _framyInputDecoration,
               initialValue: dependency.value?.toString(),
-              autovalidate: true,
+              autovalidateMode: AutovalidateMode.always,
               validator: (value) {
                 String error;
                 if (dependency.type == 'int') {

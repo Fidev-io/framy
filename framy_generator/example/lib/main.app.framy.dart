@@ -4,6 +4,9 @@
 // FramyGenerator
 // **************************************************************************
 
+import 'dart:core';
+
+import 'package:counter_app/main.dart';
 // ignore_for_file: unused_import
 // ignore_for_file: directives_ordering
 // ignore_for_file: type_annotate_public_apis
@@ -23,9 +26,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:counter_app/main.dart';
 import 'package:framy_annotation/framy_annotation.dart';
-import 'dart:core';
 
 void main() {
   runApp(FramyApp());
@@ -1574,7 +1575,7 @@ class FramyWidgetDependencyInput extends StatelessWidget {
               key: inputKey,
               decoration: _framyInputDecoration,
               initialValue: dependency.value?.toString(),
-              autovalidate: true,
+              autovalidateMode: AutovalidateMode.always,
               validator: (value) {
                 String error;
                 if (dependency.type == 'int') {
