@@ -4,9 +4,6 @@
 // FramyGenerator
 // **************************************************************************
 
-import 'dart:core';
-
-import 'package:counter_app/main.dart';
 // ignore_for_file: unused_import
 // ignore_for_file: directives_ordering
 // ignore_for_file: type_annotate_public_apis
@@ -26,7 +23,9 @@ import 'package:counter_app/main.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:counter_app/main.dart';
 import 'package:framy_annotation/framy_annotation.dart';
+import 'dart:core';
 
 void main() {
   runApp(FramyApp());
@@ -502,11 +501,14 @@ class FramyColorsPage extends StatelessWidget {
         _FramyColorItem(name: 'Button', color: Theme.of(context).buttonColor),
         _FramyColorItem(
           name: 'Text selection',
+          // ignore: deprecated_member_use
           color: Theme.of(context).textSelectionColor,
         ),
+        // ignore: deprecated_member_use
         _FramyColorItem(name: 'Cursor', color: Theme.of(context).cursorColor),
         _FramyColorItem(
           name: 'Text selection handle',
+          // ignore: deprecated_member_use
           color: Theme.of(context).textSelectionHandleColor,
         ),
         _FramyColorItem(
@@ -1265,11 +1267,11 @@ class FramyWidgetDependenciesPanel extends StatelessWidget {
                 onTap: onTabIndexChanged,
                 items: [
                   BottomNavigationBarItem(
-                    title: Text('Dependencies'),
+                    label: 'Dependencies',
                     icon: Icon(Icons.settings_applications),
                   ),
                   BottomNavigationBarItem(
-                    title: Text('Callbacks'),
+                    label: 'Callbacks',
                     icon: Icon(Icons.list),
                   ),
                 ],
@@ -1530,10 +1532,13 @@ class FramyWidgetDependencyInput extends StatelessWidget {
                   if (trailing != null) trailing,
                 ],
               ),
-              FramyPresetDropdown(
-                dependency: dependency,
-                onChanged: _onValueChanged,
-                presets: presets,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: FramyPresetDropdown(
+                  dependency: dependency,
+                  onChanged: _onValueChanged,
+                  presets: presets,
+                ),
               ),
             ],
           ),
