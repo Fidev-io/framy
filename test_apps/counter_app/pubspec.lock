@@ -256,7 +256,7 @@ packages:
       path: "../../framy_generator"
       relative: true
     source: path
-    version: "0.3.2"
+    version: "0.3.3"
   freezed_annotation:
     dependency: transitive
     description:
