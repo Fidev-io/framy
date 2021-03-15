@@ -74,28 +74,32 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
       riverpodFramyObjects.isNotEmpty,
       framyConfig,
     ));
-    buffer.writeln(generateRouting(widgetFramyObjects));
+    buffer.writeln(generateRouting(widgetFramyObjects, framyConfig));
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());
     buffer.writeln(generateSettingsDialog(useDevicePreview));
-    buffer.writeln(generateDrawer(widgetFramyObjects));
+    buffer.writeln(generateDrawer(widgetFramyObjects, framyConfig));
     buffer.writeln(
         '\n// ======================== MATERIAL PAGES ===========================\n');
     buffer.writeln(generateFontsPage());
     buffer.writeln(generateColorsPage(themeFramyObjects));
-    buffer.writeln(generateUtils());
-    buffer.writeln(generateAppBarPage());
-    buffer.writeln(generateButtonPage());
-    buffer.writeln(generateTogglePage());
-    buffer.writeln(generateTextFieldPage());
+    if (framyConfig.showMaterialComponents) {
+      buffer.writeln(generateUtils());
+      buffer.writeln(generateAppBarPage());
+      buffer.writeln(generateButtonPage());
+      buffer.writeln(generateTogglePage());
+      buffer.writeln(generateTextFieldPage());
+    }
     buffer.writeln(
         '\n// ======================== CUSTOM PAGES ===========================\n');
     buffer.writeln(generateCustomPage(useDevicePreview));
     buffer.writeln(generateWidgetPages(widgetFramyObjects));
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
-    buffer.writeln(generateStoryboardPage(
-        widgetFramyObjects, modelFramyObjects, useDevicePreview));
+    if (framyConfig.showStoryboard) {
+      buffer.writeln(generateStoryboardPage(
+          widgetFramyObjects, modelFramyObjects, useDevicePreview));
+    }
     buffer.writeln(
         '\n// ======================== DEPENDENCY INPUTS ===========================\n');
     buffer.writeln(generateWidgetDependencyInput(modelFramyObjects));
