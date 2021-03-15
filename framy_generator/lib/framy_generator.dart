@@ -78,7 +78,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());
     buffer.writeln(generateSettingsDialog(useDevicePreview));
-    buffer.writeln(generateDrawer(widgetFramyObjects));
+    buffer.writeln(generateDrawer(widgetFramyObjects, framyConfig));
     buffer.writeln(
         '\n// ======================== MATERIAL PAGES ===========================\n');
     buffer.writeln(generateFontsPage());
@@ -94,8 +94,10 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateWidgetPages(widgetFramyObjects));
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
-    buffer.writeln(generateStoryboardPage(
-        widgetFramyObjects, modelFramyObjects, useDevicePreview, framyConfig));
+    if (framyConfig.showStoryboard) {
+      buffer.writeln(generateStoryboardPage(
+          widgetFramyObjects, modelFramyObjects, useDevicePreview));
+    }
     buffer.writeln(
         '\n// ======================== DEPENDENCY INPUTS ===========================\n');
     buffer.writeln(generateWidgetDependencyInput(modelFramyObjects));

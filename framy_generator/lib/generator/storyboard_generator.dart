@@ -1,12 +1,8 @@
-import 'package:framy_generator/config/framy_config.dart';
 import 'package:framy_generator/framy_object.dart';
 import 'package:framy_generator/generator/widget_dependency_utils.dart';
 
 String generateStoryboardPage(List<FramyObject> widgetFramyObjects,
-    List<FramyObject> modelFramyObjects, bool useDevicePreview, FramyConfig framyConfig) {
-  if (!framyConfig.showStoryboard) {
-    return '';
-  }
+    List<FramyObject> modelFramyObjects, bool useDevicePreview) {
   final pageFramyObjects = widgetFramyObjects
       .where((element) => element.type == FramyObjectType.page)
       .toList();
