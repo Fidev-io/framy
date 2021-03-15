@@ -6,10 +6,7 @@ Route onGenerateRoute(RouteSettings settings) {
   final routes = {
     '/typography': FramyFontsPage(),
     '/colors': FramyColorsPage(),
-    '/appbar': FramyAppBarPage(),
-    '/button': FramyButtonPage(),
-    '/toggle': FramyTogglePage(),
-    '/textfield': FramyTextFieldPage(),
+    ${_generateMaterialComponentPages(framyConfig)}
     ${_generateCustomWidgetPages(widgetFramyObjects)}
     ${framyConfig.showStoryboard ? "'/storyboard': FramyStoryboardPage()," : ""}
   };
@@ -20,6 +17,18 @@ Route onGenerateRoute(RouteSettings settings) {
   );
 }
 ''';
+
+String _generateMaterialComponentPages(FramyConfig framyConfig) {
+  if (!framyConfig.showMaterialComponents) {
+    return '';
+  }
+  return '''
+'/appbar': FramyAppBarPage(),
+'/button': FramyButtonPage(),
+'/toggle': FramyTogglePage(),
+'/textfield': FramyTextFieldPage(),
+''';
+}
 
 String _generateCustomWidgetPages(List<FramyObject> widgetObjects) {
   var result = '';

@@ -83,11 +83,13 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
         '\n// ======================== MATERIAL PAGES ===========================\n');
     buffer.writeln(generateFontsPage());
     buffer.writeln(generateColorsPage(themeFramyObjects));
-    buffer.writeln(generateUtils());
-    buffer.writeln(generateAppBarPage());
-    buffer.writeln(generateButtonPage());
-    buffer.writeln(generateTogglePage());
-    buffer.writeln(generateTextFieldPage());
+    if (framyConfig.showMaterialComponents) {
+      buffer.writeln(generateUtils());
+      buffer.writeln(generateAppBarPage());
+      buffer.writeln(generateButtonPage());
+      buffer.writeln(generateTogglePage());
+      buffer.writeln(generateTextFieldPage());
+    }
     buffer.writeln(
         '\n// ======================== CUSTOM PAGES ===========================\n');
     buffer.writeln(generateCustomPage(useDevicePreview));
