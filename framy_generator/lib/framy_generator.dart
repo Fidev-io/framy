@@ -74,7 +74,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
       riverpodFramyObjects.isNotEmpty,
       framyConfig,
     ));
-    buffer.writeln(generateRouting(widgetFramyObjects));
+    buffer.writeln(generateRouting(widgetFramyObjects, framyConfig));
     buffer.writeln(generateLayoutTemplate());
     buffer.writeln(generateAppBar());
     buffer.writeln(generateSettingsDialog(useDevicePreview));
@@ -95,7 +95,7 @@ class FramyGenerator extends GeneratorForAnnotation<FramyApp> {
     buffer.writeln(generateDependencyModel());
     buffer.writeln(generateWidgetDependenciesPanel());
     buffer.writeln(generateStoryboardPage(
-        widgetFramyObjects, modelFramyObjects, useDevicePreview));
+        widgetFramyObjects, modelFramyObjects, useDevicePreview, framyConfig));
     buffer.writeln(
         '\n// ======================== DEPENDENCY INPUTS ===========================\n');
     buffer.writeln(generateWidgetDependencyInput(modelFramyObjects));

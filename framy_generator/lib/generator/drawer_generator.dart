@@ -1,6 +1,7 @@
+import 'package:framy_generator/config/framy_config.dart';
 import 'package:framy_generator/framy_object.dart';
 
-String generateDrawer(List<FramyObject> widgetFramyObjects) => '''
+String generateDrawer(List<FramyObject> widgetFramyObjects, FramyConfig framyConfig) => '''
 class FramyDrawer extends StatelessWidget {
   final bool showHeader;
 
@@ -70,26 +71,7 @@ class FramyDrawer extends StatelessWidget {
                 ),
               ),
               ${_generateCustomWidgetTiles(widgetFramyObjects)}
-              ListTile(
-                leading: Icon(Icons.view_carousel),
-                title: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    Text('Storyboard'),
-                    Chip(
-                      label: Text(
-                        'Preview',
-                        style: TextStyle(color: Theme.of(context).primaryColor),
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ],
-                ),
-                onTap: () =>
-                    Navigator.of(context).pushReplacementNamed('/storyboard'),
-              ),
+              ${_generateStoryboardTile(framyConfig)}
             ],
           ),
         ),
@@ -98,6 +80,34 @@ class FramyDrawer extends StatelessWidget {
   }
 }
 ''';
+
+String _generateStoryboardTile(FramyConfig framyConfig) {
+  if (!framyConfig.showStoryboard) {
+    return '';
+  }
+  return '''
+ListTile(
+  leading: Icon(Icons.view_carousel),
+  title: Wrap(
+    crossAxisAlignment: WrapCrossAlignment.center,
+    spacing: 8,
+    runSpacing: 8,
+    children: [
+      Text('Storyboard'),
+      Chip(
+        label: Text(
+          'Preview',
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
+        backgroundColor: Colors.transparent,
+      ),
+    ],
+  ),
+  onTap: () =>
+      Navigator.of(context).pushReplacementNamed('/storyboard'),
+),
+''';
+}
 
 String _generateCustomWidgetTiles(List<FramyObject> objects) {
   final widgetObjects = objects

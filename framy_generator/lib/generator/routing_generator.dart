@@ -1,6 +1,7 @@
+import 'package:framy_generator/config/framy_config.dart';
 import 'package:framy_generator/framy_object.dart';
 
-String generateRouting(List<FramyObject> widgetFramyObjects) => '''
+String generateRouting(List<FramyObject> widgetFramyObjects, FramyConfig framyConfig) => '''
 Route onGenerateRoute(RouteSettings settings) {
   final routes = {
     '/typography': FramyFontsPage(),
@@ -10,7 +11,7 @@ Route onGenerateRoute(RouteSettings settings) {
     '/toggle': FramyTogglePage(),
     '/textfield': FramyTextFieldPage(),
     ${_generateCustomWidgetPages(widgetFramyObjects)}
-    '/storyboard': FramyStoryboardPage(),
+    ${framyConfig.showStoryboard ? "'/storyboard': FramyStoryboardPage()," : ""}
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
