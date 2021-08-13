@@ -3,8 +3,8 @@ name: Acceptance tests
 on:
   push:
     branches: [ master ]
-  schedule:
-    - cron: "0 2 * * *" #Every day on 2AM
+  # schedule:
+    # - cron: "0 2 * * *" #Every day on 2AM
 
 jobs:
   counter-app:
