@@ -1,16 +1,14 @@
+import 'package:framy_generator/config/framy_config.dart';
 import 'package:framy_generator/framy_object.dart';
 
-String generateRouting(List<FramyObject> widgetFramyObjects) => '''
+String generateRouting(List<FramyObject> widgetFramyObjects, FramyConfig framyConfig) => '''
 Route onGenerateRoute(RouteSettings settings) {
   final routes = {
     '/typography': FramyFontsPage(),
     '/colors': FramyColorsPage(),
-    '/appbar': FramyAppBarPage(),
-    '/button': FramyButtonPage(),
-    '/toggle': FramyTogglePage(),
-    '/textfield': FramyTextFieldPage(),
+    ${_generateMaterialComponentPages(framyConfig)}
     ${_generateCustomWidgetPages(widgetFramyObjects)}
-    '/storyboard': FramyStoryboardPage(),
+    ${framyConfig.showStoryboard ? "'/storyboard': FramyStoryboardPage()," : ""}
   };
   final page = routes[settings.name] ?? FramyFontsPage();
   return PageRouteBuilder<dynamic>(
@@ -19,6 +17,18 @@ Route onGenerateRoute(RouteSettings settings) {
   );
 }
 ''';
+
+String _generateMaterialComponentPages(FramyConfig framyConfig) {
+  if (!framyConfig.showMaterialComponents) {
+    return '';
+  }
+  return '''
+'/appbar': FramyAppBarPage(),
+'/button': FramyButtonPage(),
+'/toggle': FramyTogglePage(),
+'/textfield': FramyTextFieldPage(),
+''';
+}
 
 String _generateCustomWidgetPages(List<FramyObject> widgetObjects) {
   var result = '';
